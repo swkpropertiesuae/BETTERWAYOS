@@ -3,6 +3,7 @@ import { mkdirSync } from 'node:fs';
 import path from 'node:path';
 import { UNIFIED_SCHEMA_SQL } from './schema';
 import { ensureCommercialProductionReady, seedInitialData } from './seed';
+import { resolveDataDir } from './data-dir';
 import { hashPassword } from '@/server/auth';
 
 let singletonDb: DatabaseSync | null = null;
@@ -24,9 +25,15 @@ export function initializeDatabase(
   ensure('users', 'totp_secret', "TEXT NOT NULL DEFAULT ''");
   ensure('users', 'mfa_enabled', 'INTEGER NOT NULL DEFAULT 0');
   ensure('users', 'avatar_url', 'TEXT');
+  ensure('users', 'failed_logins', 'INTEGER NOT NULL DEFAULT 0');
+  ensure('users', 'locked_until', 'TEXT');
+  ensure('users', 'last_login_at', 'TEXT');
   ensure('employees', 'avatar_url', 'TEXT');
   ensure('leads', 'lost_reason', "TEXT NOT NULL DEFAULT ''");
   ensure('company_settings', 'production_lock_enabled', 'INTEGER NOT NULL DEFAULT 0');
+  ensure('company_settings', 'office_wifi_ssid', "TEXT NOT NULL DEFAULT 'Betterway-Office-5G'");
+  ensure('company_settings', 'office_wifi_ip', "TEXT NOT NULL DEFAULT ''");
+  ensure('company_settings', 'office_ip_locked', 'INTEGER NOT NULL DEFAULT 0');
   ensure('vendor_bills', 'approval_status', "TEXT NOT NULL DEFAULT 'APPROVED'");
   ensure('vendor_bills', 'approved_by_user_id', 'INTEGER');
   ensure('conveyancing_cases', 'valuation_access_status', "TEXT NOT NULL DEFAULT 'ACCESS_CONFIRMED'");
@@ -112,10 +119,9 @@ export function initializeDatabase(
 
 export function getDb(): DatabaseSync {
   if (singletonDb) return singletonDb;
-  // shortcut: Vercel fs is read-only except /tmp, so demo data is ephemeral per instance; use a hosted DB for real use
-  const dataDir = process.env.VERCEL ? '/tmp' : path.resolve(process.cwd(), 'data');
-  mkdirSync(dataDir, { recursive: true });
+  const dataDir = resolveDataDir();
   const dbPath = process.env.BW_OS_DB_PATH || path.join(dataDir, 'betterway-os.sqlite');
+  mkdirSync(path.dirname(dbPath), { recursive: true });
   const db = new DatabaseSync(dbPath);
   db.exec('PRAGMA journal_mode = WAL;');
   db.exec('PRAGMA busy_timeout = 5000;');

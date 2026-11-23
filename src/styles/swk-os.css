@@ -1,8 +1,8 @@
 /* =====================================================================================
-   Betterway OS: "Oxblood, Brass & Bone" design layer.
-   Composition follows SWK OS (calm operating workspace): light header with breadcrumb,
-   dark per-app sidebar, floating white surfaces on a bone ledger-grid canvas, capsule controls.
-   This sheet is intentionally un-layered so it wins over the Estate OS component layer.
+   Betterway OS: "Midnight Banking Navy, Sovereign Gold & Alabaster" design layer.
+   Composition follows SWK OS (calm operating wallet): light header with breadcrumb,
+   midnight-navy per-app sidebar, floating white surfaces on a fine ledger-grid canvas,
+   capsule controls, and Instrument Serif editorial accents.
    ===================================================================================== */
 
 :root {
@@ -105,7 +105,7 @@ body { background: var(--bg); }
 .swk-create {
   white-space: nowrap; flex: none;
   display: inline-flex; align-items: center; gap: 7px; height: 40px; padding: 0 16px 0 13px; border-radius: var(--pill); border: 1px solid rgba(255, 255, 255, .14); cursor: pointer;
-  font-weight: 650; font-size: 13px; color: #fff; background: var(--ox-grad); box-shadow: 0 10px 22px -12px rgba(90, 22, 32, .8), inset 0 1px 0 rgba(255, 255, 255, .22);
+  font-weight: 650; font-size: 13px; color: #fff; background: var(--ox-grad); box-shadow: 0 10px 22px -12px rgba(2, 17, 37, .8), inset 0 1px 0 rgba(255, 255, 255, .22);
   transition: filter .15s, transform .1s;
 }
 .swk-create:hover { filter: brightness(1.08); }
@@ -255,7 +255,7 @@ body { background: var(--bg); }
 .swk-app .btn-icon { width: 40px; padding: 0; border-radius: 50%; }
 .swk-app .btn-icon.btn-sm { width: 34px; }
 .swk-app .btn-icon.btn-xs { width: 28px; }
-.swk-app .btn-primary { background: var(--ox-grad); border-color: transparent; color: #fff; box-shadow: 0 10px 22px -14px rgba(90, 22, 32, .85); }
+.swk-app .btn-primary { background: var(--ox-grad); border-color: transparent; color: #fff; box-shadow: 0 10px 22px -14px rgba(2, 17, 37, .85); }
 .swk-app .btn-primary:hover:not(:disabled) { filter: brightness(1.1); background: var(--ox-grad); border-color: transparent; }
 .swk-app .btn-accent { background: var(--champ); border-color: var(--champ); color: #021125; }
 .swk-app .btn-accent:hover:not(:disabled) { filter: brightness(1.06); background: var(--champ); }
@@ -271,10 +271,10 @@ body { background: var(--bg); }
 /* Segmented controls and tabs: capsules */
 .swk-app .seg { border-radius: var(--pill); background: var(--fill); padding: 4px; border: 1px solid var(--border); }
 .swk-app .seg button { border-radius: var(--pill); }
-.swk-app .seg button.on { background: var(--surface); color: var(--text); box-shadow: 0 2px 8px -3px rgba(90, 22, 32, .3), 0 0 0 1px color-mix(in srgb, var(--champ) 50%, transparent); }
+.swk-app .seg button.on { background: var(--surface); color: var(--text); box-shadow: 0 2px 8px -3px rgba(2, 17, 37, .3), 0 0 0 1px color-mix(in srgb, var(--champ) 50%, transparent); }
 .swk-app .tabs { border-bottom: 0; gap: 4px; background: var(--fill); border-radius: var(--pill); padding: 4px; display: inline-flex; flex-wrap: wrap; }
 .swk-app .tab { border-radius: var(--pill); padding: 7px 14px; }
-.swk-app .tab.on { background: var(--surface); color: var(--text); box-shadow: 0 2px 8px -3px rgba(90, 22, 32, .3); }
+.swk-app .tab.on { background: var(--surface); color: var(--text); box-shadow: 0 2px 8px -3px rgba(2, 17, 37, .3); }
 .swk-app .tab.on::after { display: none; }
 .swk-app .tab-ink { display: none; }
 
@@ -292,7 +292,7 @@ body { background: var(--bg); }
 .swk-app .search-trigger { display: none; }
 
 /* AI assistant */
-.swk-app .ai-fab { background: var(--ox-grad); color: #f0d9a2; border: 1px solid rgba(201, 162, 87, .5); box-shadow: 0 16px 34px -14px rgba(90, 22, 32, .8); }
+.swk-app .ai-fab { background: var(--ox-grad); color: #f0d9a2; border: 1px solid rgba(201, 162, 87, .5); box-shadow: 0 16px 34px -14px rgba(2, 17, 37, .8); }
 
 /* ------------------------------------------------------------------ launcher (All apps) */
 .swk-launch { max-width: 1040px; margin: 0 auto; padding: 8px 0 40px; }

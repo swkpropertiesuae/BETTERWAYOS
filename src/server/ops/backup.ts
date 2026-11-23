@@ -5,8 +5,9 @@ import { createHash } from 'node:crypto';
 import { existsSync, mkdirSync, readFileSync } from 'node:fs';
 import path from 'node:path';
 import { assertRole, writeAuditLog, type UserRecord } from '@/server/auth';
+import { resolveDataDir } from '@/server/db/data-dir';
 
-export function runBackupAndRestoreTest(db: DatabaseSync, actor: UserRecord, dir = path.resolve(process.cwd(), 'data', 'backups')) {
+export function runBackupAndRestoreTest(db: DatabaseSync, actor: UserRecord, dir = resolveDataDir('backups')) {
   assertRole(actor, ['SUPER_ADMIN', 'COMPLIANCE_MLRO']);
   const t0 = Date.now();
   mkdirSync(dir, { recursive: true });
@@ -30,8 +31,13 @@ export function runBackupAndRestoreTest(db: DatabaseSync, actor: UserRecord, dir
   } finally { copy.close(); }
 
   // encrypted vault files live outside the database: confirm every referenced file exists
+  const vaultRoot = resolveDataDir();
   const docs = db.prepare('SELECT storage_path FROM vault_documents').all() as { storage_path: string }[];
-  const missingFiles = docs.filter((d) => d.storage_path && !existsSync(path.isAbsolute(d.storage_path) ? d.storage_path : path.resolve(process.cwd(), d.storage_path))).length;
+  const missingFiles = docs.filter((d) => {
+    if (!d.storage_path) return false;
+    if (path.isAbsolute(d.storage_path)) return !existsSync(d.storage_path);
+    return !existsSync(path.resolve(vaultRoot, d.storage_path)) && !existsSync(path.resolve(process.cwd(), d.storage_path));
+  }).length;
   if (missingFiles) problems.push(`${missingFiles} vault file(s) referenced in the database are missing on disk`);
 
   const sha = createHash('sha256').update(readFileSync(file)).digest('hex');

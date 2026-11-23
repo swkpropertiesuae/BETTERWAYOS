@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 import { getDb } from '@/server/db';
-import { createSession, SESSION_COOKIE_NAME, type UserRole } from '@/server/auth';
-import { defaultHomeForRole, LANG_COOKIE_NAME } from '@/server/auth/request';
+import { createSession, extractClientIp, SESSION_COOKIE_NAME, writeAuditLog, type UserRole } from '@/server/auth';
+import { defaultHomeForRole, getCurrentUser, LANG_COOKIE_NAME } from '@/server/auth/request';
 import { normalizeLoginAlias } from '@/server/engines/swk-enterprise-engine';
 import { getProductionSecurityStatus } from '@/server/engines/commercial-workflows-engine';
 
@@ -29,41 +29,57 @@ export async function POST(req: Request) {
     }
     const dest = safeReturnTo || fallbackDest;
     const res = NextResponse.redirect(new URL(dest, req.url), 303);
-    res.cookies.set(LANG_COOKIE_NAME, lang, { path: '/', maxAge: 365 * 86_400, sameSite: 'lax' });
+    res.cookies.set(LANG_COOKIE_NAME, lang, {
+      path: '/',
+      maxAge: 365 * 86_400,
+      sameSite: 'lax',
+      secure: process.env.NODE_ENV === 'production',
+    });
     return res;
   }
 
-  const host = req.headers.get('host') || '';
-  const reqHost = new URL(req.url).hostname;
-  const isStrictLoopback =
-    /^(localhost|127\.0\.0\.1)(:\d+)?$/i.test(host) && (reqHost === 'localhost' || reqHost === '127.0.0.1');
-  if (!isStrictLoopback && process.env.BW_ENABLE_ROLE_SWITCHER !== '1') {
-    return NextResponse.json({ error: 'Quick role switcher is only enabled on loopback localhost' }, { status: 403 });
+  // Strictly block quick role switching in production; require explicit dev opt-in + authenticated SUPER_ADMIN.
+  if (process.env.NODE_ENV === 'production' || process.env.BW_ENABLE_ROLE_SWITCHER !== '1') {
+    return NextResponse.json(
+      { error: 'Quick role switcher is disabled. Sign in with your account credentials.' },
+      { status: 403 },
+    );
+  }
+
+  const currentUser = await getCurrentUser();
+  if (!currentUser || currentUser.role !== 'SUPER_ADMIN') {
+    return NextResponse.json(
+      { error: 'Only an authenticated SUPER_ADMIN can use the development role switcher.' },
+      { status: 403 },
+    );
   }
 
   const prodStatus = getProductionSecurityStatus(db);
   if (prodStatus.productionLockEnabled) {
     return NextResponse.redirect(
-      new URL('/os/security?error=Production+Security+Lock+is+active.+Role+switcher+is+disabled+in+production+mode.', req.url),
+      new URL('/os/security?error=Production+Security+Lock+is+active.+Role+switcher+is+disabled.', req.url),
       303,
     );
   }
 
   const email = normalizeLoginAlias(String(form.get('email') || ''));
   const user = db
-    .prepare('SELECT id, role, preferred_lang FROM users WHERE email = ? AND status = ?')
+    .prepare('SELECT id, role, preferred_lang FROM users WHERE lower(email) = ? AND status = ?')
     .get(email, 'ACTIVE') as { id: number; role: UserRole; preferred_lang: string } | undefined;
 
   if (!user) {
-    return NextResponse.redirect(new URL('/login?error=Demo+account+not+found', req.url), 303);
+    return NextResponse.redirect(new URL('/login?error=Account+not+found', req.url), 303);
   }
 
-  const token = createSession(db, user.id, '127.0.0.1', 'quick-role-switcher');
+  const ip = extractClientIp(req);
+  const token = createSession(db, user.id, ip, 'dev-role-switcher');
+  writeAuditLog(db, currentUser, 'sessions', user.id, 'DEV_ROLE_SWITCH', null, { targetEmail: email }, ip);
   const dest = safeReturnTo || defaultHomeForRole(user.role);
   const res = NextResponse.redirect(new URL(dest, req.url), 303);
   res.cookies.set(SESSION_COOKIE_NAME, token, {
     httpOnly: true,
     sameSite: 'lax',
+    secure: false,
     path: '/',
     maxAge: 14 * 86_400,
   });

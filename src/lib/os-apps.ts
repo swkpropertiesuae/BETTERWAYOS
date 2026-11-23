@@ -71,8 +71,8 @@ export interface OsApp {
   items: OsItem[];
 }
 
-/** Estate-OS pages live behind a hash route on /os. */
-const e = (key: string) => (key === 'dashboard' ? '/os' : `/os#/${key}`);
+/** Legacy Estate-OS interactive workspace pages live behind hash routes on /os/workspace; live executive Overview lives on /os. */
+const e = (key: string) => (key === 'dashboard' ? '/os' : `/os/workspace#/${key}`);
 
 /**
  * Betterway Mortgages OS, workflow-ordered. Same launcher composition as SWK OS:
@@ -240,17 +240,21 @@ export interface ActiveNav {
   item: OsItem;
 }
 
-/** Resolve the app + page for the current URL. `estateKey` is the hash route key when on /os. */
+/** Resolve the app + page for the current URL. `estateKey` is the hash route key when on /os/workspace. */
 export function findActiveNav(pathname: string, estateKey?: string): ActiveNav | null {
   const clean = pathname.split('?')[0] || '/os';
   if (clean === '/os') {
+    const hit = OS_ITEMS.find((i) => i.href === '/os');
+    return hit ? { app: hit.app, item: hit } : null;
+  }
+  if (clean === '/os/workspace') {
     const href = e(estateKey || 'dashboard');
-    const hit = OS_ITEMS.find((i) => i.href === href);
+    const hit = OS_ITEMS.find((i) => i.href === href) || OS_ITEMS.find((i) => i.href === '/os');
     return hit ? { app: hit.app, item: hit } : null;
   }
   let best: (typeof OS_ITEMS)[number] | null = null;
   for (const i of OS_ITEMS) {
-    if (i.href.startsWith('/os#')) continue;
+    if (i.href.startsWith('/os/workspace#')) continue;
     const p = i.prefix ?? i.href;
     if (clean === p || clean.startsWith(p + '/')) {
       if (!best || p.length > (best.prefix ?? best.href).length) best = i;

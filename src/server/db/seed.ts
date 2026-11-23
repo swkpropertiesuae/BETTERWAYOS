@@ -625,7 +625,10 @@ export function ensureCommercialProductionReady(db: DatabaseSync) {
     db.exec('DELETE FROM sessions;');
     db.exec('DELETE FROM users;');
 
-    const defaultPass = hashPassword('Betterway#2026');
+    const fallbackPass = process.env.STAFF_DEFAULT_PASSWORD || 'Betterway#2026';
+    const ownerPassHash = hashPassword(process.env.OWNER_PASSWORD || fallbackPass);
+    const adminPassHash = hashPassword(process.env.ADMIN_PASSWORD || fallbackPass);
+    const staffPassHash = hashPassword(fallbackPass);
     const insertUser = db.prepare(`
       INSERT INTO users (email, phone, full_name_en, full_name_ar, password_hash, role, is_mlro, can_approve_rates, preferred_lang, status, avatar_url)
       VALUES (?, ?, ?, ?, ?, ?, ?, ?, 'en', 'ACTIVE', ?)
@@ -645,12 +648,18 @@ export function ensureCommercialProductionReady(db: DatabaseSync) {
     `);
 
     OFFICIAL_BETTERWAY_STAFF.forEach((s, idx) => {
+      const accountPassHash =
+        s.email === 'shabib@betterwaymortgages.com' || s.email === 'warda@betterwaymortgages.com'
+          ? ownerPassHash
+          : s.email === 'admin@betterwaymortgages.com'
+            ? adminPassHash
+            : staffPassHash;
       const uRes = insertUser.run(
         s.email,
         s.phone,
         s.fullNameEn,
         s.fullNameAr,
-        defaultPass,
+        accountPassHash,
         s.role,
         s.isMlro,
         s.canApproveRates,

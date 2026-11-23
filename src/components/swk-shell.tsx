@@ -272,8 +272,8 @@ export function OsLayoutFrame({
     return () => window.removeEventListener('keydown', onKey);
   }, []);
 
-  // On /os root, EstateOsHost renders its own frame (same chrome, workspace pages, Assistant).
-  if (pathname === '/os') {
+  // On /os/workspace, EstateOsHost renders its own interactive canvas frame.
+  if (pathname === '/os/workspace') {
     return <>{children}</>;
   }
 
@@ -412,12 +412,14 @@ export function OsLayoutFrame({
               {theme === 'dark' ? 'Light mode' : 'Dark mode'}
             </button>
             <div className="sep" />
-            <a href="/api/v1/auth/logout">
-              <span className="ic">
-                <LogOut size={16} />
-              </span>
-              Sign out
-            </a>
+            <form method="POST" action="/api/v1/auth/logout">
+              <button type="submit" className="item">
+                <span className="ic">
+                  <LogOut size={16} />
+                </span>
+                Sign out
+              </button>
+            </form>
           </div>
         )}
       </div>
@@ -527,7 +529,7 @@ export function OsLayoutFrame({
                     className="cmdk-item"
                     onClick={() => {
                       setCmdOpen(false);
-                      if (item.href.startsWith('/os#')) window.location.href = item.href;
+                      if (item.href.startsWith('/os/workspace#')) window.location.href = item.href;
                       else router.push(item.href);
                     }}
                   >

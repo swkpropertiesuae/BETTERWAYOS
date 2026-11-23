@@ -11,6 +11,7 @@ export interface BetterwayStaffProfile {
     | 'COMPLIANCE_MLRO'
     | 'FINANCE_ADMIN'
     | 'HR_MANAGER';
+  tier: 'executive' | 'management' | 'specialist';
   isMlro: 0 | 1;
   canApproveRates: 0 | 1;
   empCode: string;
@@ -19,6 +20,8 @@ export interface BetterwayStaffProfile {
   isNational: 0 | 1;
   basicSalaryFils: number;
   avatarUrl: string | null;
+  portraitUrl: string | null;
+  portrait8kUrl: string | null;
 }
 
 export const OFFICIAL_STAFF_DIRECTORY: readonly BetterwayStaffProfile[] = [
@@ -28,6 +31,7 @@ export const OFFICIAL_STAFF_DIRECTORY: readonly BetterwayStaffProfile[] = [
     fullNameEn: 'Shabib Siraj',
     fullNameAr: 'شبيب سراج',
     role: 'SUPER_ADMIN',
+    tier: 'executive',
     isMlro: 1,
     canApproveRates: 1,
     empCode: 'EMP-SHABIB',
@@ -36,6 +40,8 @@ export const OFFICIAL_STAFF_DIRECTORY: readonly BetterwayStaffProfile[] = [
     isNational: 0,
     basicSalaryFils: 0,
     avatarUrl: null,
+    portraitUrl: null,
+    portrait8kUrl: null,
   },
   {
     email: 'warda@betterwaymortgages.com',
@@ -43,6 +49,7 @@ export const OFFICIAL_STAFF_DIRECTORY: readonly BetterwayStaffProfile[] = [
     fullNameEn: 'Warda',
     fullNameAr: 'وردة',
     role: 'SUPER_ADMIN',
+    tier: 'executive',
     isMlro: 1,
     canApproveRates: 1,
     empCode: 'EMP-WARDA',
@@ -51,6 +58,8 @@ export const OFFICIAL_STAFF_DIRECTORY: readonly BetterwayStaffProfile[] = [
     isNational: 0,
     basicSalaryFils: 0,
     avatarUrl: null,
+    portraitUrl: null,
+    portrait8kUrl: null,
   },
   {
     email: 'admin@betterwaymortgages.com',
@@ -58,6 +67,7 @@ export const OFFICIAL_STAFF_DIRECTORY: readonly BetterwayStaffProfile[] = [
     fullNameEn: 'Betterway Admin',
     fullNameAr: 'مسؤول النظام',
     role: 'SUPER_ADMIN',
+    tier: 'executive',
     isMlro: 1,
     canApproveRates: 1,
     empCode: 'EMP-ADMIN',
@@ -66,6 +76,8 @@ export const OFFICIAL_STAFF_DIRECTORY: readonly BetterwayStaffProfile[] = [
     isNational: 0,
     basicSalaryFils: 0,
     avatarUrl: null,
+    portraitUrl: null,
+    portrait8kUrl: null,
   },
   {
     email: 'daniel@betterwaymortgages.com',
@@ -73,6 +85,7 @@ export const OFFICIAL_STAFF_DIRECTORY: readonly BetterwayStaffProfile[] = [
     fullNameEn: 'Daniel Xavier',
     fullNameAr: 'دانيال خافيير',
     role: 'SUPER_ADMIN',
+    tier: 'management',
     isMlro: 0,
     canApproveRates: 1,
     empCode: 'EMP-DANIEL',
@@ -81,6 +94,8 @@ export const OFFICIAL_STAFF_DIRECTORY: readonly BetterwayStaffProfile[] = [
     isNational: 0,
     basicSalaryFils: 1_800_000,
     avatarUrl: '/staff/daniel-xavier.jpg',
+    portraitUrl: '/staff/daniel-xavier-portrait.webp',
+    portrait8kUrl: '/staff/8k/daniel-xavier-8k.webp',
   },
   {
     email: 'rahaba@betterwaymortgages.com',
@@ -88,6 +103,7 @@ export const OFFICIAL_STAFF_DIRECTORY: readonly BetterwayStaffProfile[] = [
     fullNameEn: 'Rahaba Azeez',
     fullNameAr: 'رحبة عزيز',
     role: 'HR_MANAGER',
+    tier: 'specialist',
     isMlro: 0,
     canApproveRates: 0,
     empCode: 'EMP-RAHABA',
@@ -96,6 +112,8 @@ export const OFFICIAL_STAFF_DIRECTORY: readonly BetterwayStaffProfile[] = [
     isNational: 0,
     basicSalaryFils: 1_200_000,
     avatarUrl: '/staff/rahaba-azeez.jpg',
+    portraitUrl: '/staff/rahaba-azeez-portrait.webp',
+    portrait8kUrl: '/staff/8k/rahaba-azeez-8k.webp',
   },
   {
     email: 'nusrik@betterwaymortgages.com',
@@ -103,6 +121,7 @@ export const OFFICIAL_STAFF_DIRECTORY: readonly BetterwayStaffProfile[] = [
     fullNameEn: 'Mohammad Nusrik',
     fullNameAr: 'محمد نصريك',
     role: 'SALES_ADVISOR',
+    tier: 'specialist',
     isMlro: 0,
     canApproveRates: 0,
     empCode: 'EMP-NUSRIK',
@@ -111,6 +130,8 @@ export const OFFICIAL_STAFF_DIRECTORY: readonly BetterwayStaffProfile[] = [
     isNational: 0,
     basicSalaryFils: 1_100_000,
     avatarUrl: '/staff/mohammad-nusrik.jpg',
+    portraitUrl: '/staff/mohammad-nusrik-portrait.webp',
+    portrait8kUrl: '/staff/8k/mohammad-nusrik-8k.webp',
   },
   {
     email: 'elton@betterwaymortgages.com',
@@ -118,6 +139,7 @@ export const OFFICIAL_STAFF_DIRECTORY: readonly BetterwayStaffProfile[] = [
     fullNameEn: 'Elton Frank',
     fullNameAr: 'إلتون فرانك',
     role: 'PROGRESSION_MANAGER',
+    tier: 'specialist',
     isMlro: 0,
     canApproveRates: 0,
     empCode: 'EMP-ELTON',
@@ -126,6 +148,8 @@ export const OFFICIAL_STAFF_DIRECTORY: readonly BetterwayStaffProfile[] = [
     isNational: 0,
     basicSalaryFils: 1_100_000,
     avatarUrl: '/staff/elton-frank.jpg',
+    portraitUrl: '/staff/elton-frank-portrait.webp',
+    portrait8kUrl: '/staff/8k/elton-frank-8k.webp',
   },
   {
     email: 'reshma@betterwaymortgages.com',
@@ -133,6 +157,7 @@ export const OFFICIAL_STAFF_DIRECTORY: readonly BetterwayStaffProfile[] = [
     fullNameEn: 'Reshma Rajan',
     fullNameAr: 'ريشما راجان',
     role: 'SALES_ADVISOR',
+    tier: 'specialist',
     isMlro: 0,
     canApproveRates: 0,
     empCode: 'EMP-RESHMA',
@@ -141,6 +166,8 @@ export const OFFICIAL_STAFF_DIRECTORY: readonly BetterwayStaffProfile[] = [
     isNational: 0,
     basicSalaryFils: 1_000_000,
     avatarUrl: '/staff/reshma-rajan.jpg',
+    portraitUrl: '/staff/reshma-rajan-portrait.webp',
+    portrait8kUrl: '/staff/8k/reshma-rajan-8k.webp',
   },
   {
     email: 'asif@betterwaymortgages.com',
@@ -148,6 +175,7 @@ export const OFFICIAL_STAFF_DIRECTORY: readonly BetterwayStaffProfile[] = [
     fullNameEn: 'Asif Khan',
     fullNameAr: 'آصف خان',
     role: 'SALES_ADVISOR',
+    tier: 'specialist',
     isMlro: 0,
     canApproveRates: 0,
     empCode: 'EMP-ASIF',
@@ -156,6 +184,8 @@ export const OFFICIAL_STAFF_DIRECTORY: readonly BetterwayStaffProfile[] = [
     isNational: 0,
     basicSalaryFils: 1_200_000,
     avatarUrl: '/staff/asif-khan.jpg',
+    portraitUrl: '/staff/asif-khan-portrait.webp',
+    portrait8kUrl: '/staff/8k/asif-khan-8k.webp',
   },
 ] as const;
 

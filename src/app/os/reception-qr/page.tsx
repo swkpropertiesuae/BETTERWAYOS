@@ -7,6 +7,7 @@ import { PrintQrStandButton, ReceptionQrScanWidget } from '@/components/receptio
 import {
   canPrintReceptionQr,
   generateReceptionStandQrSvg,
+  getOfficeWifiConfig,
 } from '@/server/engines/swk-enterprise-engine';
 
 export const dynamic = 'force-dynamic';
@@ -28,6 +29,8 @@ export default async function ReceptionQrPage({
   const qrDataUri = `data:image/svg+xml;utf8,${encodeURIComponent(qrSvg)}`;
 
   const db = getDb();
+  const wifiCfg = getOfficeWifiConfig(db);
+  const canOverrideTime = user.role === 'SUPER_ADMIN' || user.role === 'HR_MANAGER';
   const attendanceLogs = db
     .prepare('SELECT * FROM office_attendance_logs ORDER BY id DESC LIMIT 25')
     .all() as Array<Record<string, unknown>>;
@@ -135,31 +138,80 @@ export default async function ReceptionQrPage({
             standCode={sp.stand || OFFICE_RECEPTION_QR_TOKEN}
           />
 
-          {/* Server Form Fallback */}
-          <div className="bw-card p-4 space-y-3">
-            <div className="text-[10px] font-bold uppercase tracking-wider text-slate-500">
-              Manual / Back-Office Time Override (Admin / HR)
-            </div>
-            <form method="POST" action="/api/v1/actions" className="space-y-2.5 text-xs">
-              <input type="hidden" name="action" value="reception_qr_checkin" />
-              <input type="hidden" name="returnTo" value="/os/reception-qr" />
-              <input type="hidden" name="qrStandCode" value={OFFICE_RECEPTION_QR_TOKEN} />
-              <input type="hidden" name="networkSsid" value="Betterway-Office-5G" />
-              <div className="flex items-center gap-2">
-                <input
-                  type="text"
-                  name="checkInTimeGst"
-                  defaultValue="09:58"
-                  required
-                  className="bw-input font-num flex-1"
-                  placeholder="HH:MM GST"
-                />
-                <button type="submit" className="bw-btn-navy shrink-0">
-                  Log GST Arrival
-                </button>
+          {/* Office Wi-Fi IP Lock (Owner / Admin / Manager Only — SWKOS Parity) */}
+          {allowedToPrint && (
+            <div className="bw-card p-4 space-y-3 border-[#d7b04e]/40">
+              <div className="flex items-center justify-between gap-2">
+                <div className="text-[10px] font-bold uppercase tracking-wider text-[#8a6518]">
+                  SWK-Grade Office Wi-Fi IP Lock
+                </div>
+                <span
+                  className={`px-2 py-0.5 rounded-full font-mono text-[10px] font-bold ${
+                    wifiCfg.strictIpLock
+                      ? 'bg-emerald-50 text-emerald-800 border border-emerald-200'
+                      : 'bg-slate-100 text-slate-600 border border-slate-200'
+                  }`}
+                >
+                  {wifiCfg.strictIpLock ? `LOCKED (${wifiCfg.officeIp})` : 'UNLOCKED'}
+                </span>
               </div>
-            </form>
-          </div>
+              <p className="text-[11px] text-slate-600 leading-relaxed">
+                Lock check-ins strictly to the office router public IP so remote Wi-Fi spoofing is blocked server-side.
+              </p>
+              <form method="POST" action="/api/v1/actions" className="space-y-2 text-xs">
+                <input type="hidden" name="action" value="lock_office_wifi" />
+                <input type="hidden" name="returnTo" value="/os/reception-qr" />
+                <input type="hidden" name="strictIpLock" value={wifiCfg.strictIpLock ? '0' : '1'} />
+                <div className="grid grid-cols-2 gap-2">
+                  <input
+                    type="text"
+                    name="ssid"
+                    defaultValue={wifiCfg.ssid}
+                    className="bw-input text-xs"
+                    placeholder="Office SSID"
+                  />
+                  <input
+                    type="text"
+                    name="officeIp"
+                    defaultValue={wifiCfg.officeIp}
+                    className="bw-input font-num text-xs"
+                    placeholder="Auto-detect current IP"
+                  />
+                </div>
+                <button type="submit" className="bw-btn-navy w-full">
+                  {wifiCfg.strictIpLock ? 'Disable Strict IP Lock' : 'Lock to Office Public IP'}
+                </button>
+              </form>
+            </div>
+          )}
+
+          {/* Server Form Fallback — Restricted to SUPER_ADMIN / HR_MANAGER */}
+          {canOverrideTime && (
+            <div className="bw-card p-4 space-y-3">
+              <div className="text-[10px] font-bold uppercase tracking-wider text-slate-500">
+                Manual / Back-Office Time Override (Admin / HR)
+              </div>
+              <form method="POST" action="/api/v1/actions" className="space-y-2.5 text-xs">
+                <input type="hidden" name="action" value="reception_qr_checkin" />
+                <input type="hidden" name="returnTo" value="/os/reception-qr" />
+                <input type="hidden" name="qrStandCode" value={OFFICE_RECEPTION_QR_TOKEN} />
+                <input type="hidden" name="networkSsid" value={wifiCfg.ssid} />
+                <div className="flex items-center gap-2">
+                  <input
+                    type="text"
+                    name="checkInTimeGst"
+                    defaultValue="09:58"
+                    required
+                    className="bw-input font-num flex-1"
+                    placeholder="HH:MM GST"
+                  />
+                  <button type="submit" className="bw-btn-navy shrink-0">
+                    Log GST Arrival
+                  </button>
+                </div>
+              </form>
+            </div>
+          )}
         </div>
 
         {/* Continuous Contemptor Alerts + Today's Roll Call */}

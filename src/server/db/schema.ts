@@ -16,6 +16,9 @@ CREATE TABLE IF NOT EXISTS company_settings (
   office_address TEXT NOT NULL,
   house_clawback_provision_bps INTEGER NOT NULL DEFAULT 1000,
   production_lock_enabled INTEGER NOT NULL DEFAULT 0 CHECK (production_lock_enabled IN (0,1)),
+  office_wifi_ssid TEXT NOT NULL DEFAULT 'Betterway-Office-5G',
+  office_wifi_ip TEXT NOT NULL DEFAULT '',
+  office_ip_locked INTEGER NOT NULL DEFAULT 0 CHECK (office_ip_locked IN (0,1)),
   updated_at TEXT NOT NULL DEFAULT (datetime('now'))
 );
 
@@ -37,7 +40,32 @@ CREATE TABLE IF NOT EXISTS users (
   totp_secret TEXT NOT NULL DEFAULT '',
   mfa_enabled INTEGER NOT NULL DEFAULT 0,
   avatar_url TEXT DEFAULT NULL,
+  failed_logins INTEGER NOT NULL DEFAULT 0,
+  locked_until TEXT DEFAULT NULL,
+  last_login_at TEXT DEFAULT NULL,
   created_at TEXT NOT NULL DEFAULT (datetime('now'))
+);
+
+CREATE TABLE IF NOT EXISTS login_events (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  user_id INTEGER REFERENCES users(id) ON DELETE SET NULL,
+  email TEXT NOT NULL,
+  outcome TEXT NOT NULL CHECK (outcome IN ('SUCCESS','BAD_PASSWORD','LOCKED','MFA_REQUIRED','MFA_FAILED','SUSPENDED','NOT_FOUND')),
+  ip_address TEXT NOT NULL DEFAULT '',
+  user_agent TEXT NOT NULL DEFAULT '',
+  created_at TEXT NOT NULL DEFAULT (datetime('now'))
+);
+
+CREATE TABLE IF NOT EXISTS staff_devices (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  user_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+  device_id TEXT NOT NULL,
+  label TEXT NOT NULL DEFAULT '',
+  last_ip TEXT NOT NULL DEFAULT '',
+  first_seen_at TEXT NOT NULL DEFAULT (datetime('now')),
+  last_seen_at TEXT NOT NULL DEFAULT (datetime('now')),
+  revoked_at TEXT DEFAULT NULL,
+  UNIQUE(user_id, device_id)
 );
 
 CREATE TABLE IF NOT EXISTS sessions (
@@ -1128,4 +1156,35 @@ CREATE TABLE IF NOT EXISTS pdc_cheque_register (
   gl_entry_id INTEGER REFERENCES gl_journal_entries(id),
   created_at TEXT NOT NULL DEFAULT (datetime('now'))
 );
+
+CREATE INDEX IF NOT EXISTS idx_sessions_user_id ON sessions(user_id);
+CREATE INDEX IF NOT EXISTS idx_sessions_expires_at ON sessions(expires_at);
+CREATE INDEX IF NOT EXISTS idx_audit_logs_entity ON audit_logs(entity_type, entity_id);
+CREATE INDEX IF NOT EXISTS idx_audit_logs_created_at ON audit_logs(created_at);
+CREATE INDEX IF NOT EXISTS idx_login_events_email_created ON login_events(email, created_at);
+CREATE INDEX IF NOT EXISTS idx_staff_devices_user ON staff_devices(user_id, revoked_at);
+CREATE INDEX IF NOT EXISTS idx_applicants_household ON applicants(household_id, applicant_role);
+CREATE INDEX IF NOT EXISTS idx_applicants_user ON applicants(user_id);
+CREATE INDEX IF NOT EXISTS idx_leads_stage_created ON leads(stage, created_at);
+CREATE INDEX IF NOT EXISTS idx_leads_advisor ON leads(assigned_advisor_id, stage);
+CREATE INDEX IF NOT EXISTS idx_comm_messages_lead ON comm_messages(lead_id, created_at);
+CREATE INDEX IF NOT EXISTS idx_comm_messages_deal ON comm_messages(deal_id, created_at);
+CREATE INDEX IF NOT EXISTS idx_bank_rate_cards_status ON bank_rate_cards(bank_id, status);
+CREATE INDEX IF NOT EXISTS idx_deals_stage_origin ON deals(origin_mode, stage);
+CREATE INDEX IF NOT EXISTS idx_deals_household ON deals(household_id);
+CREATE INDEX IF NOT EXISTS idx_deals_partner ON deals(partner_agent_id);
+CREATE INDEX IF NOT EXISTS idx_deal_submissions_deal ON deal_submissions(deal_id, status);
+CREATE INDEX IF NOT EXISTS idx_vault_documents_deal ON vault_documents(deal_id, doc_category);
+CREATE INDEX IF NOT EXISTS idx_gl_journal_lines_entry ON gl_journal_lines(journal_entry_id);
+CREATE INDEX IF NOT EXISTS idx_gl_journal_lines_account ON gl_journal_lines(account_code);
+CREATE INDEX IF NOT EXISTS idx_commission_settlements_status ON commission_settlements(reconciliation_status, partner_payout_status);
+CREATE INDEX IF NOT EXISTS idx_tax_invoices_deal ON tax_invoices(deal_id, invoice_type);
+CREATE INDEX IF NOT EXISTS idx_vendor_bills_status ON vendor_bills(approval_status, bill_date);
+CREATE INDEX IF NOT EXISTS idx_ops_tasks_status_role ON ops_tasks(status, assigned_role, due_at);
+CREATE INDEX IF NOT EXISTS idx_attendance_user_date ON office_attendance_logs(user_id, check_in_date);
+CREATE INDEX IF NOT EXISTS idx_contemptor_status ON late_contemptor_alerts(alert_status, created_at);
+CREATE INDEX IF NOT EXISTS idx_daily_reports_date ON daily_work_reports(report_date, user_id);
+CREATE INDEX IF NOT EXISTS idx_dld_tx_date ON dld_market_transactions(tx_date, area_code);
+CREATE INDEX IF NOT EXISTS idx_pdc_deal_status ON pdc_cheque_register(deal_id, vault_status);
+CREATE INDEX IF NOT EXISTS idx_notifications_status ON notifications(status, created_at);
 `;

@@ -80,7 +80,7 @@ export function DubaiClock() {
 const QUICK_ADD: { label: string; desc: string; href: string; icon: LucideIcon }[] = [
   { label: 'New Lead', desc: 'Capture a mortgage enquiry', href: '/os/crm', icon: UserPlus },
   { label: 'Run 24-Bank Match', desc: 'DBR, LTV and ranked offers', href: '/os/los', icon: Landmark },
-  { label: 'Book Appointment', desc: 'Client meeting or valuation', href: '/os#/appointments', icon: CalendarCheck },
+  { label: 'Book Appointment', desc: 'Client meeting or valuation', href: '/os/activities', icon: CalendarCheck },
   { label: 'Open Deal Pipeline', desc: 'Move a case to the next stage', href: '/os/deals', icon: Handshake },
   { label: 'DBR Toolkit', desc: 'Buyout and EMI calculators', href: '/os/toolkit', icon: Calculator },
   { label: 'Add Follow-up Task', desc: 'Callbacks and reminders', href: '/os/activities', icon: CheckSquare },

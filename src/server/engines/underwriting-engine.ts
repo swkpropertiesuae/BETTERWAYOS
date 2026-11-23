@@ -50,7 +50,8 @@ export function statutoryMaxLtvBps(params: {
     return params.nonResidentBankMaxBps;
   }
   if (!params.isFirstHome) {
-    return 6500; // CBUAE second/investment property cap
+    // CBUAE Mortgage Regulations: 2nd / investment property cap is 65% for UAE Nationals and 60% for Expats
+    return params.residencyType === 'UAE_NATIONAL' ? 6500 : 6000;
   }
   const over5M = params.valuationBaseFils > 500_000_000; // AED 5,000,000 in fils
   if (params.residencyType === 'UAE_NATIONAL') {

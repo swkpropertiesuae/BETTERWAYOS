@@ -1,5 +1,16 @@
 import type { DatabaseSync } from 'node:sqlite';
-import { ForbiddenError, hashPassword, verifyPassword, writeAuditLog, type UserRecord } from '@/server/auth';
+import QRCode from 'qrcode';
+import {
+  checkAccountLockout,
+  clearFailedLogins,
+  ForbiddenError,
+  hashPassword,
+  recordFailedLoginAttempt,
+  recordLoginEvent,
+  verifyPassword,
+  writeAuditLog,
+  type UserRecord,
+} from '@/server/auth';
 import { getStaffAvatarUrl, getStaffProfileByNameOrEmail } from '@/lib/staff-directory';
 
 export const SUPREME_OWNER_EMAILS = new Set([
@@ -132,11 +143,15 @@ export function executeOwnerAdminControl(
     db.prepare("UPDATE users SET status = 'SUSPENDED' WHERE id = ?").run(adminUser.id);
     db.prepare("UPDATE sessions SET revoked_at = datetime('now') WHERE user_id = ?").run(adminUser.id);
   } else if (input.action === 'activate' || input.action === 'unlock') {
-    db.prepare("UPDATE users SET status = 'ACTIVE' WHERE id = ?").run(adminUser.id);
+    db.prepare("UPDATE users SET status = 'ACTIVE', failed_logins = 0, locked_until = NULL WHERE id = ?").run(adminUser.id);
   } else if (input.action === 'force_signout') {
     db.prepare("UPDATE sessions SET revoked_at = datetime('now') WHERE user_id = ?").run(adminUser.id);
   } else if (input.action === 'reset_password') {
-    db.prepare('UPDATE users SET password_hash = ? WHERE id = ?').run(hashPassword('Betterway#2026'), adminUser.id);
+    const nextPassword = process.env.ADMIN_PASSWORD || process.env.STAFF_DEFAULT_PASSWORD || 'Betterway#2026';
+    db.prepare('UPDATE users SET password_hash = ?, failed_logins = 0, locked_until = NULL WHERE id = ?').run(
+      hashPassword(nextPassword),
+      adminUser.id,
+    );
     db.prepare("UPDATE sessions SET revoked_at = datetime('now') WHERE user_id = ?").run(adminUser.id);
   }
 
@@ -909,80 +924,83 @@ export function syncDailyDldTransactions(db: DatabaseSync, actor: UserRecord) {
 }
 
 /**
- * Generates a high-contrast, deterministic 29x29 QR Matrix SVG with finder patterns,
- * timing tracks, alignment pattern, and deterministic payload modules for the Reception Stand QR.
+ * Generates a real, camera-scannable ISO/IEC 18004 QR Code SVG (ECC Level M)
+ * for the Betterway Mortgages LLC Reception Attendance Stand.
  */
 export function generateReceptionStandQrSvg(scanUrl: string, darkColor = '#021125', lightColor = '#ffffff'): string {
-  const size = 29;
-  const grid: boolean[][] = Array.from({ length: size }, () => Array(size).fill(false));
-  const reserved: boolean[][] = Array.from({ length: size }, () => Array(size).fill(false));
+  const qr = QRCode.create(scanUrl, { errorCorrectionLevel: 'M' });
+  const size = qr.modules.size;
+  const data = qr.modules.data;
+  const margin = 4;
+  const total = size + margin * 2;
 
-  const placeFinder = (r0: number, c0: number) => {
-    for (let r = -1; r <= 7; r++) {
-      for (let c = -1; c <= 7; c++) {
-        const rr = r0 + r;
-        const cc = c0 + c;
-        if (rr < 0 || rr >= size || cc < 0 || cc >= size) continue;
-        reserved[rr]![cc] = true;
-        const inOuter = r >= 0 && r <= 6 && c >= 0 && c <= 6 && (r === 0 || r === 6 || c === 0 || c === 6);
-        const inInner = r >= 2 && r <= 4 && c >= 2 && c <= 4;
-        grid[rr]![cc] = inOuter || inInner;
-      }
-    }
-  };
-
-  placeFinder(0, 0);
-  placeFinder(0, size - 7);
-  placeFinder(size - 7, 0);
-
-  // Alignment pattern at (20, 20)
-  for (let r = -2; r <= 2; r++) {
-    for (let c = -2; c <= 2; c++) {
-      const rr = 20 + r;
-      const cc = 20 + c;
-      reserved[rr]![cc] = true;
-      grid[rr]![cc] = Math.abs(r) === 2 || Math.abs(c) === 2 || (r === 0 && c === 0);
-    }
-  }
-
-  // Timing patterns
-  for (let i = 8; i < size - 8; i++) {
-    reserved[6]![i] = true;
-    reserved[i]![6] = true;
-    grid[6]![i] = i % 2 === 0;
-    grid[i]![6] = i % 2 === 0;
-  }
-
-  // Deterministic bit stream from scanUrl
-  let hash = 2166136261;
-  for (let i = 0; i < scanUrl.length; i++) {
-    hash ^= scanUrl.charCodeAt(i);
-    hash = Math.imul(hash, 16777619);
-  }
-
-  let state = (hash >>> 0) || 0x9e3779b9;
+  const paths: string[] = [];
   for (let r = 0; r < size; r++) {
-    for (let c = 0; c < size; c++) {
-      if (reserved[r]![c]) continue;
-      state ^= state << 13;
-      state ^= state >>> 17;
-      state ^= state << 5;
-      const charBit = scanUrl.charCodeAt((r * size + c) % Math.max(1, scanUrl.length)) & (1 << ((r + c) % 7));
-      grid[r]![c] = ((state >>> 0) & 1) === 1 ? !charBit : Boolean(charBit);
-    }
-  }
-
-  const rects: string[] = [];
-  for (let r = 0; r < size; r++) {
-    for (let c = 0; c < size; c++) {
-      if (grid[r]![c]) {
-        rects.push(`<rect x="${c + 2}" y="${r + 2}" width="1" height="1" fill="${darkColor}" />`);
+    let runStart = -1;
+    for (let c = 0; c <= size; c++) {
+      const dark = c < size && Boolean(data[r * size + c]);
+      if (dark && runStart === -1) {
+        runStart = c;
+      } else if (!dark && runStart !== -1) {
+        const len = c - runStart;
+        paths.push(`M${runStart + margin} ${r + margin}h${len}v1h-${len}z`);
+        runStart = -1;
       }
     }
   }
 
-  const total = size + 4;
-  return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${total} ${total}" width="260" height="260" role="img" aria-label="Betterway Mortgages LLC Reception Attendance QR Code"><rect width="${total}" height="${total}" rx="2" fill="${lightColor}" />${rects.join('')}</svg>`;
+  return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${total} ${total}" width="260" height="260" shape-rendering="crispEdges" role="img" aria-label="Betterway Mortgages LLC Reception Attendance QR Code"><rect width="${total}" height="${total}" rx="2" fill="${lightColor}" /><path d="${paths.join('')}" fill="${darkColor}" /></svg>`;
+}
+
+export interface OfficeWifiConfig {
+  ssid: string;
+  officeIp: string;
+  strictIpLock: boolean;
+}
+
+export function getOfficeWifiConfig(db: DatabaseSync): OfficeWifiConfig {
+  try {
+    const row = db
+      .prepare('SELECT office_wifi_ssid, office_wifi_ip, office_ip_locked FROM company_settings WHERE id = 1')
+      .get() as { office_wifi_ssid?: string; office_wifi_ip?: string; office_ip_locked?: number } | undefined;
+    return {
+      ssid: row?.office_wifi_ssid?.trim() || 'Betterway-Office-5G',
+      officeIp: row?.office_wifi_ip?.trim() || '',
+      strictIpLock: Number(row?.office_ip_locked || 0) === 1,
+    };
+  } catch {
+    return { ssid: 'Betterway-Office-5G', officeIp: '', strictIpLock: false };
+  }
+}
+
+export function updateOfficeWifiLock(
+  db: DatabaseSync,
+  actor: UserRecord,
+  input: { ssid?: string; officeIp?: string; strictIpLock: boolean },
+): OfficeWifiConfig {
+  if (!canPrintReceptionQr(actor)) {
+    throw new ForbiddenError(
+      'Only Owner (Shabib Siraj / Warda), Betterway Admin, or Team Manager (Daniel Xavier) can configure Office Wi-Fi IP lock.',
+    );
+  }
+  const current = getOfficeWifiConfig(db);
+  const ssid = input.ssid?.trim() || current.ssid;
+  const officeIp = input.strictIpLock ? (input.officeIp?.trim() || current.officeIp) : (input.officeIp?.trim() ?? current.officeIp);
+  if (input.strictIpLock && !officeIp) {
+    throw new Error('Cannot enable strict Office Wi-Fi IP lock without a valid office public IP address.');
+  }
+  db.prepare(
+    `UPDATE company_settings
+     SET office_wifi_ssid = ?, office_wifi_ip = ?, office_ip_locked = ?, updated_at = datetime('now')
+     WHERE id = 1`,
+  ).run(ssid, officeIp, input.strictIpLock ? 1 : 0);
+
+  writeAuditLog(db, actor, 'company_settings', 1, input.strictIpLock ? 'LOCK_OFFICE_WIFI_IP' : 'UNLOCK_OFFICE_WIFI_IP', current, {
+    ssid,
+    officeIp,
+    strictIpLock: input.strictIpLock,
+  });
+  return { ssid, officeIp, strictIpLock: input.strictIpLock };
 }
 
 export function verifyAndRecordPublicQrCheckIn(
@@ -994,6 +1012,7 @@ export function verifyAndRecordPublicQrCheckIn(
     networkSsid?: string;
     qrStandCode?: string;
     deviceId?: string;
+    clientIp?: string;
     checkInDate?: string;
     checkInTimeGst?: string;
   },
@@ -1005,24 +1024,71 @@ export function verifyAndRecordPublicQrCheckIn(
     );
   }
 
+  const wifiCfg = getOfficeWifiConfig(db);
+  if (wifiCfg.strictIpLock && wifiCfg.officeIp && input.clientIp) {
+    const cleanClientIp = input.clientIp.trim();
+    if (cleanClientIp !== wifiCfg.officeIp) {
+      throw new Error(
+        `Office Wi-Fi IP Lock active: your connection IP (${cleanClientIp}) does not match the registered Betterway Office Wi-Fi gateway (${wifiCfg.ssid}). Connect to Office Wi-Fi and try again.`,
+      );
+    }
+  }
+
   const normalizedEmail = normalizeLoginAlias(input.email);
   const user = db
     .prepare('SELECT * FROM users WHERE lower(email) = ?')
     .get(normalizedEmail) as (UserRecord & { password_hash: string; avatar_url?: string | null }) | undefined;
 
-  if (!user || !verifyPassword(input.password, user.password_hash)) {
+  if (!user) {
+    recordLoginEvent(db, { email: normalizedEmail, outcome: 'NOT_FOUND', ip: input.clientIp });
+    throw new Error('Invalid Betterway Mortgages email or password.');
+  }
+
+  const lockState = checkAccountLockout(db, user.id);
+  if (lockState.locked) {
+    recordLoginEvent(db, { userId: user.id, email: normalizedEmail, outcome: 'LOCKED', ip: input.clientIp });
+    throw new Error(
+      `Account temporarily locked after repeated failed attempts. Retry in ${Math.ceil(lockState.remainingSeconds / 60)} minute(s) or contact Owner Shabib Siraj.`,
+    );
+  }
+
+  if (!verifyPassword(input.password, user.password_hash)) {
+    const attempt = recordFailedLoginAttempt(db, user.id);
+    recordLoginEvent(db, {
+      userId: user.id,
+      email: normalizedEmail,
+      outcome: attempt.locked ? 'LOCKED' : 'BAD_PASSWORD',
+      ip: input.clientIp,
+    });
     throw new Error('Invalid Betterway Mortgages email or password.');
   }
   if (user.status !== 'ACTIVE') {
+    recordLoginEvent(db, { userId: user.id, email: normalizedEmail, outcome: 'SUSPENDED', ip: input.clientIp });
     throw new Error('This staff account is currently suspended.');
+  }
+
+  clearFailedLogins(db, user.id);
+  recordLoginEvent(db, { userId: user.id, email: normalizedEmail, outcome: 'SUCCESS', ip: input.clientIp });
+
+  const deviceId = input.deviceId || 'BW-MOBILE-SCAN';
+  try {
+    db.prepare(
+      `INSERT INTO staff_devices (user_id, device_id, label, last_ip, last_seen_at)
+       VALUES (?, ?, 'Reception QR Device', ?, datetime('now'))
+       ON CONFLICT(user_id, device_id) DO UPDATE SET
+         last_ip = excluded.last_ip,
+         last_seen_at = datetime('now')`,
+    ).run(user.id, deviceId, input.clientIp || '127.0.0.1');
+  } catch {
+    // Non-fatal on older schemas
   }
 
   const rec = recordReceptionQrCheckIn(db, user, {
     checkInDate: input.checkInDate,
     checkInTimeGst: input.checkInTimeGst,
-    networkSsid: input.networkSsid || 'Betterway-Office-5G',
+    networkSsid: input.networkSsid || wifiCfg.ssid,
     qrStandCode: input.qrStandCode || 'BW-RECEPTION-STAND-DXB-1',
-    deviceId: input.deviceId || 'BW-MOBILE-SCAN',
+    deviceId,
   });
 
   const empRow = db

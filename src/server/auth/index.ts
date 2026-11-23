@@ -62,9 +62,122 @@ export function verifyPassword(password: string, stored: string): boolean {
 
 const sha256Hex = (input: string) => createHash('sha256').update(input).digest('hex');
 
-// shortcut: on Vercel the sqlite db is per-instance, so sessions are signed tokens (no server-side revoke); use a hosted DB for real use
+export const MAX_FAILED_LOGINS = 5;
+export const LOCKOUT_MINUTES = 15;
+
+let ephemeralSessionKey: string | null = null;
+
+function getSessionSecret(): string {
+  const configured = process.env.BW_SESSION_SECRET?.trim();
+  if (configured && configured.length >= 24) return configured;
+  if (process.env.VERCEL && process.env.NODE_ENV === 'production') {
+    // Derive a domain-separated key from BW_VAULT_MASTER_KEY only if explicitly provisioned; never fall back to a literal string.
+    const vaultKey = process.env.BW_VAULT_MASTER_KEY?.trim();
+    if (vaultKey && vaultKey.length >= 32) {
+      return createHmac('sha256', vaultKey).update('betterway-os-session-signing-v2').digest('hex');
+    }
+    throw new Error('BW_SESSION_SECRET (min 24 chars) must be configured in production');
+  }
+  if (!ephemeralSessionKey) {
+    ephemeralSessionKey = randomBytes(32).toString('hex');
+  }
+  return ephemeralSessionKey;
+}
+
 const signSession = (userId: number, exp: number) =>
-  createHmac('sha256', process.env.BW_VAULT_MASTER_KEY || 'demo').update(`${userId}.${exp}`).digest('hex');
+  createHmac('sha256', getSessionSecret()).update(`${userId}.${exp}`).digest('hex');
+
+export function extractClientIp(req: Request): string {
+  const xff = req.headers.get('x-forwarded-for');
+  if (xff) return xff.split(',')[0]!.trim();
+  const realIp = req.headers.get('x-real-ip');
+  if (realIp) return realIp.trim();
+  return '127.0.0.1';
+}
+
+export function validatePasswordStrength(password: string): string | null {
+  if (password.length < 10) return 'Password must be at least 10 characters long.';
+  if (!/[A-Z]/.test(password)) return 'Password must include at least one uppercase letter.';
+  if (!/[a-z]/.test(password)) return 'Password must include at least one lowercase letter.';
+  if (!/\d/.test(password)) return 'Password must include at least one digit.';
+  return null;
+}
+
+export type LoginEventOutcome =
+  | 'SUCCESS'
+  | 'BAD_PASSWORD'
+  | 'LOCKED'
+  | 'MFA_REQUIRED'
+  | 'MFA_FAILED'
+  | 'SUSPENDED'
+  | 'NOT_FOUND';
+
+export function recordLoginEvent(
+  db: DatabaseSync,
+  params: {
+    userId?: number | null;
+    email: string;
+    outcome: LoginEventOutcome;
+    ip?: string;
+    userAgent?: string;
+  },
+): void {
+  try {
+    db.prepare(
+      `INSERT INTO login_events (user_id, email, outcome, ip_address, user_agent)
+       VALUES (?, ?, ?, ?, ?)`,
+    ).run(
+      params.userId ?? null,
+      params.email.trim().toLowerCase(),
+      params.outcome,
+      params.ip || '127.0.0.1',
+      (params.userAgent || '').slice(0, 240),
+    );
+  } catch {
+    // Non-fatal on older schemas without login_events
+  }
+}
+
+export function checkAccountLockout(
+  db: DatabaseSync,
+  userId: number,
+): { locked: boolean; lockedUntil: string | null; remainingSeconds: number } {
+  const row = db
+    .prepare('SELECT locked_until FROM users WHERE id = ?')
+    .get(userId) as { locked_until: string | null } | undefined;
+  if (!row?.locked_until) return { locked: false, lockedUntil: null, remainingSeconds: 0 };
+  const untilMs = Date.parse(row.locked_until);
+  if (!Number.isFinite(untilMs) || untilMs <= Date.now()) {
+    db.prepare('UPDATE users SET failed_logins = 0, locked_until = NULL WHERE id = ?').run(userId);
+    return { locked: false, lockedUntil: null, remainingSeconds: 0 };
+  }
+  return {
+    locked: true,
+    lockedUntil: row.locked_until,
+    remainingSeconds: Math.max(1, Math.ceil((untilMs - Date.now()) / 1000)),
+  };
+}
+
+export function recordFailedLoginAttempt(
+  db: DatabaseSync,
+  userId: number,
+): { failedLogins: number; locked: boolean; lockedUntil: string | null } {
+  const row = db
+    .prepare('SELECT failed_logins FROM users WHERE id = ?')
+    .get(userId) as { failed_logins: number } | undefined;
+  const nextCount = Number(row?.failed_logins || 0) + 1;
+  if (nextCount >= MAX_FAILED_LOGINS) {
+    const lockedUntil = new Date(Date.now() + LOCKOUT_MINUTES * 60_000).toISOString();
+    db.prepare('UPDATE users SET failed_logins = ?, locked_until = ? WHERE id = ?').run(nextCount, lockedUntil, userId);
+    return { failedLogins: nextCount, locked: true, lockedUntil };
+  }
+  db.prepare('UPDATE users SET failed_logins = ? WHERE id = ?').run(nextCount, userId);
+  return { failedLogins: nextCount, locked: false, lockedUntil: null };
+}
+
+export function clearFailedLogins(db: DatabaseSync, userId: number): void {
+  db.prepare("UPDATE users SET failed_logins = 0, locked_until = NULL, last_login_at = datetime('now') WHERE id = ?").run(userId);
+}
 
 export function createSession(db: DatabaseSync, userId: number, ip = '127.0.0.1', userAgent = ''): string {
   if (process.env.VERCEL) {

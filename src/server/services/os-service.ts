@@ -1,8 +1,8 @@
 import { activeRows } from '@/server/data-hub/import';
 import { openStageTask } from '@/server/engines/workflow-engine';
 import { randomBytes, randomUUID } from 'node:crypto';
-import path from 'node:path';
 import type { DatabaseSync } from 'node:sqlite';
+import { resolveDataDir } from '@/server/db/data-dir';
 import {
   assertRole,
   ForbiddenError,
@@ -618,7 +618,7 @@ export function uploadDealVaultDocument(
     documentIssueDate?: string | null;
     documentExpiryDate?: string | null;
   },
-  dataDir = path.resolve(process.cwd(), 'data'),
+  dataDir = resolveDataDir(),
 ): number {
   assertDealVaultAccess(db, actor, input.dealId);
 
@@ -685,7 +685,7 @@ export function downloadDealVaultDocument(
   db: DatabaseSync,
   actor: UserRecord,
   docId: number,
-  dataDir = path.resolve(process.cwd(), 'data'),
+  dataDir = resolveDataDir(),
 ) {
   const doc = db.prepare('SELECT * FROM vault_documents WHERE id = ?').get(docId) as
     | {

@@ -1,6 +1,7 @@
 import { createCipheriv, createDecipheriv, createHash, randomBytes } from 'node:crypto';
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
+import { resolveDataDir } from '@/server/db/data-dir';
 
 export type EncryptedPayload = {
   ciphertext: Buffer;
@@ -36,7 +37,7 @@ export function decryptVaultBytes(ciphertext: Buffer, masterKey: Buffer, ivHex: 
   return Buffer.concat([decipher.update(ciphertext), decipher.final()]);
 }
 
-export function getOrCreateVaultMasterKey(dataDir = path.resolve(process.cwd(), 'data')): Buffer {
+export function getOrCreateVaultMasterKey(dataDir = resolveDataDir()): Buffer {
   if (process.env.BW_VAULT_MASTER_KEY) {
     const envBuf = Buffer.from(process.env.BW_VAULT_MASTER_KEY, 'hex');
     if (envBuf.length === 32) return envBuf;
@@ -56,7 +57,7 @@ export function writeEncryptedVaultFile(
   dealId: number,
   docUuid: string,
   plain: Buffer,
-  dataDir = path.resolve(process.cwd(), 'data'),
+  dataDir = resolveDataDir(),
 ): EncryptedPayload & { relativePath: string } {
   const key = getOrCreateVaultMasterKey(dataDir);
   const enc = encryptVaultBytes(plain, key);
@@ -72,7 +73,7 @@ export function readEncryptedVaultFile(
   relativePath: string,
   ivHex: string,
   authTagHex: string,
-  dataDir = path.resolve(process.cwd(), 'data'),
+  dataDir = resolveDataDir(),
 ): Buffer {
   const resolvedBase = path.resolve(dataDir);
   const resolvedTarget = path.resolve(dataDir, relativePath);

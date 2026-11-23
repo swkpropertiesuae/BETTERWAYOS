@@ -14,7 +14,13 @@ export async function GET(_req: Request, ctx: { params: Promise<{ id: string }> 
     if (!b) return NextResponse.json({ error: 'Batch not found' }, { status: 404 });
     assertRole(user, rolesFor(specByNo(b.spec_no)!));
     writeAuditLog(db, user, 'data_batches', b.id, 'DATA_BATCH_CSV_DOWNLOAD');
-    return new NextResponse(b.csv_content, { headers: { 'Content-Type': 'text/csv; charset=utf-8', 'Content-Disposition': `attachment; filename="batch-${b.id}-${b.file_name.replace(/\.[^.]+$/, '')}.csv"` } });
+    const safeStem = b.file_name.replace(/\.[^.]+$/, '').replace(/[^a-zA-Z0-9._-]+/g, '_').slice(0, 80) || 'export';
+    return new NextResponse(b.csv_content, {
+      headers: {
+        'Content-Type': 'text/csv; charset=utf-8',
+        'Content-Disposition': `attachment; filename="batch-${b.id}-${safeStem}.csv"`,
+      },
+    });
   } catch (e) {
     const status = e instanceof UnauthorizedError ? 401 : e instanceof ForbiddenError ? 403 : 400;
     return NextResponse.json({ error: e instanceof Error ? e.message : 'Failed' }, { status });

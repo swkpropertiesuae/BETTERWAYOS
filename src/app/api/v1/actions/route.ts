@@ -4,6 +4,7 @@ import { getCurrentUser } from '@/server/auth/request';
 import {
   assertMlroAccess,
   assertRole,
+  extractClientIp,
   ForbiddenError,
   UnauthorizedError,
   writeAuditLog,
@@ -45,6 +46,7 @@ import {
   requestRecordDeletionToBin,
   submitManagerAdminDecision,
   syncDailyDldTransactions,
+  updateOfficeWifiLock,
 } from '@/server/engines/swk-enterprise-engine';
 import { recordPartnerPayout, reversePartnerPayout } from '@/server/engines/payouts';
 import { startMfa, confirmMfa, disableMfa, openIncident, closeIncident, purgeRetention } from '@/server/engines/privacy';
@@ -845,21 +847,6 @@ export async function POST(req: Request) {
         return respondOk('Bank credit policy article published to Wiki & Co-Pilot index');
       }
 
-      case 'create_ops_task': {
-        assertRole(user, STAFF_ROLES);
-        db.prepare(
-          `INSERT INTO ops_tasks (deal_id, assigned_role, priority, title, due_at)
-           VALUES (?, ?, ?, ?, ?)`,
-        ).run(
-          body.dealId ? Number(body.dealId) : null,
-          String(body.assignedRole || 'SALES_ADVISOR'),
-          String(body.priority || 'HIGH'),
-          String(body.title || ''),
-          String(body.dueAt || new Date(Date.now() + 86_400_000).toISOString()),
-        );
-        return respondOk('Operational SLA task added to Command Board');
-      }
-
       case 'complete_ops_task': {
         assertRole(user, STAFF_ROLES);
         db.prepare(`UPDATE ops_tasks SET status = 'COMPLETED' WHERE id = ?`).run(Number(body.taskId));
@@ -1039,14 +1026,32 @@ export async function POST(req: Request) {
       }
 
       case 'reception_qr_checkin': {
+        assertRole(user, STAFF_ROLES);
+        const canOverrideTime = user.role === 'SUPER_ADMIN' || user.role === 'HR_MANAGER';
         const r = recordReceptionQrCheckIn(db, user, {
-          checkInDate: body.checkInDate ? String(body.checkInDate) : undefined,
-          checkInTimeGst: body.checkInTimeGst ? String(body.checkInTimeGst) : undefined,
+          checkInDate: canOverrideTime && body.checkInDate ? String(body.checkInDate) : undefined,
+          checkInTimeGst: canOverrideTime && body.checkInTimeGst ? String(body.checkInTimeGst) : undefined,
           networkSsid: String(body.networkSsid || 'Betterway-Office-5G'),
           qrStandCode: String(body.qrStandCode || 'BW-RECEPTION-STAND-DXB-1'),
         });
         return respondOk(
           `Attendance Check-In Recorded (${r.checkInTimeGst} GST · ${r.status}${r.isLate ? ` · ${r.lateMinutes}m late` : ''}${r.contemptorAlertTriggered ? ' · CONTEMPTOR ALERT SENT TO OWNER' : ''})`,
+        );
+      }
+
+      case 'lock_office_wifi': {
+        assertRole(user, STAFF_ROLES);
+        const strictIpLock = body.strictIpLock === '1' || body.strictIpLock === 'true' || body.strictIpLock === true;
+        const detectedIp = extractClientIp(req);
+        const cfg = updateOfficeWifiLock(db, user, {
+          ssid: body.ssid ? String(body.ssid) : undefined,
+          officeIp: body.officeIp ? String(body.officeIp) : detectedIp,
+          strictIpLock,
+        });
+        return respondOk(
+          cfg.strictIpLock
+            ? `Office Wi-Fi IP Lock ENABLED (${cfg.ssid} · Gateway ${cfg.officeIp})`
+            : `Office Wi-Fi IP Lock disabled (${cfg.ssid})`,
         );
       }
 

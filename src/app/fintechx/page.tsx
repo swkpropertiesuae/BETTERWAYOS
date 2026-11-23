@@ -20,13 +20,13 @@ import {
   Users,
 } from 'lucide-react';
 
-const BANK_PANEL_RATES = [
-  { bank: 'Emirates NBD', code: 'ENBD-3Y-FIX', introRate: '3.89%', revertRate: '3M EIBOR + 1.50%', maxLtv: '80% (85% UAE Nat.)', dbrRule: '3% Card Limit Stress' },
-  { bank: 'First Abu Dhabi Bank', code: 'FAB-3Y-ELITE', introRate: '3.94%', revertRate: '3M EIBOR + 1.55%', maxLtv: '80% (85% UAE Nat.)', dbrRule: '5% Card Limit Stress' },
-  { bank: 'Abu Dhabi Commercial Bank', code: 'ADCB-HYBRID-3Y', introRate: '3.99%', revertRate: '3M EIBOR + 1.65%', maxLtv: '80% Ready Property', dbrRule: '3% Card Limit Stress' },
-  { bank: 'Dubai Islamic Bank', code: 'DIB-IJARA-3Y', introRate: '3.95%', revertRate: '3M EIBOR + 1.60%', maxLtv: '80% Sharia Ijara', dbrRule: '5% Card Limit Stress' },
-  { bank: 'HSBC Middle East', code: 'HSBC-PREMIER-3Y', introRate: '3.85%', revertRate: '3M EIBOR + 1.49%', maxLtv: '80% Resident / 60% Non-Res', dbrRule: '3% Card Limit Stress' },
-  { bank: 'Mashreq Bank', code: 'MSHQ-HOME-5Y', introRate: '4.15%', revertRate: '3M EIBOR + 1.75%', maxLtv: '80% Ready / 50% Off-Plan', dbrRule: '5% Card Limit Stress' },
+const BANK_PANEL_CAPABILITIES = [
+  { bank: 'Emirates NBD', structure: 'Conventional & Islamic', tenor: 'Fixed & 3M EIBOR', maxLtv: '80% Expat / 85% National', dbrRule: '5% Card Limit Stress' },
+  { bank: 'First Abu Dhabi Bank', structure: 'Conventional & Islamic', tenor: 'Fixed & 3M EIBOR', maxLtv: '80% Expat / 85% National', dbrRule: '5% Card Limit Stress' },
+  { bank: 'Abu Dhabi Commercial Bank', structure: 'Conventional & Islamic', tenor: 'Fixed & 3M EIBOR', maxLtv: '80% Ready Property', dbrRule: '3% Card Limit Stress' },
+  { bank: 'Dubai Islamic Bank', structure: 'Sharia Ijara', tenor: 'Fixed & 3M EIBOR', maxLtv: '80% Expat / 85% National', dbrRule: '3% Card Limit Stress' },
+  { bank: 'HSBC Middle East', structure: 'Conventional', tenor: 'Fixed & 3M EIBOR', maxLtv: '80% Resident / 60% Non-Res', dbrRule: '3% Card Limit Stress' },
+  { bank: 'Mashreq Bank', structure: 'Conventional & Islamic', tenor: 'Fixed & 3M EIBOR', maxLtv: '80% Ready / 50% Off-Plan', dbrRule: '5% Card Limit Stress' },
 ];
 
 const PRICING_TIERS = [
@@ -97,12 +97,17 @@ export default function FintechXShowcasePage() {
     monthlyRate > 0 ? Math.round((loanAmountAed * monthlyRate * factor) / (factor - 1)) : Math.round(loanAmountAed / months);
   const dldTransferFeeAed = Math.round(propertyPriceAed * 0.04) + 580;
   const mortgageRegFeeAed = Math.round(loanAmountAed * 0.0025) + 290;
-  const minRequiredSalaryAed = Math.round(monthlyEmiAed * 2); // CBUAE 50% DBR rule
+  // CBUAE Mortgage Regulations require DBR affordability stress testing at +2.0% above note rate (min 6.5%)
+  const stressedRatePct = Math.max(interestRatePct + 2.0, 6.5);
+  const stressedMonthlyRate = stressedRatePct / 100 / 12;
+  const stressedFactor = Math.pow(1 + stressedMonthlyRate, months);
+  const stressedEmiAed = Math.round((loanAmountAed * stressedMonthlyRate * stressedFactor) / (stressedFactor - 1));
+  const minRequiredSalaryAed = Math.round(stressedEmiAed * 2); // CBUAE 50% DBR stressed ceiling
 
   return (
-    <div className="min-h-screen bg-[#f6f1ea] text-[#021125]">
+    <div className="min-h-screen bg-[#f8f9fa] text-[#021125]">
       {/* FintechX Sticky Top Navigation Bar */}
-      <header className="sticky top-0 z-50 border-b border-[#e7dccd] bg-[#f6f1ea]/90 backdrop-blur-md">
+      <header className="sticky top-0 z-50 border-b border-[#e2e6ea] bg-[#f8f9fa]/92 backdrop-blur-md">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 h-18 flex items-center justify-between gap-4">
           <Link href="/os" className="flex items-center gap-3">
             <img
@@ -155,9 +160,9 @@ export default function FintechXShowcasePage() {
       {/* FintechX Hero Section with Trust Pill, Value Prop & Live Interactive Mortgage Intelligence Preview */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 pt-12 pb-16 space-y-12">
         <div className="max-w-3xl mx-auto text-center space-y-5">
-          <div className="inline-flex items-center gap-2 rounded-full bg-white border border-[#e7dccd] px-3.5 py-1.5 text-xs font-semibold text-[#021125] shadow-2xs">
+          <div className="inline-flex items-center gap-2 rounded-full bg-white border border-[#e2e6ea] px-3.5 py-1.5 text-xs font-semibold text-[#021125] shadow-2xs">
             <span className="size-2 rounded-full bg-emerald-600" />
-            <span>CBUAE Licensed Mortgage Brokerage · RERA ORN 31048 · 24 UAE Banks</span>
+            <span>Betterway Mortgages LLC · Dubai, UAE · 24 UAE Panel Banks</span>
           </div>
 
           <h1 className="font-display text-3xl sm:text-5xl font-bold tracking-tight text-[#021125] leading-[1.12]">
@@ -329,8 +334,8 @@ export default function FintechXShowcasePage() {
                 <span className="font-semibold">AED {mortgageRegFeeAed.toLocaleString('en-US')}</span>
               </div>
               <div className="flex justify-between">
-                <span className="text-slate-300 font-sans">Min. Monthly Income (CBUAE 50% DBR)</span>
-                <span className="font-bold text-[#c9a257]">AED {minRequiredSalaryAed.toLocaleString('en-US')}/mo</span>
+                <span className="text-slate-300 font-sans">Min. Salary (50% DBR @ {stressedRatePct.toFixed(2)}% stress)</span>
+                <span className="font-bold text-[#d7b04e]">AED {minRequiredSalaryAed.toLocaleString('en-US')}/mo</span>
               </div>
             </div>
 
@@ -430,15 +435,18 @@ export default function FintechXShowcasePage() {
         </div>
       </section>
 
-      {/* FintechX 24-Bank Live Rate Table Preview */}
+      {/* 24-Bank Policy & Eligibility Capability Matrix */}
       <section id="banks" className="max-w-7xl mx-auto px-4 sm:px-6 py-12 space-y-6">
-        <div className="rounded-3xl bg-white border border-[#e7dccd] p-6 sm:p-8 shadow-2xs space-y-5">
+        <div className="rounded-3xl bg-white border border-[#e2e6ea] p-6 sm:p-8 shadow-2xs space-y-5">
           <div className="flex flex-wrap items-center justify-between gap-4">
             <div>
               <span className="bw-badge">24-Bank UAE Lending Panel</span>
               <h2 className="text-xl sm:text-2xl font-bold text-[#021125] mt-2">
-                Representative Institutional Mortgage Rate Cards (Conventional &amp; Islamic)
+                Panel Policy &amp; CBUAE Underwriting Matrix (Live Rate Cards Inside OS)
               </h2>
+              <p className="text-xs text-[#4a5868] mt-1">
+                Verified lender rate cards are maintained under Maker-Checker control inside Betterway OS; live written quotes are issued only after KFS acknowledgement.
+              </p>
             </div>
             <Link href="/os/banks-apl" className="bw-btn-navy">
               Open Full 24-Bank &amp; 80-Project APL Desk →
@@ -447,26 +455,24 @@ export default function FintechXShowcasePage() {
 
           <div className="overflow-x-auto">
             <table className="w-full text-xs">
-              <thead className="bg-[#f6f1ea] text-[#766661] border-y border-[#e7dccd]">
+              <thead className="bg-[#f8f9fa] text-[#4a5868] border-y border-[#e2e6ea]">
                 <tr>
                   <th className="py-3 px-4 text-left">Lending Institution</th>
-                  <th className="py-3 px-4 text-left">Product Code</th>
-                  <th className="py-3 px-4 text-left">Intro Fixed Rate</th>
-                  <th className="py-3 px-4 text-left">Post-Fixed Revert Rate</th>
+                  <th className="py-3 px-4 text-left">Facility Structure</th>
+                  <th className="py-3 px-4 text-left">Pricing Benchmark</th>
                   <th className="py-3 px-4 text-left">CBUAE LTV Ceiling</th>
                   <th className="py-3 px-4 text-left">Card Limit DBR Rule</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-[#e7dccd]">
-                {BANK_PANEL_RATES.map((row) => (
-                  <tr key={row.code} className="hover:bg-[#fbf7f1]">
+              <tbody className="divide-y divide-[#e2e6ea]">
+                {BANK_PANEL_CAPABILITIES.map((row) => (
+                  <tr key={row.bank} className="hover:bg-[#f8f9fa]">
                     <td className="py-3 px-4 font-bold text-[#021125]">{row.bank}</td>
-                    <td className="py-3 px-4 font-num text-[#766661]">{row.code}</td>
-                    <td className="py-3 px-4 font-num font-bold text-emerald-800">{row.introRate}</td>
-                    <td className="py-3 px-4 font-num">{row.revertRate}</td>
+                    <td className="py-3 px-4 text-[#4a5868]">{row.structure}</td>
+                    <td className="py-3 px-4 font-num">{row.tenor}</td>
                     <td className="py-3 px-4">{row.maxLtv}</td>
                     <td className="py-3 px-4">
-                      <span className="bw-badge">{row.dbrRule}</span>
+                      <span className="bw-badge bg-[#faf3e0] text-[#8a6518] border-[#d7b04e]/40">{row.dbrRule}</span>
                     </td>
                   </tr>
                 ))}
@@ -552,7 +558,7 @@ export default function FintechXShowcasePage() {
           <div className="flex items-center gap-3">
             <img src="/brand/icon-gold-squircle.svg" alt="Betterway" className="size-7 rounded-lg" />
             <span className="font-semibold text-[#021125]">Betterway Mortgages LLC</span>
-            <span>· CBUAE Reg. MB-2025-041 · RERA ORN 31048 · FTA TRN 100492817300003</span>
+            <span>· Al Nasr Plaza, Oud Metha, Dubai, UAE · Institutional Corporate OS</span>
           </div>
           <div className="flex items-center gap-4 font-semibold text-[#021125]">
             <Link href="/os" className="hover:underline">Corporate OS</Link>

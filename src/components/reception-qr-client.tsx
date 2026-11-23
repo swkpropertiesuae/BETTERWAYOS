@@ -35,10 +35,13 @@ export function ReceptionQrScanWidget({
   standCode?: string;
 }) {
   const [email, setEmail] = useState(defaultEmail);
-  const [password, setPassword] = useState('Betterway#2026');
+  const [password, setPassword] = useState('');
   const [showPass, setShowPass] = useState(false);
   const [connectionType, setConnectionType] = useState<'wifi' | 'cellular'>('wifi');
   const [ssid, setSsid] = useState('Betterway-Office-5G');
+  const [detectedIp, setDetectedIp] = useState<string>('');
+  const [strictIpLock, setStrictIpLock] = useState<boolean>(false);
+  const [ipMatches, setIpMatches] = useState<boolean>(true);
   const [deviceId, setDeviceId] = useState('BW-WEB-BROWSER');
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -62,9 +65,21 @@ export function ReceptionQrScanWidget({
     if (raw.includes('cellular') || raw === '3g' || raw === '2g') {
       setConnectionType('cellular');
     }
+
+    fetch('/api/v1/reception-qr/checkin')
+      .then((r) => r.json())
+      .then((d) => {
+        if (d.ssid) setSsid(String(d.ssid));
+        if (d.detected_client_ip) setDetectedIp(String(d.detected_client_ip));
+        setStrictIpLock(Boolean(d.strict_ip));
+        setIpMatches(d.ip_matches_office !== false);
+      })
+      .catch(() => {
+        /* ignore */
+      });
   }, []);
 
-  const networkApproved = connectionType === 'wifi';
+  const networkApproved = connectionType === 'wifi' && (!strictIpLock || ipMatches);
 
   const onSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -185,8 +200,10 @@ export function ReceptionQrScanWidget({
               )}
               <span>
                 {networkApproved
-                  ? `Connected to ${ssid} (Office Wi-Fi Verified)`
-                  : 'Cellular Data Detected — Blocked by Anti-Loophole Rule'}
+                  ? `Connected to ${ssid}${strictIpLock ? ` · IP Locked (${detectedIp || 'verified'})` : ' (Office Wi-Fi Verified)'}`
+                  : strictIpLock && !ipMatches
+                    ? `Office Wi-Fi IP Lock Mismatch (${detectedIp}) — Connect to ${ssid}`
+                    : 'Cellular Data Detected — Blocked by Anti-Loophole Rule'}
               </span>
             </div>
             <button
@@ -232,6 +249,7 @@ export function ReceptionQrScanWidget({
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 required
+                placeholder="Enter your staff password"
                 className="w-full rounded-xl bg-[#041933] border border-white/15 pl-9 pr-9 py-2.5 text-white text-xs outline-none focus:border-[#d7b04e]"
               />
               <button

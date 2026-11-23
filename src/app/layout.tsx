@@ -2,6 +2,8 @@ import type { Metadata, Viewport } from 'next';
 import '@fontsource-variable/plus-jakarta-sans';
 import '@fontsource-variable/inter';
 import '@fontsource-variable/jetbrains-mono';
+import '@fontsource/instrument-serif/400.css';
+import '@fontsource/instrument-serif/400-italic.css';
 import '@fontsource/ibm-plex-sans-arabic/400.css';
 import '@fontsource/ibm-plex-sans-arabic/600.css';
 import '@fontsource/ibm-plex-sans-arabic/700.css';
@@ -27,8 +29,8 @@ export default async function RootLayout({ children }: { children: React.ReactNo
   const dir = lang === 'ar' ? 'rtl' : 'ltr';
 
   return (
-    <html lang={lang} dir={dir} className="bg-[#faf6f0] text-[#021125]">
-      <body className="min-h-[100dvh] bg-[#faf6f0] text-[#021125] antialiased">{children}</body>
+    <html lang={lang} dir={dir} className="bg-[#f8f9fa] text-[#021125]">
+      <body className="min-h-[100dvh] bg-[#f8f9fa] text-[#021125] antialiased">{children}</body>
     </html>
   );
 }
