@@ -17,5 +17,5 @@
       "@web/*": ["src/web/*"]
     }
   },
-  "include": ["src", "vite.config.ts"]
+  "include": ["src", "api", "vite.config.ts"]
 }

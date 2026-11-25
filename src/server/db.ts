@@ -1,17 +1,33 @@
 import { DatabaseSync } from 'node:sqlite';
 import crypto from 'node:crypto';
 import fs from 'node:fs';
+import os from 'node:os';
 import path from 'node:path';
 import { BETTERWAY_STAFF } from '../shared/staff-directory.js';
 import { DOCUMENT_CHECKLIST_BY_PROFILE, type BorrowerProfileType } from '../shared/workflow-constants.js';
 
-const DATA_DIR = path.resolve(process.cwd(), 'data');
-if (!fs.existsSync(DATA_DIR)) fs.mkdirSync(DATA_DIR, { recursive: true });
+function resolveDbPath(): string {
+  if (process.env.BETTERWAY_DB_PATH) return process.env.BETTERWAY_DB_PATH;
+  const preferredDir = process.env.VERCEL ? os.tmpdir() : path.resolve(process.cwd(), 'data');
+  try {
+    if (!fs.existsSync(preferredDir)) fs.mkdirSync(preferredDir, { recursive: true });
+    return path.join(preferredDir, 'betterway-os.sqlite');
+  } catch {
+    const fallbackDir = os.tmpdir();
+    if (!fs.existsSync(fallbackDir)) fs.mkdirSync(fallbackDir, { recursive: true });
+    return path.join(fallbackDir, 'betterway-os.sqlite');
+  }
+}
 
-const DB_PATH = process.env.BETTERWAY_DB_PATH || path.join(DATA_DIR, 'betterway-os.sqlite');
+const DB_PATH = resolveDbPath();
 export const db = new DatabaseSync(DB_PATH);
 
-db.exec('PRAGMA journal_mode = WAL; PRAGMA foreign_keys = ON;');
+try {
+  db.exec('PRAGMA journal_mode = WAL;');
+} catch {
+  // Serverless tmp filesystems may not support WAL; fall back gracefully.
+}
+db.exec('PRAGMA foreign_keys = ON;');
 
 export function hashPassword(password: string, salt?: string): string {
   const s = salt || crypto.randomBytes(16).toString('hex');

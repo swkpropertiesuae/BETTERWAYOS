@@ -4,7 +4,9 @@ import { fileURLToPath } from 'node:url';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const root = path.resolve(__dirname, '..');
+const repoRoot = path.resolve(root, '..');
 const www = path.join(root, 'www');
+const distWebMobile = path.join(repoRoot, 'dist', 'web', 'mobile');
 const checkOnly = process.argv.includes('--check');
 
 const FILES = ['index.html', 'style.css', 'app.js', 'sw.js', 'manifest.webmanifest'];
@@ -30,10 +32,19 @@ if (checkOnly) {
   process.exit(0);
 }
 
-fs.rmSync(www, { recursive: true, force: true });
-fs.mkdirSync(www, { recursive: true });
-for (const f of FILES) {
-  fs.copyFileSync(path.join(root, f), path.join(www, f));
+function copyBundle(targetDir) {
+  fs.rmSync(targetDir, { recursive: true, force: true });
+  fs.mkdirSync(targetDir, { recursive: true });
+  for (const f of FILES) {
+    fs.copyFileSync(path.join(root, f), path.join(targetDir, f));
+  }
+  fs.cpSync(path.join(root, 'assets'), path.join(targetDir, 'assets'), { recursive: true });
 }
-fs.cpSync(path.join(root, 'assets'), path.join(www, 'assets'), { recursive: true });
-console.log(`Built Betterway Mobile Capacitor www/ bundle cleanly (${FILES.length} core files + assets/).`);
+
+copyBundle(www);
+if (fs.existsSync(path.join(repoRoot, 'dist', 'web'))) {
+  copyBundle(distWebMobile);
+  console.log(`Built Betterway Mobile Capacitor www/ + dist/web/mobile/ cleanly (${FILES.length} core files + assets/).`);
+} else {
+  console.log(`Built Betterway Mobile Capacitor www/ bundle cleanly (${FILES.length} core files + assets/).`);
+}

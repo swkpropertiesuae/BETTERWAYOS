@@ -3,6 +3,9 @@
   "version": "2.0.0",
   "private": true,
   "type": "module",
+  "engines": {
+    "node": "24.x"
+  },
   "description": "Betterway Mortgages LLC — Simple-English UAE Mortgage Brokerage OS (30 Routes, Full SWKOS v3.9.0 Parity) & Dedicated 3-Mode Mobile App",
   "scripts": {
     "dev": "concurrently \"npm run dev:server\" \"npm run dev:web\"",

@@ -123,7 +123,13 @@ apiRouter.post('/auth/login', (req: Request, res: Response) => {
   const token = signSessionToken(row.id);
   const user = getUserById(row.id)!;
   logAudit({ id: user.id, name: user.name, role: user.role }, 'auth', user.id, 'LOGIN', 'Password login', user.email);
-  res.cookie('bw_session', token, { httpOnly: true, sameSite: 'lax', maxAge: 7 * 24 * 3600 * 1000 });
+  res.cookie('bw_session', token, {
+    httpOnly: true,
+    sameSite: 'lax',
+    secure: Boolean(process.env.VERCEL || req.secure),
+    path: '/',
+    maxAge: 7 * 24 * 3600 * 1000,
+  });
   res.json({ token, user });
 });
 
@@ -139,7 +145,13 @@ apiRouter.post('/auth/quick-role', (req: Request, res: Response) => {
   const user = getUserById(row.id)!;
   const token = signSessionToken(user.id);
   logAudit({ id: user.id, name: user.name, role: user.role }, 'auth', user.id, 'QUICK_ROLE_SIGNIN', 'Executive/Demo Role Switch', user.role);
-  res.cookie('bw_session', token, { httpOnly: true, sameSite: 'lax', maxAge: 7 * 24 * 3600 * 1000 });
+  res.cookie('bw_session', token, {
+    httpOnly: true,
+    sameSite: 'lax',
+    secure: Boolean(process.env.VERCEL || req.secure),
+    path: '/',
+    maxAge: 7 * 24 * 3600 * 1000,
+  });
   res.json({ token, user });
 });
 
