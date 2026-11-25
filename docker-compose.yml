@@ -1,20 +1,16 @@
 services:
   betterway-os:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    container_name: betterway-os
+    build: .
+    container_name: betterway-mortgages-os
     restart: unless-stopped
     ports:
-      - "3001:3001"
-    env_file:
-      - .env.local
+      - "8088:8088"
     environment:
       NODE_ENV: production
-      PORT: 3001
-      BW_OS_DATA_DIR: /var/lib/betterway-os
+      PORT: 8088
+      BETTERWAY_DB_PATH: /app/data/betterway-os.sqlite
     volumes:
-      - betterway_os_data:/var/lib/betterway-os
+      - betterway_data:/app/data
 
 volumes:
-  betterway_os_data:
+  betterway_data:

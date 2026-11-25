@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512" fill="none">
+  <title>Betterway Mortgages — Brandmark Icon (fullcolor)</title>
+  <defs>
+    <!-- Circular Bowl Clip -->
+    <clipPath id="ico-full-bowl-clip">
+      <circle cx="256" cy="300" r="146"/>
+    </clipPath>
+
+    <!-- Gold Metallic Base Disc Gradient -->
+    <linearGradient id="ico-full-gold-base" x1="158" y1="218" x2="386" y2="418" gradientUnits="userSpaceOnUse">
+      <stop offset="0%"   stop-color="#144538"/>
+      <stop offset="22%"  stop-color="#6B6D37"/>
+      <stop offset="46%"  stop-color="#B98D37"/>
+      <stop offset="70%"  stop-color="#E7C469"/>
+      <stop offset="86%"  stop-color="#FCF1B7"/>
+      <stop offset="100%" stop-color="#CEA449"/>
+    </linearGradient>
+
+    <!-- Satin Sweeping Gold Ribbon Fold on Lower-Right Arc -->
+    <linearGradient id="ico-full-gold-ribbon" x1="184" y1="436" x2="398" y2="270" gradientUnits="userSpaceOnUse">
+      <stop offset="0%"   stop-color="#A67B2B"/>
+      <stop offset="28%"  stop-color="#D2AA52"/>
+      <stop offset="56%"  stop-color="#F7E195"/>
+      <stop offset="74%"  stop-color="#FFF3C0"/>
+      <stop offset="92%"  stop-color="#D8B056"/>
+      <stop offset="100%" stop-color="#9A7024"/>
+    </linearGradient>
+
+    <!-- Deep Concave Recessed Shadow behind Roof & Chimney -->
+    <radialGradient id="ico-full-bowl-inner-depth" cx="250" cy="236" r="158" fx="242" fy="206" gradientUnits="userSpaceOnUse">
+      <stop offset="0%"   stop-color="#063128" stop-opacity="0.97"/>
+      <stop offset="38%"  stop-color="#0D4B3C" stop-opacity="0.90"/>
+      <stop offset="63%"  stop-color="#2A5B42" stop-opacity="0.54"/>
+      <stop offset="83%"  stop-color="#7B7436" stop-opacity="0.16"/>
+      <stop offset="100%" stop-color="#B88E38" stop-opacity="0"/>
+    </radialGradient>
+
+    <!-- Soft Cast Shadow from Emerald Stem Tongue onto Gold Bowl -->
+    <linearGradient id="ico-full-stem-cast" x1="152" y1="364" x2="216" y2="424" gradientUnits="userSpaceOnUse">
+      <stop offset="0%"   stop-color="#052620" stop-opacity="0.60"/>
+      <stop offset="55%"  stop-color="#4A411B" stop-opacity="0.22"/>
+      <stop offset="100%" stop-color="#997228" stop-opacity="0"/>
+    </linearGradient>
+
+    <!-- Primary Sculpted Emerald Ribbon (Stem + Tapered Upper Arch) -->
+    <linearGradient id="ico-full-emerald-arch" x1="156" y1="84" x2="368" y2="378" gradientUnits="userSpaceOnUse">
+      <stop offset="0%"   stop-color="#34DFAC"/>
+      <stop offset="24%"  stop-color="#22BA90"/>
+      <stop offset="52%"  stop-color="#179373"/>
+      <stop offset="80%"  stop-color="#0E6954"/>
+      <stop offset="100%" stop-color="#0A4A3E"/>
+    </linearGradient>
+
+    <!-- Silky Outer Left Shading of Ascender Stem (Blends Seamlessly into Lower Tongue) -->
+    <linearGradient id="ico-full-emerald-stem-outer" x1="110" y1="74" x2="152" y2="396" gradientUnits="userSpaceOnUse">
+      <stop offset="0%"   stop-color="#2AD1A2" stop-opacity="0.92"/>
+      <stop offset="32%"  stop-color="#199B7A" stop-opacity="0.82"/>
+      <stop offset="66%"  stop-color="#0F6753" stop-opacity="0.72"/>
+      <stop offset="92%"  stop-color="#0A4A3E" stop-opacity="0.35"/>
+      <stop offset="100%" stop-color="#0A4A3E" stop-opacity="0"/>
+    </linearGradient>
+
+    <!-- Soft Vertical Luminous Highlight Ridge on Inner Stem Fold -->
+    <linearGradient id="ico-full-emerald-ridge" x1="148" y1="90" x2="180" y2="394" gradientUnits="userSpaceOnUse">
+      <stop offset="0%"   stop-color="#52F0C0" stop-opacity="0.48"/>
+      <stop offset="35%"  stop-color="#27C599" stop-opacity="0.22"/>
+      <stop offset="75%"  stop-color="#137C63" stop-opacity="0.04"/>
+      <stop offset="100%" stop-color="#0A4A3E" stop-opacity="0"/>
+    </linearGradient>
+
+    <!-- Architectural Gold Pitched Roof & Chimney (Unified Luminous Satin) -->
+    <linearGradient id="ico-full-roof-gold" x1="210" y1="226" x2="338" y2="306" gradientUnits="userSpaceOnUse">
+      <stop offset="0%"   stop-color="#CE9E43"/>
+      <stop offset="32%"  stop-color="#F7DF8D"/>
+      <stop offset="48%"  stop-color="#FFF2B6"/>
+      <stop offset="72%"  stop-color="#DDB355"/>
+      <stop offset="100%" stop-color="#AA7D29"/>
+    </linearGradient>
+
+    <!-- Wordmark Metallic Gold Gradient (Dark Backgrounds) -->
+    <linearGradient id="ico-full-text-gold" x1="0%" y1="0%" x2="100%" y2="15%">
+      <stop offset="0%"   stop-color="#C89E44"/>
+      <stop offset="28%"  stop-color="#EED380"/>
+      <stop offset="54%"  stop-color="#D7AF55"/>
+      <stop offset="82%"  stop-color="#F3DA8A"/>
+      <stop offset="100%" stop-color="#C89C41"/>
+    </linearGradient>
+
+    <!-- Wordmark Rich Burnished Gold Gradient (Light Backgrounds) -->
+    <linearGradient id="ico-full-text-gold-light" x1="0%" y1="0%" x2="100%" y2="15%">
+      <stop offset="0%"   stop-color="#9B7222"/>
+      <stop offset="30%"  stop-color="#C99E41"/>
+      <stop offset="56%"  stop-color="#AF832C"/>
+      <stop offset="84%"  stop-color="#D2A748"/>
+      <stop offset="100%" stop-color="#966E20"/>
+    </linearGradient>
+
+    <!-- Monochrome Luxury Gold Vertical Sheen -->
+    <linearGradient id="ico-full-mono-gold" x1="110" y1="66" x2="402" y2="446" gradientUnits="userSpaceOnUse">
+      <stop offset="0%"   stop-color="#F5DC8E"/>
+      <stop offset="35%"  stop-color="#E0B95F"/>
+      <stop offset="68%"  stop-color="#C69B40"/>
+      <stop offset="100%" stop-color="#F1D683"/>
+    </linearGradient>
+    
+  </defs>
+  
+    <g id="Brandmark-b-House">
+      <!-- Layer 1: Circular Brushed Metallic Gold Bowl -->
+      <g id="Gold-Bowl" clip-path="url(#ico-full-bowl-clip)">
+        <circle cx="256" cy="300" r="146" fill="url(#ico-full-gold-base)"/>
+        <path id="Gold-Sweeping-Ribbon" d="M 136 402 C 208 426, 298 404, 346 338 C 376 296, 394 250, 406 218 L 422 460 L 118 460 Z" fill="url(#ico-full-gold-ribbon)" opacity="0.72"/>
+        <circle id="Bowl-Inner-Depth" cx="256" cy="300" r="146" fill="url(#ico-full-bowl-inner-depth)"/>
+        <path id="Stem-Cast-Shadow" d="M 184 358 L 204 358 C 204 404, 178 430, 146 414 L 150.98 401.42 C 165.57 416.53, 190 396, 190 360 Z" fill="url(#ico-full-stem-cast)"/>
+      </g>
+
+      <!-- Layer 2: Sculpted Emerald 'b' Ribbon & Tapered Upper Arch -->
+      <g id="Emerald-Ribbon">
+        <path id="Emerald-Main-Arch" d="M 110 66 C 150 66, 178 96, 178 138 L 178 176.58 A 146.0 146.0 0 0 1 401.8 292.36 C 394 233, 336 188, 270 188 C 218 188, 190 218, 190 272 L 190 360 C 190 396, 165.57 416.53, 150.98 401.42 A 146.0 146.0 0 0 1 110 300 L 110 66 Z" fill="url(#ico-full-emerald-arch)"/>
+        <path id="Emerald-Outer-Facet" d="M 110 66 C 136 66, 148 86, 148 118 L 148 338 C 148 372, 155 394, 165 408 C 160 408, 155 405, 150.98 401.42 A 146.0 146.0 0 0 1 110 300 L 110 66 Z" fill="url(#ico-full-emerald-stem-outer)"/>
+        <path id="Emerald-Highlight-Ridge" d="M 148 102 C 164 110, 176 124, 176 146 L 176 350 C 176 376, 169 392, 161 400 C 153 386, 148 362, 148 334 L 148 102 Z" fill="url(#ico-full-emerald-ridge)"/>
+      </g>
+
+      <!-- Layer 3: Architectural House, Gold Pitched Roof, Chimney & Door -->
+      <g id="House-Emblem">
+        <path id="House-Body" d="M 256 240 L 319 295 L 319 366 L 275 366 L 275 314 L 237 314 L 237 366 L 193 366 L 193 295 Z" fill="#081120"/>
+        <path id="House-Roof-Chimney" d="M 256 214 L 293 247 L 293 229 L 319 229 L 319 270 L 349 296 L 319 296 L 256 241 L 193 296 L 163 296 Z" fill="url(#ico-full-roof-gold)"/>
+        
+      </g>
+    </g>
+</svg>

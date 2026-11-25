@@ -1,9 +1,23 @@
+# Dependencies
 /node_modules/
-/.next/
-/.next-dev/
+
+# Build outputs
+/dist/
+/mobile/www/
+/mobile/android/
+/mobile/ios/
+
+# Runtime SQLite database & local secrets
 /data/
-*.tsbuildinfo
-next-env.d.ts
-/.superpowers/
+*.sqlite
+*.sqlite-shm
+*.sqlite-wal
 .env
 .env.local
+.env.*.local
+
+# Misc & OS
+*.tsbuildinfo
+.DS_Store
+Thumbs.db
+/.superpowers/

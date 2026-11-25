@@ -1,0 +1,101 @@
+@import "tailwindcss";
+
+:root {
+  --bw-navy: #070E1A;
+  --bw-navy-surface: #0C1524;
+  --bw-emerald-light: #34DFAC;
+  --bw-emerald: #179373;
+  --bw-emerald-deep: #0A4A3E;
+  --bw-gold-gleam: #FCF1B7;
+  --bw-gold: #D7B158;
+  --bw-gold-rich: #BA8D36;
+  --bw-canvas: #F5F7FA;
+  --bw-card: #FFFFFF;
+  --bw-soft: #EEF2F7;
+  --bw-ink: #070E1A;
+  --bw-body: #334155;
+  --bw-muted: #64748B;
+  --bw-line: #E2E8F0;
+}
+
+.dark {
+  --bw-canvas: #060B15;
+  --bw-card: #0C1524;
+  --bw-soft: #121F35;
+  --bw-ink: #F8FAFC;
+  --bw-body: #CBD5E1;
+  --bw-muted: #94A3B8;
+  --bw-line: #1E2D45;
+}
+
+@layer base {
+  body {
+    font-family: 'Inter', 'Plus Jakarta Sans', system-ui, sans-serif;
+    background-color: var(--bw-canvas);
+    color: var(--bw-ink);
+  }
+  [dir="rtl"] body {
+    font-family: 'IBM Plex Sans Arabic', 'Inter', system-ui, sans-serif;
+  }
+  h1, h2, h3, .font-display {
+    font-family: 'Plus Jakarta Sans', 'Montserrat', system-ui, sans-serif;
+  }
+  .font-brand {
+    font-family: 'Montserrat', sans-serif;
+  }
+  .font-serif-accent {
+    font-family: 'Instrument Serif', Georgia, serif;
+    font-style: italic;
+  }
+  .font-mono-num {
+    font-family: 'JetBrains Mono', ui-monospace, monospace;
+    font-variant-numeric: tabular-nums;
+  }
+}
+
+@layer components {
+  .bw-card {
+    background-color: var(--bw-card);
+    border: 1px solid var(--bw-line);
+    border-radius: 22px;
+    box-shadow: 0 12px 32px -22px rgba(7, 14, 26, 0.14);
+  }
+}
+
+.bw-gold-gradient {
+  background: linear-gradient(135deg, #FCF1B7 0%, #D7B158 50%, #BA8D36 100%);
+}
+
+.bw-emerald-gradient {
+  background: linear-gradient(135deg, #34DFAC 0%, #179373 55%, #0A4A3E 100%);
+}
+
+.bw-navy-gradient {
+  background: linear-gradient(145deg, #0C1524 0%, #070E1A 55%, #040912 100%);
+}
+
+/* Custom sleek scrollbars */
+::-webkit-scrollbar {
+  width: 7px;
+  height: 7px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(148, 163, 184, 0.35);
+  border-radius: 999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(23, 147, 115, 0.55);
+}
+
+@media print {
+  .no-print {
+    display: none !important;
+  }
+  body {
+    background: #ffffff !important;
+    color: #070E1A !important;
+  }
+}

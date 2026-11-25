@@ -1,0 +1,152 @@
+{
+  "brand": "Betterway Mortgages",
+  "colors": {
+    "midnight_navy": {
+      "hex": "#070E1A",
+      "rgb": [
+        7,
+        14,
+        26
+      ],
+      "cmyk": [
+        92,
+        78,
+        52,
+        74
+      ]
+    },
+    "navy_surface": {
+      "hex": "#0C1524",
+      "rgb": [
+        12,
+        21,
+        36
+      ],
+      "cmyk": [
+        90,
+        75,
+        48,
+        66
+      ]
+    },
+    "emerald_light": {
+      "hex": "#34DFAC",
+      "rgb": [
+        52,
+        223,
+        172
+      ],
+      "cmyk": [
+        68,
+        0,
+        44,
+        0
+      ]
+    },
+    "emerald_mid": {
+      "hex": "#179373",
+      "rgb": [
+        23,
+        147,
+        115
+      ],
+      "cmyk": [
+        85,
+        18,
+        64,
+        5
+      ]
+    },
+    "emerald_deep": {
+      "hex": "#0A4A3E",
+      "rgb": [
+        10,
+        74,
+        62
+      ],
+      "cmyk": [
+        92,
+        42,
+        68,
+        42
+      ]
+    },
+    "gold_gleam": {
+      "hex": "#FCF1B7",
+      "rgb": [
+        252,
+        241,
+        183
+      ],
+      "cmyk": [
+        2,
+        3,
+        32,
+        0
+      ]
+    },
+    "gold_mid": {
+      "hex": "#D7B158",
+      "rgb": [
+        215,
+        177,
+        88
+      ],
+      "cmyk": [
+        16,
+        28,
+        76,
+        2
+      ]
+    },
+    "gold_rich": {
+      "hex": "#BA8D36",
+      "rgb": [
+        186,
+        141,
+        54
+      ],
+      "cmyk": [
+        24,
+        42,
+        92,
+        10
+      ]
+    },
+    "pure_white": {
+      "hex": "#FFFFFF",
+      "rgb": [
+        255,
+        255,
+        255
+      ],
+      "cmyk": [
+        0,
+        0,
+        0,
+        0
+      ]
+    }
+  },
+  "typography": {
+    "primary_family": "Montserrat",
+    "wordmark_line1": {
+      "text": "betterway",
+      "weight": 700,
+      "case": "lowercase",
+      "tracking_em": -0.012
+    },
+    "wordmark_line2": {
+      "text": "MORTGAGES",
+      "weight": 700,
+      "case": "uppercase",
+      "tracking_em": 0.275
+    }
+  },
+  "clear_space": "Minimum clear space equal to 0.25x brandmark bowl diameter on all sides.",
+  "minimum_size": {
+    "digital_horizontal_px": 140,
+    "digital_icon_px": 16,
+    "print_horizontal_mm": 28
+  }
+}
