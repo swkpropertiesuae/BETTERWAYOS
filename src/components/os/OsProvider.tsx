@@ -1,0 +1,154 @@
+'use client';
+
+import React, { createContext, useCallback, useContext, useEffect, useState } from 'react';
+import type { SessionUser } from '@/lib/domain/types';
+import type { RoleCapabilities } from '@/lib/auth/rbac';
+
+interface ToastItem {
+  id: string;
+  text: string;
+  tone: 'ok' | 'err' | 'info';
+}
+
+interface DemoAccount {
+  id: string;
+  name: string;
+  email: string;
+  role: string;
+  designation: string;
+  department: string;
+  avatarUrl: string | null;
+  portraitUrl: string | null;
+  initials: string;
+}
+
+interface OsContextValue {
+  user: SessionUser | null;
+  capabilities: RoleCapabilities | null;
+  demoMode: boolean;
+  demoAccounts: DemoAccount[];
+  loading: boolean;
+  dark: boolean;
+  rtl: boolean;
+  toggleDark: () => void;
+  toggleRtl: () => void;
+  refreshUser: () => Promise<void>;
+  logout: () => Promise<void>;
+  switchDemoAccount: (email: string) => Promise<void>;
+  toast: (text: string, tone?: 'ok' | 'err' | 'info') => void;
+}
+
+const OsContext = createContext<OsContextValue | null>(null);
+
+export function OsProvider({ children }: { children: React.ReactNode }) {
+  const [user, setUser] = useState<SessionUser | null>(null);
+  const [capabilities, setCapabilities] = useState<RoleCapabilities | null>(null);
+  const [demoMode, setDemoMode] = useState(false);
+  const [demoAccounts, setDemoAccounts] = useState<DemoAccount[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [dark, setDark] = useState(false);
+  const [rtl, setRtl] = useState(false);
+  const [toasts, setToasts] = useState<ToastItem[]>([]);
+
+  const toast = useCallback((text: string, tone: 'ok' | 'err' | 'info' = 'ok') => {
+    const id = `${Date.now()}-${Math.random().toString(36).slice(2, 6)}`;
+    setToasts((prev) => [...prev.slice(-3), { id, text, tone }]);
+    setTimeout(() => setToasts((prev) => prev.filter((t) => t.id !== id)), 4200);
+  }, []);
+
+  const refreshUser = useCallback(async () => {
+    try {
+      const res = await fetch('/api/v1/auth/me', { cache: 'no-store' });
+      const data = await res.json();
+      setUser(data.user ?? null);
+      setCapabilities(data.capabilities ?? null);
+      setDemoMode(Boolean(data.demoMode));
+      setDemoAccounts(data.demoAccounts ?? []);
+    } catch {
+      setUser(null);
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    void refreshUser();
+  }, [refreshUser]);
+
+  useEffect(() => {
+    document.documentElement.classList.toggle('dark', dark);
+  }, [dark]);
+
+  useEffect(() => {
+    document.documentElement.dir = rtl ? 'rtl' : 'ltr';
+  }, [rtl]);
+
+  const logout = useCallback(async () => {
+    await fetch('/api/v1/auth/logout', { method: 'POST' });
+    setUser(null);
+    window.location.href = '/login';
+  }, []);
+
+  const switchDemoAccount = useCallback(
+    async (email: string) => {
+      const res = await fetch('/api/v1/auth/demo-switch', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email }),
+      });
+      if (!res.ok) {
+        const err = await res.json().catch(() => ({}));
+        toast(err.error || 'Unable to switch role', 'err');
+        return;
+      }
+      await refreshUser();
+      toast(`Switched workspace to ${email}`);
+      window.location.href = '/os';
+    },
+    [refreshUser, toast],
+  );
+
+  return (
+    <OsContext.Provider
+      value={{
+        user,
+        capabilities,
+        demoMode,
+        demoAccounts,
+        loading,
+        dark,
+        rtl,
+        toggleDark: () => setDark((v) => !v),
+        toggleRtl: () => setRtl((v) => !v),
+        refreshUser,
+        logout,
+        switchDemoAccount,
+        toast,
+      }}
+    >
+      {children}
+      <div className="fixed bottom-4 end-4 z-[90] flex flex-col gap-2 max-w-sm no-print">
+        {toasts.map((t) => (
+          <div
+            key={t.id}
+            className={`px-4 py-3 rounded-2xl text-xs font-semibold shadow-xl border backdrop-blur ${
+              t.tone === 'err'
+                ? 'bg-red-950/95 text-red-100 border-red-500/40'
+                : t.tone === 'info'
+                  ? 'bg-[#0A1128]/95 text-[#FCF1B7] border-[#D4AF37]/40'
+                  : 'bg-[#083B2E]/95 text-emerald-50 border-[#34DFAC]/40'
+            }`}
+          >
+            {t.text}
+          </div>
+        ))}
+      </div>
+    </OsContext.Provider>
+  );
+}
+
+export function useOs() {
+  const ctx = useContext(OsContext);
+  if (!ctx) throw new Error('useOs must be used inside OsProvider');
+  return ctx;
+}
