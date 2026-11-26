@@ -1,4 +1,4 @@
-name: Betterway OS & Mobile CI
+name: Betterway OS v3 CI
 
 on:
   push:
@@ -7,15 +7,30 @@ on:
 
 jobs:
   verify:
+    name: Typecheck, Offline Contracts & Production Build
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
-          node-version: 24
+          node-version: 22
           cache: npm
       - run: npm ci
       - run: npm run typecheck
+      - run: npm run test:ci
       - run: npm run build
-      - run: node mobile/scripts/build-www.mjs --check
-      - run: npm test
+      - name: Run full Supabase integration suite (when repo secrets are configured)
+        env:
+          NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
+          NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.NEXT_PUBLIC_SUPABASE_ANON_KEY }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+          BW_SESSION_SECRET: ${{ secrets.BW_SESSION_SECRET }}
+          BW_CMS_REVALIDATE_SECRET: ${{ secrets.BW_CMS_REVALIDATE_SECRET }}
+          BW_INTAKE_HMAC_SECRET: ${{ secrets.BW_INTAKE_HMAC_SECRET }}
+          BW_HIKVISION_HMAC_SECRET: ${{ secrets.BW_HIKVISION_HMAC_SECRET }}
+        run: |
+          if [ -n "$NEXT_PUBLIC_SUPABASE_URL" ] && [ -n "$NEXT_PUBLIC_SUPABASE_ANON_KEY" ] && [ -n "$SUPABASE_SERVICE_ROLE_KEY" ]; then
+            npm test
+          else
+            echo "Skipping live Supabase integration suite (NEXT_PUBLIC_SUPABASE_URL / NEXT_PUBLIC_SUPABASE_ANON_KEY / SUPABASE_SERVICE_ROLE_KEY secrets not configured)."
+          fi

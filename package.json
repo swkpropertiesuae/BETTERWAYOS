@@ -13,6 +13,7 @@
     "typecheck": "tsc --noEmit",
     "lint": "next lint",
     "test": "vitest run",
+    "test:ci": "vitest run tests/domain-and-seed.test.ts tests/ci-offline-contracts.test.ts",
     "db:migrate": "tsx scripts/migrate-supabase.ts",
     "seed": "tsx scripts/seed-supabase.ts"
   },
