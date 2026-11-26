@@ -24,7 +24,33 @@ export async function POST(req: Request, ctx: { params: Promise<{ id: string }> 
             : 'REJECTED';
       await db.from('payout_requests').update({ status: nextStatus }).eq('id', updated.reference_id);
     } else if (updated.reference_table === 'delete_bin_requests' && updated.status === 'APPROVED') {
-      await db.from('delete_bin_requests').update({ status: 'PURGED' }).eq('id', updated.reference_id);
+      const { data: delReq } = await db
+        .from('delete_bin_requests')
+        .select('*')
+        .eq('id', updated.reference_id)
+        .maybeSingle();
+      const allowedPurgeTables = new Set(['leads', 'mortgage_cases', 'case_documents', 'contacts']);
+      if (delReq && allowedPurgeTables.has(delReq.entity_table)) {
+        if (delReq.entity_table === 'case_documents') {
+          const { data: docRow } = await db
+            .from('case_documents')
+            .select('storage_path')
+            .eq('id', delReq.entity_id)
+            .maybeSingle();
+          if (docRow?.storage_path) {
+            await db.storage.from('client-vault').remove([docRow.storage_path]);
+          }
+          await db.from('case_documents').delete().eq('id', delReq.entity_id);
+        } else if (delReq.entity_table === 'leads' || delReq.entity_table === 'mortgage_cases') {
+          await db.from(delReq.entity_table).delete().eq('id', delReq.entity_id);
+        } else if (delReq.entity_table === 'contacts') {
+          await db.from('contacts').delete().eq('id', delReq.entity_id);
+        }
+      }
+      await db
+        .from('delete_bin_requests')
+        .update({ status: 'PURGED', purged_at: new Date().toISOString() })
+        .eq('id', updated.reference_id);
     } else if (updated.reference_table === 'word_documents' && updated.status === 'APPROVED') {
       await db
         .from('word_documents')

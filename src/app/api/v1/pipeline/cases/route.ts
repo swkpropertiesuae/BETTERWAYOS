@@ -10,6 +10,9 @@ export async function GET() {
   const auth = await requireSession();
   if ('error' in auth) return auth.error;
   const caps = getCapabilitiesForRole(auth.user.role);
+  if (caps.pipelineScope === 'NONE') {
+    return NextResponse.json({ error: 'FORBIDDEN: Mortgage Pipeline is restricted from your role.' }, { status: 403 });
+  }
   const db = await getSupabaseAdmin();
 
   let q = db
@@ -36,11 +39,15 @@ export async function GET() {
 export async function POST(req: Request) {
   const auth = await requireSession();
   if ('error' in auth) return auth.error;
+  if (getCapabilitiesForRole(auth.user.role).pipelineScope === 'NONE') {
+    return NextResponse.json({ error: 'FORBIDDEN: Pipeline writes are restricted from your role.' }, { status: 403 });
+  }
   try {
     const body = await req.json();
     const res = await createMortgageCaseWithVault(body, auth.user);
     return NextResponse.json({ ok: true, ...res }, { status: 201 });
   } catch (err: unknown) {
-    return NextResponse.json({ error: err instanceof Error ? err.message : 'Case creation failed' }, { status: 400 });
+    const msg = err instanceof Error ? err.message : 'Case creation failed';
+    return NextResponse.json({ error: msg }, { status: msg.startsWith('FORBIDDEN') ? 403 : 400 });
   }
 }

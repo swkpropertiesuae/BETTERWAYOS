@@ -97,19 +97,19 @@ export default function EmployeesPage() {
     loadQr();
   }, [loadHr, loadQr]);
 
-  // 20-second rotating Oud Metha Reception QR countdown
+  // 20-second rotating Oud Metha Reception QR countdown (clean effect without mutating inside updater)
   useEffect(() => {
     const t = setInterval(() => {
-      setCountdown((prev) => {
-        if (prev <= 1) {
-          void loadQr();
-          return 20;
-        }
-        return prev - 1;
-      });
+      setCountdown((prev) => (prev <= 1 ? 0 : prev - 1));
     }, 1000);
     return () => clearInterval(t);
-  }, [loadQr]);
+  }, []);
+
+  useEffect(() => {
+    if (countdown === 0) {
+      void loadQr();
+    }
+  }, [countdown, loadQr]);
 
   async function doQrCheckIn() {
     if (!qr?.token) return;
@@ -155,9 +155,11 @@ export default function EmployeesPage() {
       const j = await r.json();
       if (!r.ok) throw new Error(j.error || 'Hikvision punch failed');
       const first = j.results?.[0];
+      const evKind = first?.event?.event_kind || 'CHECK_IN';
+      const evTime = first?.event?.dubai_time_str || '';
       setNotice(
-        `Hikvision Door Fingerprint logged (${first?.eventKind}) for ${hikEmpCode} at ${first?.dubaiTimeStr}${
-          first?.postedGroupCard ? ' — Check-In card posted to #attendance-checkin!' : ' (mid-day door unlock — zero duplicate spam).'
+        `Hikvision Door Fingerprint logged (${evKind}) for ${hikEmpCode} at ${evTime}${
+          first?.postedGroupMessage ? ' — Check-In card posted to #attendance-checkin!' : ' (mid-day door unlock — zero duplicate spam).'
         }`,
       );
       await loadQr();

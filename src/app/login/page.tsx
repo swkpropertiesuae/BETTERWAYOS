@@ -7,8 +7,9 @@ import { StaffAvatar } from '@/components/os/UiKit';
 
 export default function LoginPage() {
   const { demoMode, demoAccounts, switchDemoAccount, toast } = useOs();
-  const [email, setEmail] = useState('warda@betterwaymortgages.com');
-  const [password, setPassword] = useState('Betterway@2026');
+  const isDemoBuild = process.env.NEXT_PUBLIC_DEMO_MODE === 'true';
+  const [email, setEmail] = useState(isDemoBuild ? 'warda@betterwaymortgages.com' : '');
+  const [password, setPassword] = useState(isDemoBuild ? 'Betterway@2026' : '');
   const [busy, setBusy] = useState(false);
 
   const onSubmit = async (e: React.FormEvent) => {

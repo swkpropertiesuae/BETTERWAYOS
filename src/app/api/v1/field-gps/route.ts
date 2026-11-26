@@ -20,6 +20,15 @@ export async function POST(req: Request) {
   if ('error' in auth) return auth.error;
   try {
     const body = await req.json();
+    if (body.action === 'waypoint' || body.action === 'end' || body.action === 'sos') {
+      const db = await getSupabaseAdmin();
+      const { data: existing } = await db.from('field_visits').select('id,user_id').eq('id', body.visitId).maybeSingle();
+      if (!existing) return NextResponse.json({ error: 'Field visit not found' }, { status: 404 });
+      const caps = getCapabilitiesForRole(auth.user.role);
+      if (!caps.canViewFieldGpsAll && existing.user_id !== auth.user.id) {
+        return NextResponse.json({ error: 'FORBIDDEN: You can only update your own field visits.' }, { status: 403 });
+      }
+    }
     if (body.action === 'waypoint') {
       const visit = await pingFieldWaypoint(body.visitId, Number(body.lat), Number(body.lng), body.note);
       return NextResponse.json({ ok: true, visit });

@@ -16,7 +16,12 @@ export interface SessionTokenPayload {
 }
 
 function getSecret(): string {
-  return process.env.BW_SESSION_SECRET || 'dev-betterway-session-secret-change-in-prod';
+  const s = process.env.BW_SESSION_SECRET?.trim();
+  if (s) return s;
+  if (process.env.NODE_ENV === 'production') {
+    throw new Error('CRITICAL_CONFIG: BW_SESSION_SECRET must be set in production.');
+  }
+  return 'dev-betterway-session-secret-change-in-prod';
 }
 
 export function signSessionToken(payload: SessionTokenPayload): string {

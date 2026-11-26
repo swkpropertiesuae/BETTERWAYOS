@@ -30,13 +30,37 @@ export async function PATCH(req: Request) {
   const auth = await requireOwner();
   if ('error' in auth) return auth.error;
   try {
-    const body = (await req.json()) as { id: string; stage_code?: string; cash_status?: string; notes?: string };
+    const body = (await req.json()) as {
+      id: string;
+      stage_code?: string;
+      stageCode?: string;
+      cash_status?: string;
+      cashStatus?: string;
+      notes?: string;
+    };
     const db = await getSupabaseAdmin();
+    const { data: existing } = await db
+      .from('privacy_fast_track_jobs')
+      .select('id,private_to_owner_id')
+      .eq('id', body.id)
+      .maybeSingle();
+    if (!existing) {
+      return NextResponse.json({ error: 'Fast-Track job not found' }, { status: 404 });
+    }
+    if (existing.private_to_owner_id && existing.private_to_owner_id !== auth.user.id) {
+      return NextResponse.json(
+        { error: 'OWNER_PRIVATE_LOCK: Strictly locked to the creating Co-Owner.' },
+        { status: 403 },
+      );
+    }
+
+    const nextStage = body.stage_code || body.stageCode;
+    const nextCash = body.cash_status || body.cashStatus;
     const { data, error } = await db
       .from('privacy_fast_track_jobs')
       .update({
-        ...(body.stage_code ? { stage_code: body.stage_code } : {}),
-        ...(body.cash_status ? { cash_status: body.cash_status } : {}),
+        ...(nextStage ? { stage_code: nextStage } : {}),
+        ...(nextCash ? { cash_status: nextCash } : {}),
         ...(body.notes !== undefined ? { notes: body.notes } : {}),
         updated_at: new Date().toISOString(),
       })

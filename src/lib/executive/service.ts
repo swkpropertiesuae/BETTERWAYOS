@@ -170,6 +170,9 @@ export async function createFastTrackDoc(
   const db = await getSupabaseAdmin();
   const { data: job } = await db.from('privacy_fast_track_jobs').select('id,private_to_owner_id').eq('id', input.jobId).single();
   if (!job) throw new Error('Fast-Track job not found.');
+  if (job.private_to_owner_id && job.private_to_owner_id !== owner.id) {
+    throw new Error('OWNER_PRIVATE_LOCK: Strictly locked to the creating Co-Owner.');
+  }
 
   const { data, error } = await db
     .from('privacy_fast_track_docs')

@@ -117,26 +117,29 @@ export function OsShell({ children }: { children: React.ReactNode }) {
     );
   }
 
+  const hasPipelineAccess = user?.role !== 'HR_MANAGER' && user?.role !== 'IT_MARKETING';
+  const isOwnerOrAdmin = user?.role === 'OWNER' || user?.role === 'OFFICE_ADMIN';
+
   const quickDock = [
     { label: 'Apps', href: '/os', icon: LayoutGrid, show: true },
     { label: user?.executiveAppTitle || "Owner's Desk", href: '/os/executive', icon: Crown, show: Boolean(user?.isOwner) },
     { label: 'Command', href: '/os/command-center', icon: Radar, show: true },
     { label: 'Dashboard', href: '/os/dashboard', icon: LayoutDashboard, show: true },
-    { label: 'Master Log', href: '/os/master-log', icon: Database, show: user?.role === 'OWNER' || user?.role === 'OFFICE_ADMIN' },
-    { label: '12-Step', href: '/os/pipeline', icon: KanbanSquare, show: true },
-    { label: 'CRM', href: '/os/crm', icon: UserPlus, show: true },
-    { label: 'Mortgage Desk', href: '/os/mortgage-desk', icon: Calculator, show: true },
-    { label: 'Vault', href: '/os/vault', icon: FileLock2, show: true },
-    { label: 'Accounts', href: '/os/accounts', icon: Wallet, show: user?.role === 'OWNER' || user?.role === 'OFFICE_ADMIN' },
-    { label: 'Compliance', href: '/os/compliance', icon: ShieldCheck, show: true },
-    { label: 'Website', href: '/os/website-studio', icon: Globe, show: true },
+    { label: 'Master Log', href: '/os/master-log', icon: Database, show: isOwnerOrAdmin },
+    { label: '12-Step', href: '/os/pipeline', icon: KanbanSquare, show: hasPipelineAccess },
+    { label: 'CRM', href: '/os/crm', icon: UserPlus, show: hasPipelineAccess },
+    { label: 'Mortgage Desk', href: '/os/mortgage-desk', icon: Calculator, show: hasPipelineAccess },
+    { label: 'Vault', href: '/os/vault', icon: FileLock2, show: hasPipelineAccess },
+    { label: 'Accounts', href: '/os/accounts', icon: Wallet, show: isOwnerOrAdmin },
+    { label: 'Compliance', href: '/os/compliance', icon: ShieldCheck, show: isOwnerOrAdmin },
+    { label: 'Website', href: '/os/website-studio', icon: Globe, show: isOwnerOrAdmin || user?.role === 'IT_MARKETING' },
     { label: 'Team & QR', href: '/os/employees', icon: Users, show: true },
     { label: 'Group', href: '/os/inside', icon: MessagesSquare, show: true },
     { label: 'Field GPS', href: '/os/field-gps', icon: MapPin, show: true },
     { label: 'AI Desk', href: '/os/ai', icon: Sparkles, show: true },
     { label: 'Utilities', href: '/os/utilities', icon: Wrench, show: true },
-    { label: 'Sales', href: '/os/sales', icon: Briefcase, show: true },
-    { label: 'Settings', href: '/os/settings', icon: Settings, show: user?.role === 'OWNER' || user?.role === 'OFFICE_ADMIN' },
+    { label: 'Sales', href: '/os/sales', icon: Briefcase, show: hasPipelineAccess },
+    { label: 'Settings', href: '/os/settings', icon: Settings, show: isOwnerOrAdmin },
   ].filter((i) => i.show);
 
   return (
@@ -223,7 +226,7 @@ export function OsShell({ children }: { children: React.ReactNode }) {
 
       {/* Compact OS App Strip (visible on sub-apps for 1-click desktop switching) */}
       {pathname !== '/os' && (
-        <nav className="border-b border-[var(--bw-line)] bg-[var(--bw-card)]/70 px-4 lg:px-6 py-2 overflow-x-auto no-print">
+        <nav className="border-b border-[var(--bw-line)] bg-[var(--bw-card)]/70 px-4 lg:px-6 py-2 overflow-x-auto no-print [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
           <div className="flex items-center gap-1.5 min-w-max">
             {quickDock.map((item) => {
               const active = pathname === item.href || (item.href !== '/os' && pathname.startsWith(item.href + '/'));

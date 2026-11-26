@@ -16,9 +16,10 @@ export async function GET(req: Request) {
     db.from('hr_leave_requests').select('*, users(name,designation)').order('created_at', { ascending: false }).limit(60),
   ]);
 
+  const canSeeSalaries = auth.user.role === 'OWNER' || auth.user.role === 'HR_MANAGER';
   if (wpsPeriod) {
-    if (auth.user.role !== 'OWNER' && auth.user.role !== 'HR_MANAGER' && auth.user.role !== 'OFFICE_ADMIN') {
-      return NextResponse.json({ error: 'WPS export restricted to Owners, HR & Admin' }, { status: 403 });
+    if (!canSeeSalaries) {
+      return NextResponse.json({ error: 'WPS payroll export is strictly restricted to Owners & HR Manager.' }, { status: 403 });
     }
     const rows = (compRes.data ?? []).filter((c) => Number(c.basic_salary_aed || 0) > 0);
     const sif = generateMohreWpsSif(
@@ -40,8 +41,10 @@ export async function GET(req: Request) {
     });
   }
 
-  const canSeeSalaries = auth.user.role === 'OWNER' || auth.user.role === 'HR_MANAGER';
-  const compliance = (compRes.data ?? []).map((c) => {
+  const scopedCompliance = canSeeSalaries
+    ? compRes.data ?? []
+    : (compRes.data ?? []).filter((c) => c.user_id === auth.user.id);
+  const compliance = scopedCompliance.map((c) => {
     const years = Math.max(0.5, (Date.now() - new Date(c.join_date).getTime()) / (365.25 * 86_400_000));
     return {
       ...c,
@@ -51,11 +54,15 @@ export async function GET(req: Request) {
     };
   });
 
+  const scopedLeaves = canSeeSalaries
+    ? leavesRes.data ?? []
+    : (leavesRes.data ?? []).filter((l) => l.user_id === auth.user.id);
+
   return NextResponse.json({
     staff: usersRes.data ?? [],
     compliance,
-    leaves: leavesRes.data ?? [],
-    canManageHr: canSeeSalaries || auth.user.role === 'OFFICE_ADMIN',
+    leaves: scopedLeaves,
+    canManageHr: canSeeSalaries,
   });
 }
 

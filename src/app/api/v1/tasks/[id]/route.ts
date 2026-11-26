@@ -8,6 +8,13 @@ export async function PATCH(req: Request, ctx: { params: Promise<{ id: string }>
   const { id } = await ctx.params;
   const body = (await req.json()) as { status?: 'Todo' | 'In Progress' | 'Done'; priority?: string };
   const db = await getSupabaseAdmin();
+  const { data: existing } = await db.from('tasks').select('id,assigned_to,created_by').eq('id', id).maybeSingle();
+  if (!existing) return NextResponse.json({ error: 'Task not found' }, { status: 404 });
+  const isSupervisor =
+    auth.user.role === 'OWNER' || auth.user.role === 'TEAM_MANAGER' || auth.user.role === 'OPERATIONS_MANAGER';
+  if (!isSupervisor && existing.assigned_to !== auth.user.id && existing.created_by !== auth.user.id) {
+    return NextResponse.json({ error: 'FORBIDDEN: You can only update tasks assigned to or created by you.' }, { status: 403 });
+  }
   const { data, error } = await db
     .from('tasks')
     .update({

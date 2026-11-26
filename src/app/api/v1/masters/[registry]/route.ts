@@ -11,8 +11,13 @@ export async function GET(_req: Request, ctx: { params: Promise<{ registry: stri
   const def = getMasterRegistry(registry);
   if (!def) return NextResponse.json({ error: 'Unknown master registry' }, { status: 404 });
 
-  const rows = await listMasterRecords(def.key, auth.user);
-  return NextResponse.json({ registry: def, rows });
+  try {
+    const rows = await listMasterRecords(def.key, auth.user);
+    return NextResponse.json({ registry: def, rows });
+  } catch (err: unknown) {
+    const msg = err instanceof Error ? err.message : 'Master read failed';
+    return NextResponse.json({ error: msg }, { status: msg.includes('FORBIDDEN') ? 403 : 400 });
+  }
 }
 
 export async function POST(req: Request, ctx: { params: Promise<{ registry: string }> }) {

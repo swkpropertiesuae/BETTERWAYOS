@@ -32,6 +32,7 @@ async function pushToBetterwayOs(events) {
   });
   const text = await res.text();
   console.log(`[${new Date().toISOString()}] Forwarded ${events.length} door event(s) -> HTTP ${res.status}: ${text.slice(0, 200)}`);
+  return res.ok;
 }
 
 async function pollHikvision() {
@@ -72,6 +73,7 @@ async function pollHikvision() {
     for (const item of list) {
       const uid = `${item.serialNo || item.time}-${item.employeeNoString}`;
       if (!item.employeeNoString || seenEventIds.has(uid)) continue;
+      if (seenEventIds.size > 2000) seenEventIds.clear();
       seenEventIds.add(uid);
       fresh.push({
         employeeNoString: item.employeeNoString,
@@ -80,8 +82,12 @@ async function pollHikvision() {
         verifyMode: item.currentVerifyMode || 'fingerprint',
       });
     }
-    if (fresh.length > 0) await pushToBetterwayOs(fresh);
-    lastSyncIso = nowIso;
+    if (fresh.length === 0) {
+      lastSyncIso = nowIso;
+    } else {
+      const delivered = await pushToBetterwayOs(fresh);
+      if (delivered) lastSyncIso = nowIso;
+    }
   } catch (err) {
     console.error('[Hikvision Relay] Poll error:', err.message);
   }

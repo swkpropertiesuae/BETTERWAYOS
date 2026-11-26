@@ -32,8 +32,8 @@ export async function GET() {
     usersRes,
     eventsRes,
   ] = await Promise.all([
-    casesQ,
-    leadsQ.order('created_at', { ascending: false }).limit(200),
+    caps.pipelineScope === 'NONE' ? Promise.resolve({ data: [] }) : casesQ,
+    caps.pipelineScope === 'NONE' ? Promise.resolve({ data: [] }) : leadsQ.order('created_at', { ascending: false }).limit(200),
     db.from('tasks').select('*').order('due_date', { ascending: true }).limit(200),
     db.from('notifications').select('*').eq('recipient_user_id', auth.user.id).order('created_at', { ascending: false }).limit(30),
     db.from('attendance_events').select('*').eq('attendance_date_dubai', todayDubai).order('created_at', { ascending: false }),

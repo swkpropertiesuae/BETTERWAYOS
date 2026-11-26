@@ -5,6 +5,9 @@ import { getSupabaseAdmin } from '@/lib/supabase/admin';
 export async function GET() {
   const auth = await requireSession();
   if ('error' in auth) return auth.error;
+  if (auth.user.role !== 'OWNER' && auth.user.role !== 'OFFICE_ADMIN') {
+    return NextResponse.json({ error: 'FORBIDDEN: Office security settings are restricted to Owners & Office Admin.' }, { status: 403 });
+  }
   const db = await getSupabaseAdmin();
   const [{ data: branch }, { data: settings }] = await Promise.all([
     db.from('office_branches').select('*').eq('id', 'BR-OUDMETHA').maybeSingle(),

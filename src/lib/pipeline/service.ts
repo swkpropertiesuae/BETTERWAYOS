@@ -1,9 +1,36 @@
 import crypto from 'node:crypto';
 import type { SessionUser, StageCode } from '@/lib/domain/types';
+import { getCapabilitiesForRole } from '@/lib/auth/rbac';
 import { getChecklistForProfile, PIPELINE_STAGES, type BorrowerProfileType } from '@/lib/domain/workflow';
 import { calculateCbuaeEligibility } from '@/lib/domain/cbuae-math';
 import { getSupabaseAdmin } from '@/lib/supabase/admin';
 import { logAudit } from '@/lib/auth/approvals';
+
+export function assertPipelineScope(user: SessionUser) {
+  const caps = getCapabilitiesForRole(user.role);
+  if (caps.pipelineScope === 'NONE') {
+    throw new Error('FORBIDDEN: Your role does not have access to client CRM, pipeline, or document vaults.');
+  }
+  return caps.pipelineScope;
+}
+
+export async function assertCaseAccess(caseId: string, user: SessionUser) {
+  const scope = assertPipelineScope(user);
+  const db = await getSupabaseAdmin();
+  const { data: existing, error } = await db
+    .from('mortgage_cases')
+    .select('*')
+    .eq('id', caseId)
+    .eq('deleted_soft', false)
+    .maybeSingle();
+  if (error || !existing) {
+    throw new Error('NOT_FOUND: Mortgage case not found.');
+  }
+  if (scope === 'OWN' && existing.advisor_id !== user.id) {
+    throw new Error('FORBIDDEN: Advisors may only access their own assigned mortgage cases.');
+  }
+  return existing;
+}
 
 export function todayDubaiIso(): string {
   return new Intl.DateTimeFormat('en-CA', { timeZone: 'Asia/Dubai' }).format(new Date());
@@ -120,7 +147,24 @@ export async function createMortgageCaseWithVault(
   },
   actor: SessionUser,
 ) {
+  const scope = assertPipelineScope(actor);
   const db = await getSupabaseAdmin();
+
+  let resolvedPhone = String(input.borrowerPhone || '').trim();
+  if (input.leadId && (!resolvedPhone || resolvedPhone.includes('•') || resolvedPhone.includes('*'))) {
+    const { data: srcLead } = await db
+      .from('leads')
+      .select('contact_phone,assigned_to')
+      .eq('id', input.leadId)
+      .maybeSingle();
+    if (srcLead) {
+      if (scope === 'OWN' && srcLead.assigned_to !== actor.id) {
+        throw new Error('FORBIDDEN: Advisors can only convert their own assigned leads.');
+      }
+      resolvedPhone = srcLead.contact_phone;
+    }
+  }
+
   const profile: BorrowerProfileType = input.borrowerProfile || 'salaried';
   const residency = input.residencyStatus || (profile === 'non_resident' ? 'non_resident' : 'expat_resident');
   const math = calculateCbuaeEligibility({
@@ -142,7 +186,7 @@ export async function createMortgageCaseWithVault(
       case_code: caseCode,
       lead_id: input.leadId || null,
       borrower_name: input.borrowerName.trim(),
-      borrower_phone: input.borrowerPhone.trim(),
+      borrower_phone: resolvedPhone,
       borrower_email: (input.borrowerEmail || '').trim(),
       residency_status: residency,
       borrower_profile: profile,
@@ -215,13 +259,8 @@ export async function advanceMortgageStage(
   const stageDef = PIPELINE_STAGES.find((s) => s.code === nextStage);
   if (!stageDef) throw new Error(`Invalid stage code: ${nextStage}`);
 
+  const existing = await assertCaseAccess(caseId, actor);
   const db = await getSupabaseAdmin();
-  const { data: existing, error: fetchErr } = await db
-    .from('mortgage_cases')
-    .select('*')
-    .eq('id', caseId)
-    .single();
-  if (fetchErr || !existing) throw new Error('Mortgage case not found.');
 
   const prevLog = Array.isArray(existing.stage_evidence_log) ? existing.stage_evidence_log : [];
   const nextLog = [
@@ -259,6 +298,7 @@ export async function advanceMortgageStage(
 }
 
 export async function createCaseVaultUploadUrl(docId: string, fileName: string, actor: SessionUser) {
+  const scope = assertPipelineScope(actor);
   const db = await getSupabaseAdmin();
   const { data: doc, error } = await db
     .from('case_documents')
@@ -268,7 +308,7 @@ export async function createCaseVaultUploadUrl(docId: string, fileName: string, 
   if (error || !doc) throw new Error('Vault document slot not found.');
 
   const mc = (doc.mortgage_cases as unknown as { case_code: string; advisor_id: string } | null);
-  if (actor.role === 'ADVISOR' && mc?.advisor_id !== actor.id) {
+  if (scope === 'OWN' && mc?.advisor_id !== actor.id) {
     throw new Error('FORBIDDEN: Advisors may only upload documents for their own assigned cases.');
   }
 
@@ -319,6 +359,7 @@ export async function bookPropertyValuation(
   },
   actor: SessionUser,
 ) {
+  await assertCaseAccess(input.caseId, actor);
   const db = await getSupabaseAdmin();
   const { data: val, error } = await db
     .from('case_valuations')

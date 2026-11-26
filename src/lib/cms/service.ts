@@ -6,8 +6,7 @@ import { PIPELINE_STAGES } from '@/lib/domain/workflow';
 
 function sanitizePublicText(val: unknown): string {
   return String(val ?? '')
-    .replace(/\bswk\s*properties(?:\s*llc)?\b/gi, 'Betterway Partner Network')
-    .replace(/\bswk\b/gi, 'Betterway')
+    .replace(/swk(?:\s*properties(?:\s*llc)?)?/gi, 'Betterway')
     .trim();
 }
 
@@ -25,7 +24,12 @@ function sanitizeDeep<T>(value: T): T {
 }
 
 export function getCmsWebhookSecret(): string {
-  return process.env.BW_CMS_REVALIDATE_SECRET || process.env.BW_INTAKE_HMAC_SECRET || 'betterway-dev-cms-secret';
+  const s = process.env.BW_CMS_REVALIDATE_SECRET?.trim() || process.env.BW_INTAKE_HMAC_SECRET?.trim();
+  if (s) return s;
+  if (process.env.NODE_ENV === 'production') {
+    throw new Error('CRITICAL_CONFIG: BW_CMS_REVALIDATE_SECRET or BW_INTAKE_HMAC_SECRET must be set in production.');
+  }
+  return 'betterway-dev-cms-secret';
 }
 
 export function signCmsWebhookBody(rawBody: string): string {
@@ -321,11 +325,12 @@ export async function signPortalUploadUrl(input: {
     throw new Error(`Storage upload signing failed: ${error?.message}`);
   }
 
+  const cleanDocHint = String(input.docType || 'Passport').replace(/[(),%*\\]/g, '').trim();
   await db
     .from('case_documents')
-    .update({ status: 'Uploaded', storage_path: storagePath, updated_at: new Date().toISOString() })
+    .update({ status: 'Uploaded', storage_path: storagePath, file_name: safeName, updated_at: new Date().toISOString() })
     .eq('case_id', caseRow.id)
-    .ilike('doc_type', `%${input.docType}%`);
+    .ilike('doc_name', `%${cleanDocHint}%`);
 
   return {
     caseCode: caseRow.case_code,
@@ -337,15 +342,26 @@ export async function signPortalUploadUrl(input: {
 
 export async function getPublicCaseStatus(queryRef: string) {
   const ref = String(queryRef || '').trim();
-  if (!ref) return null;
+  if (!/^[A-Za-z0-9_-]{6,64}$/.test(ref)) return null;
   const db = await getSupabaseAdmin();
 
-  const { data: c } = await db
+  const selectCols = 'case_code,borrower_name,stage_code,community,property_price_aed,requested_loan_aed,updated_at';
+  let { data: c } = await db
     .from('mortgage_cases')
-    .select('case_code,borrower_name,stage_code,community,property_price_aed,requested_loan_aed,updated_at')
-    .or(`case_code.eq.${ref},portal_token.eq.${ref}`)
+    .select(selectCols)
+    .eq('case_code', ref)
     .eq('deleted_soft', false)
     .maybeSingle();
+
+  if (!c) {
+    const byToken = await db
+      .from('mortgage_cases')
+      .select(selectCols)
+      .eq('portal_token', ref)
+      .eq('deleted_soft', false)
+      .maybeSingle();
+    c = byToken.data;
+  }
 
   if (!c) return null;
   const stageIdx = PIPELINE_STAGES.findIndex((s) => s.code === c.stage_code);

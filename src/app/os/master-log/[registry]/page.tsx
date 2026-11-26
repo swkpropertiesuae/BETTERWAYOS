@@ -42,6 +42,7 @@ export default function MasterRegistryDetailPage({ params }: { params: Promise<{
     setEditId(String(row.id));
     const next: Record<string, string | number | boolean> = {};
     for (const f of def?.fields ?? []) {
+      if (f.ownerOnlyField && !user?.isOwner) continue;
       const v = row[f.key];
       if (v !== undefined && v !== null) next[f.key] = v as string | number | boolean;
     }
@@ -80,6 +81,7 @@ export default function MasterRegistryDetailPage({ params }: { params: Promise<{
 
   const isOwnerLocked = def?.writePolicy === 'OWNER_ONLY';
   const canSubmit = user?.isOwner || (user?.role === 'OFFICE_ADMIN' && !isOwnerLocked);
+  const canCreate = user?.isOwner || (user?.role === 'OFFICE_ADMIN' && !isOwnerLocked && def?.writePolicy !== 'OWNER_ONLY_SALARY_ROLE');
 
   const filtered = rows.filter((r) => {
     if (!search.trim()) return true;
@@ -103,7 +105,7 @@ export default function MasterRegistryDetailPage({ params }: { params: Promise<{
             >
               <RefreshCw size={13} /> Refresh
             </button>
-            {canSubmit ? (
+            {canCreate ? (
               <button
                 type="button"
                 onClick={openCreate}

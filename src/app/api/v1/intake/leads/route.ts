@@ -12,7 +12,10 @@ export async function POST(req: Request) {
     const rawText = await req.text();
     const secret = process.env.BW_INTAKE_HMAC_SECRET?.trim();
     const sigHeader = req.headers.get('x-betterway-signature');
-    if (secret && sigHeader) {
+    if (secret) {
+      if (!sigHeader) {
+        return NextResponse.json({ error: 'Missing x-betterway-signature HMAC header' }, { status: 401 });
+      }
       const expected = `sha256=${crypto.createHmac('sha256', secret).update(rawText).digest('hex')}`;
       const a = Buffer.from(sigHeader);
       const b = Buffer.from(expected);

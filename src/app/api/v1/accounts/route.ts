@@ -83,12 +83,40 @@ export async function POST(req: Request) {
     const db = await getSupabaseAdmin();
 
     if (body.kind === 'payout') {
+      const amountAed = Number(body.amountAed);
+      if (!Number.isFinite(amountAed) || amountAed <= 0) {
+        return NextResponse.json({ error: 'Payout amountAed must be a positive number.' }, { status: 400 });
+      }
+      if (!body.brokerId) {
+        return NextResponse.json(
+          { error: 'CORPORATE_ACCOUNT_GUARD: Select a registered RERA Partner Brokerage verified in Master Log before initiating payout.' },
+          { status: 400 },
+        );
+      }
+      const { data: broker } = await db
+        .from('rera_brokers')
+        .select('id,agency_name,orn_number,corporate_iban,corporate_bank_verified,bank_name')
+        .eq('id', body.brokerId)
+        .maybeSingle();
+      if (!broker) {
+        return NextResponse.json({ error: 'CORPORATE_ACCOUNT_GUARD: Registered RERA Partner Brokerage not found.' }, { status: 400 });
+      }
+      const submittedIban = String(body.destinationIban || '').replace(/\s+/g, '').toUpperCase();
+      const brokerIban = String(broker.corporate_iban || '').replace(/\s+/g, '').toUpperCase();
+      if (!brokerIban || submittedIban !== brokerIban) {
+        return NextResponse.json(
+          { error: 'CORPORATE_ACCOUNT_GUARD: Destination IBAN must match the verified corporate IBAN registered on the RERA Brokerage master record.' },
+          { status: 400 },
+        );
+      }
+
+      // Server-derived verification flags ONLY — never trust client-supplied ornVerified / bankLetterVerified booleans!
       validateCorporateAccountChannel({
         payeeAccountType: String(body.payeeAccountType || 'CORPORATE'),
-        destinationIban: String(body.destinationIban || ''),
+        destinationIban: brokerIban,
         channelNote: String(body.channelNote || ''),
-        ornVerified: Boolean(body.ornVerified),
-        bankLetterVerified: Boolean(body.bankLetterVerified),
+        ornVerified: Boolean(broker.orn_number && String(broker.orn_number).trim().length >= 3),
+        bankLetterVerified: Boolean(broker.corporate_bank_verified),
       });
 
       const code = `PAY-${new Date().getFullYear()}-${crypto.randomBytes(2).toString('hex').toUpperCase()}`;
@@ -96,13 +124,13 @@ export async function POST(req: Request) {
         .from('payout_requests')
         .insert({
           payout_code: code,
-          broker_id: body.brokerId || null,
-          payee_name: body.payeeName,
+          broker_id: broker.id,
+          payee_name: broker.agency_name,
           payee_account_type: 'CORPORATE',
-          destination_iban: body.destinationIban,
-          bank_name: body.bankName || '',
-          amount_aed: Number(body.amountAed),
-          vat_aed: Number(((Number(body.amountAed) * 5) / 100).toFixed(2)),
+          destination_iban: brokerIban,
+          bank_name: broker.bank_name || body.bankName || '',
+          amount_aed: amountAed,
+          vat_aed: Number(((amountAed * 5) / 100).toFixed(2)),
           orn_verified: true,
           bank_letter_verified: true,
           requested_by: auth.user.id,
@@ -116,9 +144,9 @@ export async function POST(req: Request) {
         approvalKind: 'PAYOUT_RELEASE',
         referenceTable: 'payout_requests',
         referenceId: payout.id,
-        title: `Payout ${code} · ${body.payeeName} (${Number(body.amountAed).toLocaleString()} AED)`,
-        summary: `Verified ORN Corporate IBAN ${body.destinationIban}. Requires 2-of-2 Owner sign-off (Warda + Shabib).`,
-        amountAed: Number(body.amountAed),
+        title: `Payout ${code} · ${broker.agency_name} (${amountAed.toLocaleString()} AED)`,
+        summary: `Verified ORN ${broker.orn_number} Corporate IBAN ${brokerIban}. Requires 2-of-2 Owner sign-off (Warda + Shabib).`,
+        amountAed,
         requestedBy: auth.user.id,
       });
       await db.from('payout_requests').update({ approval_id: approval.id }).eq('id', payout.id);
@@ -126,7 +154,10 @@ export async function POST(req: Request) {
     }
 
     if (body.kind === 'expense') {
-      const amt = Number(body.amountAed || 0);
+      const amt = Number(body.amountAed);
+      if (!Number.isFinite(amt) || amt <= 0) {
+        return NextResponse.json({ error: 'Expense amountAed must be a positive number.' }, { status: 400 });
+      }
       const vat = body.vatApplicable === false ? 0 : Number(((amt * 5) / 100).toFixed(2));
       const { data: exp, error } = await db
         .from('expenses')
@@ -146,7 +177,10 @@ export async function POST(req: Request) {
     }
 
     // Standard Bank DSA / Advisory Invoice (strictly Corporate IBAN)
-    const subtotal = Number(body.subtotalAed || 0);
+    const subtotal = Number(body.subtotalAed);
+    if (!Number.isFinite(subtotal) || subtotal <= 0) {
+      return NextResponse.json({ error: 'Invoice subtotalAed must be a positive number.' }, { status: 400 });
+    }
     const vatAmount = Number(((subtotal * 5) / 100).toFixed(2));
     const total = Number((subtotal + vatAmount).toFixed(2));
     const invoiceNo = `BW-INV-${new Date().getFullYear()}-${crypto.randomBytes(2).toString('hex').toUpperCase()}`;

@@ -12,6 +12,7 @@ export async function POST(req: Request, ctx: { params: Promise<{ id: string }> 
     const updated = await advanceMortgageStage(id, body.nextStage, body.evidenceNote, auth.user);
     return NextResponse.json({ ok: true, mortgageCase: updated });
   } catch (err: unknown) {
-    return NextResponse.json({ error: err instanceof Error ? err.message : 'Stage advance failed' }, { status: 400 });
+    const msg = err instanceof Error ? err.message : 'Stage advance failed';
+    return NextResponse.json({ error: msg }, { status: msg.startsWith('FORBIDDEN') ? 403 : msg.startsWith('NOT_FOUND') ? 404 : 400 });
   }
 }

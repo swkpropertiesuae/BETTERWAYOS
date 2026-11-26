@@ -72,6 +72,12 @@ export default function AccountsPage() {
       return;
     }
     setData(j);
+    const firstBroker = (j.brokers ?? [])[0] as Record<string, unknown> | undefined;
+    if (firstBroker) {
+      setPayBrokerId((prev) => prev || String(firstBroker.id || ''));
+      setPayName((prev) => prev || String(firstBroker.agency_name || ''));
+      if (firstBroker.corporate_iban) setPayIban(String(firstBroker.corporate_iban));
+    }
   }, []);
 
   useEffect(() => {
@@ -428,16 +434,18 @@ export default function AccountsPage() {
                     setPayBrokerId(e.target.value);
                     const b = data?.brokers.find((x) => String(x.id) === e.target.value);
                     if (b) {
-                      setPayName(String(b.brokerage_name || ''));
+                      setPayName(String(b.agency_name || ''));
                       if (b.corporate_iban) setPayIban(String(b.corporate_iban));
+                      if (b.bank_name) setPayBank(String(b.bank_name));
                     }
                   }}
+                  required
                   className="w-full rounded-xl border border-[var(--bw-line)] bg-[var(--bw-card)] px-3 py-2 text-xs"
                 >
-                  <option value="">Select Registered RERA Partner Brokerage (Optional)</option>
+                  <option value="">Select Registered RERA Partner Brokerage (Required)</option>
                   {(data?.brokers ?? []).map((b) => (
                     <option key={String(b.id)} value={String(b.id)}>
-                      {String(b.brokerage_name)} · ORN {String(b.orn_number)}
+                      {String(b.agency_name)} · ORN {String(b.orn_number)}
                     </option>
                   ))}
                 </select>
@@ -515,7 +523,7 @@ export default function AccountsPage() {
                         <td className="py-2">
                           <StatusPill
                             label={String(p.status)}
-                            tone={String(p.status) === 'APPROVED' ? 'emerald' : 'gold'}
+                            tone={String(p.status) === 'READY_TO_PAY' || String(p.status) === 'PAID' ? 'emerald' : 'gold'}
                           />
                         </td>
                       </tr>

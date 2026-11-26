@@ -173,13 +173,13 @@ export default function UtilitiesPage() {
                     key={String(t.id)}
                     type="button"
                     onClick={() => {
-                      setTitle(String(t.name));
+                      setTitle(String(t.title || t.code));
                       setCategory(String(t.category || 'Mortgage Quote'));
                       if (t.body_template) setBodyText(String(t.body_template));
                     }}
                     className="px-2.5 py-1 rounded-lg bg-slate-500/10 hover:bg-[#083B2E] hover:text-white text-[11px] font-semibold transition"
                   >
-                    {String(t.code)} · {String(t.name)}
+                    {String(t.code)} · {String(t.title || t.code)}
                   </button>
                 ))}
               </div>
@@ -351,7 +351,7 @@ export default function UtilitiesPage() {
                   <div className="font-bold">{String(r.title)}</div>
                   <div className="text-[11px] text-[var(--bw-muted)]">{String(r.subtitle)}</div>
                 </div>
-                <StatusPill label={String(r.entity)} tone={String(r.entity) === 'PRIVACY_FAST_TRACK' ? 'navy' : 'emerald'} />
+                <StatusPill label={String(r.type || 'Record')} tone={String(r.type) === 'Privacy Fast Track' ? 'navy' : 'emerald'} />
               </div>
             ))}
           </div>

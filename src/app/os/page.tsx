@@ -63,6 +63,8 @@ export default function OsAppLauncherPage() {
 
   const isOwner = Boolean(user?.isOwner);
   const isOwnerOrAdmin = user?.role === 'OWNER' || user?.role === 'OFFICE_ADMIN';
+  const hasPipelineAccess = user?.role !== 'HR_MANAGER' && user?.role !== 'IT_MARKETING';
+  const hasWebsiteStudioAccess = isOwnerOrAdmin || user?.role === 'IT_MARKETING';
 
   const allApps: AppIconDef[] = [
     {
@@ -113,7 +115,7 @@ export default function OsAppLauncherPage() {
       href: '/os/pipeline',
       icon: KanbanSquare,
       tone: 'emerald',
-      visible: true,
+      visible: hasPipelineAccess,
     },
     {
       key: 'crm',
@@ -123,7 +125,7 @@ export default function OsAppLauncherPage() {
       href: '/os/crm',
       icon: UserPlus,
       tone: 'sky',
-      visible: true,
+      visible: hasPipelineAccess,
     },
     {
       key: 'mortgage-desk',
@@ -133,7 +135,7 @@ export default function OsAppLauncherPage() {
       href: '/os/mortgage-desk',
       icon: Calculator,
       tone: 'gold',
-      visible: true,
+      visible: hasPipelineAccess,
     },
     {
       key: 'sales',
@@ -143,7 +145,7 @@ export default function OsAppLauncherPage() {
       href: '/os/sales',
       icon: Briefcase,
       tone: 'navy',
-      visible: true,
+      visible: hasPipelineAccess,
     },
     {
       key: 'vault',
@@ -153,7 +155,7 @@ export default function OsAppLauncherPage() {
       href: '/os/vault',
       icon: FileLock2,
       tone: 'navy',
-      visible: true,
+      visible: hasPipelineAccess,
     },
     {
       key: 'accounts',
@@ -173,7 +175,7 @@ export default function OsAppLauncherPage() {
       href: '/os/compliance',
       icon: ShieldCheck,
       tone: 'violet',
-      visible: true,
+      visible: isOwnerOrAdmin,
     },
     {
       key: 'website-studio',
@@ -183,7 +185,7 @@ export default function OsAppLauncherPage() {
       href: '/os/website-studio',
       icon: Globe,
       tone: 'emerald',
-      visible: true,
+      visible: hasWebsiteStudioAccess,
     },
     {
       key: 'employees',

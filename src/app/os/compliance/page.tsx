@@ -148,8 +148,9 @@ export default function CompliancePage() {
                 className="w-full rounded-xl border border-[var(--bw-line)] bg-[var(--bw-card)] px-3 py-2 text-xs"
               >
                 <option value="SANCTIONS_SCREEN">UAE EOCN / UN Sanctions Screen</option>
-                <option value="CBUAE_KFS">CBUAE Key Facts Statement (KFS) Audit</option>
-                <option value="PEP_REVIEW">Politically Exposed Person (PEP) Review</option>
+                <option value="KFS_SIGN">CBUAE Key Facts Statement (KFS) Audit</option>
+                <option value="PDPL_CONSENT">UAE PDPL Consent Verification</option>
+                <option value="GOAML_STR">UAE FIU goAML STR Filing Review</option>
               </select>
               <button className="w-full rounded-xl bg-[#083B2E] text-white py-2.5 text-xs font-bold">
                 Run Compliance Check
@@ -228,7 +229,7 @@ export default function CompliancePage() {
             >
               <option value="leads">leads</option>
               <option value="mortgage_cases">mortgage_cases</option>
-              <option value="client_documents">client_documents</option>
+              <option value="case_documents">case_documents</option>
               <option value="contacts">contacts</option>
             </select>
             <input
@@ -276,7 +277,7 @@ export default function CompliancePage() {
                     <td className="py-2 pr-3 font-semibold">{String(d.record_label)}</td>
                     <td className="py-2 pr-3 text-[var(--bw-muted)]">{String(d.reason)}</td>
                     <td className="py-2">
-                      <StatusPill label={String(d.status)} tone={String(d.status) === 'APPROVED' ? 'red' : 'gold'} />
+                      <StatusPill label={String(d.status)} tone={String(d.status) === 'PURGED' ? 'red' : 'gold'} />
                     </td>
                   </tr>
                 ))}
@@ -305,7 +306,7 @@ export default function CompliancePage() {
                   <td className="py-2 pr-3 font-mono text-[11px]">{String(a.created_at).slice(0, 19).replace('T', ' ')}</td>
                   <td className="py-2 pr-3 font-semibold">{String(a.actor_role || a.actor_id || 'SYSTEM')}</td>
                   <td className="py-2 pr-3 font-mono text-[var(--bw-emerald)]">{String(a.action)}</td>
-                  <td className="py-2 pr-3">{String(a.entity_type)}</td>
+                  <td className="py-2 pr-3 font-mono">{String(a.entity_table)}</td>
                   <td className="py-2 text-[var(--bw-muted)] truncate max-w-md">{JSON.stringify(a.details || {})}</td>
                 </tr>
               ))}

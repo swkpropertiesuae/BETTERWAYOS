@@ -4,11 +4,57 @@ import { getSupabaseAdmin } from '@/lib/supabase/admin';
 import { todayDubaiIso } from '@/lib/pipeline/service';
 
 function getHikSecret(): string {
-  return process.env.BW_HIKVISION_HMAC_SECRET || 'dev-betterway-hikvision-secret';
+  const s = process.env.BW_HIKVISION_HMAC_SECRET?.trim();
+  if (s) return s;
+  if (process.env.NODE_ENV === 'production') {
+    throw new Error('CRITICAL_CONFIG: BW_HIKVISION_HMAC_SECRET must be set in production.');
+  }
+  return 'dev-betterway-hikvision-secret';
 }
 
 function getQrSecret(): string {
-  return process.env.BW_SESSION_SECRET || 'dev-betterway-qr-secret';
+  const s = process.env.BW_SESSION_SECRET?.trim();
+  if (s) return s;
+  if (process.env.NODE_ENV === 'production') {
+    throw new Error('CRITICAL_CONFIG: BW_SESSION_SECRET must be set in production.');
+  }
+  return 'dev-betterway-qr-secret';
+}
+
+function ipv4ToInt(ip: string): number | null {
+  const clean = ip.replace(/^::ffff:/i, '').trim();
+  const parts = clean.split('.');
+  if (parts.length !== 4) return null;
+  let num = 0;
+  for (const p of parts) {
+    const n = Number(p);
+    if (!Number.isInteger(n) || n < 0 || n > 255) return null;
+    num = (num << 8) | n;
+  }
+  return num >>> 0;
+}
+
+export function ipMatchesCidrList(clientIp: string, cidrList: string): boolean {
+  const ip = clientIp.replace(/^::ffff:/i, '').trim();
+  const entries = cidrList
+    .split(',')
+    .map((s) => s.trim())
+    .filter(Boolean);
+  if (entries.length === 0) return true;
+  if (ip === '::1' && entries.some((e) => e.startsWith('127.0.0.1') || e === '::1')) return true;
+
+  const clientNum = ipv4ToInt(ip);
+  for (const entry of entries) {
+    if (entry === ip) return true;
+    const [net, bitsStr] = entry.split('/');
+    const netNum = ipv4ToInt(net);
+    const bits = bitsStr !== undefined ? Number(bitsStr) : 32;
+    if (clientNum !== null && netNum !== null && Number.isInteger(bits) && bits >= 0 && bits <= 32) {
+      const mask = bits === 0 ? 0 : (~0 << (32 - bits)) >>> 0;
+      if ((clientNum & mask) === (netNum & mask)) return true;
+    }
+  }
+  return false;
 }
 
 export function signHikvisionPayload(rawBody: string): string {
@@ -205,16 +251,20 @@ export async function processOfficeQrCheckIn(params: {
   const { data: branch } = await db.from('office_branches').select('*').eq('id', 'BR-OUDMETHA').maybeSingle();
 
   let distanceM: number | null = null;
-  if (params.latitude !== undefined && params.longitude !== undefined && branch) {
+  if (branch?.geofence_lock_enabled) {
+    if (params.latitude === undefined || params.longitude === undefined || !Number.isFinite(params.latitude) || !Number.isFinite(params.longitude)) {
+      throw new Error('GPS location permission is required for Al Nasr Plaza Oud Metha office check-in.');
+    }
     distanceM = haversineDistanceMeters(branch.latitude, branch.longitude, params.latitude, params.longitude);
-    if (branch.geofence_lock_enabled && distanceM > Number(branch.geofence_radius_m || 150)) {
+    if (distanceM > Number(branch.geofence_radius_m || 150)) {
       throw new Error(`Outside Al Nasr Plaza Oud Metha geofence (${distanceM}m away; max ${branch.geofence_radius_m}m).`);
     }
+  } else if (params.latitude !== undefined && params.longitude !== undefined && branch) {
+    distanceM = haversineDistanceMeters(branch.latitude, branch.longitude, params.latitude, params.longitude);
   }
 
-  if (branch?.wifi_lock_enabled && branch.office_ip_cidr && params.clientIp) {
-    const allowedPrefix = branch.office_ip_cidr.split('/')[0];
-    if (allowedPrefix && !params.clientIp.includes(allowedPrefix)) {
+  if (branch?.wifi_lock_enabled && branch.office_ip_cidr) {
+    if (!params.clientIp || !ipMatchesCidrList(params.clientIp, branch.office_ip_cidr)) {
       throw new Error(`Office Wi-Fi IP Lock active: connect to ${branch.wifi_ssid} (${branch.office_ip_cidr}).`);
     }
   }

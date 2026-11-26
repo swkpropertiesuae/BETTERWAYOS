@@ -12,6 +12,9 @@ export async function GET(req: Request) {
   const url = new URL(req.url);
   const dateFilter = url.searchParams.get('date') || '';
   const caps = getCapabilitiesForRole(auth.user.role);
+  if (caps.pipelineScope === 'NONE') {
+    return NextResponse.json({ error: 'FORBIDDEN: Client CRM is restricted from your role.' }, { status: 403 });
+  }
   const db = await getSupabaseAdmin();
 
   let q = db.from('leads').select('*').eq('deleted_soft', false).order('created_at', { ascending: false }).limit(250);
@@ -49,6 +52,9 @@ export async function GET(req: Request) {
 export async function POST(req: Request) {
   const auth = await requireSession();
   if ('error' in auth) return auth.error;
+  if (getCapabilitiesForRole(auth.user.role).pipelineScope === 'NONE') {
+    return NextResponse.json({ error: 'FORBIDDEN: Client CRM writes are restricted from your role.' }, { status: 403 });
+  }
   try {
     const body = await req.json();
     const lead = await ingestDailyEnquiry({

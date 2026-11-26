@@ -112,9 +112,10 @@ export async function decideOwnerApproval(
         updated_at: now,
       })
       .eq('id', approvalId)
+      .eq('status', existing.status)
       .select('*')
       .single();
-    if (error) throw new Error(error.message);
+    if (error || !updated) throw new Error(error?.message || 'Approval state changed concurrently; refresh and retry.');
     await logAudit(actor, 'owner_approvals', approvalId, 'REJECTED', { note, kind: existing.approval_kind });
     return updated;
   }
@@ -131,9 +132,10 @@ export async function decideOwnerApproval(
         updated_at: now,
       })
       .eq('id', approvalId)
+      .eq('status', existing.status)
       .select('*')
       .single();
-    if (error) throw new Error(error.message);
+    if (error || !updated) throw new Error(error?.message || 'Approval state changed concurrently; refresh and retry.');
     await logAudit(actor, 'owner_approvals', approvalId, 'APPROVED_1_OF_2', { note, kind: existing.approval_kind });
     return updated;
   }
@@ -150,9 +152,10 @@ export async function decideOwnerApproval(
         updated_at: now,
       })
       .eq('id', approvalId)
+      .eq('status', existing.status)
       .select('*')
       .single();
-    if (error) throw new Error(error.message);
+    if (error || !updated) throw new Error(error?.message || 'Approval state changed concurrently; refresh and retry.');
     await logAudit(actor, 'owner_approvals', approvalId, 'OWNER_1_APPROVED', { note, kind: existing.approval_kind });
 
     const otherOwnerId = actor.id === 'USR-01' ? 'USR-02' : 'USR-01';
@@ -183,9 +186,10 @@ export async function decideOwnerApproval(
       updated_at: now,
     })
     .eq('id', approvalId)
+    .eq('status', existing.status)
     .select('*')
     .single();
-  if (error) throw new Error(error.message);
+  if (error || !updated) throw new Error(error?.message || 'Approval state changed concurrently; refresh and retry.');
   await logAudit(actor, 'owner_approvals', approvalId, 'APPROVED_2_OF_2', { note, kind: existing.approval_kind });
   return updated;
 }

@@ -3,6 +3,8 @@ import type { MasterRegistryKey, SessionUser } from '@/lib/domain/types';
 import { getMasterRegistry, MASTER_REGISTRIES } from '@/lib/domain/masters';
 import { getSupabaseAdmin } from '@/lib/supabase/admin';
 import { createOwnerApproval, decideOwnerApproval, logAudit } from '@/lib/auth/approvals';
+import { getCapabilitiesForRole } from '@/lib/auth/rbac';
+import { maskPhoneForRole } from '@/lib/auth/masking';
 
 const PROTECTED_EMPLOYEE_FIELDS = new Set(['role', 'basic_salary_aed', 'monthly_target_aed', 'password_hash']);
 
@@ -26,6 +28,17 @@ export async function getMasterRegistryCounts(): Promise<Record<string, number>>
 export async function listMasterRecords(registryKey: MasterRegistryKey, user: SessionUser) {
   const def = getMasterRegistry(registryKey);
   if (!def) throw new Error(`Unknown master registry: ${registryKey}`);
+  const caps = getCapabilitiesForRole(user.role);
+
+  // Security & admin-only master registries
+  const adminReadOnly = new Set(['office_branches', 'roles_permissions', 'lead_routing_rules', 'rera_brokers', 'chart_of_accounts']);
+  if (adminReadOnly.has(registryKey) && user.role !== 'OWNER' && user.role !== 'OFFICE_ADMIN') {
+    throw new Error(`FORBIDDEN: Master registry ${def.label} is restricted to Owners & Office Admin.`);
+  }
+  if ((registryKey === 'contacts' || registryKey === 'master_vault_index') && caps.pipelineScope === 'NONE') {
+    throw new Error(`FORBIDDEN: ${def.label} is restricted to client advisory, operations & leadership.`);
+  }
+
   const db = await getSupabaseAdmin();
   const selectCols =
     registryKey === 'employees'
@@ -33,9 +46,25 @@ export async function listMasterRecords(registryKey: MasterRegistryKey, user: Se
         ? 'id,emp_code,slug,name,name_ar,email,phone,role,tier,designation,department,avatar_url,portrait_url,initials,monthly_target_aed,basic_salary_aed,active'
         : 'id,emp_code,slug,name,name_ar,email,phone,role,tier,designation,department,avatar_url,portrait_url,initials,active'
       : '*';
-  const { data, error } = await db.from(def.table).select(selectCols).limit(500);
+
+  let q = db.from(def.table).select(selectCols);
+  if (registryKey === 'contacts' && caps.pipelineScope === 'OWN') {
+    q = q.eq('assigned_to', user.id);
+  } else if (registryKey === 'master_vault_index' && caps.pipelineScope === 'OWN') {
+    q = q.eq('uploaded_by', user.id);
+  }
+
+  const { data, error } = await q.limit(500);
   if (error) throw new Error(error.message);
-  return data ?? [];
+  const rows = (data ?? []) as unknown as Array<Record<string, unknown>>;
+
+  if (registryKey === 'contacts' && !user.isOwner) {
+    return rows.map((r) => ({
+      ...r,
+      phone: maskPhoneForRole(String(r.phone || ''), user, false),
+    }));
+  }
+  return rows;
 }
 
 function sanitizePayloadForTable(registryKey: MasterRegistryKey, payload: Record<string, unknown>) {
@@ -63,7 +92,14 @@ export async function writeMasterRecord(
   // Enforce strict RBAC + Security-Critical Master Protection
   if (actor.role !== 'OWNER') {
     if (def.writePolicy === 'OPERATIONAL_FREE_CREATE' && action === 'CREATE') {
-      // Operational creates during active mortgage deals (contacts, units, properties, vault index)
+      const caps = getCapabilitiesForRole(actor.role);
+      if (caps.pipelineScope === 'NONE') {
+        throw new Error(`FORBIDDEN: Your role cannot create ${def.label} records.`);
+      }
+      if (registryKey === 'master_vault_index') {
+        payload.verified = false;
+        payload.uploaded_by = actor.id;
+      }
     } else if (actor.role !== 'OFFICE_ADMIN') {
       throw new Error(`FORBIDDEN: Only Owners (Warda & Shabib) or approval-gated Office Admin can modify Master Log (${registryKey}).`);
     } else {

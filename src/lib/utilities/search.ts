@@ -9,12 +9,20 @@ export interface UnifiedSearchHit {
   href: string;
 }
 
+export function sanitizePostgrestQuery(raw: string): string {
+  return String(raw || '')
+    .replace(/[(),%*\\'"`]/g, ' ')
+    .replace(/\s+/g, ' ')
+    .trim()
+    .slice(0, 80);
+}
+
 /**
  * Global OS Search — strictly isolates Privacy Fast Track to Owners (Warda & Shabib),
- * and enforces Advisor own-record scoping.
+ * enforces Advisor own-record scoping, and sanitizes PostgREST filter characters.
  */
 export async function runUnifiedSearch(query: string, user: SessionUser): Promise<UnifiedSearchHit[]> {
-  const q = query.trim();
+  const q = sanitizePostgrestQuery(query);
   if (q.length < 2) return [];
   const pattern = `%${q}%`;
   const db = await getSupabaseAdmin();

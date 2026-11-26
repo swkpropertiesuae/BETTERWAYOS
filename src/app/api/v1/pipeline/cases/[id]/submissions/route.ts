@@ -2,12 +2,14 @@ import { NextResponse } from 'next/server';
 import { requireSession } from '@/lib/auth/session';
 import { getSupabaseAdmin } from '@/lib/supabase/admin';
 import { UAE_BANKS } from '@/lib/domain/banks';
+import { assertCaseAccess } from '@/lib/pipeline/service';
 
 export async function POST(req: Request, ctx: { params: Promise<{ id: string }> }) {
   const auth = await requireSession();
   if ('error' in auth) return auth.error;
   const { id } = await ctx.params;
   try {
+    await assertCaseAccess(id, auth.user);
     const body = (await req.json()) as {
       bankKey: string;
       productType?: string;
@@ -35,6 +37,7 @@ export async function POST(req: Request, ctx: { params: Promise<{ id: string }> 
     if (error) throw new Error(error.message);
     return NextResponse.json({ ok: true, submission: data }, { status: 201 });
   } catch (err: unknown) {
-    return NextResponse.json({ error: err instanceof Error ? err.message : 'Submission failed' }, { status: 400 });
+    const msg = err instanceof Error ? err.message : 'Submission failed';
+    return NextResponse.json({ error: msg }, { status: msg.startsWith('FORBIDDEN') ? 403 : msg.startsWith('NOT_FOUND') ? 404 : 400 });
   }
 }

@@ -2,15 +2,27 @@ import { NextResponse } from 'next/server';
 import { requireSession } from '@/lib/auth/session';
 import { getCapabilitiesForRole } from '@/lib/auth/rbac';
 import { getSupabaseAdmin } from '@/lib/supabase/admin';
-import { createCaseVaultUploadUrl } from '@/lib/pipeline/service';
+import { assertCaseAccess, createCaseVaultUploadUrl } from '@/lib/pipeline/service';
 
 export async function GET(req: Request) {
   const auth = await requireSession();
   if ('error' in auth) return auth.error;
   const caps = getCapabilitiesForRole(auth.user.role);
+  if (caps.pipelineScope === 'NONE') {
+    return NextResponse.json({ error: 'FORBIDDEN: Client Document Vault is restricted from your role.' }, { status: 403 });
+  }
   const url = new URL(req.url);
   const caseId = url.searchParams.get('caseId');
   const db = await getSupabaseAdmin();
+
+  if (caseId) {
+    try {
+      await assertCaseAccess(caseId, auth.user);
+    } catch (err: unknown) {
+      const msg = err instanceof Error ? err.message : 'Forbidden';
+      return NextResponse.json({ error: msg }, { status: msg.startsWith('NOT_FOUND') ? 404 : 403 });
+    }
+  }
 
   let caseQ = db
     .from('mortgage_cases')
@@ -21,14 +33,14 @@ export async function GET(req: Request) {
   const { data: cases } = await caseQ.limit(100);
 
   const selectedId = caseId || cases?.[0]?.id || null;
-  let documents: any[] = [];
+  let documents: Array<Record<string, unknown>> = [];
   if (selectedId) {
     const { data: docs } = await db
       .from('case_documents')
       .select('*')
       .eq('case_id', selectedId)
       .order('doc_category', { ascending: true });
-    documents = docs ?? [];
+    documents = (docs ?? []) as Array<Record<string, unknown>>;
   }
 
   return NextResponse.json({ cases: cases ?? [], selectedCaseId: selectedId, documents });
@@ -37,6 +49,9 @@ export async function GET(req: Request) {
 export async function POST(req: Request) {
   const auth = await requireSession();
   if ('error' in auth) return auth.error;
+  if (getCapabilitiesForRole(auth.user.role).pipelineScope === 'NONE') {
+    return NextResponse.json({ error: 'FORBIDDEN: Vault actions are restricted from your role.' }, { status: 403 });
+  }
   try {
     const body = (await req.json()) as {
       action: 'upload_url' | 'verify' | 'download_url';
@@ -50,10 +65,14 @@ export async function POST(req: Request) {
       const signed = await createCaseVaultUploadUrl(body.docId, body.fileName || 'document.pdf', auth.user);
       return NextResponse.json({ ok: true, ...signed });
     }
+
+    const { data: docRow } = await db.from('case_documents').select('id,case_id,storage_path').eq('id', body.docId).maybeSingle();
+    if (!docRow) return NextResponse.json({ error: 'Document slot not found' }, { status: 404 });
+    await assertCaseAccess(docRow.case_id, auth.user);
+
     if (body.action === 'download_url') {
-      const { data: doc } = await db.from('case_documents').select('storage_path').eq('id', body.docId).single();
-      if (!doc?.storage_path) return NextResponse.json({ error: 'No file uploaded yet' }, { status: 404 });
-      const { data: signed, error } = await db.storage.from('client-vault').createSignedUrl(doc.storage_path, 300);
+      if (!docRow.storage_path) return NextResponse.json({ error: 'No file uploaded yet' }, { status: 404 });
+      const { data: signed, error } = await db.storage.from('client-vault').createSignedUrl(docRow.storage_path, 300);
       if (error || !signed) throw new Error(error?.message || 'Unable to sign download');
       return NextResponse.json({ ok: true, signedUrl: signed.signedUrl });
     }
@@ -71,6 +90,7 @@ export async function POST(req: Request) {
     if (error) throw new Error(error.message);
     return NextResponse.json({ ok: true, document: updated });
   } catch (err: unknown) {
-    return NextResponse.json({ error: err instanceof Error ? err.message : 'Vault action failed' }, { status: 400 });
+    const msg = err instanceof Error ? err.message : 'Vault action failed';
+    return NextResponse.json({ error: msg }, { status: msg.startsWith('FORBIDDEN') ? 403 : 400 });
   }
 }

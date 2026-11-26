@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import { requireSession } from '@/lib/auth/session';
+import { getCapabilitiesForRole } from '@/lib/auth/rbac';
 import { getSupabaseAdmin } from '@/lib/supabase/admin';
 import { logAudit } from '@/lib/auth/approvals';
 import { maskPhoneNumber } from '@/lib/auth/masking';
@@ -7,6 +8,9 @@ import { maskPhoneNumber } from '@/lib/auth/masking';
 export async function POST(req: Request) {
   const auth = await requireSession();
   if ('error' in auth) return auth.error;
+  if (getCapabilitiesForRole(auth.user.role).pipelineScope === 'NONE') {
+    return NextResponse.json({ error: 'PDPL_DENIED: Your role cannot unmask client phone numbers.' }, { status: 403 });
+  }
   try {
     const body = (await req.json()) as {
       entityType: 'lead' | 'vault_lead' | 'case';

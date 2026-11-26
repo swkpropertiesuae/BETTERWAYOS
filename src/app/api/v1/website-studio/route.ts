@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import { requireSession } from '@/lib/auth/session';
 import { getSupabaseAdmin } from '@/lib/supabase/admin';
+import { createOwnerApproval } from '@/lib/auth/approvals';
 import {
   createSocialCampaign,
   getPublicCmsPayload,
@@ -13,6 +14,13 @@ import {
 export async function GET() {
   const auth = await requireSession();
   if ('error' in auth) return auth.error;
+  if (
+    auth.user.role !== 'OWNER' &&
+    auth.user.role !== 'IT_MARKETING' &&
+    auth.user.role !== 'OFFICE_ADMIN'
+  ) {
+    return NextResponse.json({ error: 'FORBIDDEN: Website & Social Studio is restricted to Owners, IT/Marketing & Admin.' }, { status: 403 });
+  }
   const db = await getSupabaseAdmin();
 
   const [offersRes, bannersRes, ratesRes, teamRes, campaignsRes, publicPreview] = await Promise.all([
@@ -48,6 +56,20 @@ export async function POST(req: Request) {
 
   try {
     const body = await req.json();
+
+    // Office Admin cannot publish directly to betterwaymortgages.com — route through 1-of-2 Owner approval!
+    if (auth.user.role === 'OFFICE_ADMIN' && body.kind !== 'campaign') {
+      const approval = await createOwnerApproval({
+        approvalKind: 'WEBSITE_PUBLISH',
+        referenceTable: 'website_offers',
+        referenceId: String(body.offer?.id || body.banner?.id || body.rate?.bank_key || 'WEBSITE-UPDATE'),
+        title: `Website Publish Request (${String(body.kind).toUpperCase()})`,
+        summary: `${auth.user.name} proposed a live website update (${JSON.stringify(body).slice(0, 220)}). Requires 1-of-2 Owner approval.`,
+        requestedBy: auth.user.id,
+      });
+      return NextResponse.json({ ok: true, mode: 'QUEUED_FOR_OWNER_APPROVAL', approval }, { status: 202 });
+    }
+
     if (body.kind === 'revalidate') {
       const res = await triggerWebsiteRevalidate();
       return NextResponse.json({ ok: true, revalidate: res });

@@ -273,7 +273,7 @@ export default function WebsiteStudioPage() {
               {
                 kind: 'banner',
                 banner: {
-                  id: 'BNR-TOP-01',
+                  id: 'BNR-TOP',
                   placement: 'top_bar',
                   badge: bnrBadge,
                   message: bnrMessage,
