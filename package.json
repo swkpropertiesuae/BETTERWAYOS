@@ -1,46 +1,40 @@
 {
-  "name": "betterway-mortgage-os",
-  "version": "2.0.0",
+  "name": "betterway-mortgages-os",
+  "version": "3.0.0",
   "private": true,
   "type": "module",
   "engines": {
-    "node": "24.x"
+    "node": ">=22.0.0"
   },
-  "description": "Betterway Mortgages LLC — Simple-English UAE Mortgage Brokerage OS (30 Routes, Full SWKOS v3.9.0 Parity) & Dedicated 3-Mode Mobile App",
   "scripts": {
-    "dev": "concurrently \"npm run dev:server\" \"npm run dev:web\"",
-    "dev:server": "tsx watch src/server/index.ts",
-    "dev:web": "vite --port 5175 --strictPort",
-    "build": "npm run build:web && npm run build:mobile",
-    "build:web": "vite build",
-    "build:mobile": "node mobile/scripts/build-www.mjs",
-    "start": "tsx src/server/index.ts",
+    "dev": "next dev -p 3001",
+    "build": "next build",
+    "start": "next start -p 3001",
     "typecheck": "tsc --noEmit",
-    "test": "node --test tests/api.test.mjs"
+    "lint": "next lint",
+    "test": "vitest run",
+    "seed": "tsx scripts/seed-supabase.ts"
   },
   "dependencies": {
-    "cors": "^2.8.5",
-    "express": "^5.1.0",
+    "@supabase/supabase-js": "^2.99.0",
+    "exceljs": "^4.4.0",
     "lucide-react": "^0.552.0",
-    "motion": "^12.23.12",
+    "next": "^15.5.29",
     "qrcode": "^1.5.4",
     "react": "^19.2.0",
-    "react-dom": "^19.2.0",
-    "react-router-dom": "^7.9.5"
+    "react-dom": "^19.2.0"
   },
   "devDependencies": {
-    "@tailwindcss/vite": "^4.1.16",
-    "@types/cors": "^2.8.19",
-    "@types/express": "^5.0.3",
+    "@tailwindcss/postcss": "^4.1.16",
     "@types/node": "^22.18.0",
     "@types/qrcode": "^1.5.5",
     "@types/react": "^19.2.0",
     "@types/react-dom": "^19.2.0",
-    "@vitejs/plugin-react": "^5.0.4",
-    "concurrently": "^9.2.1",
+    "dotenv": "^17.2.3",
+    "postcss": "^8.5.6",
     "tailwindcss": "^4.1.16",
     "tsx": "^4.20.6",
     "typescript": "^5.9.2",
-    "vite": "^7.1.12"
+    "vitest": "^3.2.4"
   }
 }

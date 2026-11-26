@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512" fill="none">
+  <title>Betterway Mortgages — Corporate Architectural Brandmark</title>
+  <defs>
+    
+    <linearGradient id="bw-icon-light-em-stem" x1="88" y1="42" x2="175" y2="430" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#00A87A"/>
+      <stop offset="52%" stop-color="#0A7B5C"/>
+      <stop offset="100%" stop-color="#054A38"/>
+    </linearGradient>
+    <linearGradient id="bw-icon-light-em-arch" x1="120" y1="168" x2="412" y2="330" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#00A87A"/>
+      <stop offset="58%" stop-color="#0A7B5C"/>
+      <stop offset="100%" stop-color="#054A38"/>
+    </linearGradient>
+    <linearGradient id="bw-icon-light-em-facet" x1="94" y1="44" x2="148" y2="210" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#35BFA0" stop-opacity="0.42"/>
+      <stop offset="100%" stop-color="#13755C" stop-opacity="0"/>
+    </linearGradient>
+    <linearGradient id="bw-icon-light-gold-ring" x1="158" y1="242" x2="414" y2="452" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#754C04"/>
+      <stop offset="28%" stop-color="#996809"/>
+      <stop offset="58%" stop-color="#D49B22"/>
+      <stop offset="82%" stop-color="#BA8414"/>
+      <stop offset="100%" stop-color="#754C04"/>
+    </linearGradient>
+    <linearGradient id="bw-icon-light-gold-roof" x1="184" y1="224" x2="366" y2="368" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#D49B22"/>
+      <stop offset="48%" stop-color="#BA8414"/>
+      <stop offset="100%" stop-color="#754C04"/>
+    </linearGradient>
+    <linearGradient id="bw-icon-light-gold-text" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#BA8414"/>
+      <stop offset="50%" stop-color="#D49B22"/>
+      <stop offset="100%" stop-color="#996809"/>
+    </linearGradient>
+    <linearGradient id="bw-icon-light-crest-bg" x1="40" y1="20" x2="472" y2="492" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#101D33"/>
+      <stop offset="52%" stop-color="#0A1424"/>
+      <stop offset="100%" stop-color="#060C18"/>
+    </linearGradient>
+    <linearGradient id="bw-icon-light-crest-rim" x1="36" y1="24" x2="476" y2="488" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#F0DB99"/>
+      <stop offset="35%" stop-color="#C6A04B"/>
+      <stop offset="70%" stop-color="#E7CD85"/>
+      <stop offset="100%" stop-color="#9A752A"/>
+    </linearGradient>
+    <clipPath id="bw-icon-light-bowl-clip">
+      <circle cx="272" cy="316" r="154"/>
+    </clipPath>
+    
+  </defs>
+  <g transform="translate(-41.66, -26.34) scale(1.0943396226415094)">
+    
+    <g id="bw-icon-light-mark">
+      
+
+      <!-- 1. Satin Brushed Champagne Gold Lower-Right Crescent Arc (Cleanly clipped between -18 deg and +128 deg) -->
+      <path d="M 418.5 268.4
+               A 154 154 0 0 1 177.2 437.4
+               L 206.7 399.5
+               A 106 106 0 0 0 372.8 283.2
+               Z"
+            fill="url(#bw-icon-light-gold-ring)"/>
+
+      <!-- 2. Single Seamless Institutional Emerald Ascending Column + Upper Vault Arch (ZERO seam!) -->
+      <path d="M 118 48
+               L 153 65
+               Q 166 72 166 88
+               L 166 204.3
+               A 154 154 0 0 1 418.5 268.4
+               L 372.8 283.2
+               A 106 106 0 0 0 166 316
+               A 106 106 0 0 0 206.7 399.5
+               L 177.2 437.4
+               A 154 154 0 0 1 118 316
+               Z"
+            fill="url(#bw-icon-light-em-stem)"/>
+
+      <!-- Subtle architectural highlight facet along outer left vertical spine -->
+      <path d="M 118 48 L 138 58 L 138 316 C 138 355 151 389 175 416 L 157 424 C 132 394 118 357 118 316 Z"
+            fill="url(#bw-icon-light-em-facet)"/>
+
+      <!-- Delicate satin gold specular arc along the brushed gold lower-right ribbon -->
+      <path d="M 192 426 A 141 141 0 0 0 407 284"
+            stroke="#EDD48D" stroke-width="2.2" stroke-linecap="round" fill="none" opacity="0.58"/>
+
+      <!-- 3. Minimalist Swiss-Architectural Pitched Roofline + Open Monolithic Portal (ZERO chimney/dash/doorknob) -->
+      <path d="M 190 314
+               L 272 238
+               L 354 314
+               L 337 330
+               L 272 270
+               L 207 330
+               Z"
+            fill="url(#bw-icon-light-gold-roof)"/>
+
+      <!-- Two clean monolithic structural piers framing an open architectural portal -->
+      <path d="M 218 329 L 250 300 L 250 375 L 218 375 Z" fill="#0A1424" opacity="0.96"/>
+      <path d="M 326 329 L 294 300 L 294 375 L 326 375 Z" fill="#0A1424" opacity="0.96"/>
+
+      <!-- Clean gold architectural plinth anchoring the portal -->
+      <rect x="208" y="375" width="128" height="7" rx="1.5" fill="url(#bw-icon-light-gold-roof)"/>
+    </g>
+    
+  </g>
+</svg>
