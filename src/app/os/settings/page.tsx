@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useCallback, useEffect, useState } from 'react';
-import { CheckCircle2, Fingerprint, Globe, Lock, MapPin, Shield, Terminal, Wifi } from 'lucide-react';
+import { CheckCircle2, Globe, Lock, MapPin, Shield, Wifi } from 'lucide-react';
 import { PageHeader, StatusPill } from '@/components/os/UiKit';
 
 interface SettingsPayload {
@@ -90,10 +90,10 @@ export default function SettingsPage() {
   return (
     <div className="space-y-6">
       <PageHeader
-        eyebrow="Owner-Locked Security · Al Nasr Plaza Oud Metha · Hikvision ISAPI · Website Sync"
+        eyebrow="Owner-Locked Security · Al Nasr Plaza Oud Metha · QR Geofence · Website Sync"
         title="Settings &"
-        accent="Office Hardware"
-        subtitle="Configure Oud Metha office Wi-Fi CIDR, GPS geofence lock, Hikvision door fingerprint terminal mode (Single Entry vs Dual Reader), and live BetterwayMortgages.com two-way webhook connectivity."
+        accent="Office Security"
+        subtitle="Configure Oud Metha office Wi-Fi CIDR, GPS geofence lock, 20-second Reception QR shift rules, and live BetterwayMortgages.com two-way webhook connectivity."
       />
 
       {error && <div className="rounded-xl border border-red-400/40 bg-red-50 p-3 text-xs font-semibold text-red-700">{error}</div>}
@@ -181,70 +181,25 @@ export default function SettingsPage() {
             </label>
           </div>
 
-          <div className="border-t border-[var(--bw-line)] pt-4 space-y-3">
-            <h3 className="text-xs font-extrabold uppercase tracking-wider flex items-center gap-1.5">
-              <Fingerprint size={14} className="text-[var(--bw-emerald)]" /> Hikvision Office Door Fingerprint Terminal
-            </h3>
-            <div className="grid sm:grid-cols-3 gap-3 text-xs">
-              <div>
-                <label className="block text-[10.5px] font-bold uppercase text-[var(--bw-muted)] mb-1">Device Serial</label>
-                <input
-                  disabled={!data?.canEditSecurity}
-                  value={hikSerial}
-                  onChange={(e) => setHikSerial(e.target.value)}
-                  className="w-full rounded-xl border border-[var(--bw-line)] bg-transparent px-3 py-2 font-mono"
-                />
-              </div>
-              <div>
-                <label className="block text-[10.5px] font-bold uppercase text-[var(--bw-muted)] mb-1">Office LAN IP</label>
-                <input
-                  disabled={!data?.canEditSecurity}
-                  value={hikIp}
-                  onChange={(e) => setHikIp(e.target.value)}
-                  className="w-full rounded-xl border border-[var(--bw-line)] bg-transparent px-3 py-2 font-mono"
-                />
-              </div>
-              <div>
-                <label className="block text-[10.5px] font-bold uppercase text-[var(--bw-muted)] mb-1">Door Reader Topology</label>
-                <select
-                  disabled={!data?.canEditSecurity}
-                  value={hikMode}
-                  onChange={(e) => setHikMode(e.target.value as 'SINGLE_ENTRY_READER' | 'DUAL_READER')}
-                  className="w-full rounded-xl border border-[var(--bw-line)] bg-[var(--bw-card)] px-3 py-2"
-                >
-                  <option value="SINGLE_ENTRY_READER">SINGLE_ENTRY_READER (1st Unlock = IN · Zero False Out)</option>
-                  <option value="DUAL_READER">DUAL_READER (Entry + Exit Fingerprint Readers)</option>
-                </select>
-              </div>
-            </div>
-          </div>
-
           {data?.canEditSecurity ? (
             <button disabled={busy} className="rounded-xl bg-[#083B2E] text-white px-5 py-2.5 text-xs font-bold">
               {busy ? 'Saving…' : 'Save Owner Security Configuration'}
             </button>
           ) : (
             <div className="rounded-xl bg-amber-500/10 border border-amber-500/30 p-3 text-xs flex items-center gap-2">
-              <Lock size={14} className="text-amber-600" /> Only Owners (Warda Kapadia or Shabib Siraj) can modify geofence, Wi-Fi, or Hikvision security settings.
+              <Lock size={14} className="text-amber-600" /> Only Owners (Warda Kapadia or Shabib Siraj) can modify geofence or Wi-Fi security settings.
             </div>
           )}
         </form>
 
         <div className="space-y-4">
-          <div className="rounded-2xl bg-[#0A1128] text-white border border-[#D4AF37]/35 p-5 space-y-3">
+          <div className="rounded-2xl bg-[#0A1128] text-white border border-[#D4AF37]/35 p-5 space-y-2.5">
             <h3 className="text-sm font-extrabold flex items-center gap-1.5 text-[#FCF1B7]">
-              <Terminal size={15} /> Hikvision LAN Relay Agent
+              <Shield size={15} /> Reception QR Attendance Active
             </h3>
             <p className="text-[11px] text-slate-300 leading-relaxed">
-              Run this lightweight Node.js agent on the Oud Metha reception PC to stream real-time door fingerprint unlocks via HMAC-SHA256 straight to Betterway OS:
+              Staff check-in runs via the 20-second rotating cryptographic QR code at Al Nasr Plaza, Oud Metha with Wi-Fi CIDR &amp; GPS geofence verification, automatically posting Check-In cards to <strong>#attendance-checkin</strong>. Optional door hardware integration is currently paused.
             </p>
-            <pre className="rounded-xl bg-black/50 p-3 text-[10.5px] font-mono text-[#34DFAC] overflow-x-auto">
-{`HIK_HOST=${hikIp} \\
-HIK_USER=admin HIK_PASS=<pass> \\
-BW_OS_WEBHOOK=${data?.hikvisionWebhookUrl || 'https://betterwayos.vercel.app/api/v1/attendance/hikvision'} \\
-BW_HIKVISION_HMAC_SECRET=<secret> \\
-node tools/hikvision-relay/index.mjs`}
-            </pre>
           </div>
 
           <div className="rounded-2xl bg-[var(--bw-card)] border border-[var(--bw-line)] p-5 space-y-2.5 text-xs">

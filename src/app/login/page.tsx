@@ -45,7 +45,7 @@ export default function LoginPage() {
             One Operating System for <span className="text-[#34DFAC]">24 UAE Banks</span>, 12 Closing Steps & Live Website Control.
           </h1>
           <p className="text-sm text-slate-300 max-w-lg leading-relaxed">
-            Al Nasr Plaza, Oud Metha, Dubai · Permanent Supabase Cloud Postgres, Private Encrypted Document Vault, Hikvision Door Biometric + QR Attendance, Field GPS, and Live Sync with betterwaymortgages.com.
+            Al Nasr Plaza, Oud Metha, Dubai · Permanent Supabase Cloud Postgres, Private Encrypted Document Vault, Oud Metha QR Attendance, Field GPS, and Live Sync with betterwaymortgages.com.
           </p>
         </div>
 

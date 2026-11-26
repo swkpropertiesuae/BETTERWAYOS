@@ -6,7 +6,6 @@ import {
   CheckCircle2,
   ClipboardCheck,
   Download,
-  Fingerprint,
   LogOut,
   MapPin,
   QrCode,
@@ -59,7 +58,6 @@ export default function EmployeesPage() {
   const [hr, setHr] = useState<HrPayload | null>(null);
   const [qr, setQr] = useState<QrTerminalPayload | null>(null);
   const [countdown, setCountdown] = useState(20);
-  const [hikEmpCode, setHikEmpCode] = useState('BW-007');
   const [notice, setNotice] = useState('');
   const [error, setError] = useState('');
   const [busy, setBusy] = useState(false);
@@ -132,39 +130,6 @@ export default function EmployeesPage() {
       await loadQr();
     } catch (err: unknown) {
       setError(err instanceof Error ? err.message : 'Check-in failed');
-    } finally {
-      setBusy(false);
-    }
-  }
-
-  async function testHikvisionPunch() {
-    setBusy(true);
-    setError('');
-    setNotice('');
-    try {
-      const r = await fetch('/api/v1/attendance/hikvision', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          employeeNoString: hikEmpCode,
-          eventTime: new Date().toISOString(),
-          deviceSerial: 'DS-K1T342MFX-OUDMETHA',
-          verifyMode: 'fingerprint',
-        }),
-      });
-      const j = await r.json();
-      if (!r.ok) throw new Error(j.error || 'Hikvision punch failed');
-      const first = j.results?.[0];
-      const evKind = first?.event?.event_kind || 'CHECK_IN';
-      const evTime = first?.event?.dubai_time_str || '';
-      setNotice(
-        `Hikvision Door Fingerprint logged (${evKind}) for ${hikEmpCode} at ${evTime}${
-          first?.postedGroupMessage ? ' — Check-In card posted to #attendance-checkin!' : ' (mid-day door unlock — zero duplicate spam).'
-        }`,
-      );
-      await loadQr();
-    } catch (err: unknown) {
-      setError(err instanceof Error ? err.message : 'Hikvision error');
     } finally {
       setBusy(false);
     }
@@ -260,10 +225,10 @@ export default function EmployeesPage() {
   return (
     <div className="space-y-6">
       <PageHeader
-        eyebrow="Team · Oud Metha QR + Hikvision Door Fingerprint · MOHRE WPS"
+        eyebrow="Team · Oud Metha 20s QR + Geofence Attendance · MOHRE WPS"
         title="Employees &"
         accent="Live Attendance"
-        subtitle="Official Betterway Mortgages LLC 8-member leadership & advisory studio roster, Oud Metha Al Nasr Plaza 20s rotating QR + Hikvision door fingerprint attendance, Mandatory Daily Close, and UAE MOHRE WPS payroll."
+        subtitle="Official Betterway Mortgages LLC 8-member leadership & advisory studio roster, Oud Metha Al Nasr Plaza 20s rotating QR check-in (auto-posted to #attendance-checkin), Mandatory Daily Close, and UAE MOHRE WPS payroll."
         actions={
           <Link
             href="/os/inside"
@@ -289,7 +254,7 @@ export default function EmployeesPage() {
         {(
           [
             ['roster', 'Official 8-Member Studio Roster', Users],
-            ['attendance', 'Oud Metha QR + Hikvision Door Console', Fingerprint],
+            ['attendance', 'Oud Metha Reception QR Attendance', QrCode],
             ['hr', 'UAE Visas, Leave & MOHRE WPS (.SIF)', ShieldCheck],
           ] as const
         ).map(([k, label, Icon]) => (
@@ -345,7 +310,7 @@ export default function EmployeesPage() {
                     </div>
                     <div className="text-[11px] text-[#FCF1B7]/90 border-t border-white/10 pt-2.5 flex items-center justify-between">
                       <span>{m.email}</span>
-                      <span className="font-mono text-[#34DFAC]">Hikvision #{m.emp_code}</span>
+                      <span className="font-mono text-[#34DFAC]">Staff ID {m.emp_code}</span>
                     </div>
                   </div>
                 </div>
@@ -456,38 +421,15 @@ export default function EmployeesPage() {
               </div>
             </div>
 
-            {(user?.role === 'OWNER' || user?.role === 'OFFICE_ADMIN' || user?.role === 'HR_MANAGER') && (
-              <div className="rounded-2xl bg-[var(--bw-card)] border border-[var(--bw-line)] p-5 space-y-3">
-                <div className="flex items-center justify-between">
-                  <h3 className="text-sm font-extrabold flex items-center gap-1.5">
-                    <Fingerprint size={15} className="text-[var(--bw-emerald)]" /> Hikvision Door Fingerprint Punch
-                  </h3>
-                  <StatusPill label={String(qr?.branch?.hikvision_reader_mode || 'SINGLE_ENTRY_READER')} tone="gold" />
-                </div>
-                <p className="text-[11px] text-[var(--bw-muted)]">
-                  First morning door unlock checks staff IN and broadcasts an automatic Check-In card to Team Group <strong>#attendance-checkin</strong>. Mid-day unlocks log cleanly as <code>DOOR_REENTRY</code> with zero duplicate spam.
-                </p>
-                <select
-                  value={hikEmpCode}
-                  onChange={(e) => setHikEmpCode(e.target.value)}
-                  className="w-full rounded-xl border border-[var(--bw-line)] bg-[var(--bw-card)] px-3 py-2 text-xs"
-                >
-                  {(hr?.staff ?? []).map((s) => (
-                    <option key={s.id} value={s.emp_code}>
-                      {s.emp_code} — {s.name} ({s.designation})
-                    </option>
-                  ))}
-                </select>
-                <button
-                  type="button"
-                  disabled={busy}
-                  onClick={testHikvisionPunch}
-                  className="w-full rounded-xl bg-[#0A1128] text-[#FCF1B7] py-2.5 text-xs font-bold hover:brightness-110"
-                >
-                  Trigger Hikvision Door Unlock Event
-                </button>
+            <div className="rounded-2xl bg-[var(--bw-card)] border border-[var(--bw-line)] p-4 space-y-2 text-xs">
+              <div className="flex items-center justify-between">
+                <span className="font-extrabold">Auto Team Group Check-In Active</span>
+                <StatusPill label="Oud Metha QR Mode" tone="emerald" />
               </div>
-            )}
+              <p className="text-[11px] text-[var(--bw-muted)] leading-relaxed">
+                When staff scan the live 20-second Oud Metha Reception QR, Betterway OS verifies office Wi-Fi/GPS geofence and automatically broadcasts a timestamped Check-In card into <strong>#attendance-checkin</strong>.
+              </p>
+            </div>
           </div>
 
           {/* Center & Right: Today's Live Attendance + Mandatory Daily Close */}
@@ -532,7 +474,7 @@ export default function EmployeesPage() {
                 })}
                 {(qr?.events.length ?? 0) === 0 && (
                   <div className="py-8 text-center text-xs text-[var(--bw-muted)]">
-                    No check-ins recorded yet today. Scan the Oud Metha QR or trigger a Hikvision door fingerprint punch.
+                    No check-ins recorded yet today. Scan the live 20-second Oud Metha Reception QR to check in.
                   </div>
                 )}
               </div>

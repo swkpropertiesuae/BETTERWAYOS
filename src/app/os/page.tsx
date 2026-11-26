@@ -190,8 +190,8 @@ export default function OsAppLauncherPage() {
     {
       key: 'employees',
       label: 'Employees & Attendance',
-      blurb: '8-member studio roster, Hikvision door fingerprint + 20s Office QR check-in, Visas, Leave & MOHRE WPS .SIF',
-      badge: 'Hikvision + QR',
+      blurb: '8-member studio roster, 20s Oud Metha Office QR + Geofence check-in, Visas, Leave & MOHRE WPS .SIF',
+      badge: 'Oud Metha QR',
       href: '/os/employees',
       icon: Users,
       tone: 'navy',
@@ -200,7 +200,7 @@ export default function OsAppLauncherPage() {
     {
       key: 'inside',
       label: 'Team Group (Inside)',
-      blurb: 'Company channels & live #attendance-checkin feed automatically updated when staff enter via Hikvision or QR',
+      blurb: 'Company channels & live #attendance-checkin feed automatically updated when staff scan Oud Metha QR',
       badge: 'Auto Check-In Feed',
       href: '/os/inside',
       icon: MessagesSquare,
@@ -240,7 +240,7 @@ export default function OsAppLauncherPage() {
     {
       key: 'settings',
       label: 'Settings',
-      blurb: 'Oud Metha Wi-Fi/Geofence calibration, Hikvision door relay config, Website sync HMAC & Corporate IBAN whitelist',
+      blurb: 'Oud Metha Wi-Fi/Geofence calibration, Reception QR rules, Website sync HMAC & Corporate IBAN whitelist',
       badge: 'System Config',
       href: '/os/settings',
       icon: Settings,

@@ -13,6 +13,9 @@ export async function POST(req: Request) {
     const sig = req.headers.get('x-betterway-hikvision-sig');
 
     if (sig) {
+      if (!process.env.BW_HIKVISION_HMAC_SECRET?.trim()) {
+        return NextResponse.json({ error: 'HIKVISION_DISABLED: Door reader webhook is currently paused.' }, { status: 503 });
+      }
       if (!verifyHikvisionSignature(rawText, sig)) {
         return NextResponse.json({ error: 'Invalid Hikvision HMAC signature' }, { status: 401 });
       }
