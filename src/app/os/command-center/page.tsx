@@ -21,7 +21,7 @@ export default function CommandCenterPage() {
         eyebrow="Live Executive War Room · Asia/Dubai GST"
         title="Command"
         accent="Center"
-        subtitle="Real-time 100% daily enquiry pulse, 12-stage mortgage funnel counts, Oud Metha live office presence (Hikvision + QR), active Field GPS radar, and critical alerts."
+        subtitle="Real-time 100% daily enquiry pulse, 12-stage mortgage funnel counts, Oud Metha live office presence (20s Reception QR), active Field GPS radar, and critical alerts."
       />
 
       {data && (
@@ -30,7 +30,7 @@ export default function CommandCenterPage() {
             <MetricTile label="Active Loan Book" value={fmtAed(data.kpis.loanBookAed, true)} hint={`${data.kpis.activeCasesCount} cases`} tone="navy" />
             <MetricTile label="Expected DSA Revenue" value={fmtAed(data.kpis.expectedDsaAed, true)} hint="0.85% avg panel rate" tone="gold" />
             <MetricTile label="Today's Enquiries" value={data.kpis.todayEnquiriesCount} hint={`Date: ${data.todayDubai}`} tone="emerald" />
-            <MetricTile label="Office Presence" value={`${data.kpis.checkedInCount}/${data.kpis.totalStaffCount}`} hint="Hikvision + QR live" />
+            <MetricTile label="Office Presence" value={`${data.kpis.checkedInCount}/${data.kpis.totalStaffCount}`} hint="Oud Metha QR live" />
             <MetricTile label="Active Field GPS" value={data.kpis.activeFieldVisitsCount} hint="Bank / Valuation / DLD" tone={data.kpis.activeFieldVisitsCount > 0 ? 'emerald' : 'default'} />
           </div>
 

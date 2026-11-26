@@ -71,7 +71,7 @@ export default function MasterLogPage() {
           <ShieldAlert size={16} className="text-sky-700 shrink-0" />
           <span>
             <strong>Governance Rule:</strong> Any addition or edit you submit in Master Log is queued for <strong>Warda Kapadia</strong> or{' '}
-            <strong>Shabib Siraj</strong> to approve before taking effect. Office Geofence/Hikvision, Roles, and Staff Salaries are strictly Owner-only.
+            <strong>Shabib Siraj</strong> to approve before taking effect. Office Geofence/Wi-Fi, Roles, and Staff Salaries are strictly Owner-only.
           </span>
         </div>
       )}

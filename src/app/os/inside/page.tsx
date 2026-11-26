@@ -6,7 +6,7 @@ import { useOs } from '@/components/os/OsProvider';
 import { PageHeader, StaffAvatar, StatusPill } from '@/components/os/UiKit';
 
 const CHANNELS = [
-  { id: 'attendance-checkin', label: 'Attendance Check-In (Live)', desc: 'Auto-populated by Oud Metha Hikvision Door & Office QR' },
+  { id: 'attendance-checkin', label: 'Attendance Check-In (Live)', desc: 'Auto-populated by Oud Metha 20s Office QR Check-In' },
   { id: 'general', label: 'General Company Desk', desc: 'Daily team announcements & leadership updates' },
   { id: 'bank-desk', label: '24-Bank Underwriting Desk', desc: 'Rate specials, APL confirmations & bank RM notes' },
   { id: 'progression', label: 'Valuations, NOC & Trustee', desc: 'Step 07–10 closing coordination' },
@@ -55,7 +55,7 @@ export default function TeamGroupInsidePage() {
         eyebrow="Betterway Inside · Company Team Group & Auto Check-In Feed"
         title="Team Group"
         accent="(#attendance-checkin)"
-        subtitle="Every staff entry via the Al Nasr Plaza Oud Metha Hikvision door fingerprint terminal or Reception QR automatically posts here in real time."
+        subtitle="Every staff check-in via the Al Nasr Plaza Oud Metha 20-second Reception QR automatically posts here in real time."
       />
 
       <div className="grid lg:grid-cols-12 gap-5">
@@ -83,7 +83,7 @@ export default function TeamGroupInsidePage() {
           <div className="space-y-3 max-h-[420px] overflow-y-auto pe-1">
             {messages.length === 0 ? (
               <div className="py-16 text-center text-xs text-[var(--bw-muted)]">
-                No posts in #{channel} yet. Check-ins from Hikvision Door or Office QR appear here automatically.
+                No posts in #{channel} yet. Staff check-ins from the Oud Metha Office QR appear here automatically.
               </div>
             ) : (
               messages.map((m) => (

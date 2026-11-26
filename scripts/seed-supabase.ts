@@ -1,6 +1,7 @@
 import dotenv from 'dotenv';
 import path from 'node:path';
 import crypto from 'node:crypto';
+import { Client } from 'pg';
 dotenv.config({ path: path.resolve(process.cwd(), '.env.local') });
 
 import { getSupabaseAdmin } from '../src/lib/supabase/admin';
@@ -9,6 +10,76 @@ import { UAE_BANKS } from '../src/lib/domain/banks';
 import { UAE_COMMUNITIES } from '../src/lib/domain/communities';
 import { CORE_DOCUMENT_CHECKLIST } from '../src/lib/domain/workflow';
 import { SEED_CASE_STUDIES } from '../src/lib/domain/case-studies';
+
+/**
+ * Lightweight direct-Postgres upsert adapter used when seeding via DATABASE_URL
+ * (e.g. before Supabase API keys are copied into .env.local).
+ */
+async function createDirectPgSeedAdapter(databaseUrl: string) {
+  const client = new Client({ connectionString: databaseUrl, ssl: { rejectUnauthorized: false } });
+  await client.connect();
+
+  const colTypesRes = await client.query(
+    `SELECT table_name, column_name, data_type FROM information_schema.columns WHERE table_schema = 'public';`,
+  );
+  const jsonbCols = new Set<string>();
+  for (const r of colTypesRes.rows) {
+    if (r.data_type === 'jsonb' || r.data_type === 'json') {
+      jsonbCols.add(`${r.table_name}.${r.column_name}`);
+    }
+  }
+
+  return {
+    async close() {
+      await client.end();
+    },
+    from(table: string) {
+      return {
+        select(col: string) {
+          return {
+            eq(k: string, v: unknown) {
+              return {
+                async maybeSingle() {
+                  const res = await client.query(`SELECT "${col}" FROM public."${table}" WHERE "${k}" = $1 LIMIT 1`, [v]);
+                  return { data: res.rows[0] ?? null, error: null };
+                },
+              };
+            },
+          };
+        },
+        async upsert(rowsInput: Record<string, unknown> | Array<Record<string, unknown>>, opts: { onConflict: string }) {
+          const rows = Array.isArray(rowsInput) ? rowsInput : [rowsInput];
+          const conflictCol = opts.onConflict;
+          try {
+            for (const row of rows) {
+              const keys = Object.keys(row);
+              const colsSql = keys.map((k) => `"${k}"`).join(', ');
+              const placeholders = keys.map((_, i) => `$${i + 1}`).join(', ');
+              const updates = keys
+                .filter((k) => k !== conflictCol)
+                .map((k) => `"${k}" = EXCLUDED."${k}"`)
+                .join(', ');
+              const values = keys.map((k) => {
+                const v = row[k];
+                if (v !== null && v !== undefined && jsonbCols.has(`${table}.${k}`)) {
+                  return JSON.stringify(v);
+                }
+                return v;
+              });
+              await client.query(
+                `INSERT INTO public."${table}" (${colsSql}) VALUES (${placeholders}) ON CONFLICT ("${conflictCol}") DO UPDATE SET ${updates}`,
+                values,
+              );
+            }
+            return { error: null };
+          } catch (err: unknown) {
+            return { error: { message: err instanceof Error ? err.message : String(err) } };
+          }
+        },
+      };
+    },
+  };
+}
 
 function hashPassword(password: string): string {
   const salt = crypto.randomBytes(16).toString('hex');
@@ -27,7 +98,7 @@ const DEPARTMENTS = [
   { id: 'DEP-08', code: 'PMGT', name: 'Property Management', head_user_id: 'USR-02', category: 'Operations', description: 'Landlord portfolio advisory, rental yield tracking, handover snagging & equity release desk.' },
   { id: 'DEP-09', code: 'SBD', name: 'Sales & Business Development', head_user_id: 'USR-03', category: 'Revenue', description: 'Direct mortgage advisory desk (Daniel, Asif, Reshma) across resident, buyout & non-resident segments.' },
   { id: 'DEP-10', code: 'OPS', name: 'Operations', head_user_id: 'USR-04', category: 'Operations', description: 'Bank submissions, valuations, FOL signing, Developer NOC & DLD Trustee transfers.' },
-  { id: 'DEP-11', code: 'IT', name: 'IT & Digital Platforms', head_user_id: 'USR-06', category: 'Corporate', description: 'Betterway OS, website interconnect, Hikvision door attendance bridge & AI knowledge systems.' },
+  { id: 'DEP-11', code: 'IT', name: 'IT & Digital Platforms', head_user_id: 'USR-06', category: 'Corporate', description: 'Betterway OS, website interconnect, Oud Metha QR attendance & AI knowledge systems.' },
   { id: 'DEP-12', code: 'COMP', name: 'Compliance & MLRO', head_user_id: 'USR-01', category: 'Corporate', description: 'CBUAE KFS governance, AML/goAML screening, UAE PDPL Decree-Law 45/2021 & audit trails.' },
 ];
 
@@ -97,7 +168,7 @@ const COA_SEED: Array<{ code: string; name: string; account_type: 'Asset' | 'Lia
   { code: '1210', name: 'Prepaid DED / CBUAE License & Insurance', account_type: 'Asset', sub_type: 'Prepayments', vat_code: 'OOS-0' },
   { code: '1220', name: 'Refundable Security Deposits (DEWA / Landlord)', account_type: 'Asset', sub_type: 'Deposits', vat_code: 'OOS-0' },
   { code: '1300', name: 'Input VAT Recoverable (5%)', account_type: 'Asset', sub_type: 'Tax Asset', vat_code: 'STD-5' },
-  { code: '1500', name: 'Office IT Hardware & Hikvision Biometric Systems', account_type: 'Asset', sub_type: 'Fixed Assets', vat_code: 'STD-5' },
+  { code: '1500', name: 'Office IT Hardware & Reception QR Terminals', account_type: 'Asset', sub_type: 'Fixed Assets', vat_code: 'STD-5' },
   { code: '1510', name: 'Office Furniture & Oud Metha Fit-Out', account_type: 'Asset', sub_type: 'Fixed Assets', vat_code: 'STD-5' },
   { code: '1590', name: 'Accumulated Depreciation', account_type: 'Asset', sub_type: 'Fixed Assets', vat_code: 'OOS-0' },
   { code: '2000', name: 'Accounts Payable — Vendors & Portals', account_type: 'Liability', sub_type: 'Payables', vat_code: 'STD-5' },
@@ -158,7 +229,11 @@ const DOC_TEMPLATES = [
 ];
 
 async function main() {
-  const db = await getSupabaseAdmin();
+  const usePgDirect = !process.env.SUPABASE_SERVICE_ROLE_KEY?.trim() && Boolean(process.env.DATABASE_URL?.trim());
+  const pgAdapter = usePgDirect ? await createDirectPgSeedAdapter(process.env.DATABASE_URL!.trim()) : null;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const db: any = pgAdapter ?? (await getSupabaseAdmin());
+  if (usePgDirect) console.log('Seeding directly over Postgres DATABASE_URL...');
   const defaultPass = process.env.BW_DEFAULT_STAFF_PASSWORD || 'Betterway@2026';
 
   console.log('1. Seeding 9 official staff accounts (Warda & Shabib equal OWNER)...');
@@ -502,6 +577,7 @@ async function main() {
   }
 
   console.log('SEED_COMPLETE_SUCCESS: Clean Master Data & AI Case-Study Knowledge Base populated.');
+  if (pgAdapter) await pgAdapter.close();
 }
 
 main().catch((err) => {

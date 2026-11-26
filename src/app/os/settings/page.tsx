@@ -78,7 +78,7 @@ export default function SettingsPage() {
       });
       const j = await r.json();
       if (!r.ok) throw new Error(j.error || 'Settings save failed');
-      setNotice('Oud Metha Office Wi-Fi, GPS Geofence & Hikvision Door settings saved cleanly.');
+      setNotice('Oud Metha Office Wi-Fi & GPS Geofence QR settings saved cleanly.');
       await load();
     } catch (err: unknown) {
       setError(err instanceof Error ? err.message : 'Save failed');

@@ -75,10 +75,10 @@ export const MASTER_REGISTRIES: readonly MasterRegistryDef[] = [
     key: 'office_branches',
     table: 'office_branches',
     label: 'Office Branches & Geofence',
-    subtitle: 'Al Nasr Plaza Oud Metha office, Wi-Fi IP, GPS geofence & Hikvision door',
+    subtitle: 'Al Nasr Plaza Oud Metha office, Wi-Fi IP & GPS geofence for 20s QR check-in',
     category: 'Core Masters',
     writePolicy: 'OWNER_ONLY',
-    displayColumns: ['code', 'name', 'building', 'district', 'wifi_ssid', 'geofence_radius_m', 'hikvision_reader_mode'],
+    displayColumns: ['code', 'name', 'building', 'district', 'wifi_ssid', 'geofence_radius_m', 'shift_start_gst'],
     fields: [
       { key: 'code', label: 'Branch Code', type: 'text', required: true },
       { key: 'name', label: 'Branch Name', type: 'text', required: true },
@@ -91,9 +91,7 @@ export const MASTER_REGISTRIES: readonly MasterRegistryDef[] = [
       { key: 'geofence_radius_m', label: 'Geofence Radius (m)', type: 'number' },
       { key: 'wifi_ssid', label: 'Office Wi-Fi SSID Label', type: 'text' },
       { key: 'office_ip_cidr', label: 'Office Static Public IP / CIDR', type: 'text' },
-      { key: 'hikvision_device_serial', label: 'Hikvision Door Terminal Serial', type: 'text' },
-      { key: 'hikvision_local_ip', label: 'Hikvision LAN IP', type: 'text' },
-      { key: 'hikvision_reader_mode', label: 'Hikvision Reader Mode', type: 'select', options: ['SINGLE_ENTRY_READER', 'DUAL_READER'] },
+      { key: 'shift_start_gst', label: 'Shift Start (GST)', type: 'text' },
     ],
   },
   {
