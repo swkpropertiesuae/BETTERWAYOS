@@ -61,7 +61,7 @@ export function TeamDailyWorkspaceTab() {
   };
 
   const toggleTask = async (taskId: string, currentStatus: string) => {
-    const next = currentStatus === 'Done' ? 'Pending' : 'Done';
+    const next = currentStatus === 'Done' ? 'Todo' : 'Done';
     const r = await fetch('/api/v1/workspace/team-daily', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -70,6 +70,9 @@ export function TeamDailyWorkspaceTab() {
     if (r.ok) {
       toast(next === 'Done' ? 'Task marked Done for the day!' : 'Task reopened');
       await load();
+    } else {
+      const out = await r.json().catch(() => ({}));
+      toast(out.error || 'Failed to update task status', 'err');
     }
   };
 

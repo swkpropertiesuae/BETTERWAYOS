@@ -81,11 +81,11 @@ export async function POST(req: Request) {
       if (error || !updated) throw new Error(error?.message || 'Report not found');
 
       await db.from('notifications').insert({
-        user_id: updated.submitted_by_user_id,
+        recipient_user_id: updated.submitted_by_user_id,
         title: `Forensic Report ${updated.report_no}: ${status}`,
         body: `${auth.user.name} marked your ${updated.report_type} (${updated.building_or_project || updated.community}) as ${status}. ${notes}`,
         severity: status === 'Verified' ? 'info' : 'warning',
-        link_href: '/os/field-gps',
+        href: '/os/field-gps',
       });
       await logAudit(auth.user, 'forensic_field_reports', updated.id, 'FORENSIC_REPORT_VERIFIED', {
         reportNo: updated.report_no,
@@ -97,7 +97,7 @@ export async function POST(req: Request) {
     // 2. Staff Own-Task Toggle (scoped strictly to auth.user.id)
     if (body.action === 'toggle_my_task') {
       const taskId = String(body.taskId || '');
-      const nextStatus = body.status === 'Done' ? 'Done' : 'Pending';
+      const nextStatus = body.status === 'Done' ? 'Done' : body.status === 'In Progress' ? 'In Progress' : 'Todo';
       const { data: existing } = await db.from('tasks').select('id,assigned_to').eq('id', taskId).maybeSingle();
       if (!existing || (existing.assigned_to !== auth.user.id && !auth.user.isOwner)) {
         return NextResponse.json({ error: 'FORBIDDEN: You can only toggle your own assigned tasks.' }, { status: 403 });
@@ -197,11 +197,11 @@ export async function POST(req: Request) {
     const notifyIds = Array.from(new Set(['USR-01', 'USR-02', ...verifiers.map((v) => v.user_id)]));
     await db.from('notifications').insert(
       notifyIds.map((uid) => ({
-        user_id: uid,
+        recipient_user_id: uid,
         title: `New ${reportType} Forensic Report (${reportNo})`,
         body: `${auth.user.name} submitted GPS-pinned ${reportType} at ${created.building_or_project || created.community} (${created.outcome}).`,
         severity: created.outcome === 'Closed' ? 'info' : 'warning',
-        link_href: '/os/executive',
+        href: '/os/executive',
       })),
     );
 

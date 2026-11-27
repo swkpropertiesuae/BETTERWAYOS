@@ -206,7 +206,7 @@ export function CatalogBrochureStudioTab() {
               </select>
             </div>
 
-            {(entity === 'property' || entity === 'unit') && (
+            {entity === 'property' && (
               <>
                 <div>
                   <label className="font-bold block mb-1">Community</label>
@@ -225,6 +225,34 @@ export function CatalogBrochureStudioTab() {
                       <option key={d.id} value={d.id}>{d.name}</option>
                     ))}
                   </select>
+                </div>
+              </>
+            )}
+
+            {entity === 'unit' && (
+              <>
+                <div>
+                  <label className="font-bold block mb-1">Parent Project / Building</label>
+                  <select value={form.propertyId} onChange={(e) => setForm({ ...form, propertyId: e.target.value })} className="w-full h-9 px-3 rounded-xl border border-[var(--bw-line)] bg-[var(--bw-bg)]">
+                    <option value="">Select Project / Building...</option>
+                    {(data?.properties ?? []).map((p: any) => (
+                      <option key={p.id} value={p.id}>{p.name} ({p.emirate})</option>
+                    ))}
+                  </select>
+                </div>
+                <div className="grid grid-cols-3 gap-1.5">
+                  <div>
+                    <label className="font-bold block mb-1">Beds</label>
+                    <input value={form.bedrooms} onChange={(e) => setForm({ ...form, bedrooms: e.target.value })} placeholder="2BR" className="w-full h-9 px-2 rounded-xl border border-[var(--bw-line)] bg-[var(--bw-bg)]" />
+                  </div>
+                  <div>
+                    <label className="font-bold block mb-1">Sq.Ft</label>
+                    <input type="number" value={form.areaSqft} onChange={(e) => setForm({ ...form, areaSqft: Number(e.target.value) })} className="w-full h-9 px-2 rounded-xl border border-[var(--bw-line)] bg-[var(--bw-bg)] font-mono-num" />
+                  </div>
+                  <div>
+                    <label className="font-bold block mb-1">Floor</label>
+                    <input value={form.floorNo} onChange={(e) => setForm({ ...form, floorNo: e.target.value })} placeholder="14" className="w-full h-9 px-2 rounded-xl border border-[var(--bw-line)] bg-[var(--bw-bg)]" />
+                  </div>
                 </div>
               </>
             )}

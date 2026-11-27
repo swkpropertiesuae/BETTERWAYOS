@@ -158,4 +158,32 @@ describe('Warda & Shabib Workspace Command Suite — Offline Domain & Schema Con
     const asif = res.agents.find((a) => a.agentName === 'Asif Khan');
     expect(asif?.netBalanceDueAed).toBe(18_500); // 20,000 + 1,500 - 3,000
   });
+
+  it('guards live Supabase Postgres column & CHECK contracts in Team Daily and Field Reports API routes', () => {
+    const teamDailySrc = fs.readFileSync(
+      path.join(process.cwd(), 'src', 'app', 'api', 'v1', 'workspace', 'team-daily', 'route.ts'),
+      'utf8',
+    );
+    const fieldReportsSrc = fs.readFileSync(
+      path.join(process.cwd(), 'src', 'app', 'api', 'v1', 'field-reports', 'route.ts'),
+      'utf8',
+    );
+
+    // attendance_events real columns
+    expect(teamDailySrc).toContain('attendance_date_dubai');
+    expect(teamDailySrc).toContain('event_kind');
+    expect(teamDailySrc).toContain('dubai_time_str');
+    expect(teamDailySrc).not.toContain('event_date_dubai');
+
+    // tasks.status CHECK allows ('Todo', 'In Progress', 'Done') — never 'Pending'
+    expect(teamDailySrc).toContain("status: 'Todo'");
+    expect(teamDailySrc).not.toContain("status: 'Pending'");
+    expect(fieldReportsSrc).not.toContain("? 'Done' : 'Pending'");
+
+    // notifications real columns (recipient_user_id, href) — never user_id or link_href
+    expect(teamDailySrc).toContain('recipient_user_id');
+    expect(teamDailySrc).not.toContain('link_href');
+    expect(fieldReportsSrc).toContain('recipient_user_id');
+    expect(fieldReportsSrc).not.toContain('link_href');
+  });
 });

@@ -25,9 +25,9 @@ export async function GET(req: Request) {
     db.from('tasks').select('*').order('due_date', { ascending: true }).limit(400),
     db
       .from('attendance_events')
-      .select('user_id,event_type,event_time,is_late,late_minutes,source')
-      .eq('event_date_dubai', dateStr)
-      .order('event_time', { ascending: true }),
+      .select('user_id,event_kind,dubai_time_str,late_minutes,source')
+      .eq('attendance_date_dubai', dateStr)
+      .order('created_at', { ascending: true }),
     getFieldVerifiers(),
   ]);
 
@@ -43,15 +43,15 @@ export async function GET(req: Request) {
     const openToday = mine.filter((t) => t.status !== 'Done' && t.due_date <= dateStr);
     const upcoming = mine.filter((t) => t.status !== 'Done' && t.due_date > dateStr);
     const overdue = mine.filter((t) => t.status !== 'Done' && t.due_date < dateStr);
-    const checkIn = allAtt.find((a) => a.user_id === u.id && a.event_type === 'CHECK_IN');
+    const checkIn = allAtt.find((a) => a.user_id === u.id && a.event_kind === 'CHECK_IN');
 
     return {
       ...u,
       isVerifier: u.role === 'OWNER' || verifierIds.has(u.id),
       isAssignedVerifier: verifierIds.has(u.id),
       checkedIn: Boolean(checkIn),
-      checkInTime: checkIn?.event_time ?? null,
-      isLate: Boolean(checkIn?.is_late),
+      checkInTime: checkIn?.dubai_time_str ?? null,
+      isLate: Boolean((checkIn?.late_minutes ?? 0) > 0),
       tasksToDoCount: openToday.length,
       tasksDoneTodayCount: doneToday.length,
       overdueCount: overdue.length,
@@ -93,7 +93,7 @@ export async function POST(req: Request) {
 
     if (body.action === 'toggle_task') {
       const taskId = String(body.taskId || '');
-      const nextStatus = body.status === 'Done' ? 'Done' : 'Pending';
+      const nextStatus = body.status === 'Done' ? 'Done' : body.status === 'In Progress' ? 'In Progress' : 'Todo';
       const { data, error } = await db
         .from('tasks')
         .update({
@@ -146,13 +146,13 @@ export async function POST(req: Request) {
       if (error) throw new Error(error.message);
 
       await db.from('notifications').insert({
-        user_id: targetUser.id,
+        recipient_user_id: targetUser.id,
         title: enable ? 'Site-Visit Verification Authority Assigned' : 'Site-Visit Verification Authority Revoked',
         body: enable
           ? `${auth.user.name} assigned you as an authorised verifier for GPS-pinned Site Visit & Viewing forensic reports.`
           : `${auth.user.name} removed Site-Visit Verification Authority from your profile.`,
         severity: 'info',
-        link_href: '/os/field-gps',
+        href: '/os/field-gps',
       });
       await logAudit(auth.user, 'app_settings', 'owner:field_verifiers', enable ? 'VERIFIER_ASSIGNED' : 'VERIFIER_REVOKED', {
         targetUserId: targetUser.id,
@@ -179,7 +179,7 @@ export async function POST(req: Request) {
         due_date: dueDate,
         assigned_to: u.id,
         created_by: auth.user.id,
-        status: 'Pending',
+        status: 'Todo',
       }));
       const { data, error } = await db.from('tasks').insert(rows).select('*');
       if (error) throw new Error(error.message);
@@ -197,18 +197,18 @@ export async function POST(req: Request) {
         due_date: dueDate,
         assigned_to: assignedTo,
         created_by: auth.user.id,
-        status: 'Pending',
+        status: 'Todo',
       })
       .select('*')
       .single();
     if (error) throw new Error(error.message);
 
     await db.from('notifications').insert({
-      user_id: assignedTo,
+      recipient_user_id: assignedTo,
       title: `New Executive Task (${priority})`,
       body: `${auth.user.name} assigned: ${title} (Due ${dueDate})`,
       severity: priority === 'Critical' ? 'warning' : 'info',
-      link_href: '/os/dashboard',
+      href: '/os/dashboard',
     });
     await logAudit(auth.user, 'tasks', data.id, 'OWNER_TASK_ASSIGNED', { title, assignedTo });
     return NextResponse.json({ ok: true, task: data }, { status: 201 });
