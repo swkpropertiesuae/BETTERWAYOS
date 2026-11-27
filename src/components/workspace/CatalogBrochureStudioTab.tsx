@@ -40,12 +40,12 @@ export function CatalogBrochureStudioTab() {
     areaSqft: 1380,
     floorNo: '14',
     viewLabel: 'Burj / Water Canal View',
-    aplTier: 'Tier 1 — All 24 UAE Banks',
-    flooring: 'Italian Porcelain / Natural Marble',
-    kitchen: 'Built-in European Appliances & Quartz Countertops',
-    amenities: 'Infinity Pool, Private Gym, Concierge, EV Parking, Kids Club',
+    aplTier: 'Tier 1 — All 24 UAE Banks (Conventional & Islamic)',
+    flooring: 'Up to 80% Expat LTV · 85% UAE National LTV · 60% Non-Resident LTV',
+    kitchen: 'ENBD, FAB, ADCB, DIB, Mashreq, ADIB, HSBC, Standard Chartered APL',
+    amenities: '48h Valuation Turnaround · Digital Developer SOA & e-NOC · Zero Client Broker Fee',
     coverImageUrl: '',
-    description: 'Prime Dubai freehold residential asset pre-approved across 24 UAE partner banks via Betterway Mortgages LLC.',
+    description: 'Bank-approved UAE freehold asset eligible across 24 Conventional & Islamic partner lenders via Betterway Mortgages LLC with CBUAE 50% DBR clarity and AED 0 broker fee.',
   });
 
   const load = useCallback(async () => {
@@ -118,23 +118,23 @@ export function CatalogBrochureStudioTab() {
     metaPairs: meta,
     sections: [
       {
-        heading: 'Materials, Finishes & Specifications',
+        heading: 'CBUAE LTV Limits, Bank APL Coverage & Underwriting Specs',
         rows: [
-          { label: 'Flooring & Interiors', value: form.flooring },
-          { label: 'Kitchen & Appliances', value: form.kitchen },
-          { label: 'Lifestyle Amenities', value: form.amenities },
+          { label: 'Max LTV & Eligibility', value: form.flooring },
+          { label: 'Approved Partner Banks (APL)', value: form.kitchen },
+          { label: 'Valuation, SOA & e-NOC Readiness', value: form.amenities },
         ],
       },
       ...(theme.showPaymentPlan
         ? [
             {
-              heading: 'Payment Plan & UAE Mortgage Financing (24 Banks)',
-              text: `${form.paymentPlanSummary}\n\nBetterway Mortgages LLC Financing Advisory: Up to 80% LTV for UAE Expats (85% UAE Nationals, 60% Non-Residents) across 24 Partner Banks with AED 0 Client Broker Fee.`,
+              heading: '24-Bank Mortgage Structure & Cash-to-Close Clarity',
+              text: `${form.paymentPlanSummary}\n\nBetterway Mortgages LLC Advisory: Up to 80% LTV for UAE Expats (85% UAE Nationals, 60% Non-Residents) across 24 Conventional & Islamic Partner Banks · DLD Mortgage Reg 0.25% + AED 290 · AED 0 Client Broker Fee.`,
             },
           ]
         : []),
       {
-        heading: 'Executive Overview',
+        heading: 'Executive Mortgage Brief',
         text: desc,
       },
     ],
@@ -162,10 +162,10 @@ export function CatalogBrochureStudioTab() {
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div>
           <h2 className="text-base font-extrabold flex items-center gap-2">
-            <Building2 size={16} className="text-[#0D8A6A]" /> Community, Developer, Project &amp; Unit Creator + Custom Brochure Studio
+            <Building2 size={16} className="text-[#0D8A6A]" /> Bank-APL Catalog (Community · Developer · Project · Unit) &amp; Mortgage Proposal Brochure Studio
           </h2>
           <p className="text-xs text-[var(--bw-muted)]">
-            Add any new Community, Developer, Project, or Unit with complete material specifications, payment plans, and custom brochure colors/layouts — exportable immediately to JPEG, Word &amp; PDF.
+            Add any Bank-Approved Community, Master Developer, Project, or Financed Unit with LTV/APL specs, handover financing terms, and custom Betterway brochure colors/templates — exportable immediately to JPEG, Word &amp; PDF.
           </p>
         </div>
         <div className="flex flex-wrap gap-1.5 text-xs">
@@ -258,7 +258,7 @@ export function CatalogBrochureStudioTab() {
             )}
 
             <div>
-              <label className="font-bold block mb-1">{entity === 'community' ? 'Avg AED / Sq.Ft' : 'Starting / Asking Price (AED)'}</label>
+              <label className="font-bold block mb-1">{entity === 'community' ? 'Avg Valuation AED / Sq.Ft' : 'Property Valuation / Price (AED)'}</label>
               <input
                 type="number"
                 value={entity === 'community' ? form.avgSqftAed : entity === 'unit' ? form.askingPriceAed : form.startingPriceAed}
@@ -272,7 +272,7 @@ export function CatalogBrochureStudioTab() {
               />
             </div>
             <div>
-              <label className="font-bold block mb-1">Handover / Status</label>
+              <label className="font-bold block mb-1">Financing Stage / Handover</label>
               <div className="grid grid-cols-2 gap-1.5">
                 <select value={form.completionStatus} onChange={(e) => setForm({ ...form, completionStatus: e.target.value })} className="h-9 px-2 rounded-xl border border-[var(--bw-line)] bg-[var(--bw-bg)]">
                   <option>Off-Plan</option>
@@ -285,14 +285,14 @@ export function CatalogBrochureStudioTab() {
           </div>
 
           <div className="pt-2 border-t border-[var(--bw-line)] space-y-2">
-            <div className="font-extrabold text-[#0D8A6A]">Materials, Finishes &amp; Payment Plan</div>
+            <div className="font-extrabold text-[#0D8A6A]">Bank APL Coverage, LTV Limits &amp; Financing Plan</div>
             <div className="grid sm:grid-cols-2 gap-2">
-              <input value={form.flooring} onChange={(e) => setForm({ ...form, flooring: e.target.value })} placeholder="Flooring & Finishes" className="h-9 px-3 rounded-xl border border-[var(--bw-line)] bg-[var(--bw-bg)]" />
-              <input value={form.kitchen} onChange={(e) => setForm({ ...form, kitchen: e.target.value })} placeholder="Kitchen & Appliances" className="h-9 px-3 rounded-xl border border-[var(--bw-line)] bg-[var(--bw-bg)]" />
+              <input value={form.flooring} onChange={(e) => setForm({ ...form, flooring: e.target.value })} placeholder="Max Expat / National / Non-Resident LTV %" className="h-9 px-3 rounded-xl border border-[var(--bw-line)] bg-[var(--bw-bg)]" />
+              <input value={form.kitchen} onChange={(e) => setForm({ ...form, kitchen: e.target.value })} placeholder="Eligible APL Banks (Conventional & Islamic)" className="h-9 px-3 rounded-xl border border-[var(--bw-line)] bg-[var(--bw-bg)]" />
             </div>
-            <input value={form.amenities} onChange={(e) => setForm({ ...form, amenities: e.target.value })} placeholder="Amenities list" className="w-full h-9 px-3 rounded-xl border border-[var(--bw-line)] bg-[var(--bw-bg)]" />
-            <input value={form.paymentPlanSummary} onChange={(e) => setForm({ ...form, paymentPlanSummary: e.target.value })} placeholder="Payment Plan Summary (e.g. 60/40 Handover Mortgage)" className="w-full h-9 px-3 rounded-xl border border-[var(--bw-line)] bg-[var(--bw-bg)]" />
-            <textarea rows={2} value={form.description} onChange={(e) => setForm({ ...form, description: e.target.value })} placeholder="Executive brochure narrative..." className="w-full p-2.5 rounded-xl border border-[var(--bw-line)] bg-[var(--bw-bg)]" />
+            <input value={form.amenities} onChange={(e) => setForm({ ...form, amenities: e.target.value })} placeholder="Valuation SLA, Escrow Bank & Developer e-NOC Notes" className="w-full h-9 px-3 rounded-xl border border-[var(--bw-line)] bg-[var(--bw-bg)]" />
+            <input value={form.paymentPlanSummary} onChange={(e) => setForm({ ...form, paymentPlanSummary: e.target.value })} placeholder="Mortgage Financing Plan (e.g. 20% Down · 80% 3Y Fixed Mortgage)" className="w-full h-9 px-3 rounded-xl border border-[var(--bw-line)] bg-[var(--bw-bg)]" />
+            <textarea rows={2} value={form.description} onChange={(e) => setForm({ ...form, description: e.target.value })} placeholder="Executive UAE mortgage proposal narrative..." className="w-full p-2.5 rounded-xl border border-[var(--bw-line)] bg-[var(--bw-bg)]" />
           </div>
 
           <button type="submit" className="w-full h-10 rounded-full bg-[#0D8A6A] hover:bg-[#10a17c] text-white font-extrabold cursor-pointer">
@@ -381,8 +381,8 @@ export function CatalogBrochureStudioTab() {
                   <div className="font-bold truncate">{form.paymentPlanSummary}</div>
                 </div>
               </div>
-              <div className="opacity-85"><strong>Finishes:</strong> {form.flooring} · {form.kitchen}</div>
-              <div className="opacity-85"><strong>Amenities:</strong> {form.amenities}</div>
+              <div className="opacity-85"><strong>LTV &amp; Bank APL:</strong> {form.flooring} · {form.kitchen}</div>
+              <div className="opacity-85"><strong>Valuation &amp; NOC:</strong> {form.amenities}</div>
               <div className="pt-2 border-t border-black/10 text-[10px] opacity-70">{theme.footerNote}</div>
             </div>
           </div>

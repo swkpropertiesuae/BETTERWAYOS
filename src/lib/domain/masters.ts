@@ -290,15 +290,15 @@ export const MASTER_REGISTRIES: readonly MasterRegistryDef[] = [
   {
     key: 'contacts',
     table: 'contacts',
-    label: 'Contacts, Buyers & Landlords',
-    subtitle: 'CRM master registry of borrowers, co-borrowers & sellers (PDPL)',
+    label: 'Contacts, Borrowers & Guarantors',
+    subtitle: 'CRM master registry of borrowers, co-borrowers, sellers & guarantors (PDPL)',
     category: 'Real Estate & Mortgage Ops',
     writePolicy: 'OPERATIONAL_FREE_CREATE',
     displayColumns: ['code', 'full_name', 'party_type', 'residency_status', 'pdpl_consent', 'status'],
     fields: [
       { key: 'code', label: 'Contact Code', type: 'text', required: true },
       { key: 'full_name', label: 'Full Name', type: 'text', required: true },
-      { key: 'party_type', label: 'Party Type', type: 'select', options: ['Borrower', 'Co-Borrower', 'Seller', 'Landlord', 'Guarantor'] },
+      { key: 'party_type', label: 'Party Type', type: 'select', options: ['Borrower', 'Co-Borrower', 'Seller', 'Portfolio Investor', 'Guarantor'] },
       { key: 'phone', label: 'Phone', type: 'text', required: true },
       { key: 'email', label: 'Email', type: 'text' },
       { key: 'nationality', label: 'Nationality', type: 'text' },

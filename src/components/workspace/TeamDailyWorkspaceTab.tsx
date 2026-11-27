@@ -87,12 +87,12 @@ export function TeamDailyWorkspaceTab() {
       toast(out.error || 'Failed to update verifier authority', 'err');
       return;
     }
-    toast(!currentlyEnabled ? 'Assigned as Site-Visit Verification Authority!' : 'Verification Authority removed');
+    toast(!currentlyEnabled ? 'Assigned as Mortgage Field Verification Authority!' : 'Field Verification Authority removed');
     await load();
   };
 
   if (loading && !data) {
-    return <div className="bw-card p-8 text-center text-xs text-[var(--bw-muted)]">Loading Team &amp; Daily To-Do Board...</div>;
+    return <div className="bw-card p-8 text-center text-xs text-[var(--bw-muted)]">Loading Mortgage Team &amp; Daily To-Do Board...</div>;
   }
 
   const staffBoard: any[] = data?.staffBoard ?? [];
@@ -105,10 +105,10 @@ export function TeamDailyWorkspaceTab() {
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div>
           <h2 className="text-base font-extrabold flex items-center gap-2">
-            <Users size={16} className="text-[#0D8A6A]" /> Team Directory, Job Roles, Daily To-Do &amp; Verification Authority
+            <Users size={16} className="text-[#0D8A6A]" /> Mortgage Team Directory, Job Roles, Daily To-Do &amp; Field Verification Authority
           </h2>
           <p className="text-xs text-[var(--bw-muted)]">
-            Review every staff member&apos;s exact role, tasks to do vs. tasks completed today, assign individual/team directives, and delegate Site-Visit Verification Authority.
+            Review every mortgage advisor &amp; operations role, daily tasks to do vs. completed today, assign individual/team directives, and delegate GPS Field Meeting Verification Authority.
           </p>
         </div>
         <div className="flex items-center gap-2 text-xs">
@@ -123,28 +123,28 @@ export function TeamDailyWorkspaceTab() {
       </div>
 
       <div className="grid grid-cols-2 lg:grid-cols-5 gap-3">
-        <MetricTile label="Active Team Roster" value={data?.summary?.totalStaff ?? 9} hint="Official Betterway staff" tone="navy" />
+        <MetricTile label="Active Mortgage Team" value={data?.summary?.totalStaff ?? 9} hint="Official Betterway staff" tone="navy" />
         <MetricTile label="Checked In Today" value={`${data?.summary?.checkedInCount ?? 0} / ${data?.summary?.totalStaff ?? 9}`} hint="Oud Metha QR attendance" tone="emerald" />
         <MetricTile label="Tasks To Be Done" value={data?.summary?.totalTasksOpen ?? 0} hint={`${data?.summary?.totalOverdue ?? 0} overdue`} tone="gold" />
         <MetricTile label="Tasks Done Today" value={data?.summary?.totalTasksDone ?? 0} hint="Completed checklist items" tone="emerald" />
-        <MetricTile label="Assigned Verifiers" value={data?.summary?.verifierCount ?? 0} hint="Plus Warda & Shabib" tone="navy" />
+        <MetricTile label="Field Verifiers" value={data?.summary?.verifierCount ?? 0} hint="Plus Warda & Shabib" tone="navy" />
       </div>
 
       {/* Staff Roster Matrix with Job Roles, Daily Progress & Verification Authority Toggle */}
       <div className="bw-card p-5 space-y-3 overflow-x-auto">
         <div className="flex items-center justify-between">
-          <h3 className="text-sm font-extrabold">Betterway Staff Performance &amp; Site-Visit Verification Authority</h3>
+          <h3 className="text-sm font-extrabold">Betterway Staff Performance &amp; Mortgage Field Verification Authority</h3>
           <span className="text-[11px] text-[var(--bw-muted)]">Click any row to filter their personal To-Do list below</span>
         </div>
         <table className="w-full text-xs text-start min-w-[780px]">
           <thead>
             <tr className="border-b border-[var(--bw-line)] text-[10.5px] uppercase tracking-wider text-[var(--bw-muted)]">
-              <th className="py-2.5 text-start">Staff &amp; Job Role</th>
+              <th className="py-2.5 text-start">Advisor / Staff &amp; Role</th>
               <th className="py-2.5 text-start">Department</th>
               <th className="py-2.5 text-center">Office Check-In</th>
               <th className="py-2.5 text-center">To Do Today</th>
               <th className="py-2.5 text-center">Done Today</th>
-              <th className="py-2.5 text-end">Site-Visit Verifier Authority</th>
+              <th className="py-2.5 text-end">Field Meeting Verifier Authority</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-[var(--bw-line)]">

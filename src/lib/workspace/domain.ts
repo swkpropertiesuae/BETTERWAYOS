@@ -22,7 +22,10 @@ export interface BrochureThemeConfig {
   showMortgageStrip: boolean;
 }
 
-export const BROCHURE_THEME_PRESETS: Record<Exclude<BrochurePresetKey, 'custom'>, Omit<BrochureThemeConfig, 'headerTagline' | 'footerNote' | 'showPaymentPlan' | 'showAmenities' | 'showMortgageStrip'>> = {
+export const BROCHURE_THEME_PRESETS: Record<
+  Exclude<BrochurePresetKey, 'custom'>,
+  Omit<BrochureThemeConfig, 'headerTagline' | 'footerNote' | 'showPaymentPlan' | 'showAmenities' | 'showMortgageStrip'>
+> = {
   navy_gold: {
     preset: 'navy_gold',
     primaryHex: '#0A1128',
@@ -67,7 +70,7 @@ export const BROCHURE_THEME_PRESETS: Record<Exclude<BrochurePresetKey, 'custom'>
 
 export const DEFAULT_BROCHURE_THEME: BrochureThemeConfig = {
   ...BROCHURE_THEME_PRESETS.navy_gold,
-  headerTagline: 'Independent UAE Mortgage & Real Estate Advisory · 24 Partner Banks',
+  headerTagline: 'Independent UAE Mortgage Advisory · 24 Conventional & Islamic Partner Banks · Zero Client Broker Fee',
   footerNote: 'Betterway Mortgages LLC · Al Nasr Plaza, Oud Metha, Dubai, UAE · betterwaymortgages.com',
   showPaymentPlan: true,
   showAmenities: true,
@@ -110,16 +113,53 @@ export function assertCleanBetterwayPublicText(payload: unknown): void {
   }
 }
 
-// ---------- Pin-to-Pin Closing Tracks (Off-Plan, Secondary, Handover, Leasing, Property Management) ----------
+// ---------- 100% UAE Mortgage Field Meeting Constants ----------
 
-export type ClosingTrack = 'Off-Plan' | 'Secondary' | 'Handover' | 'Leasing' | 'Property Management';
+export const MORTGAGE_FIELD_MEETING_TYPES = [
+  'Client Consultation',
+  'Bank RM & FOL Signing',
+  'Valuation Inspection',
+  'Developer SOA & NOC',
+  'DLD Trustee Transfer',
+] as const;
+
+export type MortgageFieldMeetingType = (typeof MORTGAGE_FIELD_MEETING_TYPES)[number];
+
+export const MORTGAGE_DEAL_CATEGORIES = [
+  'Ready Home Purchase',
+  'Off-Plan Handover Finance',
+  'Buyout & Refinance',
+  'Equity Release',
+  'Non-Resident Mortgage',
+  'Commercial & SME Finance',
+] as const;
+
+export const MORTGAGE_MET_ROLES = [
+  'Borrower / Applicant',
+  'Co-Borrower / Spouse',
+  'Bank RM / Credit Officer',
+  'Bank Valuer',
+  'Developer NOC Officer',
+  'DLD Trustee Officer',
+  'RERA Introducer / Referrer',
+  'Other',
+] as const;
+
+// ---------- Pin-to-Pin UAE Mortgage Closing Tracks (Scratch -> Bank Disbursal & DSA) ----------
+
+export type ClosingTrack =
+  | 'Ready Purchase Mortgage'
+  | 'Off-Plan Handover Finance'
+  | 'Buyout & Refinance'
+  | 'Equity Release'
+  | 'Non-Resident & Commercial';
 
 export const CLOSING_TRACKS: readonly ClosingTrack[] = [
-  'Off-Plan',
-  'Secondary',
-  'Handover',
-  'Leasing',
-  'Property Management',
+  'Ready Purchase Mortgage',
+  'Off-Plan Handover Finance',
+  'Buyout & Refinance',
+  'Equity Release',
+  'Non-Resident & Commercial',
 ];
 
 export interface ClosingStageItem {
@@ -132,67 +172,69 @@ export interface ClosingStageItem {
 }
 
 const TRACK_STAGE_LABELS: Record<ClosingTrack, string[]> = {
-  'Off-Plan': [
-    'EOI & Unit Booking Confirmation',
-    'Client KYC, AML & Source of Funds Check',
-    'Booking Deposit & 1st Instalment Receipt',
-    'SPA Issuance & Buyer Signature',
-    '4% DLD Registration & Oqood Certificate',
-    'Escrow Construction Milestones & SOA Audit',
-    'Pre-Handover UAE Bank Pre-Approval (DIP)',
-    'Developer Final SOA & Bank Property Valuation',
-    'Pre-Handover Snagging & Final Balance Disbursal',
-    'Key Handover, DEWA Activation & Title Deed',
+  'Ready Purchase Mortgage': [
+    'Borrower Intake, CBUAE 50% DBR & LTV Stress Test',
+    'AECB Credit Report, KYC, AML & Income Verification',
+    '24-Bank Shortlist & Written Cash-to-Close Proposal',
+    'CBUAE Joint Key Facts Statement (KFS) & Mandate Signed',
+    'Bank Pre-Approval (DIP) Issued (Valid 60 Days)',
+    'Signed Form F (MOU) & Independent Bank Valuation',
+    'Final Offer Letter (FOL), Life & Property Insurance Assigned',
+    'Developer e-NOC & Service Charge Clearance',
+    'DLD Trustee Transfer, Manager Cheques & 0.25% Mortgage Reg',
+    'New Title Deed Issued, Loan Disbursed & Bank DSA Settled',
   ],
-  Secondary: [
-    'Lead Intake & Forensic Viewing Report',
-    'Written Offer / Letter of Intent (LOI)',
-    'RERA Form A / Form B / A2A (Form I) Signed',
-    'Buyer & Seller KYC, AML & Liability Check',
-    'Form F (MOU) Executed & 10% Security Cheque Held',
-    'UAE Bank Mortgage Pre-Approval (DIP)',
-    'Bank Property Valuation Report Issued',
-    'Final Offer Letter (FOL) & Life Insurance Signed',
-    'Developer NOC & Service Charge Clearance',
-    'DLD Trustee Transfer & Manager Cheques Settled',
-    'New Title Deed Issued, Keys & Commission Settled',
-  ],
-  Handover: [
-    'Developer Handover Notice & Completion Certificate',
-    'Technical Snagging Inspection & Defect Sign-Off',
+  'Off-Plan Handover Finance': [
+    'Developer Completion Notice, SPA & Oqood Audit',
     'Updated Developer Final Statement of Account (SOA)',
-    'Handover Mortgage Pre-Approval (24-Bank Shortlist)',
-    'Bank Valuation & Final Offer Letter (FOL)',
-    'Manager Cheque / Escrow Disbursal to Developer',
-    'Developer Clearance Receipt & Handover NOC',
-    'DEWA, Chiller & Utility Account Activation',
-    'Keys, Access Cards & Title Deed Issuance',
+    'Borrower KYC, AECB & CBUAE 50% DBR / LTV Structuring',
+    '24-Bank APL Check & Handover Pre-Approval (DIP)',
+    'Bank Property Valuation at Handover Completion',
+    'Final Offer Letter (FOL) & Takaful / Life Policy Assignment',
+    'Bank Manager Cheque / Escrow Balance Disbursal to Developer',
+    'Developer Payment Clearance Receipt & Handover e-NOC',
+    'DLD Mortgage Charge Registration (0.25%) & Title Deed Issued',
+    'Bank DSA Commission Invoiced & Post-Disbursal Rate Watch',
   ],
-  Leasing: [
-    'Forensic Viewing & Landlord Offer Approval',
-    'Tenant KYC (Passport, Visa, Emirates ID)',
-    'Dubai RERA Unified Tenancy Contract & Addendum',
-    'Refundable Security Deposit Cheque / Receipt',
-    'Yearly Rent PDC Cheques (1–12 Cheques) Logged',
-    'Agency Leasing Fee & 5% VAT Receipt',
-    'Ejari Certificate Registered at DLD',
-    'DEWA, Chiller & Building Move-In Permit',
-    'Key Handover & Unit Condition Photo Report',
+  'Buyout & Refinance': [
+    'Existing Mortgage Audit & Post-Fixed EIBOR Revert Check',
+    '1% / AED 10,000 CBUAE Exit Fee & Break-Even Savings Calc',
+    'Borrower Updated KYC, AECB & 6-Month Bank Statements',
+    'New Lending Bank Pre-Approval (DIP) Secured',
+    'Independent Bank Property Valuation & Final Credit Approval',
+    'Existing Lender Liability Letter Issued & Verified',
+    'New Bank Final Offer Letter (FOL) & Insurance Re-Assignment',
+    'Bank-to-Bank Settlement Manager Cheque Cleared',
+    'DLD Old Mortgage Release & New Mortgage Charge Registered',
+    'Bank DSA Commission Settled & New Fixed-Period Alert Set',
   ],
-  'Property Management': [
-    'Owner Onboarding & Title Deed Verification',
-    'Signed Property Management Agreement (PMA)',
-    'Initial Snagging, Inventory & Readiness Inspection',
-    'Marketing Listing, Brochure & Viewing Logs',
-    'Tenant Placement, Deposit & Rent Cheque Schedule',
-    'Ejari Registration & Tenant Move-In Handover',
-    'Preventive Maintenance & Expense Escrow Log',
-    'Owner Statement, Cheque Clearance & Renewal Watch',
+  'Equity Release': [
+    'Title Deed Verification (Unencumbered / Low-LTV Assessment)',
+    'Purpose of Funds, AML Screening & CBUAE Cash-Out LTV Check',
+    'AECB Credit Bureau, Income & Rental Statement Verification',
+    '24-Bank Cash-Out Rate Shortlist & KFS Mandate Signed',
+    'Lending Bank Pre-Approval (DIP) Issued',
+    'Independent Bank Valuation & Credit Underwriting Sign-Off',
+    'Final Offer Letter (FOL), Life & Property Insurance Signed',
+    'DLD Mortgage Registration (0.25% of Facility) Completed',
+    'Equity Release Cash Proceeds Disbursed to Borrower IBAN',
+    'Bank DSA Commission Invoiced & Settled',
+  ],
+  'Non-Resident & Commercial': [
+    'Overseas / Corporate KYC, Passport & Source of Funds Audit',
+    'Home-Country Credit Bureau & 6–12m Bank Statement Review',
+    'Non-Resident (Max 60% LTV) / Commercial Lender Shortlist',
+    'Bank Pre-Approval (DIP) & Remote POA / Attestation Setup',
+    'Independent Bank Property Valuation & Underwriting Approval',
+    'Final Offer Letter (FOL) & Cross-Border FX Equity Plan',
+    'Developer e-NOC & DLD Trustee Appointment Confirmation',
+    'DLD Trustee Settlement, Manager Cheques & Mortgage Registration',
+    'Title Deed Issued, Golden Visa Bank NOC & DSA Commission Settled',
   ],
 };
 
 export function buildDefaultStagesForTrack(track: ClosingTrack): ClosingStageItem[] {
-  const labels = TRACK_STAGE_LABELS[track] ?? TRACK_STAGE_LABELS.Secondary;
+  const labels = TRACK_STAGE_LABELS[track] ?? TRACK_STAGE_LABELS['Ready Purchase Mortgage'];
   return labels.map((label, idx) => ({
     step: idx + 1,
     label,
@@ -234,7 +276,7 @@ export function summarizeChequeLedger(cheques: ChequeLedgerRow[]) {
   };
 }
 
-// ---------- Legal Form Placeholder Extractor & Live Template Filler ----------
+// ---------- Mortgage Legal Form Placeholder Extractor & Live Template Filler ----------
 
 export interface TemplateFieldDef {
   token: string;
@@ -256,7 +298,7 @@ export function extractTemplatePlaceholders(templateBody: string): TemplateField
       ? 'date'
       : lower.includes('email')
         ? 'email'
-        : lower.includes('aed') || lower.includes('pct') || lower.includes('count') || lower.includes('days') || lower.includes('sqft')
+        : lower.includes('aed') || lower.includes('pct') || lower.includes('count') || lower.includes('days') || lower.includes('years')
           ? 'number'
           : 'text';
     fields.push({ token, label, inputType });
@@ -272,7 +314,7 @@ export function fillTemplateText(templateBody: string, values: Record<string, st
   });
 }
 
-// ---------- Agent Commission & Expense Settlement Math ----------
+// ---------- Advisor DSA Commission, Expense & RERA Partner Referral Settlement Math ----------
 
 export const COMMISSION_PAYMENT_MODES = [
   'Cash',
@@ -285,10 +327,19 @@ export const COMMISSION_PAYMENT_MODES = [
 
 export const COMMISSION_STATUSES = ['Pending', 'Received', 'Paid'] as const;
 
+export const COMMISSION_ENTRY_TYPES = [
+  'Advisor DSA Commission',
+  'Advisor Case Expense',
+  'Advisor Draw / Advance',
+  'RERA Partner Referral Split',
+] as const;
+
+export type CommissionEntryType = (typeof COMMISSION_ENTRY_TYPES)[number];
+
 export interface CommissionExpenseEntry {
   agent_name: string;
   agent_user_id?: string | null;
-  entry_type: 'Commission to Agent' | 'Expense by Agent' | 'Agent Advance' | '3rd-Party Split';
+  entry_type: CommissionEntryType;
   gross_amount_aed: number;
   split_pct: number;
   net_amount_aed: number;
@@ -324,8 +375,8 @@ export function computeAgentSettlementSummary(entries: CommissionExpenseEntry[])
     if (e.status === 'Received') totalReceivedAed += net;
     if (e.status === 'Paid') totalPaidAed += net;
     if (e.status === 'Pending') totalPendingAed += net;
-    if (e.entry_type === 'Expense by Agent') totalExpensesAed += net;
-    if (e.entry_type === '3rd-Party Split' || e.is_third_party) totalThirdPartyAed += net;
+    if (e.entry_type === 'Advisor Case Expense') totalExpensesAed += net;
+    if (e.entry_type === 'RERA Partner Referral Split' || e.is_third_party) totalThirdPartyAed += net;
 
     const key = e.agent_name || 'Unassigned';
     const cur = byAgent.get(key) ?? {
@@ -341,19 +392,19 @@ export function computeAgentSettlementSummary(entries: CommissionExpenseEntry[])
     };
     cur.count += 1;
 
-    if (e.entry_type === 'Commission to Agent') {
+    if (e.entry_type === 'Advisor DSA Commission') {
       if (e.status === 'Received') cur.commissionReceivedAed += net;
       else if (e.status === 'Paid') cur.commissionPaidAed += net;
       else cur.commissionPendingAed += net;
-    } else if (e.entry_type === 'Expense by Agent') {
+    } else if (e.entry_type === 'Advisor Case Expense') {
       cur.expensesByAgentAed += net;
-    } else if (e.entry_type === 'Agent Advance') {
+    } else if (e.entry_type === 'Advisor Draw / Advance') {
       cur.advancesAed += net;
-    } else if (e.entry_type === '3rd-Party Split') {
+    } else if (e.entry_type === 'RERA Partner Referral Split') {
       cur.thirdPartySplitAed += net;
     }
 
-    // Net Due to Agent = Pending/Received Commissions + Approved Agent Expenses - Advances already given
+    // Net Due to Advisor = Pending/Received DSA Commissions + Approved Case Expenses - Draws/Advances
     cur.netBalanceDueAed = Number(
       (cur.commissionPendingAed + cur.commissionReceivedAed + cur.expensesByAgentAed - cur.advancesAed).toFixed(2),
     );

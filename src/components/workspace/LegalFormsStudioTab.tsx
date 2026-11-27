@@ -7,15 +7,15 @@ import { StatusPill } from '@/components/os/UiKit';
 import { extractTemplatePlaceholders, fillTemplateText } from '@/lib/workspace/domain';
 import { downloadJpegDocument, downloadWordDocument, printBrandedDocument } from '@/lib/workspace/exporters';
 
-const PRIORITY_CODES = ['BW-A2A-FORMI', 'BW-LOI-OFFER', 'BW-TENANCY-RERA', 'BW-EJARI-PACK', 'BW-NOC-PACK', 'BW-AGREEMENT-PACK'];
+const PRIORITY_CODES = ['BW-MANDATE-KFS', 'BW-PREAPP-PACK', 'BW-REFERRAL-DSA', 'BW-NOC-SOA', 'BW-BUYOUT-LIAB', 'BW-FOL-TRUSTEE'];
 
 export function LegalFormsStudioTab() {
   const { user, toast } = useOs();
   const [templates, setTemplates] = useState<any[]>([]);
   const [savedDocs, setSavedDocs] = useState<any[]>([]);
-  const [selectedCode, setSelectedCode] = useState('BW-A2A-FORMI');
-  const [title, setTitle] = useState('Agent-to-Agent (A2A / Form I) Co-Brokerage & Commission Protection Agreement');
-  const [category, setCategory] = useState('Legal & Brokerage');
+  const [selectedCode, setSelectedCode] = useState('BW-MANDATE-KFS');
+  const [title, setTitle] = useState('CBUAE Key Facts Statement (KFS) & Zero-Broker-Fee Mortgage Mandate');
+  const [category, setCategory] = useState('CBUAE Mortgage Mandate');
   const [rawTemplate, setRawTemplate] = useState('');
   const [fieldValues, setFieldValues] = useState<Record<string, string>>({});
   const [mode, setMode] = useState<'form' | 'edit'>('form');
@@ -28,11 +28,11 @@ export function LegalFormsStudioTab() {
       const tpls: any[] = d.templates ?? [];
       setTemplates(tpls);
       setSavedDocs(d.docs ?? []);
-      const first = tpls.find((t) => t.code === 'BW-A2A-FORMI') || tpls[0];
+      const first = tpls.find((t) => t.code === 'BW-MANDATE-KFS') || tpls[0];
       if (first && !rawTemplate) {
         setSelectedCode(first.code);
         setTitle(first.title);
-        setCategory(first.category || 'Legal & Brokerage');
+        setCategory(first.category || 'CBUAE Mortgage Mandate');
         setRawTemplate(first.body_template || '');
       }
     }
@@ -96,10 +96,10 @@ export function LegalFormsStudioTab() {
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div>
           <h2 className="text-base font-extrabold flex items-center gap-2">
-            <FileText size={16} className="text-[#0D8A6A]" /> Legal Agreements &amp; Editable Forms Studio (Word `.DOC` · `.JPEG` · Fillable)
+            <FileText size={16} className="text-[#0D8A6A]" /> UAE Mortgage Forms &amp; Agreements Studio (Word `.DOC` · `.JPEG` · Fillable)
           </h2>
           <p className="text-xs text-[var(--bw-muted)]">
-            Agent-to-Agent (A2A / Form I), Letter of Intent (LOI), Dubai Tenancy Contract, Ejari Pack, Developer/Bank NOC, and Client Agreements — fill fields, edit template freely, and export to Word, JPEG, or PDF.
+            CBUAE KFS Mandate, 24-Bank Pre-Approval Comparison, RERA Partner Referral DSA Agreement, Developer SOA &amp; e-NOC Letter, Buyout Liability Letter Authorization, and FOL &amp; DLD Trustee Disbursal Pack — fill fields, edit template freely, and export to Word, JPEG, or PDF.
           </p>
         </div>
         <div className="flex flex-wrap gap-1.5 text-xs">

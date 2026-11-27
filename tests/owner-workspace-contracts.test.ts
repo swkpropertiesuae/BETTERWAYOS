@@ -6,19 +6,25 @@ import {
   BROCHURE_THEME_PRESETS,
   buildDefaultStagesForTrack,
   CLOSING_TRACKS,
+  COMMISSION_ENTRY_TYPES,
   COMMISSION_PAYMENT_MODES,
   computeAgentSettlementSummary,
   extractTemplatePlaceholders,
   fillTemplateText,
+  MORTGAGE_DEAL_CATEGORIES,
+  MORTGAGE_FIELD_MEETING_TYPES,
   normalizeBrochureTheme,
   summarizeChequeLedger,
 } from '@/lib/workspace/domain';
 
-describe('Warda & Shabib Workspace Command Suite — Offline Domain & Schema Contracts', () => {
-  it('verifies migration 006 exists with all 4 workspace tables, RLS, and 6 UAE legal form templates', () => {
-    const migPath = path.join(process.cwd(), 'supabase', 'migrations', '006_owner_workspace_command_suite.sql');
-    expect(fs.existsSync(migPath)).toBe(true);
-    const sql = fs.readFileSync(migPath, 'utf8');
+describe('Warda & Shabib UAE Mortgage Command Suite — Offline Domain, Schema & Mortgage-Only Contracts', () => {
+  it('verifies migrations 006 & 007 exist with all 4 workspace tables, RLS, and 6 UAE mortgage templates', () => {
+    const mig006 = path.join(process.cwd(), 'supabase', 'migrations', '006_owner_workspace_command_suite.sql');
+    const mig007 = path.join(process.cwd(), 'supabase', 'migrations', '007_mortgage_exclusive_operations.sql');
+    expect(fs.existsSync(mig006)).toBe(true);
+    expect(fs.existsSync(mig007)).toBe(true);
+    const sql006 = fs.readFileSync(mig006, 'utf8');
+    const sql007 = fs.readFileSync(mig007, 'utf8');
 
     for (const table of [
       'forensic_field_reports',
@@ -26,19 +32,19 @@ describe('Warda & Shabib Workspace Command Suite — Offline Domain & Schema Con
       'closing_cheque_ledger',
       'owner_commission_expenses',
     ]) {
-      expect(sql).toContain(`CREATE TABLE IF NOT EXISTS public.${table}`);
-      expect(sql).toContain(`'${table}'`);
+      expect(sql006).toContain(`CREATE TABLE IF NOT EXISTS public.${table}`);
+      expect(sql006).toContain(`'${table}'`);
     }
 
     for (const tplCode of [
-      'BW-A2A-FORMI',
-      'BW-LOI-OFFER',
-      'BW-TENANCY-RERA',
-      'BW-EJARI-PACK',
-      'BW-NOC-PACK',
-      'BW-AGREEMENT-PACK',
+      'BW-MANDATE-KFS',
+      'BW-PREAPP-PACK',
+      'BW-REFERRAL-DSA',
+      'BW-NOC-SOA',
+      'BW-BUYOUT-LIAB',
+      'BW-FOL-TRUSTEE',
     ]) {
-      expect(sql).toContain(tplCode);
+      expect(sql007).toContain(tplCode);
     }
   });
 
@@ -54,15 +60,32 @@ describe('Warda & Shabib Workspace Command Suite — Offline Domain & Schema Con
     expect(custom.accentHex).toBe('#D4AF37'); // fell back safely
     expect(custom.coverLayout).toBe('editorial_split');
 
-    expect(() => assertCleanBetterwayPublicText({ title: 'Betterway Mortgages Dubai Hills Brochure' })).not.toThrow();
+    expect(() => assertCleanBetterwayPublicText({ title: 'Betterway Mortgages Dubai Hills APL Proposal' })).not.toThrow();
     expect(() => assertCleanBetterwayPublicText({ footer: 'Powered by SWK Properties' })).toThrow(/ZERO_SWK_GUARD/);
   });
 
-  it('generates complete pin-to-pin closing stages across all 5 tracks and accurately summarizes cheque ledgers', () => {
-    expect(CLOSING_TRACKS).toEqual(['Off-Plan', 'Secondary', 'Handover', 'Leasing', 'Property Management']);
+  it('defines 100% UAE mortgage field meetings, 5 mortgage closing tracks, and accurate Manager Cheque summaries', () => {
+    expect(MORTGAGE_FIELD_MEETING_TYPES).toEqual([
+      'Client Consultation',
+      'Bank RM & FOL Signing',
+      'Valuation Inspection',
+      'Developer SOA & NOC',
+      'DLD Trustee Transfer',
+    ]);
+    expect(MORTGAGE_DEAL_CATEGORIES).toContain('Ready Home Purchase');
+    expect(MORTGAGE_DEAL_CATEGORIES).toContain('Buyout & Refinance');
+    expect(MORTGAGE_DEAL_CATEGORIES).toContain('Equity Release');
+
+    expect(CLOSING_TRACKS).toEqual([
+      'Ready Purchase Mortgage',
+      'Off-Plan Handover Finance',
+      'Buyout & Refinance',
+      'Equity Release',
+      'Non-Resident & Commercial',
+    ]);
     for (const track of CLOSING_TRACKS) {
       const stages = buildDefaultStagesForTrack(track);
-      expect(stages.length).toBeGreaterThanOrEqual(8);
+      expect(stages.length).toBeGreaterThanOrEqual(9);
       expect(stages[0].step).toBe(1);
       expect(stages[0].status).toBe('In Progress');
     }
@@ -82,34 +105,41 @@ describe('Warda & Shabib Workspace Command Suite — Offline Domain & Schema Con
     expect(summary.bouncedAed).toBe(25_000);
   });
 
-  it('extracts fillable placeholders from UAE legal agreements and renders filled document text cleanly', () => {
-    const sample = 'Date: [Agreement_Date] | Party B: [Party_B_Agent_Name] | Email: [Party_B_Email] | Deal: AED [Deal_Amount_AED] | [x] Verified';
+  it('extracts fillable placeholders from UAE CBUAE mortgage forms and renders filled document text cleanly', () => {
+    const sample =
+      'Date: [Mandate_Date] | Borrower: [Borrower_Full_Name] | Email: [Borrower_Email] | Loan: AED [Requested_Loan_AED] | [x] Verified';
     const fields = extractTemplatePlaceholders(sample);
-    expect(fields.map((f) => f.token)).toEqual(['Agreement_Date', 'Party_B_Agent_Name', 'Party_B_Email', 'Deal_Amount_AED']);
-    expect(fields.find((f) => f.token === 'Agreement_Date')?.inputType).toBe('date');
-    expect(fields.find((f) => f.token === 'Party_B_Email')?.inputType).toBe('email');
-    expect(fields.find((f) => f.token === 'Deal_Amount_AED')?.inputType).toBe('number');
+    expect(fields.map((f) => f.token)).toEqual(['Mandate_Date', 'Borrower_Full_Name', 'Borrower_Email', 'Requested_Loan_AED']);
+    expect(fields.find((f) => f.token === 'Mandate_Date')?.inputType).toBe('date');
+    expect(fields.find((f) => f.token === 'Borrower_Email')?.inputType).toBe('email');
+    expect(fields.find((f) => f.token === 'Requested_Loan_AED')?.inputType).toBe('number');
 
     const filled = fillTemplateText(sample, {
-      Agreement_Date: '2026-11-27',
-      Party_B_Agent_Name: 'Amina Hassan',
-      Deal_Amount_AED: '3,200,000',
+      Mandate_Date: '2026-11-27',
+      Borrower_Full_Name: 'Amina Hassan',
+      Requested_Loan_AED: '3,200,000',
     });
     expect(filled).toContain('Date: 2026-11-27');
-    expect(filled).toContain('Party B: Amina Hassan');
-    expect(filled).toContain('[Party_B_Email]'); // untouched if blank
+    expect(filled).toContain('Borrower: Amina Hassan');
+    expect(filled).toContain('[Borrower_Email]'); // untouched if blank
     expect(filled).toContain('[x] Verified');
   });
 
-  it('computes Agent Commission, Agent Expense, Advance & 3rd-Party Split net settlement balances across Cash/BT/Botim', () => {
+  it('computes Advisor DSA Commission, Case Expense, Draw & RERA Partner Referral balances across Cash/BT/Botim', () => {
     expect(COMMISSION_PAYMENT_MODES).toContain('Cash');
     expect(COMMISSION_PAYMENT_MODES).toContain('Bank Transfer (BT)');
     expect(COMMISSION_PAYMENT_MODES).toContain('Botim');
+    expect(COMMISSION_ENTRY_TYPES).toEqual([
+      'Advisor DSA Commission',
+      'Advisor Case Expense',
+      'Advisor Draw / Advance',
+      'RERA Partner Referral Split',
+    ]);
 
     const res = computeAgentSettlementSummary([
       {
         agent_name: 'Asif Khan',
-        entry_type: 'Commission to Agent',
+        entry_type: 'Advisor DSA Commission',
         gross_amount_aed: 40_000,
         split_pct: 50,
         net_amount_aed: 20_000,
@@ -119,7 +149,7 @@ describe('Warda & Shabib Workspace Command Suite — Offline Domain & Schema Con
       },
       {
         agent_name: 'Asif Khan',
-        entry_type: 'Expense by Agent',
+        entry_type: 'Advisor Case Expense',
         gross_amount_aed: 1_500,
         split_pct: 100,
         net_amount_aed: 1_500,
@@ -129,7 +159,7 @@ describe('Warda & Shabib Workspace Command Suite — Offline Domain & Schema Con
       },
       {
         agent_name: 'Asif Khan',
-        entry_type: 'Agent Advance',
+        entry_type: 'Advisor Draw / Advance',
         gross_amount_aed: 3_000,
         split_pct: 100,
         net_amount_aed: 3_000,
@@ -138,8 +168,8 @@ describe('Warda & Shabib Workspace Command Suite — Offline Domain & Schema Con
         is_third_party: false,
       },
       {
-        agent_name: 'External Co-Broker',
-        entry_type: '3rd-Party Split',
+        agent_name: 'External ORN Partner',
+        entry_type: 'RERA Partner Referral Split',
         gross_amount_aed: 40_000,
         split_pct: 25,
         net_amount_aed: 10_000,
@@ -169,21 +199,66 @@ describe('Warda & Shabib Workspace Command Suite — Offline Domain & Schema Con
       'utf8',
     );
 
-    // attendance_events real columns
     expect(teamDailySrc).toContain('attendance_date_dubai');
     expect(teamDailySrc).toContain('event_kind');
     expect(teamDailySrc).toContain('dubai_time_str');
     expect(teamDailySrc).not.toContain('event_date_dubai');
 
-    // tasks.status CHECK allows ('Todo', 'In Progress', 'Done') — never 'Pending'
     expect(teamDailySrc).toContain("status: 'Todo'");
     expect(teamDailySrc).not.toContain("status: 'Pending'");
     expect(fieldReportsSrc).not.toContain("? 'Done' : 'Pending'");
 
-    // notifications real columns (recipient_user_id, href) — never user_id or link_href
     expect(teamDailySrc).toContain('recipient_user_id');
     expect(teamDailySrc).not.toContain('link_href');
     expect(fieldReportsSrc).toContain('recipient_user_id');
     expect(fieldReportsSrc).not.toContain('link_href');
+  });
+
+  it('strictly enforces 100% UAE Mortgage-Exclusive terminology (zero real-estate brokerage / leasing / viewing jargon)', () => {
+    const filesToAudit = [
+      'src/lib/workspace/domain.ts',
+      'src/lib/workspace/verifiers.ts',
+      'src/components/workspace/TeamDailyWorkspaceTab.tsx',
+      'src/components/workspace/ForensicVisitsTab.tsx',
+      'src/components/workspace/CatalogBrochureStudioTab.tsx',
+      'src/components/workspace/LegalFormsStudioTab.tsx',
+      'src/components/workspace/PinToPinClosingsTab.tsx',
+      'src/components/workspace/CommissionsExpensesTab.tsx',
+      'src/app/os/executive/page.tsx',
+      'src/app/os/page.tsx',
+      'src/app/os/field-gps/page.tsx',
+      'src/app/os/utilities/page.tsx',
+    ];
+
+    const forbiddenTerms = [
+      'Property Viewing',
+      'Forensic Viewing',
+      'Site Visit',
+      'Site-Visit',
+      'Tenancy Contract',
+      'Property Management',
+      'Yearly Rent',
+      'Listing Agent',
+      'Agent-to-Agent',
+      'Form I',
+      'BW-A2A',
+      'BW-TENANCY',
+      'BW-EJARI',
+      'Rent Instalment',
+      'Security Deposit',
+      'Move-In Permit',
+      'Snagging',
+      'Leasing',
+      'Tenant',
+    ];
+
+    for (const rel of filesToAudit) {
+      const content = fs.readFileSync(path.join(process.cwd(), rel), 'utf8');
+      for (const term of forbiddenTerms) {
+        expect(content, `Forbidden real-estate term "${term}" found in ${rel}`).not.toMatch(
+          new RegExp(term.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'i'),
+        );
+      }
+    }
   });
 });

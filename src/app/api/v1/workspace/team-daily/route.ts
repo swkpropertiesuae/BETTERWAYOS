@@ -147,10 +147,10 @@ export async function POST(req: Request) {
 
       await db.from('notifications').insert({
         recipient_user_id: targetUser.id,
-        title: enable ? 'Site-Visit Verification Authority Assigned' : 'Site-Visit Verification Authority Revoked',
+        title: enable ? 'Mortgage Field Verification Authority Assigned' : 'Mortgage Field Verification Authority Revoked',
         body: enable
-          ? `${auth.user.name} assigned you as an authorised verifier for GPS-pinned Site Visit & Viewing forensic reports.`
-          : `${auth.user.name} removed Site-Visit Verification Authority from your profile.`,
+          ? `${auth.user.name} assigned you as an authorised verifier for GPS-pinned Borrower, Bank RM, Valuation & DLD Trustee forensic meeting reports.`
+          : `${auth.user.name} removed Mortgage Field Verification Authority from your profile.`,
         severity: 'info',
         href: '/os/field-gps',
       });

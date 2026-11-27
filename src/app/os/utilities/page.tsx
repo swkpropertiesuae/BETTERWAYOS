@@ -70,16 +70,16 @@ export default function UtilitiesPage() {
   return (
     <div className="space-y-6">
       <PageHeader
-        eyebrow="Legal & Word/JPEG Forms Studio · 50-Spec Excel Data Hub · 9-Lang Translator · PII-Safe OCR"
+        eyebrow="UAE Mortgage Word/JPEG Forms Studio · 50-Spec Excel Data Hub · 9-Lang Translator · PII-Safe OCR"
         title="Utilities &"
-        accent="Document Studio"
-        subtitle="Fill, edit & export A2A, LOI, Tenancy, Ejari, NOC & Agreements as Word (.doc), JPEG & PDF, download all 50 operational Excel workbooks, translate UAE mortgage clauses across 9 languages, run PII-shielded OCR, and execute zero-leak global search."
+        accent="Mortgage Document Studio"
+        subtitle="Fill, edit & export CBUAE KFS Mandates, 24-Bank DIP Comparisons, RERA Referral DSA Agreements, Developer SOA/e-NOCs, Buyout Liability Letters & FOL Trustee Packs as Word (.doc), JPEG & PDF, download all 50 Excel workbooks, translate mortgage clauses across 9 languages, and run PII-shielded OCR."
       />
 
       <div className="flex flex-wrap gap-2">
         {(
           [
-            ['word', 'Legal & Word/JPEG Studio', FileText],
+            ['word', 'Mortgage Word/JPEG Forms Studio', FileText],
             ['excel', `50-Spec Excel Data Hub (${EXCEL_SPECS.length})`, FileSpreadsheet],
             ['translate', '9-Language Translator', Languages],
             ['ocr', 'PII-Shielded OCR', ScanText],

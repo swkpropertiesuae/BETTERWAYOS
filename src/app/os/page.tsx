@@ -338,7 +338,7 @@ export default function OsAppLauncherPage() {
               <div className="text-[10px] font-extrabold uppercase tracking-[0.18em] text-[#0D8A6A]">
                 {user?.email?.toLowerCase().includes('warda') ? "Warda's Workspace" : "Shabib's Workspace"} · Direct 1-Click Access
               </div>
-              <h2 className="text-sm font-extrabold">Executive Daily Operations, Forensic Dossiers, Brochures, Legal Forms &amp; Commissions</h2>
+              <h2 className="text-sm font-extrabold">Executive Mortgage Operations, Field Meetings, APL Brochures, CBUAE Forms &amp; DSA Settlements</h2>
             </div>
             <Link href="/os/executive" className="text-xs font-extrabold text-[#0D8A6A] hover:underline">
               Open Full Workspace →
@@ -346,12 +346,12 @@ export default function OsAppLauncherPage() {
           </div>
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2 text-xs">
             {[
-              { tab: 'team', label: 'Team & Daily To-Do', hint: 'Roles & Verifiers' },
-              { tab: 'visits', label: 'Site Visits & Viewings', hint: 'GPS + Photos + Verify' },
-              { tab: 'catalog', label: 'Catalog & Brochures', hint: 'Colors & Templates' },
-              { tab: 'legal', label: 'Legal Forms Studio', hint: 'A2A · LOI · Ejari · NOC' },
-              { tab: 'closings', label: 'Pin-to-Pin Closings', hint: '5 Tracks + Cheques' },
-              { tab: 'commissions', label: 'Commissions & Expenses', hint: 'Cash · BT · Botim · 3rd' },
+              { tab: 'team', label: 'Team & Daily To-Do', hint: 'Roles & Field Verifiers' },
+              { tab: 'visits', label: 'Mortgage Field Meetings', hint: 'GPS + Bank RM + Verify' },
+              { tab: 'catalog', label: 'APL Catalog & Brochures', hint: '24-Bank APL & Themes' },
+              { tab: 'legal', label: 'Mortgage Forms Studio', hint: 'KFS · DIP · SOA · FOL' },
+              { tab: 'closings', label: 'Pin-to-Pin Disbursals', hint: '5 Mortgage Tracks' },
+              { tab: 'commissions', label: 'Advisor DSA & Expenses', hint: 'Cash · BT · Botim · ORN' },
             ].map((q) => (
               <Link
                 key={q.tab}

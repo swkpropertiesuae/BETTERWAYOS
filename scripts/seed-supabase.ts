@@ -95,7 +95,7 @@ const DEPARTMENTS = [
   { id: 'DEP-05', code: 'DOCS', name: 'Documentation', head_user_id: 'USR-04', category: 'Operations', description: 'Client Document Vault verification, AECB, salary certs, Form F, Oqood, Title Deed & bank packs.' },
   { id: 'DEP-06', code: 'ACCT', name: 'Accounts', head_user_id: 'USR-00', category: 'Finance', description: 'Double-entry GL bookkeeping, bank DSA invoicing, receivables & FTA UAE 5% VAT 201.' },
   { id: 'DEP-07', code: 'FIN', name: 'Finance', head_user_id: 'USR-01', category: 'Finance', description: 'Treasury, corporate-account-only payout controls, cash flow forecasting & Owner dual sign-off.' },
-  { id: 'DEP-08', code: 'PMGT', name: 'Property Management', head_user_id: 'USR-02', category: 'Operations', description: 'Landlord portfolio advisory, rental yield tracking, handover snagging & equity release desk.' },
+  { id: 'DEP-08', code: 'EQTY', name: 'Portfolio & Equity Release', head_user_id: 'USR-02', category: 'Operations', description: 'Mortgage portfolio refinancing, equity release structuring, off-plan handover finance & rate-reset retention desk.' },
   { id: 'DEP-09', code: 'SBD', name: 'Sales & Business Development', head_user_id: 'USR-03', category: 'Revenue', description: 'Direct mortgage advisory desk (Daniel, Asif, Reshma) across resident, buyout & non-resident segments.' },
   { id: 'DEP-10', code: 'OPS', name: 'Operations', head_user_id: 'USR-04', category: 'Operations', description: 'Bank submissions, valuations, FOL signing, Developer NOC & DLD Trustee transfers.' },
   { id: 'DEP-11', code: 'IT', name: 'IT & Digital Platforms', head_user_id: 'USR-06', category: 'Corporate', description: 'Betterway OS, website interconnect, Oud Metha QR attendance & AI knowledge systems.' },

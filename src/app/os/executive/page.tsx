@@ -236,7 +236,7 @@ export default function ExecutiveOwnerDeskPage() {
                 {workspaceLabel} <span className="text-[#FCF1B7] font-semibold">· Executive Command Suite</span>
               </h1>
               <p className="text-xs sm:text-sm text-slate-300 mt-1 max-w-3xl">
-                Quick-access command hub: Team Roles &amp; Daily To-Do, GPS Forensic Site Visits &amp; Viewings, Community/Developer/Project/Unit Brochure Studio, Legal Forms (Word/JPEG/Fillable), 5-Track Pin-to-Pin Closings, Agent Commissions &amp; Expenses, plus <strong>{privacyTitle}</strong>.
+                100% UAE Mortgage Command Hub: Mortgage Team Roles &amp; Daily To-Do, GPS Forensic Field Meetings (Client, Bank RM, Valuation, SOA/NOC &amp; DLD Trustee), Bank-APL Catalog &amp; Proposal Brochures, CBUAE Mortgage Forms (Word/JPEG/Fillable), 5-Track Pin-to-Pin Disbursals, Advisor DSA &amp; Expenses, plus <strong>{privacyTitle}</strong>.
               </p>
             </div>
           </div>
@@ -260,16 +260,16 @@ export default function ExecutiveOwnerDeskPage() {
         <div className="space-y-3 pt-4 border-t border-white/10">
           <div className="space-y-1.5">
             <div className="text-[10px] font-extrabold uppercase tracking-[0.18em] text-[#34DFAC]">
-              1 · Quick-Access Workspace Operations (Team · Forensic Field · Brochures · Legal · Closings · Commissions)
+              1 · Quick-Access UAE Mortgage Operations (Team · Field Meetings · APL Brochures · Mortgage Forms · Disbursals · DSA)
             </div>
             <div className="flex flex-wrap gap-2">
               {[
                 { id: 'team', label: 'Team & Daily To-Do', icon: Users },
-                { id: 'visits', label: 'Forensic Visits & Viewings', icon: MapPin },
-                { id: 'catalog', label: 'Catalog & Brochure Studio', icon: Building2 },
-                { id: 'legal', label: 'Legal Forms (Word / JPEG)', icon: FileText },
-                { id: 'closings', label: 'Pin-to-Pin Closings (5 Tracks)', icon: FileCheck2 },
-                { id: 'commissions', label: 'Commissions & Agent Expenses', icon: Wallet },
+                { id: 'visits', label: 'Mortgage Field Meetings', icon: MapPin },
+                { id: 'catalog', label: 'APL Catalog & Brochures', icon: Building2 },
+                { id: 'legal', label: 'Mortgage Forms (Word / JPEG)', icon: FileText },
+                { id: 'closings', label: 'Pin-to-Pin Disbursals (5 Tracks)', icon: FileCheck2 },
+                { id: 'commissions', label: 'Advisor DSA & Expenses', icon: Wallet },
               ].map((t) => {
                 const Icon = t.icon;
                 return (

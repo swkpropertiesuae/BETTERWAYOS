@@ -4,6 +4,7 @@ import { requireSession } from '@/lib/auth/session';
 import { getSupabaseAdmin } from '@/lib/supabase/admin';
 import { logAudit } from '@/lib/auth/approvals';
 import { getFieldVerifiers, isFieldVerificationAuthority } from '@/lib/workspace/verifiers';
+import { MORTGAGE_DEAL_CATEGORIES, MORTGAGE_FIELD_MEETING_TYPES, MORTGAGE_MET_ROLES } from '@/lib/workspace/domain';
 
 export async function GET(req: Request) {
   const auth = await requireSession();
@@ -112,18 +113,26 @@ export async function POST(req: Request) {
       return NextResponse.json({ ok: true, task: data });
     }
 
-    // 3. Submit New GPS-Pinned Site Visit / Viewing Forensic Report (Any Authenticated Staff)
-    const reportType = body.reportType === 'Viewing' ? 'Viewing' : 'Site Visit';
-    const reportNo = `FSR-${String(new Date().getFullYear()).slice(-2)}${crypto.randomBytes(2).toString('hex').toUpperCase()}`;
+    // 3. Submit New GPS-Pinned Mortgage Field Meeting Forensic Report (Any Authenticated Staff)
+    const reportType = (MORTGAGE_FIELD_MEETING_TYPES as readonly string[]).includes(body.reportType)
+      ? body.reportType
+      : 'Client Consultation';
+    const metPersonRole = (MORTGAGE_MET_ROLES as readonly string[]).includes(body.metPersonRole)
+      ? body.metPersonRole
+      : 'Borrower / Applicant';
+    const dealCategory = (MORTGAGE_DEAL_CATEGORIES as readonly string[]).includes(body.dealCategory)
+      ? body.dealCategory
+      : 'Ready Home Purchase';
+    const reportNo = `MFR-${String(new Date().getFullYear()).slice(-2)}${crypto.randomBytes(2).toString('hex').toUpperCase()}`;
     const dubaiDate = new Intl.DateTimeFormat('en-CA', { timeZone: 'Asia/Dubai' }).format(new Date());
 
-    // Cap inline photo thumbnails cleanly (max 6 photos, data URLs or https paths)
+    // Cap inline evidence photo thumbnails cleanly (max 6 photos, data URLs or https paths)
     const rawPhotos = Array.isArray(body.photos) ? body.photos.slice(0, 6) : [];
     const safePhotos = rawPhotos
       .filter((p: any) => p && typeof p.dataUrl === 'string' && p.dataUrl.length < 750_000)
       .map((p: any) => ({
-        name: String(p.name || 'unit-photo.jpg').slice(0, 80),
-        caption: String(p.caption || 'Unit Photo').slice(0, 120),
+        name: String(p.name || 'mortgage-evidence.jpg').slice(0, 80),
+        caption: String(p.caption || 'Mortgage Evidence Photo').slice(0, 120),
         dataUrl: String(p.dataUrl),
         uploadedAt: new Date().toISOString(),
       }));
@@ -136,7 +145,7 @@ export async function POST(req: Request) {
             stage: `${reportType} GPS Pinned & Logged`,
             at: new Date().toISOString(),
             by: auth.user.name,
-            note: `${body.buildingOrProject || body.community || 'Dubai Site'} · Met: ${body.metPersonName || 'Contact'}`,
+            note: `${body.buildingOrProject || body.community || 'Dubai Mortgage Desk'} · Met: ${body.metPersonName || 'Borrower / RM'}`,
           },
         ];
 
@@ -162,7 +171,7 @@ export async function POST(req: Request) {
         verified_by_name: isAutoOwnerVerified ? auth.user.name : '',
         verified_at: isAutoOwnerVerified ? new Date().toISOString() : null,
         met_person_name: String(body.metPersonName || '').trim(),
-        met_person_role: body.metPersonRole || 'Client',
+        met_person_role: metPersonRole,
         met_person_phone: String(body.metPersonPhone || '').trim(),
         met_person_email: String(body.metPersonEmail || '').trim(),
         owner_or_agent_name: String(body.ownerOrAgentName || '').trim(),
@@ -174,7 +183,7 @@ export async function POST(req: Request) {
         third_party_brn: String(body.thirdPartyBrn || '').trim(),
         third_party_phone: String(body.thirdPartyPhone || '').trim(),
         third_party_email: String(body.thirdPartyEmail || '').trim(),
-        deal_category: body.dealCategory || 'Secondary',
+        deal_category: dealCategory,
         asking_price_aed: Number(body.askingPriceAed || 0),
         final_price_aed: Number(body.finalPriceAed || 0),
         yearly_rent_aed: Number(body.yearlyRentAed || 0),

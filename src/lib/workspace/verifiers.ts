@@ -24,7 +24,7 @@ export async function getFieldVerifiers(): Promise<FieldVerifierEntry[]> {
 /**
  * Owners (Warda Kapadia & Shabib Siraj) are always Verification Authorities.
  * Any active staff member explicitly assigned by an Owner in `owner:field_verifiers`
- * also receives authority to verify/flag GPS-pinned Site Visit & Viewing reports.
+ * also receives authority to verify/flag GPS-pinned Mortgage Field Meeting reports.
  */
 export async function isFieldVerificationAuthority(user: SessionUser): Promise<boolean> {
   if (user.role === 'OWNER') return true;

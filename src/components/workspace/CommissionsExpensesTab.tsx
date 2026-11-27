@@ -4,7 +4,13 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { Download, FileText, Image as ImageIcon, Plus, Printer, Trash2, Wallet } from 'lucide-react';
 import { useOs } from '@/components/os/OsProvider';
 import { fmtAed, MetricTile, StatusPill } from '@/components/os/UiKit';
-import { CLOSING_TRACKS, COMMISSION_PAYMENT_MODES, COMMISSION_STATUSES } from '@/lib/workspace/domain';
+import {
+  CLOSING_TRACKS,
+  COMMISSION_ENTRY_TYPES,
+  COMMISSION_PAYMENT_MODES,
+  COMMISSION_STATUSES,
+  type CommissionEntryType,
+} from '@/lib/workspace/domain';
 import { downloadCsv, downloadJpegDocument, downloadWordDocument, printBrandedDocument } from '@/lib/workspace/exporters';
 
 export function CommissionsExpensesTab() {
@@ -14,12 +20,12 @@ export function CommissionsExpensesTab() {
   const [modeFilter, setModeFilter] = useState('ALL');
 
   const [form, setForm] = useState({
-    entryType: 'Commission to Agent' as 'Commission to Agent' | 'Expense by Agent' | 'Agent Advance' | '3rd-Party Split',
+    entryType: 'Advisor DSA Commission' as CommissionEntryType,
     agentUserId: 'USR-07',
     agentName: 'Asif Khan',
     dealRef: '',
     propertyLabel: '',
-    track: 'Secondary',
+    track: 'Ready Purchase Mortgage',
     grossAmountAed: 25_000,
     splitPct: 50,
     status: 'Pending' as 'Pending' | 'Received' | 'Paid',
@@ -102,31 +108,31 @@ export function CommissionsExpensesTab() {
   const agentSummaries: any[] = data?.summary?.agents ?? [];
 
   const exportStatementPayload = {
-    filename: `Betterway_Agent_Commissions_Expenses_${new Date().toISOString().slice(0, 10)}`,
-    badge: 'OWNER COMMISSION & AGENT EXPENSE SETTLEMENT STATEMENT',
-    title: 'Agent Commissions, Expenses & 3rd-Party Splits Ledger',
+    filename: `Betterway_Advisor_DSA_Commissions_Expenses_${new Date().toISOString().slice(0, 10)}`,
+    badge: 'OWNER ADVISOR DSA COMMISSION & CASE EXPENSE SETTLEMENT STATEMENT',
+    title: 'Mortgage Advisor DSA Commissions, Case Expenses & RERA Partner Splits',
     subtitle: `Prepared for ${user?.name} · Paid / Received / Pending across Cash, Bank Transfer (BT) & Botim`,
     sealedBy: user?.name,
     metaPairs: [
-      { label: 'Total Received', value: fmtAed(totals.totalReceivedAed) },
+      { label: 'Bank DSA Received', value: fmtAed(totals.totalReceivedAed) },
       { label: 'Total Paid Out', value: fmtAed(totals.totalPaidAed) },
       { label: 'Total Pending', value: fmtAed(totals.totalPendingAed) },
-      { label: 'Agent Expenses Logged', value: fmtAed(totals.totalExpensesAed) },
-      { label: '3rd-Party Splits', value: fmtAed(totals.totalThirdPartyAed) },
+      { label: 'Advisor Case Expenses', value: fmtAed(totals.totalExpensesAed) },
+      { label: 'RERA Partner Splits', value: fmtAed(totals.totalThirdPartyAed) },
     ],
     sections: [
       {
-        heading: 'Per-Agent Net Settlement Summary',
+        heading: 'Per-Advisor Net Settlement Summary',
         rows: agentSummaries.map((a) => ({
           label: a.agentName,
           value: `Received ${fmtAed(a.commissionReceivedAed)} | Paid ${fmtAed(a.commissionPaidAed)} | Pending ${fmtAed(a.commissionPendingAed)} | Expenses ${fmtAed(a.expensesByAgentAed)} | Net Due ${fmtAed(a.netBalanceDueAed)}`,
         })),
       },
       {
-        heading: `Detailed Ledger Entries (${entries.length})`,
+        heading: `Detailed Mortgage Settlement Entries (${entries.length})`,
         rows: entries.slice(0, 40).map((e) => ({
           label: `${e.entry_no} · ${e.agent_name} (${e.entry_type})`,
-          value: `${fmtAed(e.net_amount_aed)} · ${e.status} · ${e.payment_mode} ${e.is_third_party ? `· 3rd Party: ${e.third_party_agency} (${e.third_party_agent_name})` : ''}`,
+          value: `${fmtAed(e.net_amount_aed)} · ${e.status} · ${e.payment_mode} ${e.is_third_party ? `· Partner ORN: ${e.third_party_agency} (${e.third_party_agent_name})` : ''}`,
         })),
       },
     ],
@@ -137,10 +143,10 @@ export function CommissionsExpensesTab() {
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div>
           <h2 className="text-base font-extrabold flex items-center gap-2">
-            <Wallet size={16} className="text-[#D4AF37]" /> Commission to Agent &amp; Agent Expenses Ledger (Paid · Received · Pending)
+            <Wallet size={16} className="text-[#D4AF37]" /> Advisor DSA Commissions &amp; Case Expenses Ledger (Paid · Received · Pending)
           </h2>
           <p className="text-xs text-[var(--bw-muted)]">
-            Track every agent commission, agent expense, advance, and 3rd-party broker split with Cash, Bank Transfer (BT), Botim, or Cheque settlement details.
+            Track every Mortgage Advisor Bank DSA commission, advisor case expense, draw/advance, and RERA Partner Referral split across Cash, Bank Transfer (BT), Botim, or Manager Cheque.
           </p>
         </div>
         <div className="flex flex-wrap gap-1.5 text-xs">
@@ -148,8 +154,8 @@ export function CommissionsExpensesTab() {
             type="button"
             onClick={() =>
               downloadCsv(
-                'Betterway_Commissions_Expenses',
-                ['Entry No', 'Date', 'Type', 'Agent', 'Deal Ref', 'Property', 'Track', 'Gross AED', 'Split %', 'Net AED', 'Status', 'Payment Mode', 'Ref', '3rd Party Agency', '3rd Party Agent', '3rd Party BRN', '3rd Party Phone'],
+                'Betterway_Advisor_DSA_Commissions_Expenses',
+                ['Entry No', 'Date', 'Type', 'Mortgage Advisor', 'Case Ref', 'Bank / Facility', 'Track', 'Gross DSA AED', 'Advisor Split %', 'Net AED', 'Status', 'Payment Mode', 'Ref', 'Partner Brokerage', 'Partner Broker', 'ORN/BRN', 'Partner Phone'],
                 entries.map((e) => [
                   e.entry_no, e.entry_date, e.entry_type, e.agent_name, e.deal_ref, e.property_label, e.track,
                   e.gross_amount_aed, e.split_pct, e.net_amount_aed, e.status, e.payment_mode, e.payment_reference,
@@ -175,30 +181,29 @@ export function CommissionsExpensesTab() {
 
       {/* KPI Summary */}
       <div className="grid grid-cols-2 lg:grid-cols-5 gap-3">
-        <MetricTile label="Received" value={fmtAed(totals.totalReceivedAed, true)} tone="emerald" />
+        <MetricTile label="DSA Received" value={fmtAed(totals.totalReceivedAed, true)} tone="emerald" />
         <MetricTile label="Paid Out" value={fmtAed(totals.totalPaidAed, true)} tone="navy" />
         <MetricTile label="Pending" value={fmtAed(totals.totalPendingAed, true)} tone="gold" />
-        <MetricTile label="Agent Expenses" value={fmtAed(totals.totalExpensesAed, true)} />
-        <MetricTile label="3rd-Party Splits" value={fmtAed(totals.totalThirdPartyAed, true)} tone="navy" />
+        <MetricTile label="Advisor Expenses" value={fmtAed(totals.totalExpensesAed, true)} />
+        <MetricTile label="Partner Splits" value={fmtAed(totals.totalThirdPartyAed, true)} tone="navy" />
       </div>
 
       <div className="grid lg:grid-cols-12 gap-5">
-        {/* Add Commission / Expense Form */}
+        {/* Add Advisor DSA Commission / Case Expense Form */}
         <form onSubmit={addEntry} className="lg:col-span-4 bw-card p-5 space-y-3 text-xs">
           <h3 className="text-sm font-extrabold flex items-center gap-1.5">
-            <Plus size={15} className="text-[#0D8A6A]" /> Log Commission or Agent Expense
+            <Plus size={15} className="text-[#0D8A6A]" /> Log Advisor DSA Commission or Case Expense
           </h3>
           <div>
-            <label className="font-bold block mb-1">Entry Type</label>
-            <select value={form.entryType} onChange={(e) => setForm({ ...form, entryType: e.target.value as any, isThirdParty: e.target.value === '3rd-Party Split' ? true : form.isThirdParty })} className="w-full h-9 px-3 rounded-xl border border-[var(--bw-line)] bg-[var(--bw-bg)] font-bold">
-              <option value="Commission to Agent">Commission to Agent</option>
-              <option value="Expense by Agent">Expense by Agent</option>
-              <option value="Agent Advance">Agent Advance</option>
-              <option value="3rd-Party Split">3rd-Party Split</option>
+            <label className="font-bold block mb-1">Settlement Entry Type</label>
+            <select value={form.entryType} onChange={(e) => setForm({ ...form, entryType: e.target.value as CommissionEntryType, isThirdParty: e.target.value === 'RERA Partner Referral Split' ? true : form.isThirdParty })} className="w-full h-9 px-3 rounded-xl border border-[var(--bw-line)] bg-[var(--bw-bg)] font-bold">
+              {COMMISSION_ENTRY_TYPES.map((et) => (
+                <option key={et} value={et}>{et}</option>
+              ))}
             </select>
           </div>
           <div>
-            <label className="font-bold block mb-1">Agent / Staff Member</label>
+            <label className="font-bold block mb-1">Mortgage Advisor / Staff Member</label>
             <select
               value={form.agentUserId}
               onChange={(e) => {
@@ -214,27 +219,27 @@ export function CommissionsExpensesTab() {
           </div>
           <div className="grid grid-cols-2 gap-2">
             <div>
-              <label className="font-bold block mb-1">Deal / Case Ref</label>
+              <label className="font-bold block mb-1">Mortgage Case Ref</label>
               <input value={form.dealRef} onChange={(e) => setForm({ ...form, dealRef: e.target.value })} placeholder="BW-2026-01" className="w-full h-9 px-3 rounded-xl border border-[var(--bw-line)] bg-[var(--bw-bg)]" />
             </div>
             <div>
-              <label className="font-bold block mb-1">Track</label>
+              <label className="font-bold block mb-1">Mortgage Track</label>
               <select value={form.track} onChange={(e) => setForm({ ...form, track: e.target.value })} className="w-full h-9 px-3 rounded-xl border border-[var(--bw-line)] bg-[var(--bw-bg)]">
-                {[...CLOSING_TRACKS, 'Mortgage'].map((tr) => <option key={tr}>{tr}</option>)}
+                {CLOSING_TRACKS.map((tr) => <option key={tr}>{tr}</option>)}
               </select>
             </div>
           </div>
           <div>
-            <label className="font-bold block mb-1">Property / Expense Description</label>
-            <input value={form.propertyLabel} onChange={(e) => setForm({ ...form, propertyLabel: e.target.value })} placeholder="Dubai Hills Villa / Marketing / Valuation Fee" className="w-full h-9 px-3 rounded-xl border border-[var(--bw-line)] bg-[var(--bw-bg)]" />
+            <label className="font-bold block mb-1">Bank / Case Expense Description</label>
+            <input value={form.propertyLabel} onChange={(e) => setForm({ ...form, propertyLabel: e.target.value })} placeholder="ENBD Disbursal DSA / Valuation Fee / Trustee Expense" className="w-full h-9 px-3 rounded-xl border border-[var(--bw-line)] bg-[var(--bw-bg)]" />
           </div>
           <div className="grid grid-cols-2 gap-2">
             <div>
-              <label className="font-bold block mb-1">Gross Amount (AED)</label>
+              <label className="font-bold block mb-1">Gross Bank DSA / Amt (AED)</label>
               <input type="number" required value={form.grossAmountAed} onChange={(e) => setForm({ ...form, grossAmountAed: Number(e.target.value) })} className="w-full h-9 px-3 rounded-xl border border-[var(--bw-line)] bg-[var(--bw-bg)] font-mono-num" />
             </div>
             <div>
-              <label className="font-bold block mb-1">Agent Split %</label>
+              <label className="font-bold block mb-1">Advisor / Partner Split %</label>
               <input type="number" value={form.splitPct} onChange={(e) => setForm({ ...form, splitPct: Number(e.target.value) })} className="w-full h-9 px-3 rounded-xl border border-[var(--bw-line)] bg-[var(--bw-bg)] font-mono-num" />
             </div>
           </div>
@@ -255,43 +260,43 @@ export function CommissionsExpensesTab() {
               </select>
             </div>
           </div>
-          <input value={form.paymentReference} onChange={(e) => setForm({ ...form, paymentReference: e.target.value })} placeholder="Transfer Ref / Botim Txn / Receipt #" className="w-full h-9 px-3 rounded-xl border border-[var(--bw-line)] bg-[var(--bw-bg)]" />
+          <input value={form.paymentReference} onChange={(e) => setForm({ ...form, paymentReference: e.target.value })} placeholder="Bank Transfer Ref / Botim Txn / Receipt #" className="w-full h-9 px-3 rounded-xl border border-[var(--bw-line)] bg-[var(--bw-bg)]" />
 
           <label className="flex items-center gap-2 font-bold cursor-pointer pt-1">
             <input type="checkbox" checked={form.isThirdParty} onChange={(e) => setForm({ ...form, isThirdParty: e.target.checked })} />
-            Include 3rd-Party Agent / Co-Broker Details
+            Include Referring RERA Partner Brokerage (Corporate IBAN)
           </label>
           {form.isThirdParty && (
             <div className="p-3 rounded-xl bg-amber-50/70 dark:bg-amber-950/20 border border-amber-400/40 space-y-2">
-              <input value={form.thirdPartyAgency} onChange={(e) => setForm({ ...form, thirdPartyAgency: e.target.value })} placeholder="3rd-Party Agency Name" className="w-full h-8 px-2.5 rounded-lg border border-[var(--bw-line)] bg-[var(--bw-card)]" />
+              <input value={form.thirdPartyAgency} onChange={(e) => setForm({ ...form, thirdPartyAgency: e.target.value })} placeholder="Partner Brokerage Name (RERA ORN)" className="w-full h-8 px-2.5 rounded-lg border border-[var(--bw-line)] bg-[var(--bw-card)]" />
               <div className="grid grid-cols-2 gap-1.5">
-                <input value={form.thirdPartyAgentName} onChange={(e) => setForm({ ...form, thirdPartyAgentName: e.target.value })} placeholder="Agent Name" className="h-8 px-2.5 rounded-lg border border-[var(--bw-line)] bg-[var(--bw-card)]" />
-                <input value={form.thirdPartyBrn} onChange={(e) => setForm({ ...form, thirdPartyBrn: e.target.value })} placeholder="RERA BRN" className="h-8 px-2.5 rounded-lg border border-[var(--bw-line)] bg-[var(--bw-card)]" />
-                <input value={form.thirdPartyPhone} onChange={(e) => setForm({ ...form, thirdPartyPhone: e.target.value })} placeholder="Phone" className="h-8 px-2.5 rounded-lg border border-[var(--bw-line)] bg-[var(--bw-card)]" />
-                <input value={form.thirdPartyEmail} onChange={(e) => setForm({ ...form, thirdPartyEmail: e.target.value })} placeholder="Email" className="h-8 px-2.5 rounded-lg border border-[var(--bw-line)] bg-[var(--bw-card)]" />
+                <input value={form.thirdPartyAgentName} onChange={(e) => setForm({ ...form, thirdPartyAgentName: e.target.value })} placeholder="Partner Broker Name" className="h-8 px-2.5 rounded-lg border border-[var(--bw-line)] bg-[var(--bw-card)]" />
+                <input value={form.thirdPartyBrn} onChange={(e) => setForm({ ...form, thirdPartyBrn: e.target.value })} placeholder="RERA ORN / BRN" className="h-8 px-2.5 rounded-lg border border-[var(--bw-line)] bg-[var(--bw-card)]" />
+                <input value={form.thirdPartyPhone} onChange={(e) => setForm({ ...form, thirdPartyPhone: e.target.value })} placeholder="Partner Phone" className="h-8 px-2.5 rounded-lg border border-[var(--bw-line)] bg-[var(--bw-card)]" />
+                <input value={form.thirdPartyEmail} onChange={(e) => setForm({ ...form, thirdPartyEmail: e.target.value })} placeholder="Partner Email" className="h-8 px-2.5 rounded-lg border border-[var(--bw-line)] bg-[var(--bw-card)]" />
               </div>
-              <input value={form.thirdPartyPaymentDetails} onChange={(e) => setForm({ ...form, thirdPartyPaymentDetails: e.target.value })} placeholder="IBAN / Botim / Cash Recipient Details" className="w-full h-8 px-2.5 rounded-lg border border-[var(--bw-line)] bg-[var(--bw-card)]" />
+              <input value={form.thirdPartyPaymentDetails} onChange={(e) => setForm({ ...form, thirdPartyPaymentDetails: e.target.value })} placeholder="Verified Corporate IBAN / Bank Details (No Personal Accounts)" className="w-full h-8 px-2.5 rounded-lg border border-[var(--bw-line)] bg-[var(--bw-card)]" />
             </div>
           )}
 
           <button type="submit" className="w-full h-10 rounded-full bg-[#0A1128] text-[#FCF1B7] font-extrabold cursor-pointer">
-            Save Entry to Settlement Ledger
+            Save Entry to Mortgage Settlement Ledger
           </button>
         </form>
 
-        {/* Per-Agent Summary & Full Ledger */}
+        {/* Per-Advisor Summary & Full Ledger */}
         <div className="lg:col-span-8 space-y-4">
           {agentSummaries.length > 0 && (
             <div className="bw-card p-5 space-y-2.5 overflow-x-auto">
-              <h3 className="text-sm font-extrabold">Per-Agent Net Settlement Summary</h3>
+              <h3 className="text-sm font-extrabold">Per-Advisor Net Settlement Summary</h3>
               <table className="w-full text-xs min-w-[580px]">
                 <thead>
                   <tr className="border-b border-[var(--bw-line)] text-[10px] uppercase text-[var(--bw-muted)]">
-                    <th className="py-2 text-start">Agent</th>
-                    <th className="py-2 text-end">Received</th>
+                    <th className="py-2 text-start">Mortgage Advisor</th>
+                    <th className="py-2 text-end">DSA Received</th>
                     <th className="py-2 text-end">Paid</th>
                     <th className="py-2 text-end">Pending</th>
-                    <th className="py-2 text-end">Expenses</th>
+                    <th className="py-2 text-end">Case Expenses</th>
                     <th className="py-2 text-end">Net Balance Due</th>
                   </tr>
                 </thead>
@@ -313,7 +318,7 @@ export function CommissionsExpensesTab() {
 
           <div className="bw-card p-5 space-y-3 overflow-x-auto">
             <div className="flex flex-wrap items-center justify-between gap-2">
-              <h3 className="text-sm font-extrabold">Commission &amp; Expense Entries ({entries.length})</h3>
+              <h3 className="text-sm font-extrabold">Advisor DSA Commission &amp; Case Expense Entries ({entries.length})</h3>
               <div className="flex flex-wrap gap-1.5 text-[11px]">
                 {['ALL', 'Pending', 'Received', 'Paid'].map((s) => (
                   <button
@@ -344,14 +349,14 @@ export function CommissionsExpensesTab() {
 
             {entries.length === 0 ? (
               <div className="py-10 text-center text-xs text-[var(--bw-muted)]">
-                No commission or agent expense entries recorded yet. Use the form on the left to log Paid, Received, or Pending settlements.
+                No Advisor DSA commission or case expense entries recorded yet. Use the form on the left to log Paid, Received, or Pending mortgage settlements.
               </div>
             ) : (
               <table className="w-full text-xs min-w-[680px]">
                 <thead>
                   <tr className="border-b border-[var(--bw-line)] text-[10px] uppercase text-[var(--bw-muted)]">
-                    <th className="py-2 text-start">Entry / Agent</th>
-                    <th className="py-2 text-start">Deal &amp; 3rd-Party</th>
+                    <th className="py-2 text-start">Entry / Mortgage Advisor</th>
+                    <th className="py-2 text-start">Case &amp; RERA Partner ORN</th>
                     <th className="py-2 text-center">Mode</th>
                     <th className="py-2 text-end">Net AED</th>
                     <th className="py-2 text-center">Status</th>
@@ -369,7 +374,7 @@ export function CommissionsExpensesTab() {
                         <div>{e.deal_ref || e.track} · {e.property_label || '—'}</div>
                         {e.is_third_party && (
                           <div className="text-[10.5px] text-amber-700 dark:text-amber-300 font-semibold">
-                            3rd Party: {e.third_party_agency} ({e.third_party_agent_name} · {e.third_party_phone})
+                            Partner ORN: {e.third_party_agency} ({e.third_party_agent_name} · {e.third_party_phone})
                           </div>
                         )}
                       </td>

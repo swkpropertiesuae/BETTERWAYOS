@@ -78,9 +78,9 @@ export async function POST(req: Request) {
       return NextResponse.json({ ok: true });
     }
 
-    // Create Commission / Expense / 3rd-Party Split Entry
+    // Create Advisor DSA Commission / Expense / RERA Partner Referral Split Entry
     const agentName = String(body.agentName || '').trim();
-    if (!agentName) return NextResponse.json({ error: 'Agent name is required' }, { status: 400 });
+    if (!agentName) return NextResponse.json({ error: 'Mortgage advisor name is required' }, { status: 400 });
 
     const gross = Number(body.grossAmountAed || 0);
     const splitPct = Number(body.splitPct ?? 100);
@@ -89,19 +89,19 @@ export async function POST(req: Request) {
         ? Number(body.netAmountAed)
         : Number(((gross * splitPct) / 100).toFixed(2));
 
-    const entryNo = `CEX-${String(new Date().getFullYear()).slice(-2)}${crypto.randomBytes(2).toString('hex').toUpperCase()}`;
+    const entryNo = `DSA-${String(new Date().getFullYear()).slice(-2)}${crypto.randomBytes(2).toString('hex').toUpperCase()}`;
     const status = ['Pending', 'Received', 'Paid'].includes(body.status) ? body.status : 'Pending';
 
     const { data, error } = await db
       .from('owner_commission_expenses')
       .insert({
         entry_no: entryNo,
-        entry_type: body.entryType || 'Commission to Agent',
+        entry_type: body.entryType || 'Advisor DSA Commission',
         agent_user_id: body.agentUserId || null,
         agent_name: agentName,
         deal_ref: String(body.dealRef || '').trim(),
         property_label: String(body.propertyLabel || '').trim(),
-        track: body.track || 'Secondary',
+        track: body.track || 'Ready Purchase Mortgage',
         gross_amount_aed: gross,
         split_pct: splitPct,
         net_amount_aed: computedNet,

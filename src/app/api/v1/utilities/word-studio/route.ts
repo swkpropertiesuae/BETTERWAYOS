@@ -22,7 +22,7 @@ export async function GET() {
   const db = await getSupabaseAdmin();
   const [{ data: docs }, { data: templates }] = await Promise.all([
     db.from('word_documents').select('*').order('created_at', { ascending: false }).limit(50),
-    db.from('document_templates').select('*').order('code', { ascending: true }),
+    db.from('document_templates').select('*').eq('status', 'Active').order('code', { ascending: true }),
   ]);
   return NextResponse.json({ docs: docs ?? [], templates: templates ?? [] });
 }

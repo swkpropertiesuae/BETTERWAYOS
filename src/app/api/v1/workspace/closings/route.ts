@@ -75,8 +75,8 @@ export async function POST(req: Request) {
           bank_name: String(body.bankName || '').trim(),
           payee_name: String(body.payeeName || '').trim(),
           payer_name: String(body.payerName || '').trim(),
-          purpose: String(body.purpose || 'Down Payment').trim(),
-          payment_method: body.paymentMethod || 'Cheque / PDC',
+          purpose: String(body.purpose || 'Down Payment Manager Cheque').trim(),
+          payment_method: body.paymentMethod || 'Manager Cheque',
           amount_aed: Number(body.amountAed || 0),
           cheque_date: body.chequeDate || null,
           status: body.status || 'Pending',
@@ -121,9 +121,11 @@ export async function POST(req: Request) {
       const patch: Record<string, unknown> = { updated_at: new Date().toISOString() };
       if (Array.isArray(body.stages)) patch.stages_json = body.stages;
       if (body.status) patch.status = body.status;
+      if (body.deedOrOqoodOrFolRef !== undefined) patch.ejari_or_oqood_or_deed_ref = String(body.deedOrOqoodOrFolRef);
       if (body.ejariOrOqoodOrDeedRef !== undefined) patch.ejari_or_oqood_or_deed_ref = String(body.ejariOrOqoodOrDeedRef);
       if (body.nocRef !== undefined) patch.noc_ref = String(body.nocRef);
       if (body.escrowOrBankRef !== undefined) patch.escrow_or_bank_ref = String(body.escrowOrBankRef);
+      if (body.disbursalSummary !== undefined) patch.keys_and_meters_summary = String(body.disbursalSummary);
       if (body.keysAndMetersSummary !== undefined) patch.keys_and_meters_summary = String(body.keysAndMetersSummary);
       if (body.handoverDate !== undefined) patch.handover_date = body.handoverDate || null;
       if (body.notes !== undefined) patch.notes = String(body.notes);
@@ -134,12 +136,12 @@ export async function POST(req: Request) {
       return NextResponse.json({ ok: true, dossier: data });
     }
 
-    // 4. Create New Pin-to-Pin Closing Forensic Dossier (Off-Plan, Secondary, Handover, Leasing, Property Management)
-    const track: ClosingTrack = CLOSING_TRACKS.includes(body.track) ? body.track : 'Secondary';
+    // 4. Create New Pin-to-Pin UAE Mortgage Closing Dossier (All 5 Mortgage Tracks)
+    const track: ClosingTrack = CLOSING_TRACKS.includes(body.track) ? body.track : 'Ready Purchase Mortgage';
     const clientName = String(body.clientName || '').trim();
-    if (!clientName) return NextResponse.json({ error: 'Client name is required' }, { status: 400 });
+    if (!clientName) return NextResponse.json({ error: 'Borrower name is required' }, { status: 400 });
 
-    const dossierNo = `CLS-${String(new Date().getFullYear()).slice(-2)}${crypto.randomBytes(2).toString('hex').toUpperCase()}`;
+    const dossierNo = `MCF-${String(new Date().getFullYear()).slice(-2)}${crypto.randomBytes(2).toString('hex').toUpperCase()}`;
     const defaultStages = buildDefaultStagesForTrack(track);
 
     const { data, error } = await db
@@ -147,7 +149,7 @@ export async function POST(req: Request) {
       .insert({
         dossier_no: dossierNo,
         track,
-        title: String(body.title || `${track} Closing · ${clientName}`).trim(),
+        title: String(body.title || `${track} · ${clientName}`).trim(),
         status: body.status || 'In Progress',
         case_id: body.caseId || null,
         agent_user_id: body.agentUserId || auth.user.id,
@@ -176,12 +178,12 @@ export async function POST(req: Request) {
         agency_commission_aed: Number(body.agencyCommissionAed || 0),
         vat_aed: Number(body.vatAed || Number(body.agencyCommissionAed || 0) * 0.05),
         total_cheques_count: Number(body.totalChequesCount || 0),
-        payment_mode: String(body.paymentMode || 'Bank Transfer (BT)'),
+        payment_mode: String(body.paymentMode || 'Manager Cheque'),
         escrow_or_bank_ref: String(body.escrowOrBankRef || '').trim(),
-        ejari_or_oqood_or_deed_ref: String(body.ejariOrOqoodOrDeedRef || '').trim(),
+        ejari_or_oqood_or_deed_ref: String(body.deedOrOqoodOrFolRef || body.ejariOrOqoodOrDeedRef || '').trim(),
         noc_ref: String(body.nocRef || '').trim(),
         handover_date: body.handoverDate || null,
-        keys_and_meters_summary: String(body.keysAndMetersSummary || '').trim(),
+        keys_and_meters_summary: String(body.disbursalSummary || body.keysAndMetersSummary || '').trim(),
         stages_json: defaultStages,
         notes: String(body.notes || '').trim(),
         created_by: auth.user.id,
