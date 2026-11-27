@@ -261,4 +261,31 @@ describe('Warda & Shabib UAE Mortgage Command Suite — Offline Domain, Schema &
       }
     }
   });
+
+  it('enforces Zero-Elvora / Zero-Shipping branding guard across the Calm Operating Wallet UI', () => {
+    const uiFilesToAudit = [
+      'src/app/globals.css',
+      'src/app/login/page.tsx',
+      'src/app/os/page.tsx',
+      'src/app/os/dashboard/page.tsx',
+      'src/app/os/executive/page.tsx',
+      'src/components/os/OsShell.tsx',
+      'src/components/os/UiKit.tsx',
+      'src/components/workspace/TeamDailyWorkspaceTab.tsx',
+      'src/components/workspace/ForensicVisitsTab.tsx',
+      'src/components/workspace/CatalogBrochureStudioTab.tsx',
+      'src/components/workspace/LegalFormsStudioTab.tsx',
+      'src/components/workspace/PinToPinClosingsTab.tsx',
+      'src/components/workspace/CommissionsExpensesTab.tsx',
+    ];
+    const forbiddenRefBrandTerms = ['elvora', 'elvorashipping', 'freight forwarding', 'bill of lading', 'container shipment'];
+    for (const rel of uiFilesToAudit) {
+      const content = fs.readFileSync(path.join(process.cwd(), rel), 'utf8');
+      for (const term of forbiddenRefBrandTerms) {
+        expect(content, `Forbidden reference brand term "${term}" found in ${rel}`).not.toMatch(
+          new RegExp(term.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'i'),
+        );
+      }
+    }
+  });
 });

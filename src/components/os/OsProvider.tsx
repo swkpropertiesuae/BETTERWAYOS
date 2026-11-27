@@ -135,8 +135,8 @@ export function OsProvider({ children }: { children: React.ReactNode }) {
               t.tone === 'err'
                 ? 'bg-red-950/95 text-red-100 border-red-500/40'
                 : t.tone === 'info'
-                  ? 'bg-[#0A1128]/95 text-[#FCF1B7] border-[#D4AF37]/40'
-                  : 'bg-[#083B2E]/95 text-emerald-50 border-[#34DFAC]/40'
+                  ? 'bg-[#025e3d]/95 text-[#FCF1B7] border-[#D4AF37]/40'
+                  : 'bg-[#025e3d]/95 text-emerald-50 border-[#34DFAC]/40'
             }`}
           >
             {t.text}

@@ -167,10 +167,10 @@ export function CommissionsExpensesTab() {
           >
             <Download size={12} /> CSV
           </button>
-          <button type="button" onClick={() => downloadWordDocument(exportStatementPayload)} className="px-3 py-1.5 rounded-full bg-[#0A1128] text-[#FCF1B7] font-bold inline-flex items-center gap-1 cursor-pointer">
+          <button type="button" onClick={() => downloadWordDocument(exportStatementPayload)} className="px-3 py-1.5 rounded-full bg-[#025e3d] text-[#FCF1B7] font-bold inline-flex items-center gap-1 cursor-pointer">
             <FileText size={12} /> .DOC
           </button>
-          <button type="button" onClick={() => void downloadJpegDocument(exportStatementPayload)} className="px-3 py-1.5 rounded-full bg-[#0D8A6A] text-white font-bold inline-flex items-center gap-1 cursor-pointer">
+          <button type="button" onClick={() => void downloadJpegDocument(exportStatementPayload)} className="px-3 py-1.5 rounded-full bg-[#007b52] text-white font-bold inline-flex items-center gap-1 cursor-pointer">
             <ImageIcon size={12} /> .JPEG
           </button>
           <button type="button" onClick={() => printBrandedDocument(exportStatementPayload)} className="px-3 py-1.5 rounded-full border border-[var(--bw-line)] font-bold inline-flex items-center gap-1 cursor-pointer">
@@ -192,7 +192,7 @@ export function CommissionsExpensesTab() {
         {/* Add Advisor DSA Commission / Case Expense Form */}
         <form onSubmit={addEntry} className="lg:col-span-4 bw-card p-5 space-y-3 text-xs">
           <h3 className="text-sm font-extrabold flex items-center gap-1.5">
-            <Plus size={15} className="text-[#0D8A6A]" /> Log Advisor DSA Commission or Case Expense
+            <Plus size={15} className="text-[#007b52]" /> Log Advisor DSA Commission or Case Expense
           </h3>
           <div>
             <label className="font-bold block mb-1">Settlement Entry Type</label>
@@ -244,7 +244,7 @@ export function CommissionsExpensesTab() {
             </div>
           </div>
           <div className="p-2.5 rounded-xl bg-[var(--bw-soft)] font-mono-num text-center font-bold">
-            Net Amount: <span className="text-[#0D8A6A]">{fmtAed((form.grossAmountAed * form.splitPct) / 100)}</span>
+            Net Amount: <span className="text-[#007b52]">{fmtAed((form.grossAmountAed * form.splitPct) / 100)}</span>
           </div>
           <div className="grid grid-cols-2 gap-2">
             <div>
@@ -279,7 +279,7 @@ export function CommissionsExpensesTab() {
             </div>
           )}
 
-          <button type="submit" className="w-full h-10 rounded-full bg-[#0A1128] text-[#FCF1B7] font-extrabold cursor-pointer">
+          <button type="submit" className="w-full h-10 rounded-full bg-[#025e3d] text-[#FCF1B7] font-extrabold cursor-pointer">
             Save Entry to Mortgage Settlement Ledger
           </button>
         </form>
@@ -304,11 +304,11 @@ export function CommissionsExpensesTab() {
                   {agentSummaries.map((a) => (
                     <tr key={a.agentName}>
                       <td className="py-2 font-sans font-bold">{a.agentName}</td>
-                      <td className="py-2 text-end text-[#0D8A6A]">{fmtAed(a.commissionReceivedAed)}</td>
+                      <td className="py-2 text-end text-[#007b52]">{fmtAed(a.commissionReceivedAed)}</td>
                       <td className="py-2 text-end">{fmtAed(a.commissionPaidAed)}</td>
                       <td className="py-2 text-end text-amber-600">{fmtAed(a.commissionPendingAed)}</td>
                       <td className="py-2 text-end">{fmtAed(a.expensesByAgentAed)}</td>
-                      <td className="py-2 text-end font-extrabold text-[#0A1128] dark:text-[#FCF1B7]">{fmtAed(a.netBalanceDueAed)}</td>
+                      <td className="py-2 text-end font-extrabold text-[#025e3d] dark:text-[#FCF1B7]">{fmtAed(a.netBalanceDueAed)}</td>
                     </tr>
                   ))}
                 </tbody>
@@ -326,7 +326,7 @@ export function CommissionsExpensesTab() {
                     type="button"
                     onClick={() => setStatusFilter(s)}
                     className={`px-2.5 py-1 rounded-full font-bold cursor-pointer ${
-                      statusFilter === s ? 'bg-[#0A1128] text-[#FCF1B7]' : 'border border-[var(--bw-line)]'
+                      statusFilter === s ? 'bg-[#025e3d] text-[#FCF1B7]' : 'border border-[var(--bw-line)]'
                     }`}
                   >
                     {s}
@@ -338,7 +338,7 @@ export function CommissionsExpensesTab() {
                     type="button"
                     onClick={() => setModeFilter(m)}
                     className={`px-2.5 py-1 rounded-full font-bold cursor-pointer ${
-                      modeFilter === m ? 'bg-[#0D8A6A] text-white' : 'border border-[var(--bw-line)]'
+                      modeFilter === m ? 'bg-[#007b52] text-white' : 'border border-[var(--bw-line)]'
                     }`}
                   >
                     {m === 'ALL' ? 'All Modes' : m}
@@ -367,7 +367,7 @@ export function CommissionsExpensesTab() {
                   {entries.map((e) => (
                     <tr key={e.id}>
                       <td className="py-2.5">
-                        <div className="font-mono-num text-[10px] font-bold text-[#0D8A6A]">{e.entry_no} · {e.entry_type}</div>
+                        <div className="font-mono-num text-[10px] font-bold text-[#007b52]">{e.entry_no} · {e.entry_type}</div>
                         <div className="font-bold">{e.agent_name}</div>
                       </td>
                       <td className="py-2.5">
@@ -392,7 +392,7 @@ export function CommissionsExpensesTab() {
                           </button>
                         )}
                         {e.status !== 'Paid' && (
-                          <button type="button" onClick={() => void setStatus(e.id, 'Paid')} className="px-2 py-1 rounded bg-[#0D8A6A] text-white text-[10px] font-bold cursor-pointer">
+                          <button type="button" onClick={() => void setStatus(e.id, 'Paid')} className="px-2 py-1 rounded bg-[#007b52] text-white text-[10px] font-bold cursor-pointer">
                             Mark Paid
                           </button>
                         )}

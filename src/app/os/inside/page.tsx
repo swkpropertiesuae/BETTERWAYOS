@@ -67,7 +67,7 @@ export default function TeamGroupInsidePage() {
               type="button"
               onClick={() => setChannel(c.id)}
               className={`w-full p-3 rounded-xl text-start text-xs transition cursor-pointer ${
-                channel === c.id ? 'bg-[#0A1128] text-white' : 'hover:bg-[var(--bw-soft)]'
+                channel === c.id ? 'bg-[#025e3d] text-white' : 'hover:bg-[var(--bw-soft)]'
               }`}
             >
               <div className="font-bold flex items-center gap-1.5">
@@ -121,9 +121,9 @@ export default function TeamGroupInsidePage() {
               value={body}
               onChange={(e) => setBody(e.target.value)}
               placeholder={`Message #${channel}...`}
-              className="flex-1 h-10 px-4 rounded-full border border-[var(--bw-line)] bg-[var(--bw-bg)] text-xs outline-none focus:border-[#0D8A6A]"
+              className="flex-1 h-10 px-4 rounded-full border border-[var(--bw-line)] bg-[var(--bw-bg)] text-xs outline-none focus:border-[#007b52]"
             />
-            <button type="submit" className="h-10 px-5 rounded-full bg-[#0D8A6A] text-white text-xs font-bold inline-flex items-center gap-1.5 cursor-pointer">
+            <button type="submit" className="h-10 px-5 rounded-full bg-[#007b52] text-white text-xs font-bold inline-flex items-center gap-1.5 cursor-pointer">
               <Send size={13} /> Send
             </button>
           </form>

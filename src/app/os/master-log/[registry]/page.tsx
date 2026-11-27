@@ -109,7 +109,7 @@ export default function MasterRegistryDetailPage({ params }: { params: Promise<{
               <button
                 type="button"
                 onClick={openCreate}
-                className="h-9 px-4 rounded-full bg-[#0D8A6A] text-white text-xs font-bold inline-flex items-center gap-1.5 cursor-pointer"
+                className="h-9 px-4 rounded-full bg-[#007b52] text-white text-xs font-bold inline-flex items-center gap-1.5 cursor-pointer"
               >
                 <Plus size={14} /> {user?.isOwner ? 'Add Master Record' : 'Propose Addition (Owner Approval)'}
               </button>
@@ -126,7 +126,7 @@ export default function MasterRegistryDetailPage({ params }: { params: Promise<{
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             placeholder={`Search ${def?.label || 'records'}...`}
-            className="w-full sm:w-80 h-9 px-3.5 rounded-xl border border-[var(--bw-line)] bg-[var(--bw-bg)] text-xs outline-none focus:border-[#0D8A6A]"
+            className="w-full sm:w-80 h-9 px-3.5 rounded-xl border border-[var(--bw-line)] bg-[var(--bw-bg)] text-xs outline-none focus:border-[#007b52]"
           />
           {def && (
             <StatusPill
@@ -180,7 +180,7 @@ export default function MasterRegistryDetailPage({ params }: { params: Promise<{
                         <button
                           type="button"
                           onClick={() => openEdit(row)}
-                          className="px-3 py-1 rounded-full border border-[var(--bw-line)] hover:border-[#0D8A6A] font-bold text-[11px] cursor-pointer"
+                          className="px-3 py-1 rounded-full border border-[var(--bw-line)] hover:border-[#007b52] font-bold text-[11px] cursor-pointer"
                         >
                           {user?.isOwner ? 'Edit' : 'Propose Edit'}
                         </button>
@@ -289,7 +289,7 @@ export default function MasterRegistryDetailPage({ params }: { params: Promise<{
               <button
                 type="submit"
                 disabled={saving}
-                className="px-5 py-2 rounded-full bg-[#0D8A6A] text-white text-xs font-bold inline-flex items-center gap-1.5 cursor-pointer"
+                className="px-5 py-2 rounded-full bg-[#007b52] text-white text-xs font-bold inline-flex items-center gap-1.5 cursor-pointer"
               >
                 <Save size={13} /> {saving ? 'Saving...' : user?.isOwner ? 'Save to Master Log' : 'Submit for Owner Approval'}
               </button>

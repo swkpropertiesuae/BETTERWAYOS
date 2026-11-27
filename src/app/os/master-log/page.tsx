@@ -57,7 +57,7 @@ export default function MasterLogPage() {
             {user?.isOwner && pendingProposals > 0 && (
               <Link
                 href="/os/executive?tab=approvals"
-                className="px-4 py-2 rounded-full bg-amber-500 text-[#0A1128] text-xs font-extrabold inline-flex items-center gap-1.5"
+                className="px-4 py-2 rounded-full bg-amber-500 text-[#025e3d] text-xs font-extrabold inline-flex items-center gap-1.5"
               >
                 <Crown size={13} /> {pendingProposals} Admin Proposal{pendingProposals > 1 ? 's' : ''} Waiting
               </Link>
@@ -96,8 +96,8 @@ export default function MasterLogPage() {
                 onClick={() => setActiveCat(cat)}
                 className={`px-3.5 py-2 rounded-full text-xs font-bold border transition cursor-pointer ${
                   activeCat === cat
-                    ? 'bg-[#0D8A6A] text-white border-[#0D8A6A]'
-                    : 'bg-[var(--bw-card)] text-[var(--bw-body)] border-[var(--bw-line)] hover:border-[#0D8A6A]'
+                    ? 'bg-[#007b52] text-white border-[#007b52]'
+                    : 'bg-[var(--bw-card)] text-[var(--bw-body)] border-[var(--bw-line)] hover:border-[#007b52]'
                 }`}
               >
                 {cat}
@@ -117,7 +117,7 @@ export default function MasterLogPage() {
                 <Link
                   key={reg.key}
                   href={`/os/master-log/${reg.key}`}
-                  className="group rounded-2xl border border-[var(--bw-line)] hover:border-[#0D8A6A] bg-[var(--bw-card)] p-4 flex flex-col justify-between gap-4 transition hover:shadow-md"
+                  className="group rounded-2xl border border-[var(--bw-line)] hover:border-[#007b52] bg-[var(--bw-card)] p-4 flex flex-col justify-between gap-4 transition hover:shadow-md"
                 >
                   <div className="space-y-1.5">
                     <div className="flex items-center justify-between gap-2">
@@ -129,13 +129,13 @@ export default function MasterLogPage() {
                         {reg.count}
                       </span>
                     </div>
-                    <h3 className="text-sm font-extrabold tracking-tight group-hover:text-[#0D8A6A] transition">{reg.label}</h3>
+                    <h3 className="text-sm font-extrabold tracking-tight group-hover:text-[#007b52] transition">{reg.label}</h3>
                     <p className="text-xs text-[var(--bw-muted)] leading-relaxed">{reg.subtitle}</p>
                   </div>
 
                   <div className="pt-2.5 border-t border-[var(--bw-line)] flex items-center justify-between text-xs">
                     <span className="font-mono text-[11px] text-[var(--bw-muted)]">{reg.key}</span>
-                    <span className="font-bold text-[#0D8A6A] inline-flex items-center gap-1">
+                    <span className="font-bold text-[#007b52] inline-flex items-center gap-1">
                       Open Master <ArrowRight size={13} className="transition-transform group-hover:translate-x-0.5" />
                     </span>
                   </div>

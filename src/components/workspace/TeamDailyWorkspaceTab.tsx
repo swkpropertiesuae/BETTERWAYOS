@@ -105,7 +105,7 @@ export function TeamDailyWorkspaceTab() {
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div>
           <h2 className="text-base font-extrabold flex items-center gap-2">
-            <Users size={16} className="text-[#0D8A6A]" /> Mortgage Team Directory, Job Roles, Daily To-Do &amp; Field Verification Authority
+            <Users size={16} className="text-[#007b52]" /> Mortgage Team Directory, Job Roles, Daily To-Do &amp; Field Verification Authority
           </h2>
           <p className="text-xs text-[var(--bw-muted)]">
             Review every mortgage advisor &amp; operations role, daily tasks to do vs. completed today, assign individual/team directives, and delegate GPS Field Meeting Verification Authority.
@@ -153,7 +153,7 @@ export function TeamDailyWorkspaceTab() {
                 key={s.id}
                 onClick={() => setSelectedStaffId(selectedStaffId === s.id ? 'ALL' : s.id)}
                 className={`cursor-pointer transition ${
-                  selectedStaffId === s.id ? 'bg-[#0D8A6A]/10' : 'hover:bg-[var(--bw-bg)]/70'
+                  selectedStaffId === s.id ? 'bg-[#007b52]/10' : 'hover:bg-[var(--bw-bg)]/70'
                 }`}
               >
                 <td className="py-3 pe-3">
@@ -163,7 +163,7 @@ export function TeamDailyWorkspaceTab() {
                       <div className="font-bold flex items-center gap-1.5">
                         {s.name} <span className="font-mono-num text-[10px] text-[var(--bw-muted)]">{s.emp_code}</span>
                       </div>
-                      <div className="text-[11px] text-[#0D8A6A] font-semibold">{s.designation}</div>
+                      <div className="text-[11px] text-[#007b52] font-semibold">{s.designation}</div>
                     </div>
                   </div>
                 </td>
@@ -176,7 +176,7 @@ export function TeamDailyWorkspaceTab() {
                   )}
                 </td>
                 <td className="py-3 text-center font-mono-num font-bold text-amber-600">{s.tasksToDoCount}</td>
-                <td className="py-3 text-center font-mono-num font-bold text-[#0D8A6A]">{s.tasksDoneTodayCount}</td>
+                <td className="py-3 text-center font-mono-num font-bold text-[#007b52]">{s.tasksDoneTodayCount}</td>
                 <td className="py-3 text-end" onClick={(e) => e.stopPropagation()}>
                   {s.role === 'OWNER' ? (
                     <StatusPill label="Owner Authority (Permanent)" tone="gold" />
@@ -186,8 +186,8 @@ export function TeamDailyWorkspaceTab() {
                       onClick={() => void toggleVerifier(s.id, Boolean(s.isAssignedVerifier))}
                       className={`px-3 py-1.5 rounded-full text-[11px] font-bold inline-flex items-center gap-1 cursor-pointer transition ${
                         s.isAssignedVerifier
-                          ? 'bg-[#0D8A6A] text-white'
-                          : 'border border-[var(--bw-line)] bg-[var(--bw-bg)] hover:border-[#0D8A6A]'
+                          ? 'bg-[#007b52] text-white'
+                          : 'border border-[var(--bw-line)] bg-[var(--bw-bg)] hover:border-[#007b52]'
                       }`}
                     >
                       <ShieldCheck size={12} />
@@ -205,14 +205,14 @@ export function TeamDailyWorkspaceTab() {
       <div className="grid lg:grid-cols-12 gap-5">
         <form onSubmit={assignTask} className="lg:col-span-4 bw-card p-5 space-y-3 text-xs">
           <h3 className="text-sm font-extrabold flex items-center gap-1.5">
-            <Plus size={15} className="text-[#0D8A6A]" /> Assign Daily Task (Individual or Team)
+            <Plus size={15} className="text-[#007b52]" /> Assign Daily Task (Individual or Team)
           </h3>
           <div className="grid grid-cols-2 gap-2">
             <button
               type="button"
               onClick={() => setTaskScope('individual')}
               className={`py-2 rounded-xl font-bold border cursor-pointer ${
-                taskScope === 'individual' ? 'bg-[#0A1128] text-[#FCF1B7] border-[#0A1128]' : 'border-[var(--bw-line)]'
+                taskScope === 'individual' ? 'bg-[#025e3d] text-[#FCF1B7] border-[#025e3d]' : 'border-[var(--bw-line)]'
               }`}
             >
               Individual Staff
@@ -221,7 +221,7 @@ export function TeamDailyWorkspaceTab() {
               type="button"
               onClick={() => setTaskScope('team')}
               className={`py-2 rounded-xl font-bold border cursor-pointer ${
-                taskScope === 'team' ? 'bg-[#0A1128] text-[#FCF1B7] border-[#0A1128]' : 'border-[var(--bw-line)]'
+                taskScope === 'team' ? 'bg-[#025e3d] text-[#FCF1B7] border-[#025e3d]' : 'border-[var(--bw-line)]'
               }`}
             >
               Entire Team
@@ -289,7 +289,7 @@ export function TeamDailyWorkspaceTab() {
               />
             </div>
           </div>
-          <button type="submit" className="w-full h-10 rounded-full bg-[#0D8A6A] hover:bg-[#10a17c] text-white font-extrabold cursor-pointer">
+          <button type="submit" className="w-full h-10 rounded-full bg-[#007b52] hover:bg-[#025e3d] text-white font-extrabold cursor-pointer">
             {taskScope === 'team' ? 'Assign To All Active Staff' : 'Add to Individual To-Do List'}
           </button>
         </form>
@@ -307,7 +307,7 @@ export function TeamDailyWorkspaceTab() {
                 type="button"
                 onClick={() => setSelectedStaffId('ALL')}
                 className={`px-3 py-1 rounded-full text-[11px] font-bold cursor-pointer ${
-                  selectedStaffId === 'ALL' ? 'bg-[#0A1128] text-[#FCF1B7]' : 'border border-[var(--bw-line)]'
+                  selectedStaffId === 'ALL' ? 'bg-[#025e3d] text-[#FCF1B7]' : 'border border-[var(--bw-line)]'
                 }`}
               >
                 All Team
@@ -318,7 +318,7 @@ export function TeamDailyWorkspaceTab() {
                   type="button"
                   onClick={() => setSelectedStaffId(s.id)}
                   className={`px-2.5 py-1 rounded-full text-[11px] font-bold cursor-pointer ${
-                    selectedStaffId === s.id ? 'bg-[#0D8A6A] text-white' : 'border border-[var(--bw-line)]'
+                    selectedStaffId === s.id ? 'bg-[#007b52] text-white' : 'border border-[var(--bw-line)]'
                   }`}
                 >
                   {s.name.split(' ')[0]} ({s.tasksToDoCount})
@@ -347,7 +347,7 @@ export function TeamDailyWorkspaceTab() {
                       <button
                         type="button"
                         onClick={() => void toggleTask(t.id, t.status)}
-                        className="mt-0.5 text-[#0D8A6A] cursor-pointer shrink-0"
+                        className="mt-0.5 text-[#007b52] cursor-pointer shrink-0"
                         title="Toggle Done"
                       >
                         {isDone ? <CheckCircle2 size={18} /> : <Circle size={18} />}

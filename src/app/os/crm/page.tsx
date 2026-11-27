@@ -112,7 +112,7 @@ export default function CrmPage() {
         {/* Quick Daily Enquiry Capture */}
         <form onSubmit={logEnquiry} className="lg:col-span-4 bw-card p-5 space-y-3 text-xs">
           <h3 className="text-sm font-extrabold flex items-center gap-1.5">
-            <Plus size={15} className="text-[#0D8A6A]" /> Log Daily Enquiry (100% Capture)
+            <Plus size={15} className="text-[#007b52]" /> Log Daily Enquiry (100% Capture)
           </h3>
           <div>
             <label className="font-bold block mb-1">Client Full Name *</label>
@@ -145,7 +145,7 @@ export default function CrmPage() {
             </div>
           </div>
           <textarea rows={2} value={form.notes} onChange={(e) => setForm({ ...form, notes: e.target.value })} placeholder="Enquiry summary..." className="w-full p-2.5 rounded-xl border border-[var(--bw-line)] bg-[var(--bw-bg)]" />
-          <button type="submit" className="w-full h-10 rounded-full bg-[#0D8A6A] text-white font-bold cursor-pointer">
+          <button type="submit" className="w-full h-10 rounded-full bg-[#007b52] text-white font-bold cursor-pointer">
             Record Daily Enquiry
           </button>
         </form>
@@ -157,7 +157,7 @@ export default function CrmPage() {
             <div className="flex items-center gap-2 text-xs">
               <input type="date" value={dateFilter} onChange={(e) => setDateFilter(e.target.value)} className="h-8 px-2.5 rounded-lg border border-[var(--bw-line)] bg-[var(--bw-bg)]" />
               {dateFilter && (
-                <button type="button" onClick={() => setDateFilter('')} className="text-[#0D8A6A] font-bold cursor-pointer">All Dates</button>
+                <button type="button" onClick={() => setDateFilter('')} className="text-[#007b52] font-bold cursor-pointer">All Dates</button>
               )}
             </div>
           </div>
@@ -170,7 +170,7 @@ export default function CrmPage() {
                 <div key={l.id} className="p-3.5 rounded-2xl border border-[var(--bw-line)] bg-[var(--bw-bg)]/60 flex flex-wrap items-center justify-between gap-3 text-xs">
                   <div className="space-y-0.5">
                     <div className="flex items-center gap-2">
-                      <span className="font-mono-num font-bold text-[#0D8A6A]">{l.reference_code}</span>
+                      <span className="font-mono-num font-bold text-[#007b52]">{l.reference_code}</span>
                       <span className="font-extrabold text-sm">{l.contact_name}</span>
                       <StatusPill label={l.source_channel} tone="blue" />
                       <StatusPill label={l.status} tone={l.status === 'Converted' ? 'emerald' : 'gold'} />
@@ -188,7 +188,7 @@ export default function CrmPage() {
                       <MessageCircle size={12} /> WhatsApp
                     </button>
                     {l.status !== 'Converted' && (
-                      <button type="button" onClick={() => void convertToPipeline(l)} className="px-3 py-1.5 rounded-full bg-[#0A1128] text-[#FCF1B7] font-bold inline-flex items-center gap-1 cursor-pointer">
+                      <button type="button" onClick={() => void convertToPipeline(l)} className="px-3 py-1.5 rounded-full bg-[#025e3d] text-[#FCF1B7] font-bold inline-flex items-center gap-1 cursor-pointer">
                         Start 12-Step <ArrowRight size={12} />
                       </button>
                     )}

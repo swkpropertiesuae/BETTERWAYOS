@@ -122,7 +122,7 @@ export default function CompliancePage() {
             type="button"
             onClick={() => setTab(k)}
             className={`inline-flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-bold border transition ${
-              tab === k ? 'bg-[#083B2E] text-white border-[#083B2E]' : 'bg-[var(--bw-card)] border-[var(--bw-line)]'
+              tab === k ? 'bg-[#025e3d] text-white border-[#025e3d]' : 'bg-[var(--bw-card)] border-[var(--bw-line)]'
             }`}
           >
             <Icon size={14} /> {label}
@@ -152,7 +152,7 @@ export default function CompliancePage() {
                 <option value="PDPL_CONSENT">UAE PDPL Consent Verification</option>
                 <option value="GOAML_STR">UAE FIU goAML STR Filing Review</option>
               </select>
-              <button className="w-full rounded-xl bg-[#083B2E] text-white py-2.5 text-xs font-bold">
+              <button className="w-full rounded-xl bg-[#025e3d] text-white py-2.5 text-xs font-bold">
                 Run Compliance Check
               </button>
             </form>
@@ -169,7 +169,7 @@ export default function CompliancePage() {
                 className="w-full rounded-xl border border-[var(--bw-line)] bg-transparent p-3 text-xs"
                 required
               />
-              <button className="w-full rounded-xl bg-[#0A1128] text-[#FCF1B7] py-2 text-xs font-bold">
+              <button className="w-full rounded-xl bg-[#025e3d] text-[#FCF1B7] py-2 text-xs font-bold">
                 Import Watchlist ({data?.sanctions.length ?? 0} Loaded)
               </button>
             </form>

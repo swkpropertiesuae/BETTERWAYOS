@@ -56,7 +56,7 @@ export default function SalesAndServicesPage() {
       <div className="grid lg:grid-cols-12 gap-6">
         <form onSubmit={registerReferral} className="lg:col-span-5 bw-card p-5 space-y-3 text-xs">
           <h3 className="text-sm font-extrabold flex items-center gap-1.5">
-            <Handshake size={15} className="text-[#0D8A6A]" /> 60-Second RERA Broker Referral Lock
+            <Handshake size={15} className="text-[#007b52]" /> 60-Second RERA Broker Referral Lock
           </h3>
           <input required value={refForm.contactName} onChange={(e) => setRefForm({ ...refForm, contactName: e.target.value })} placeholder="Referred Buyer Name *" className="w-full h-9 px-3 rounded-xl border border-[var(--bw-line)] bg-[var(--bw-bg)]" />
           <input required value={refForm.contactPhone} onChange={(e) => setRefForm({ ...refForm, contactPhone: e.target.value })} placeholder="Buyer Phone *" className="w-full h-9 px-3 rounded-xl border border-[var(--bw-line)] bg-[var(--bw-bg)]" />
@@ -68,7 +68,7 @@ export default function SalesAndServicesPage() {
             <input value={refForm.community} onChange={(e) => setRefForm({ ...refForm, community: e.target.value })} placeholder="Community" className="h-9 px-3 rounded-xl border border-[var(--bw-line)] bg-[var(--bw-bg)]" />
             <input type="number" value={refForm.propertyPriceAed} onChange={(e) => setRefForm({ ...refForm, propertyPriceAed: Number(e.target.value) })} className="h-9 px-3 rounded-xl border border-[var(--bw-line)] bg-[var(--bw-bg)] font-mono-num" />
           </div>
-          <button type="submit" className="w-full h-10 rounded-full bg-[#0A1128] text-[#FCF1B7] font-bold cursor-pointer">
+          <button type="submit" className="w-full h-10 rounded-full bg-[#025e3d] text-[#FCF1B7] font-bold cursor-pointer">
             Lock Referral Attribution
           </button>
         </form>

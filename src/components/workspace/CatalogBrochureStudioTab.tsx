@@ -162,7 +162,7 @@ export function CatalogBrochureStudioTab() {
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div>
           <h2 className="text-base font-extrabold flex items-center gap-2">
-            <Building2 size={16} className="text-[#0D8A6A]" /> Bank-APL Catalog (Community · Developer · Project · Unit) &amp; Mortgage Proposal Brochure Studio
+            <Building2 size={16} className="text-[#007b52]" /> Bank-APL Catalog (Community · Developer · Project · Unit) &amp; Mortgage Proposal Brochure Studio
           </h2>
           <p className="text-xs text-[var(--bw-muted)]">
             Add any Bank-Approved Community, Master Developer, Project, or Financed Unit with LTV/APL specs, handover financing terms, and custom Betterway brochure colors/templates — exportable immediately to JPEG, Word &amp; PDF.
@@ -175,7 +175,7 @@ export function CatalogBrochureStudioTab() {
               type="button"
               onClick={() => setEntity(k)}
               className={`px-3.5 py-2 rounded-full font-bold capitalize cursor-pointer ${
-                entity === k ? 'bg-[#0A1128] text-[#FCF1B7]' : 'border border-[var(--bw-line)] bg-[var(--bw-card)]'
+                entity === k ? 'bg-[#025e3d] text-[#FCF1B7]' : 'border border-[var(--bw-line)] bg-[var(--bw-card)]'
               }`}
             >
               + {k === 'property' ? 'Project / Building' : k}
@@ -188,7 +188,7 @@ export function CatalogBrochureStudioTab() {
         {/* Left: Complete Details & Materials Creator */}
         <form onSubmit={createEntity} className="lg:col-span-6 bw-card p-5 space-y-3 text-xs">
           <h3 className="text-sm font-extrabold flex items-center gap-1.5">
-            <Plus size={15} className="text-[#0D8A6A]" /> Add New {entity === 'property' ? 'Project / Building' : entity.toUpperCase()} &amp; Material Specs
+            <Plus size={15} className="text-[#007b52]" /> Add New {entity === 'property' ? 'Project / Building' : entity.toUpperCase()} &amp; Material Specs
           </h3>
 
           <div className="grid sm:grid-cols-2 gap-2.5">
@@ -285,7 +285,7 @@ export function CatalogBrochureStudioTab() {
           </div>
 
           <div className="pt-2 border-t border-[var(--bw-line)] space-y-2">
-            <div className="font-extrabold text-[#0D8A6A]">Bank APL Coverage, LTV Limits &amp; Financing Plan</div>
+            <div className="font-extrabold text-[#007b52]">Bank APL Coverage, LTV Limits &amp; Financing Plan</div>
             <div className="grid sm:grid-cols-2 gap-2">
               <input value={form.flooring} onChange={(e) => setForm({ ...form, flooring: e.target.value })} placeholder="Max Expat / National / Non-Resident LTV %" className="h-9 px-3 rounded-xl border border-[var(--bw-line)] bg-[var(--bw-bg)]" />
               <input value={form.kitchen} onChange={(e) => setForm({ ...form, kitchen: e.target.value })} placeholder="Eligible APL Banks (Conventional & Islamic)" className="h-9 px-3 rounded-xl border border-[var(--bw-line)] bg-[var(--bw-bg)]" />
@@ -295,7 +295,7 @@ export function CatalogBrochureStudioTab() {
             <textarea rows={2} value={form.description} onChange={(e) => setForm({ ...form, description: e.target.value })} placeholder="Executive UAE mortgage proposal narrative..." className="w-full p-2.5 rounded-xl border border-[var(--bw-line)] bg-[var(--bw-bg)]" />
           </div>
 
-          <button type="submit" className="w-full h-10 rounded-full bg-[#0D8A6A] hover:bg-[#10a17c] text-white font-extrabold cursor-pointer">
+          <button type="submit" className="w-full h-10 rounded-full bg-[#007b52] hover:bg-[#025e3d] text-white font-extrabold cursor-pointer">
             Save {entity === 'property' ? 'Project' : entity.toUpperCase()} &amp; Brochure Theme to Master Catalog
           </button>
         </form>
@@ -306,7 +306,7 @@ export function CatalogBrochureStudioTab() {
             <h3 className="text-sm font-extrabold flex items-center gap-1.5">
               <Palette size={15} className="text-[#D4AF37]" /> Custom Brochure Colors &amp; Template Designer
             </h3>
-            <button type="button" onClick={() => void saveCompanyDefaultTheme()} className="px-3 py-1.5 rounded-full border border-[var(--bw-line)] font-bold inline-flex items-center gap-1 cursor-pointer hover:border-[#0D8A6A]">
+            <button type="button" onClick={() => void saveCompanyDefaultTheme()} className="px-3 py-1.5 rounded-full border border-[var(--bw-line)] font-bold inline-flex items-center gap-1 cursor-pointer hover:border-[#007b52]">
               <Save size={12} /> Set Company Default
             </button>
           </div>
@@ -321,7 +321,7 @@ export function CatalogBrochureStudioTab() {
                   type="button"
                   onClick={() => applyPreset(key)}
                   className={`px-3 py-1.5 rounded-full font-bold inline-flex items-center gap-1.5 border cursor-pointer ${
-                    theme.preset === key ? 'border-[#0D8A6A] ring-1 ring-[#0D8A6A]' : 'border-[var(--bw-line)]'
+                    theme.preset === key ? 'border-[#007b52] ring-1 ring-[#007b52]' : 'border-[var(--bw-line)]'
                   }`}
                 >
                   <span className="size-3 rounded-full" style={{ backgroundColor: p.primaryHex }} />
@@ -391,14 +391,14 @@ export function CatalogBrochureStudioTab() {
             <button
               type="button"
               onClick={() => void downloadJpegDocument(buildBrochurePayload(currentTitle, `${form.emirate} · ${form.completionStatus}`, previewMeta, form.description))}
-              className="px-4 py-2 rounded-full bg-[#0D8A6A] text-white font-extrabold inline-flex items-center gap-1.5 cursor-pointer"
+              className="px-4 py-2 rounded-full bg-[#007b52] text-white font-extrabold inline-flex items-center gap-1.5 cursor-pointer"
             >
               <ImageIcon size={13} /> Export Brochure (.JPEG)
             </button>
             <button
               type="button"
               onClick={() => downloadWordDocument(buildBrochurePayload(currentTitle, `${form.emirate} · ${form.completionStatus}`, previewMeta, form.description))}
-              className="px-4 py-2 rounded-full bg-[#0A1128] text-[#FCF1B7] font-extrabold inline-flex items-center gap-1.5 cursor-pointer"
+              className="px-4 py-2 rounded-full bg-[#025e3d] text-[#FCF1B7] font-extrabold inline-flex items-center gap-1.5 cursor-pointer"
             >
               <FileText size={13} /> Export Word (.DOC)
             </button>
@@ -437,10 +437,10 @@ export function CatalogBrochureStudioTab() {
                 if (item.brochure_theme_json?.primaryHex) setTheme({ ...DEFAULT_BROCHURE_THEME, ...item.brochure_theme_json });
                 toast(`Loaded "${item.name || item.unit_number}" into Brochure Designer`);
               }}
-              className="p-3 rounded-xl border border-[var(--bw-line)] bg-[var(--bw-bg)]/60 hover:border-[#0D8A6A] text-start space-y-1 cursor-pointer"
+              className="p-3 rounded-xl border border-[var(--bw-line)] bg-[var(--bw-bg)]/60 hover:border-[#007b52] text-start space-y-1 cursor-pointer"
             >
               <div className="flex items-center justify-between gap-1">
-                <span className="font-mono-num text-[10px] font-bold text-[#0D8A6A]">{item.code}</span>
+                <span className="font-mono-num text-[10px] font-bold text-[#007b52]">{item.code}</span>
                 <StatusPill label={item.emirate || item.bedrooms || 'Active'} tone="slate" />
               </div>
               <div className="font-bold truncate">{item.name || item.unit_number}</div>

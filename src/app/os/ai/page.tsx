@@ -147,7 +147,7 @@ export default function AiCopilotPage() {
       <div className="grid lg:grid-cols-5 gap-5">
         {/* Left 3 cols: Copilot Desk */}
         <div className="lg:col-span-3 space-y-4">
-          <form onSubmit={askCopilot} className="rounded-2xl bg-[#0A1128] text-white border border-[#D4AF37]/40 p-5 space-y-3">
+          <form onSubmit={askCopilot} className="rounded-2xl bg-[#025e3d] text-white border border-[#D4AF37]/40 p-5 space-y-3">
             <div className="flex items-center justify-between">
               <h2 className="text-sm font-extrabold flex items-center gap-2 text-[#FCF1B7]">
                 <BrainCircuit size={16} className="text-[#34DFAC]" /> Ask Betterway Senior Underwriting AI
@@ -298,7 +298,7 @@ export default function AiCopilotPage() {
                 placeholder="Tags (comma-separated)"
                 className="w-full rounded-xl border border-[var(--bw-line)] bg-transparent px-3 py-2 text-xs"
               />
-              <button disabled={busy} className="w-full rounded-xl bg-[#0A1128] text-[#FCF1B7] py-2.5 text-xs font-bold">
+              <button disabled={busy} className="w-full rounded-xl bg-[#025e3d] text-[#FCF1B7] py-2.5 text-xs font-bold">
                 Save &amp; Train AI Knowledge Base
               </button>
             </form>

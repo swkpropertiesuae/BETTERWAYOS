@@ -232,7 +232,7 @@ export default function EmployeesPage() {
         actions={
           <Link
             href="/os/inside"
-            className="inline-flex items-center gap-1.5 rounded-xl bg-[#083B2E] text-white px-3.5 py-2 text-xs font-bold hover:brightness-110"
+            className="inline-flex items-center gap-1.5 rounded-xl bg-[#025e3d] text-white px-3.5 py-2 text-xs font-bold hover:brightness-110"
           >
             Open #attendance-checkin Group →
           </Link>
@@ -263,7 +263,7 @@ export default function EmployeesPage() {
             type="button"
             onClick={() => setTab(k)}
             className={`inline-flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-bold border transition ${
-              tab === k ? 'bg-[#083B2E] text-white border-[#083B2E]' : 'bg-[var(--bw-card)] border-[var(--bw-line)]'
+              tab === k ? 'bg-[#025e3d] text-white border-[#025e3d]' : 'bg-[var(--bw-card)] border-[var(--bw-line)]'
             }`}
           >
             <Icon size={14} /> {label}
@@ -281,7 +281,7 @@ export default function EmployeesPage() {
               {leadership.map((m) => (
                 <div
                   key={m.id}
-                  className="rounded-2xl overflow-hidden bg-[#0A1128] text-white border border-[#D4AF37]/40 grid sm:grid-cols-5"
+                  className="rounded-2xl overflow-hidden bg-[#025e3d] text-white border border-[#D4AF37]/40 grid sm:grid-cols-5"
                 >
                   <div className="sm:col-span-2 bg-black/30">
                     <img
@@ -377,7 +377,7 @@ export default function EmployeesPage() {
         <div className="grid lg:grid-cols-3 gap-5">
           {/* Left: Oud Metha Rotating QR + Hikvision Door Test */}
           <div className="space-y-4">
-            <div className="rounded-2xl bg-[#0A1128] text-white border border-[#D4AF37]/40 p-5 space-y-4">
+            <div className="rounded-2xl bg-[#025e3d] text-white border border-[#D4AF37]/40 p-5 space-y-4">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
                   <QrCode size={16} className="text-[#D4AF37]" />
@@ -532,7 +532,7 @@ export default function EmployeesPage() {
                 className="w-full rounded-xl border border-[var(--bw-line)] bg-transparent p-2.5 text-xs"
                 required
               />
-              <button disabled={busy} className="rounded-xl bg-[#083B2E] text-white px-4 py-2 text-xs font-bold">
+              <button disabled={busy} className="rounded-xl bg-[#025e3d] text-white px-4 py-2 text-xs font-bold">
                 Submit Daily Close &amp; Unlock Shift Check-Out
               </button>
             </form>
@@ -552,7 +552,7 @@ export default function EmployeesPage() {
               </div>
               <a
                 href={`/api/v1/hr?wpsPeriod=${new Date().toISOString().slice(0, 7)}`}
-                className="inline-flex items-center gap-1.5 rounded-xl bg-[#0A1128] text-[#FCF1B7] px-4 py-2.5 text-xs font-bold"
+                className="inline-flex items-center gap-1.5 rounded-xl bg-[#025e3d] text-[#FCF1B7] px-4 py-2.5 text-xs font-bold"
               >
                 <Download size={14} /> Download MOHRE WPS .SIF ({new Date().toISOString().slice(0, 7)})
               </a>
@@ -577,7 +577,7 @@ export default function EmployeesPage() {
               </div>
               <input type="number" value={days} onChange={(e) => setDays(e.target.value)} placeholder="Days" className="w-full rounded-xl border border-[var(--bw-line)] bg-transparent px-3 py-2 text-xs" />
               <input value={leaveReason} onChange={(e) => setLeaveReason(e.target.value)} placeholder="Reason" className="w-full rounded-xl border border-[var(--bw-line)] bg-transparent px-3 py-2 text-xs" />
-              <button disabled={busy} className="w-full rounded-xl bg-[#083B2E] text-white py-2 text-xs font-bold">
+              <button disabled={busy} className="w-full rounded-xl bg-[#025e3d] text-white py-2 text-xs font-bold">
                 Submit Leave Request
               </button>
             </form>

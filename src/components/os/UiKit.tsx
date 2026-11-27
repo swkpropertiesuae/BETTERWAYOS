@@ -1,8 +1,8 @@
 'use client';
 
-import React from 'react';
+import React, { useRef, type CSSProperties } from 'react';
 import Link from 'next/link';
-import { ArrowLeft } from 'lucide-react';
+import { ArrowUpRight, Landmark, WalletCards } from 'lucide-react';
 
 export function fmtAed(amount: number | string | null | undefined, compact = false): string {
   const n = Number(amount || 0);
@@ -22,15 +22,15 @@ export function StatusPill({
   tone?: 'emerald' | 'gold' | 'navy' | 'red' | 'blue' | 'slate';
 }) {
   const cls: Record<string, string> = {
-    emerald: 'bg-emerald-500/12 text-emerald-700 dark:text-emerald-300 border-emerald-500/25',
-    gold: 'bg-amber-500/15 text-amber-800 dark:text-amber-300 border-amber-500/30',
-    navy: 'bg-[#0A1128] text-[#FCF1B7] border-[#D4AF37]/40',
-    red: 'bg-red-500/12 text-red-700 dark:text-red-300 border-red-500/25',
-    blue: 'bg-sky-500/12 text-sky-700 dark:text-sky-300 border-sky-500/25',
-    slate: 'bg-slate-500/10 text-slate-700 dark:text-slate-300 border-slate-400/25',
+    emerald: 'bg-[#dcf1e6] text-[#025e3d] border-[#b7e0cb] dark:bg-[#1e3a2d] dark:text-[#8fe3bd] dark:border-[#2e5845]',
+    gold: 'bg-[#f6e9c3] text-[#7a5200] border-[#ead49a] dark:bg-[#3a311f] dark:text-[#fcf1b7] dark:border-[#5e4d2a]',
+    navy: 'bg-[#025e3d] text-white border-[#025e3d]',
+    red: 'bg-[#fbe1e4] text-[#9b1424] border-[#f2bcc3] dark:bg-[#3f2026] dark:text-[#ffb4be] dark:border-[#632f38]',
+    blue: 'bg-[#dfecfa] text-[#1f4f85] border-[#bcd6f0] dark:bg-[#1e3247] dark:text-[#a8d0f8] dark:border-[#2f4d6b]',
+    slate: 'bg-[#edf2ee] text-[#3f4f47] border-[#d5ddd6] dark:bg-[#24332a] dark:text-[#c4d0c7] dark:border-[#36493e]',
   };
   return (
-    <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] font-bold border ${cls[tone] || cls.slate}`}>
+    <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] font-semibold border whitespace-nowrap ${cls[tone] || cls.slate}`}>
       {label}
     </span>
   );
@@ -53,13 +53,13 @@ export function StaffAvatar({
       <img
         src={avatarUrl}
         alt={name}
-        className={`${dims} rounded-full object-cover object-top border border-[#D4AF37]/45 shrink-0`}
+        className={`${dims} rounded-full object-cover object-top border-2 border-[#d4af37]/50 shrink-0`}
       />
     );
   }
   return (
     <div
-      className={`${dims} rounded-full bg-[#0A1128] text-[#FCF1B7] border border-[#D4AF37]/45 font-bold flex items-center justify-center shrink-0`}
+      className={`${dims} rounded-full bg-[#025e3d] text-[#fcf1b7] border border-[#d4af37]/45 font-bold flex items-center justify-center shrink-0`}
     >
       {initials}
     </div>
@@ -71,7 +71,6 @@ export function PageHeader({
   title,
   accent,
   subtitle,
-  backHref = '/os',
   actions,
 }: {
   eyebrow: string;
@@ -82,22 +81,13 @@ export function PageHeader({
   actions?: React.ReactNode;
 }) {
   return (
-    <div className="flex flex-wrap items-start justify-between gap-4 pb-5 border-b border-[var(--bw-line)]">
+    <div className="flex flex-wrap items-end justify-between gap-4 pb-5 border-b border-[var(--bw-line)]">
       <div className="space-y-1.5 max-w-3xl">
-        <div className="flex items-center gap-2">
-          <Link
-            href={backHref}
-            className="inline-flex items-center gap-1 text-[11px] font-bold uppercase tracking-wider text-[var(--bw-emerald)] hover:underline no-print"
-          >
-            <ArrowLeft size={12} /> OS Home
-          </Link>
-          <span className="text-[var(--bw-muted)]">·</span>
-          <span className="text-[11px] font-bold uppercase tracking-[0.16em] text-[var(--bw-muted)]">{eyebrow}</span>
-        </div>
-        <h1 className="text-2xl sm:text-3xl font-extrabold tracking-[-0.03em] text-[var(--bw-ink)]">
+        <div className="text-[11px] font-bold uppercase tracking-[0.14em] text-[var(--bw-emerald)]">{eyebrow}</div>
+        <h1 className="font-display text-2xl sm:text-[32px] font-bold tracking-[-0.03em] leading-[1.15] text-[var(--bw-ink)]">
           {title} {accent && <span className="text-[var(--bw-emerald)]">{accent}</span>}
         </h1>
-        <p className="text-xs sm:text-sm text-[var(--bw-muted)] leading-relaxed">{subtitle}</p>
+        <p className="text-xs sm:text-[14px] text-[var(--bw-muted)] leading-relaxed">{subtitle}</p>
       </div>
       {actions && <div className="flex flex-wrap items-center gap-2 no-print">{actions}</div>}
     </div>
@@ -117,26 +107,80 @@ export function MetricTile({
 }) {
   const cls =
     tone === 'navy'
-      ? 'bg-[#0A1128] text-white border-[#D4AF37]/40'
+      ? 'bg-[#025e3d] text-white border-[#025e3d] shadow-[0_15px_28px_-19px_rgba(2,94,61,0.55)]'
       : tone === 'emerald'
-        ? 'bg-[#083B2E] text-white border-[#34DFAC]/30'
+        ? 'bg-[var(--bw-mint-soft)] text-[var(--bw-ink)] border-[var(--bw-line)]'
         : tone === 'gold'
-          ? 'bg-amber-50 dark:bg-amber-950/30 border-amber-300/60'
+          ? 'bg-[var(--bw-champagne-tint)] text-[var(--bw-ink)] border-[var(--bw-line)]'
           : tone === 'red'
-            ? 'bg-red-50 dark:bg-red-950/30 border-red-300/60'
-            : 'bg-[var(--bw-card)] border-[var(--bw-line)]';
+            ? 'bg-[var(--bw-blush)] text-[#9b1424] dark:text-[#ffb4be] border-[#f2bcc3] dark:border-[#632f38]'
+            : 'bg-[var(--bw-card)] text-[var(--bw-ink)] border-[var(--bw-line)]';
+
+  const muted = tone === 'navy' ? 'text-[#d3eee0]' : 'text-[var(--bw-muted)]';
 
   return (
-    <div className={`rounded-2xl border p-4 space-y-1 ${cls}`}>
-      <div className={`text-[10.5px] font-bold uppercase tracking-[0.14em] ${tone === 'navy' || tone === 'emerald' ? 'text-slate-300' : 'text-[var(--bw-muted)]'}`}>
-        {label}
+    <div className={`rounded-2xl border p-5 space-y-1.5 shadow-[var(--bw-shadow-raised)] transition ${cls}`}>
+      <div className={`text-[11.5px] font-semibold tracking-[0.01em] ${muted}`}>{label}</div>
+      <div className="font-display text-2xl sm:text-[28px] font-bold font-mono-num tracking-[-0.03em] leading-tight">
+        {value}
       </div>
-      <div className="text-xl sm:text-2xl font-extrabold font-mono-num tracking-tight">{value}</div>
-      {hint && (
-        <div className={`text-[11px] ${tone === 'navy' || tone === 'emerald' ? 'text-slate-300' : 'text-[var(--bw-muted)]'}`}>
-          {hint}
+      {hint && <div className={`text-[11.5px] ${muted}`}>{hint}</div>}
+    </div>
+  );
+}
+
+/** Signature Calm Operating Wallet 3D-tilt Deep Emerald Account / Loan-Book Card */
+export function WalletLoanCard({
+  label,
+  amount,
+  subLabel,
+  footerLeft,
+  footerHref,
+  footerLinkLabel,
+}: {
+  label: string;
+  amount: string;
+  subLabel?: string;
+  footerLeft: string;
+  footerHref: string;
+  footerLinkLabel: string;
+}) {
+  const ref = useRef<HTMLDivElement>(null);
+  return (
+    <div
+      ref={ref}
+      style={{ '--rx': '0deg', '--ry': '0deg', perspective: '1000px' } as CSSProperties}
+      onPointerMove={(e) => {
+        if (e.pointerType !== 'mouse' || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+        const b = e.currentTarget.getBoundingClientRect();
+        e.currentTarget.style.setProperty('--rx', `${(-(e.clientY - b.top - b.height / 2) / b.height) * 6}deg`);
+        e.currentTarget.style.setProperty('--ry', `${((e.clientX - b.left - b.width / 2) / b.width) * 6}deg`);
+      }}
+      onPointerLeave={() => {
+        ref.current?.style.setProperty('--rx', '0deg');
+        ref.current?.style.setProperty('--ry', '0deg');
+      }}
+    >
+      <section className="bw-cash-card">
+        <div className="relative z-10 flex items-center justify-between text-xs text-[#d3eee0]">
+          <span className="inline-flex items-center gap-1.5 font-semibold">
+            <Landmark size={15} /> {label}
+          </span>
+          <WalletCards size={20} strokeWidth={1.5} className="text-[#fcf1b7]" />
         </div>
-      )}
+        <div className="relative z-10 my-5">
+          <div className="font-display text-3xl sm:text-[34px] font-bold tracking-[-0.03em] font-mono-num leading-none">
+            {amount}
+          </div>
+          {subLabel && <div className="text-xs text-[#d3eee0] mt-2">{subLabel}</div>}
+        </div>
+        <div className="relative z-10 flex items-center justify-between gap-2 pt-3 border-t border-white/15 text-[11.5px] text-[#d3eee0]">
+          <span>{footerLeft}</span>
+          <Link href={footerHref} className="inline-flex items-center gap-1 text-white font-semibold hover:underline">
+            {footerLinkLabel} <ArrowUpRight size={13} />
+          </Link>
+        </div>
+      </section>
     </div>
   );
 }

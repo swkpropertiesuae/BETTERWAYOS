@@ -187,7 +187,7 @@ export default function AccountsPage() {
           user?.isOwner ? (
             <Link
               href="/os/executive"
-              className="inline-flex items-center gap-1.5 rounded-xl bg-[#0A1128] text-[#FCF1B7] border border-[#D4AF37]/40 px-3.5 py-2 text-xs font-bold hover:brightness-110"
+              className="inline-flex items-center gap-1.5 rounded-xl bg-[#025e3d] text-[#FCF1B7] border border-[#D4AF37]/40 px-3.5 py-2 text-xs font-bold hover:brightness-110"
             >
               <Lock size={13} /> Open Consolidated VAT &amp; Privacy Fast Track
             </Link>
@@ -205,7 +205,7 @@ export default function AccountsPage() {
       ) : (
         <>
           {user?.isOwner && (
-            <div className="rounded-2xl bg-[#0A1128] text-white border border-[#D4AF37]/35 p-4 flex flex-wrap items-center justify-between gap-3">
+            <div className="rounded-2xl bg-[#025e3d] text-white border border-[#D4AF37]/35 p-4 flex flex-wrap items-center justify-between gap-3">
               <div className="flex items-center gap-3">
                 <Lock className="text-[#D4AF37] shrink-0" size={18} />
                 <div className="text-xs sm:text-sm">
@@ -253,8 +253,8 @@ export default function AccountsPage() {
                 onClick={() => setTab(key)}
                 className={`inline-flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-bold border transition ${
                   tab === key
-                    ? 'bg-[#083B2E] text-white border-[#083B2E]'
-                    : 'bg-[var(--bw-card)] border-[var(--bw-line)] text-[var(--bw-ink)] hover:border-[#0B664F]'
+                    ? 'bg-[#025e3d] text-white border-[#025e3d]'
+                    : 'bg-[var(--bw-card)] border-[var(--bw-line)] text-[var(--bw-ink)] hover:border-[#007b52]'
                 }`}
               >
                 <Icon size={14} /> {label}
@@ -301,7 +301,7 @@ export default function AccountsPage() {
                 />
                 <button
                   disabled={busy}
-                  className="w-full rounded-xl bg-[#083B2E] text-white py-2.5 text-xs font-bold hover:brightness-110 disabled:opacity-50"
+                  className="w-full rounded-xl bg-[#025e3d] text-white py-2.5 text-xs font-bold hover:brightness-110 disabled:opacity-50"
                 >
                   {busy ? 'Issuing…' : 'Issue UAE Tax Invoice (5% VAT)'}
                 </button>
@@ -386,7 +386,7 @@ export default function AccountsPage() {
                     required
                   />
                 </div>
-                <button disabled={busy} className="w-full rounded-xl bg-[#083B2E] text-white py-2.5 text-xs font-bold">
+                <button disabled={busy} className="w-full rounded-xl bg-[#025e3d] text-white py-2.5 text-xs font-bold">
                   Post Expense
                 </button>
               </form>
@@ -496,7 +496,7 @@ export default function AccountsPage() {
                   <input type="checkbox" checked={payLetterOk} onChange={(e) => setPayLetterOk(e.target.checked)} />
                   Corporate Bank Account Letter Verified
                 </label>
-                <button disabled={busy} className="w-full rounded-xl bg-[#0A1128] text-[#FCF1B7] py-2.5 text-xs font-bold">
+                <button disabled={busy} className="w-full rounded-xl bg-[#025e3d] text-[#FCF1B7] py-2.5 text-xs font-bold">
                   Queue Payout for 2-of-2 Owner Release
                 </button>
               </form>

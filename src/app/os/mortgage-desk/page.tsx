@@ -111,7 +111,7 @@ export default function MortgageDeskPage() {
                   type="button"
                   onClick={() => setTab(t.id as any)}
                   className={`px-3.5 py-2 rounded-full text-xs font-bold inline-flex items-center gap-1.5 border cursor-pointer ${
-                    tab === t.id ? 'bg-[#0A1128] text-[#FCF1B7] border-[#D4AF37]' : 'bg-[var(--bw-card)] border-[var(--bw-line)]'
+                    tab === t.id ? 'bg-[#025e3d] text-[#FCF1B7] border-[#D4AF37]' : 'bg-[var(--bw-card)] border-[var(--bw-line)]'
                   }`}
                 >
                   <Icon size={13} /> {t.label}
@@ -150,7 +150,7 @@ export default function MortgageDeskPage() {
             <input required value={valForm.valuationCompany} onChange={(e) => setValForm({ ...valForm, valuationCompany: e.target.value })} placeholder="Valuation panel firm (CBRE, JLL, Cavendish...)" className="w-full h-9 px-3 rounded-xl border border-[var(--bw-line)] bg-[var(--bw-bg)]" />
             <input required value={valForm.accessContact} onChange={(e) => setValForm({ ...valForm, accessContact: e.target.value })} placeholder="Property access contact / key holder" className="w-full h-9 px-3 rounded-xl border border-[var(--bw-line)] bg-[var(--bw-bg)]" />
             <input type="datetime-local" value={valForm.bookedDate} onChange={(e) => setValForm({ ...valForm, bookedDate: e.target.value })} className="w-full h-9 px-3 rounded-xl border border-[var(--bw-line)] bg-[var(--bw-bg)]" />
-            <button type="submit" className="w-full h-10 rounded-full bg-[#0D8A6A] text-white font-bold cursor-pointer">
+            <button type="submit" className="w-full h-10 rounded-full bg-[#007b52] text-white font-bold cursor-pointer">
               Book Valuation &amp; Sync Calendar
             </button>
           </form>
@@ -204,7 +204,7 @@ export default function MortgageDeskPage() {
               </div>
               <div className="grid grid-cols-3 gap-1.5 pt-2 border-t border-[var(--bw-line)] font-mono-num">
                 <div><div className="text-[9.5px] text-[var(--bw-muted)]">3Y Fixed</div><strong>{b.indicativeFixed3Y}%</strong></div>
-                <div><div className="text-[9.5px] text-[var(--bw-muted)]">DSA</div><strong className="text-[#0D8A6A]">{b.dsaRatePct}%</strong></div>
+                <div><div className="text-[9.5px] text-[var(--bw-muted)]">DSA</div><strong className="text-[#007b52]">{b.dsaRatePct}%</strong></div>
                 <div><div className="text-[9.5px] text-[var(--bw-muted)]">SLA</div><strong>{b.slaDays}d</strong></div>
               </div>
             </div>
@@ -255,7 +255,7 @@ export default function MortgageDeskPage() {
                 <StatusPill label={elig.goldenVisaEligible ? 'Golden Visa AED 2M Eligible' : 'Standard Title'} tone={elig.goldenVisaEligible ? 'gold' : 'slate'} />
               </div>
               <div className="grid sm:grid-cols-3 gap-3 pt-2">
-                <div>Monthly Savings: <strong className="font-mono-num text-[#0D8A6A]">{fmtAed(buyout.monthlySavingsAed)}/mo</strong></div>
+                <div>Monthly Savings: <strong className="font-mono-num text-[#007b52]">{fmtAed(buyout.monthlySavingsAed)}/mo</strong></div>
                 <div>CBUAE Exit Cap (+VAT): <strong className="font-mono-num">{fmtAed(buyout.earlySettlementInclVat)}</strong></div>
                 <div>Break-Even: <strong className="font-mono-num">{buyout.breakEvenMonths} months</strong></div>
               </div>

@@ -91,7 +91,7 @@ export default function UtilitiesPage() {
             type="button"
             onClick={() => setTab(k)}
             className={`inline-flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-bold border transition ${
-              tab === k ? 'bg-[#083B2E] text-white border-[#083B2E]' : 'bg-[var(--bw-card)] border-[var(--bw-line)]'
+              tab === k ? 'bg-[#025e3d] text-white border-[#025e3d]' : 'bg-[var(--bw-card)] border-[var(--bw-line)]'
             }`}
           >
             <Icon size={14} /> {label}
@@ -102,7 +102,7 @@ export default function UtilitiesPage() {
       {tab === 'word' && <LegalFormsStudioTab />}
 
       {tab === 'excel' && (
-        <div className="rounded-2xl bg-[var(--bw-card)] border border-[var(--bw-line)] p-5 space-y-4">
+        <div className="bw-card p-5 space-y-4">
           <div className="flex flex-wrap items-center justify-between gap-3">
             <div>
               <h2 className="text-sm font-extrabold">50-Spec Operational Excel Data Hub</h2>
@@ -121,7 +121,7 @@ export default function UtilitiesPage() {
             {filteredExcel.map((sp) => (
               <div
                 key={sp.num}
-                className="rounded-xl border border-[var(--bw-line)] p-3.5 flex flex-col justify-between gap-2 hover:border-[#0B664F] transition"
+                className="rounded-xl border border-[var(--bw-line)] p-3.5 flex flex-col justify-between gap-2 hover:border-[#007b52] transition"
               >
                 <div>
                   <div className="flex items-center justify-between gap-2 mb-1">
@@ -133,7 +133,7 @@ export default function UtilitiesPage() {
                 </div>
                 <a
                   href={`/api/v1/utilities/excel-export?num=${sp.num}`}
-                  className="inline-flex items-center justify-center gap-1.5 rounded-lg bg-[#083B2E] text-white py-1.5 text-[11px] font-bold hover:brightness-110"
+                  className="inline-flex items-center justify-center gap-1.5 rounded-lg bg-[#025e3d] text-white py-1.5 text-[11px] font-bold hover:brightness-110"
                 >
                   <Download size={12} /> Download .xlsx
                 </a>
@@ -145,7 +145,7 @@ export default function UtilitiesPage() {
 
       {tab === 'translate' && (
         <div className="grid md:grid-cols-2 gap-5">
-          <div className="rounded-2xl bg-[var(--bw-card)] border border-[var(--bw-line)] p-5 space-y-3">
+          <div className="bw-card p-5 space-y-3">
             <h2 className="text-sm font-extrabold">9-Language UAE Mortgage Glossary Translator</h2>
             <select
               value={targetLang}
@@ -167,11 +167,11 @@ export default function UtilitiesPage() {
               onChange={(e) => setSourceText(e.target.value)}
               className="w-full rounded-xl border border-[var(--bw-line)] bg-transparent p-3 text-xs"
             />
-            <button type="button" onClick={runTranslate} className="rounded-xl bg-[#083B2E] text-white px-4 py-2 text-xs font-bold">
+            <button type="button" onClick={runTranslate} className="rounded-xl bg-[#025e3d] text-white px-4 py-2 text-xs font-bold">
               Translate with Legal Mortgage Glossary
             </button>
           </div>
-          <div className="rounded-2xl bg-[var(--bw-card)] border border-[var(--bw-line)] p-5 space-y-2">
+          <div className="bw-card p-5 space-y-2">
             <h3 className="text-sm font-extrabold">Glossary-Locked Output</h3>
             <pre className="whitespace-pre-wrap text-xs leading-relaxed text-[var(--bw-ink)] bg-slate-500/5 rounded-xl p-4 min-h-40">
               {translated || 'Click Translate to preview glossary-locked multilingual mortgage text.'}
@@ -182,7 +182,7 @@ export default function UtilitiesPage() {
 
       {tab === 'ocr' && (
         <div className="grid md:grid-cols-2 gap-5">
-          <div className="rounded-2xl bg-[var(--bw-card)] border border-[var(--bw-line)] p-5 space-y-3">
+          <div className="bw-card p-5 space-y-3">
             <h2 className="text-sm font-extrabold">PII-Shielded Document OCR Extractor</h2>
             <p className="text-xs text-[var(--bw-muted)]">
               Extracts Emirates ID presence, salary figures, and expiry dates while redacting raw PII before any downstream AI pipeline.
@@ -193,11 +193,11 @@ export default function UtilitiesPage() {
               onChange={(e) => setRawOcr(e.target.value)}
               className="w-full rounded-xl border border-[var(--bw-line)] bg-transparent p-3 text-xs font-mono"
             />
-            <button type="button" onClick={runOcr} className="rounded-xl bg-[#083B2E] text-white px-4 py-2 text-xs font-bold">
+            <button type="button" onClick={runOcr} className="rounded-xl bg-[#025e3d] text-white px-4 py-2 text-xs font-bold">
               Run PII-Shielded OCR Parse
             </button>
           </div>
-          <div className="rounded-2xl bg-[var(--bw-card)] border border-[var(--bw-line)] p-5 space-y-2">
+          <div className="bw-card p-5 space-y-2">
             <h3 className="text-sm font-extrabold">Extracted Structured JSON</h3>
             <pre className="whitespace-pre-wrap text-xs font-mono bg-slate-500/5 rounded-xl p-4 min-h-40">
               {ocrResult ? JSON.stringify(ocrResult, null, 2) : 'Run OCR to inspect redacted preview and extracted fields.'}
@@ -207,7 +207,7 @@ export default function UtilitiesPage() {
       )}
 
       {tab === 'search' && (
-        <div className="rounded-2xl bg-[var(--bw-card)] border border-[var(--bw-line)] p-5 space-y-4">
+        <div className="bw-card p-5 space-y-4">
           <form onSubmit={runSearch} className="flex gap-2">
             <input
               value={searchQ}
@@ -216,7 +216,7 @@ export default function UtilitiesPage() {
               className="flex-1 rounded-xl border border-[var(--bw-line)] bg-transparent px-4 py-2.5 text-xs"
               required
             />
-            <button className="rounded-xl bg-[#083B2E] text-white px-5 py-2.5 text-xs font-bold">Search OS</button>
+            <button className="rounded-xl bg-[#025e3d] text-white px-5 py-2.5 text-xs font-bold">Search OS</button>
           </form>
           <div className="space-y-2">
             {searchResults.map((r, idx) => (

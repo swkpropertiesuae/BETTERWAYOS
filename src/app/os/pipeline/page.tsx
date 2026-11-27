@@ -104,14 +104,14 @@ export default function PipelinePage() {
               <button
                 type="button"
                 onClick={() => setView('kanban')}
-                className={`px-3 py-1.5 rounded-full cursor-pointer ${view === 'kanban' ? 'bg-[#0A1128] text-[#FCF1B7]' : ''}`}
+                className={`px-3 py-1.5 rounded-full cursor-pointer ${view === 'kanban' ? 'bg-[#025e3d] text-[#FCF1B7]' : ''}`}
               >
                 12-Stage Kanban
               </button>
               <button
                 type="button"
                 onClick={() => setView('table')}
-                className={`px-3 py-1.5 rounded-full cursor-pointer ${view === 'table' ? 'bg-[#0A1128] text-[#FCF1B7]' : ''}`}
+                className={`px-3 py-1.5 rounded-full cursor-pointer ${view === 'table' ? 'bg-[#025e3d] text-[#FCF1B7]' : ''}`}
               >
                 Table View
               </button>
@@ -119,7 +119,7 @@ export default function PipelinePage() {
             <button
               type="button"
               onClick={() => setNewOpen(true)}
-              className="h-9 px-4 rounded-full bg-[#0D8A6A] text-white text-xs font-bold inline-flex items-center gap-1.5 cursor-pointer"
+              className="h-9 px-4 rounded-full bg-[#007b52] text-white text-xs font-bold inline-flex items-center gap-1.5 cursor-pointer"
             >
               <Plus size={14} /> Open Mortgage Case
             </button>
@@ -134,7 +134,7 @@ export default function PipelinePage() {
           return (
             <div key={st.code} className="bw-card p-2.5 text-center">
               <div className="text-[9.5px] font-bold uppercase text-[var(--bw-muted)] truncate">{st.shortLabel}</div>
-              <div className="text-lg font-extrabold font-mono-num text-[#0D8A6A] mt-0.5">{count}</div>
+              <div className="text-lg font-extrabold font-mono-num text-[#007b52] mt-0.5">{count}</div>
             </div>
           );
         })}
@@ -166,10 +166,10 @@ export default function PipelinePage() {
                           <div
                             key={c.id}
                             onClick={() => setSelected(c)}
-                            className="p-3 rounded-xl border border-[var(--bw-line)] bg-[var(--bw-bg)]/70 hover:border-[#0D8A6A] cursor-pointer space-y-1.5 text-xs transition"
+                            className="p-3 rounded-xl border border-[var(--bw-line)] bg-[var(--bw-bg)]/70 hover:border-[#007b52] cursor-pointer space-y-1.5 text-xs transition"
                           >
                             <div className="flex items-center justify-between">
-                              <span className="font-mono-num font-bold text-[#0D8A6A]">{c.case_code}</span>
+                              <span className="font-mono-num font-bold text-[#007b52]">{c.case_code}</span>
                               <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-[var(--bw-card)] border border-[var(--bw-line)]">
                                 {c.ltv_pct}% LTV
                               </span>
@@ -189,7 +189,7 @@ export default function PipelinePage() {
                                   e.stopPropagation();
                                   void advance(c, nextSt.code);
                                 }}
-                                className="w-full mt-1 py-1.5 rounded-lg bg-[#0A1128] text-[#FCF1B7] text-[10.5px] font-bold inline-flex items-center justify-center gap-1 cursor-pointer"
+                                className="w-full mt-1 py-1.5 rounded-lg bg-[#025e3d] text-[#FCF1B7] text-[10.5px] font-bold inline-flex items-center justify-center gap-1 cursor-pointer"
                               >
                                 Move to {nextSt.shortLabel} <ArrowRight size={11} />
                               </button>
@@ -220,7 +220,7 @@ export default function PipelinePage() {
             <tbody className="divide-y divide-[var(--bw-line)]">
               {cases.map((c) => (
                 <tr key={c.id} onClick={() => setSelected(c)} className="hover:bg-[var(--bw-soft)]/60 cursor-pointer">
-                  <td className="py-2.5 font-mono-num font-bold text-[#0D8A6A]">{c.case_code}</td>
+                  <td className="py-2.5 font-mono-num font-bold text-[#007b52]">{c.case_code}</td>
                   <td className="py-2.5 font-bold">{c.borrower_name}</td>
                   <td className="py-2.5"><StatusPill label={c.stage_code} tone="emerald" /></td>
                   <td className="py-2.5">{c.community} · {c.project_name}</td>
@@ -239,7 +239,7 @@ export default function PipelinePage() {
           <div className="w-full max-w-lg bg-[var(--bw-card)] h-full p-6 overflow-y-auto space-y-5 border-s border-[var(--bw-line)]">
             <div className="flex items-start justify-between border-b border-[var(--bw-line)] pb-3">
               <div>
-                <div className="text-xs font-mono-num font-bold text-[#0D8A6A]">{selected.case_code}</div>
+                <div className="text-xs font-mono-num font-bold text-[#007b52]">{selected.case_code}</div>
                 <h3 className="text-lg font-extrabold">{selected.borrower_name}</h3>
                 <div className="text-xs text-[var(--bw-muted)]">
                   {selected.borrower_phone} · {selected.community} ({selected.mortgage_type})
@@ -268,7 +268,7 @@ export default function PipelinePage() {
             {/* Parallel 24-Bank Submission */}
             <div className="p-4 rounded-2xl border border-[var(--bw-line)] space-y-2.5 text-xs">
               <div className="font-extrabold flex items-center gap-1.5">
-                <Building2 size={14} className="text-[#0D8A6A]" /> Parallel Bank Submissions ({(selected.bank_submissions ?? []).length})
+                <Building2 size={14} className="text-[#007b52]" /> Parallel Bank Submissions ({(selected.bank_submissions ?? []).length})
               </div>
               <div className="flex gap-2">
                 <select
@@ -285,7 +285,7 @@ export default function PipelinePage() {
                 <button
                   type="button"
                   onClick={() => void submitBank(selected)}
-                  className="px-3.5 rounded-xl bg-[#0D8A6A] text-white font-bold cursor-pointer"
+                  className="px-3.5 rounded-xl bg-[#007b52] text-white font-bold cursor-pointer"
                 >
                   Submit
                 </button>
@@ -315,8 +315,8 @@ export default function PipelinePage() {
                     onClick={() => void advance(selected, st.code)}
                     className={`p-2 rounded-xl text-start font-bold border cursor-pointer ${
                       selected.stage_code === st.code
-                        ? 'bg-[#0A1128] text-[#FCF1B7] border-[#D4AF37]'
-                        : 'border-[var(--bw-line)] hover:border-[#0D8A6A]'
+                        ? 'bg-[#025e3d] text-[#FCF1B7] border-[#D4AF37]'
+                        : 'border-[var(--bw-line)] hover:border-[#007b52]'
                     }`}
                   >
                     {st.shortLabel}
@@ -328,7 +328,7 @@ export default function PipelinePage() {
             {/* Linked Vault Checklist Summary */}
             <div className="p-4 rounded-2xl border border-[var(--bw-line)] space-y-2 text-xs">
               <div className="font-extrabold flex items-center gap-1.5">
-                <CheckCircle2 size={14} className="text-[#0D8A6A]" /> Per-Client Document Vault ({(selected.case_documents ?? []).length} docs)
+                <CheckCircle2 size={14} className="text-[#007b52]" /> Per-Client Document Vault ({(selected.case_documents ?? []).length} docs)
               </div>
               <div className="space-y-1 max-h-48 overflow-y-auto">
                 {(selected.case_documents ?? []).map((d: any) => (
@@ -404,7 +404,7 @@ export default function PipelinePage() {
             </div>
             <div className="flex justify-end gap-2 pt-3 border-t border-[var(--bw-line)]">
               <button type="button" onClick={() => setNewOpen(false)} className="px-4 py-2 rounded-full border border-[var(--bw-line)] text-xs font-bold cursor-pointer">Cancel</button>
-              <button type="submit" className="px-5 py-2 rounded-full bg-[#0D8A6A] text-white text-xs font-bold cursor-pointer">Create Case &amp; Vault</button>
+              <button type="submit" className="px-5 py-2 rounded-full bg-[#007b52] text-white text-xs font-bold cursor-pointer">Create Case &amp; Vault</button>
             </div>
           </form>
         </div>

@@ -182,7 +182,7 @@ export default function SettingsPage() {
           </div>
 
           {data?.canEditSecurity ? (
-            <button disabled={busy} className="rounded-xl bg-[#083B2E] text-white px-5 py-2.5 text-xs font-bold">
+            <button disabled={busy} className="rounded-xl bg-[#025e3d] text-white px-5 py-2.5 text-xs font-bold">
               {busy ? 'Saving…' : 'Save Owner Security Configuration'}
             </button>
           ) : (
@@ -193,7 +193,7 @@ export default function SettingsPage() {
         </form>
 
         <div className="space-y-4">
-          <div className="rounded-2xl bg-[#0A1128] text-white border border-[#D4AF37]/35 p-5 space-y-2.5">
+          <div className="rounded-2xl bg-[#025e3d] text-white border border-[#D4AF37]/35 p-5 space-y-2.5">
             <h3 className="text-sm font-extrabold flex items-center gap-1.5 text-[#FCF1B7]">
               <Shield size={15} /> Reception QR Attendance Active
             </h3>

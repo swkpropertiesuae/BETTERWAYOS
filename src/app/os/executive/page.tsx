@@ -223,43 +223,46 @@ export default function ExecutiveOwnerDeskPage() {
 
   return (
     <div className="space-y-6">
-      {/* Crown Executive Header — Warda's Workspace & Shabib's Workspace */}
-      <section className="rounded-3xl bg-[#0A1128] text-white border border-[#D4AF37]/45 p-6 sm:p-7 space-y-5 shadow-xl no-print">
+      {/* Calm Operating Wallet Deep Fold Emerald Executive Sanctuary — Warda's Workspace & Shabib's Workspace */}
+      <section
+        className="rounded-2xl text-white p-6 sm:p-7 space-y-5 shadow-[var(--bw-shadow-cash)] no-print"
+        style={{ background: 'linear-gradient(135deg, #025e3d 0%, #007b52 62%, #0a6e4c 100%)' }}
+      >
         <div className="flex flex-wrap items-center justify-between gap-4">
           <div className="flex items-center gap-4">
             <StaffAvatar name={user.name} avatarUrl={user.avatarUrl} initials={user.initials} size="lg" />
             <div>
-              <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#D4AF37]/20 border border-[#D4AF37]/45 text-[#FCF1B7] text-[10.5px] font-extrabold uppercase tracking-[0.18em]">
+              <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/12 border border-white/20 text-[#fcf1b7] text-[10.5px] font-bold uppercase tracking-[0.16em]">
                 <Crown size={12} /> {ownerTitle} · 100% Equal Co-Owner Authority (Warda &amp; Shabib)
               </div>
-              <h1 className="text-2xl sm:text-3xl font-extrabold mt-1.5 tracking-tight">
-                {workspaceLabel} <span className="text-[#FCF1B7] font-semibold">· Executive Command Suite</span>
+              <h1 className="font-display text-2xl sm:text-[30px] font-bold mt-1.5 tracking-[-0.03em] text-white">
+                {workspaceLabel} <span className="text-[#fcf1b7] font-semibold">· Executive Command Suite</span>
               </h1>
-              <p className="text-xs sm:text-sm text-slate-300 mt-1 max-w-3xl">
-                100% UAE Mortgage Command Hub: Mortgage Team Roles &amp; Daily To-Do, GPS Forensic Field Meetings (Client, Bank RM, Valuation, SOA/NOC &amp; DLD Trustee), Bank-APL Catalog &amp; Proposal Brochures, CBUAE Mortgage Forms (Word/JPEG/Fillable), 5-Track Pin-to-Pin Disbursals, Advisor DSA &amp; Expenses, plus <strong>{privacyTitle}</strong>.
+              <p className="text-xs sm:text-[13.5px] text-[#d3eee0] mt-1 max-w-3xl">
+                100% UAE Mortgage Command Hub: Mortgage Team Roles &amp; Daily To-Do, GPS Forensic Field Meetings (Client, Bank RM, Valuation, SOA/NOC &amp; DLD Trustee), Bank-APL Catalog &amp; Proposal Brochures, CBUAE Mortgage Forms (Word/JPEG/Fillable), 5-Track Pin-to-Pin Disbursals, Advisor DSA &amp; Expenses, plus <strong className="text-white">{privacyTitle}</strong>.
               </p>
             </div>
           </div>
           <div className="flex flex-wrap gap-2">
             <Link
               href="/os/master-log"
-              className="px-4 py-2.5 rounded-full bg-white/10 hover:bg-white/15 border border-white/15 text-xs font-bold inline-flex items-center gap-1.5"
+              className="px-4 py-2.5 rounded-full bg-white/12 hover:bg-white/20 border border-white/20 text-xs font-bold inline-flex items-center gap-1.5 transition"
             >
               <Database size={14} /> Open Master Log (CORE)
             </Link>
             <Link
               href="/os/ai"
-              className="px-4 py-2.5 rounded-full bg-[#0D8A6A] hover:bg-[#11a37d] text-white text-xs font-bold inline-flex items-center gap-1.5"
+              className="px-4 py-2.5 rounded-full bg-white text-[#025e3d] hover:bg-[#fcf1b7] text-xs font-extrabold inline-flex items-center gap-1.5 transition shadow-sm"
             >
               <Sparkles size={14} /> AI Case-Study Copilot
             </Link>
           </div>
         </div>
 
-        {/* Grouped Executive Navigation — Row 1: Owner Daily & Forensic Operations | Row 2: Executive Finance & Approvals */}
-        <div className="space-y-3 pt-4 border-t border-white/10">
-          <div className="space-y-1.5">
-            <div className="text-[10px] font-extrabold uppercase tracking-[0.18em] text-[#34DFAC]">
+        {/* Grouped Calm Capsule Navigation — Row 1: UAE Mortgage Daily Operations | Row 2: Executive Vault, Approvals & VAT */}
+        <div className="space-y-3 pt-4 border-t border-white/15">
+          <div className="space-y-2">
+            <div className="text-[10.5px] font-bold uppercase tracking-[0.16em] text-[#d3eee0]">
               1 · Quick-Access UAE Mortgage Operations (Team · Field Meetings · APL Brochures · Mortgage Forms · Disbursals · DSA)
             </div>
             <div className="flex flex-wrap gap-2">
@@ -277,10 +280,10 @@ export default function ExecutiveOwnerDeskPage() {
                     key={t.id}
                     type="button"
                     onClick={() => setTab(t.id as ExecTab)}
-                    className={`px-3.5 py-2 rounded-full text-xs font-bold inline-flex items-center gap-1.5 transition cursor-pointer ${
+                    className={`px-4 py-2 rounded-full text-xs font-bold inline-flex items-center gap-1.5 transition cursor-pointer ${
                       tab === t.id
-                        ? 'bg-[#D4AF37] text-[#0A1128] shadow'
-                        : 'bg-white/10 text-white hover:bg-white/20 border border-white/15'
+                        ? 'bg-white text-[#025e3d] shadow-md'
+                        : 'bg-white/12 text-white hover:bg-white/22 border border-white/15'
                     }`}
                   >
                     <Icon size={13} /> {t.label}
@@ -290,8 +293,8 @@ export default function ExecutiveOwnerDeskPage() {
             </div>
           </div>
 
-          <div className="space-y-1.5">
-            <div className="text-[10px] font-extrabold uppercase tracking-[0.18em] text-[#FCF1B7]/80">
+          <div className="space-y-2">
+            <div className="text-[10.5px] font-bold uppercase tracking-[0.16em] text-[#fcf1b7]/90">
               2 · Executive Vault, Gold-Rush Kanban, Bulk AI, Approvals &amp; Consolidated VAT
             </div>
             <div className="flex flex-wrap gap-2">
@@ -311,8 +314,8 @@ export default function ExecutiveOwnerDeskPage() {
                   onClick={() => setTab(t.id as ExecTab)}
                   className={`px-3.5 py-1.5 rounded-full text-xs font-bold transition cursor-pointer ${
                     tab === t.id
-                      ? 'bg-[#0D8A6A] text-white'
-                      : 'bg-white/6 text-slate-200 hover:bg-white/15 border border-white/10'
+                      ? 'bg-[#fcf1b7] text-[#025e3d] shadow-sm'
+                      : 'bg-black/15 text-[#eef6f1] hover:bg-white/15 border border-white/12'
                   }`}
                 >
                   {t.label}
@@ -375,7 +378,7 @@ export default function ExecutiveOwnerDeskPage() {
                   Track every stage from 01 Enquiry to 12 Client Care day-by-day alongside Privacy Fast Track cash deals.
                 </p>
               </div>
-              <Link href="/os/pipeline" className="text-xs font-bold text-[#0D8A6A] hover:underline">
+              <Link href="/os/pipeline" className="text-xs font-bold text-[#007b52] hover:underline">
                 Open Full Pipeline →
               </Link>
             </div>
@@ -385,12 +388,12 @@ export default function ExecutiveOwnerDeskPage() {
                 <div key={st.code} className="rounded-xl border border-[var(--bw-line)] p-3 bg-[var(--bw-bg)]/60">
                   <div className="flex items-center justify-between">
                     <span className="text-[10px] font-extrabold uppercase text-[var(--bw-muted)]">Step {st.order}</span>
-                    <span className="px-2 py-0.5 rounded-full bg-[#0A1128] text-[#FCF1B7] text-[11px] font-mono-num font-extrabold">
+                    <span className="px-2 py-0.5 rounded-full bg-[#025e3d] text-[#FCF1B7] text-[11px] font-mono-num font-extrabold">
                       {st.totalCount}
                     </span>
                   </div>
                   <div className="text-xs font-bold mt-1 truncate">{st.label}</div>
-                  <div className="text-[10.5px] font-mono-num text-[#0D8A6A] font-semibold mt-0.5">
+                  <div className="text-[10.5px] font-mono-num text-[#007b52] font-semibold mt-0.5">
                     {fmtAed(st.totalLoanAed, true)}
                   </div>
                   {st.fastTrackCount > 0 && (
@@ -413,10 +416,10 @@ export default function ExecutiveOwnerDeskPage() {
                       <StatusPill label={String(st.totalCount)} tone={st.totalCount > 0 ? 'emerald' : 'slate'} />
                     </div>
                     {st.fastTrackJobs.map((ft: any) => (
-                      <div key={ft.id} className="p-2.5 rounded-xl bg-[#0A1128] text-white border border-[#D4AF37]/50 text-xs space-y-1">
+                      <div key={ft.id} className="p-2.5 rounded-xl bg-[#025e3d] text-white border border-[#D4AF37]/50 text-xs space-y-1">
                         <div className="flex items-center justify-between">
                           <span className="text-[10px] font-bold text-[#FCF1B7]">{ft.job_code} · VIP FAST TRACK</span>
-                          <span className="text-[9.5px] px-1.5 py-0.5 rounded bg-amber-500 text-[#0A1128] font-extrabold">
+                          <span className="text-[9.5px] px-1.5 py-0.5 rounded bg-amber-500 text-[#025e3d] font-extrabold">
                             {ft.urgency === 'IMMEDIATE_CASH' ? 'CASH NOW' : 'PRIVATE'}
                           </span>
                         </div>
@@ -430,7 +433,7 @@ export default function ExecutiveOwnerDeskPage() {
                       <div key={c.id} className="p-2.5 rounded-xl bg-[var(--bw-card)] border border-[var(--bw-line)] text-xs space-y-1">
                         <div className="text-[10px] font-mono-num text-[var(--bw-muted)]">{c.case_code}</div>
                         <div className="font-bold">{c.borrower_name}</div>
-                        <div className="text-[11px] text-[#0D8A6A] font-mono-num">{fmtAed(c.requested_loan_aed, true)}</div>
+                        <div className="text-[11px] text-[#007b52] font-mono-num">{fmtAed(c.requested_loan_aed, true)}</div>
                       </div>
                     ))}
                     {st.totalCount === 0 && (
@@ -567,7 +570,7 @@ export default function ExecutiveOwnerDeskPage() {
 
             <button
               type="submit"
-              className="w-full h-10 rounded-full bg-[#0A1128] hover:bg-[#132046] text-[#FCF1B7] text-xs font-extrabold cursor-pointer"
+              className="w-full h-10 rounded-full bg-[#025e3d] hover:bg-[#007b52] text-[#FCF1B7] text-xs font-extrabold cursor-pointer"
             >
               Launch Fast-Track Job (Bypass Master Log)
             </button>
@@ -585,7 +588,7 @@ export default function ExecutiveOwnerDeskPage() {
                   <div key={j.id} className="p-4 rounded-2xl border border-[#D4AF37]/35 bg-[var(--bw-bg)]/70 space-y-2 text-xs">
                     <div className="flex flex-wrap items-center justify-between gap-2">
                       <div>
-                        <span className="font-mono-num font-bold text-[#0D8A6A]">{j.job_code}</span> ·{' '}
+                        <span className="font-mono-num font-bold text-[#007b52]">{j.job_code}</span> ·{' '}
                         <span className="font-extrabold text-sm">{j.client_name}</span>
                         {j.private_to_owner_id && <span className="ms-2 text-[10px] font-bold text-amber-600">🔒 Single-Owner Lock</span>}
                       </div>
@@ -596,7 +599,7 @@ export default function ExecutiveOwnerDeskPage() {
                     </div>
                     <div className="text-[var(--bw-muted)]">
                       {j.community_freeform || 'Confidential Asset'} · Loan: <strong className="font-mono-num text-[var(--bw-ink)]">{fmtAed(j.loan_amount_aed)}</strong> · Expected Cash:{' '}
-                      <strong className="font-mono-num text-[#0D8A6A]">{fmtAed(j.expected_fee_aed)}</strong>
+                      <strong className="font-mono-num text-[#007b52]">{fmtAed(j.expected_fee_aed)}</strong>
                     </div>
                     <div className="flex flex-wrap gap-2 pt-2 border-t border-[var(--bw-line)]">
                       <button
@@ -605,7 +608,7 @@ export default function ExecutiveOwnerDeskPage() {
                           setInvJob(j);
                           setInvSubtotal(Number(j.expected_fee_aed || 25_000));
                         }}
-                        className="px-3 py-1.5 rounded-full bg-[#0A1128] text-[#FCF1B7] font-bold inline-flex items-center gap-1 cursor-pointer"
+                        className="px-3 py-1.5 rounded-full bg-[#025e3d] text-[#FCF1B7] font-bold inline-flex items-center gap-1 cursor-pointer"
                       >
                         <Receipt size={12} /> Create Custom 5% VAT Invoice
                       </button>
@@ -626,7 +629,7 @@ export default function ExecutiveOwnerDeskPage() {
                       <div className="text-[var(--bw-muted)]">{inv.description}</div>
                     </div>
                     <div className="flex items-center gap-2">
-                      <span className="font-mono-num font-extrabold text-[#0D8A6A]">{fmtAed(inv.total_aed)}</span>
+                      <span className="font-mono-num font-extrabold text-[#007b52]">{fmtAed(inv.total_aed)}</span>
                       <button
                         type="button"
                         onClick={() => setPrintInvoice(inv)}
@@ -649,7 +652,7 @@ export default function ExecutiveOwnerDeskPage() {
           <form onSubmit={runBulkUpload} className="lg:col-span-7 bw-card p-5 space-y-4">
             <div>
               <h2 className="text-base font-extrabold flex items-center gap-2">
-                <Upload size={16} className="text-[#0D8A6A]" /> Bulk AI Client &amp; Lead Importer
+                <Upload size={16} className="text-[#007b52]" /> Bulk AI Client &amp; Lead Importer
               </h2>
               <p className="text-xs text-[var(--bw-muted)]">
                 Paste messy WhatsApp lists, CSV exports, or developer buyer sheets. Automatically extracts names, UAE phones, emails, communities, AED prices, and skips duplicates.
@@ -667,7 +670,7 @@ export default function ExecutiveOwnerDeskPage() {
                   onClick={() => setBulkTarget(t.id as any)}
                   className={`px-3.5 py-2 rounded-full font-bold border cursor-pointer ${
                     bulkTarget === t.id
-                      ? 'bg-[#0D8A6A] text-white border-[#0D8A6A]'
+                      ? 'bg-[#007b52] text-white border-[#007b52]'
                       : 'border-[var(--bw-line)] bg-[var(--bw-bg)]'
                   }`}
                 >
@@ -684,7 +687,7 @@ export default function ExecutiveOwnerDeskPage() {
             />
             <button
               type="submit"
-              className="px-6 py-2.5 rounded-full bg-[#0D8A6A] text-white text-xs font-extrabold inline-flex items-center gap-1.5 cursor-pointer"
+              className="px-6 py-2.5 rounded-full bg-[#007b52] text-white text-xs font-extrabold inline-flex items-center gap-1.5 cursor-pointer"
             >
               <Sparkles size={14} /> Run AI Parse &amp; Save
             </button>
@@ -731,7 +734,7 @@ export default function ExecutiveOwnerDeskPage() {
               data.pendingMasterRequests.map((req: any) => (
                 <div key={req.id} className="p-4 rounded-2xl border border-[var(--bw-line)] bg-[var(--bw-bg)]/60 space-y-2 text-xs">
                   <div className="flex items-center justify-between">
-                    <span className="font-extrabold uppercase text-[#0D8A6A]">
+                    <span className="font-extrabold uppercase text-[#007b52]">
                       {req.action} · {req.registry_key}
                     </span>
                     <StatusPill label="1-of-2 Sign-Off" tone="blue" />
@@ -744,7 +747,7 @@ export default function ExecutiveOwnerDeskPage() {
                     <button
                       type="button"
                       onClick={() => void decideMasterReq(req.id, 'APPROVED')}
-                      className="px-3.5 py-1.5 rounded-full bg-[#0D8A6A] text-white font-bold inline-flex items-center gap-1 cursor-pointer"
+                      className="px-3.5 py-1.5 rounded-full bg-[#007b52] text-white font-bold inline-flex items-center gap-1 cursor-pointer"
                     >
                       <CheckCircle2 size={12} /> Approve &amp; Commit
                     </button>
@@ -789,7 +792,7 @@ export default function ExecutiveOwnerDeskPage() {
                     <button
                       type="button"
                       onClick={() => void decideApproval(ap.id, 'APPROVED')}
-                      className="px-3.5 py-1.5 rounded-full bg-[#0A1128] text-[#FCF1B7] font-bold inline-flex items-center gap-1 cursor-pointer"
+                      className="px-3.5 py-1.5 rounded-full bg-[#025e3d] text-[#FCF1B7] font-bold inline-flex items-center gap-1 cursor-pointer"
                     >
                       <ShieldCheck size={12} /> Sign &amp; Approve
                     </button>
@@ -861,7 +864,7 @@ export default function ExecutiveOwnerDeskPage() {
               <button type="button" onClick={() => setInvJob(null)} className="px-4 py-2 rounded-full border border-[var(--bw-line)] text-xs font-bold cursor-pointer">
                 Cancel
               </button>
-              <button type="submit" className="px-5 py-2 rounded-full bg-[#0A1128] text-[#FCF1B7] text-xs font-extrabold cursor-pointer">
+              <button type="submit" className="px-5 py-2 rounded-full bg-[#025e3d] text-[#FCF1B7] text-xs font-extrabold cursor-pointer">
                 Issue &amp; Preview Invoice
               </button>
             </div>
@@ -872,7 +875,7 @@ export default function ExecutiveOwnerDeskPage() {
       {/* Printable Private Tax Invoice Modal */}
       {printInvoice && (
         <div className="fixed inset-0 z-50 bg-black/60 flex items-center justify-center p-4">
-          <div className="w-full max-w-2xl bg-white text-[#0A1128] rounded-3xl p-8 space-y-5 shadow-2xl">
+          <div className="w-full max-w-2xl bg-white text-[#161d1a] rounded-3xl p-8 space-y-5 shadow-2xl">
             <div className="flex items-start justify-between border-b border-slate-200 pb-4">
               <div>
                 <img src="/brand/logo-horizontal-light.svg" alt="Betterway Mortgages" className="h-9 mb-2" />
@@ -880,7 +883,7 @@ export default function ExecutiveOwnerDeskPage() {
               </div>
               <div className="text-end">
                 <div className="text-lg font-extrabold">TAX INVOICE</div>
-                <div className="text-xs font-mono-num font-bold text-[#0D8A6A]">{printInvoice.invoice_no}</div>
+                <div className="text-xs font-mono-num font-bold text-[#007b52]">{printInvoice.invoice_no}</div>
               </div>
             </div>
             <div className="grid grid-cols-2 gap-4 text-xs">
@@ -904,14 +907,14 @@ export default function ExecutiveOwnerDeskPage() {
               </div>
               <div className="flex justify-between text-base font-extrabold pt-2 border-t border-slate-200">
                 <span>Total Due (AED)</span>
-                <span className="font-mono-num text-[#0D8A6A]">{fmtAed(printInvoice.total_aed)}</span>
+                <span className="font-mono-num text-[#007b52]">{fmtAed(printInvoice.total_aed)}</span>
               </div>
             </div>
             <div className="flex justify-end gap-2 no-print">
               <button type="button" onClick={() => setPrintInvoice(null)} className="px-4 py-2 rounded-full border border-slate-300 text-xs font-bold cursor-pointer">
                 Close
               </button>
-              <button type="button" onClick={() => window.print()} className="px-5 py-2 rounded-full bg-[#0A1128] text-[#FCF1B7] text-xs font-bold inline-flex items-center gap-1.5 cursor-pointer">
+              <button type="button" onClick={() => window.print()} className="px-5 py-2 rounded-full bg-[#025e3d] text-[#FCF1B7] text-xs font-bold inline-flex items-center gap-1.5 cursor-pointer">
                 <FileText size={13} /> Print / Save PDF
               </button>
             </div>
