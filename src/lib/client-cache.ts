@@ -4,6 +4,11 @@ import { useCallback, useEffect, useState } from 'react';
 
 const memCache = new Map<string, { ts: number; data: unknown }>();
 const STORAGE_PREFIX = 'bw_os_cache_v3:';
+let clientHydrated = false;
+
+export function markClientHydrated(): void {
+  clientHydrated = true;
+}
 
 export function readCachedJson<T>(key: string, maxAgeMs = 120_000): T | null {
   const hit = memCache.get(key);
@@ -73,12 +78,13 @@ export function prefetchApi(url: string): void {
 }
 
 /**
- * Zero-loading stale-while-revalidate hook:
- * - Renders cached data at 0ms immediately on tab/route switch
+ * Zero-loading stale-while-revalidate hook (SSR hydration-safe):
+ * - Matches SSR HTML on hard reload (zero React #418 hydration mismatch)
+ * - Reads memory/session cache synchronously at 0ms on every in-app route switch
  * - Refreshes live Supabase data silently in the background
  */
 export function useInstantApi<T>(url: string | null) {
-  const [data, setData] = useState<T | null>(() => (url ? readCachedJson<T>(url) : null));
+  const [data, setData] = useState<T | null>(() => (clientHydrated && url ? readCachedJson<T>(url) : null));
   const [refreshing, setRefreshing] = useState(false);
 
   const reload = useCallback(async () => {

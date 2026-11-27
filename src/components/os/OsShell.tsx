@@ -306,25 +306,25 @@ export function OsShell({ children }: { children: React.ReactNode }) {
         style={{ background: 'linear-gradient(90deg, #070e1a 0%, #119c78 36%, #22e2ad 62%, #d9b356 88%, #fbe8a4 100%)' }}
       />
 
-      {/* Premium Pure White Floating Topbar */}
-      <header className="flex-none min-h-[72px] px-4 lg:px-7 py-2.5 bg-white/90 dark:bg-[#080b10]/92 backdrop-blur-xl border-b border-[var(--bw-line)] flex flex-wrap items-center gap-2.5 lg:gap-4 no-print z-40">
-        <Link href="/os" className="flex items-center gap-2.5 shrink-0 me-1 lg:me-3 group" aria-label="Betterway Mortgages OS Home">
+      {/* Premium Pure White Single-Row Floating Topbar */}
+      <header className="flex-none min-h-[66px] px-3 sm:px-4 lg:px-5 py-2 bg-white/92 dark:bg-[#080b10]/92 backdrop-blur-xl border-b border-[var(--bw-line)] flex flex-wrap lg:flex-nowrap items-center gap-2 lg:gap-2.5 no-print z-40">
+        <Link href="/os" className="flex items-center gap-2 shrink-0 me-1 group" aria-label="Betterway Mortgages OS Home">
           <img
             src={dark ? '/brand/betterway-logo-horizontal-dark-4k-transparent.png' : '/brand/betterway-logo-horizontal-light-4k-transparent.png'}
             alt="Betterway Mortgages"
-            className="h-8 sm:h-9 w-auto object-contain transition-transform duration-200 group-hover:scale-[1.02]"
+            className="h-8 w-auto object-contain transition-transform duration-200 group-hover:scale-[1.02]"
           />
-          <span className="hidden xl:block leading-tight border-s border-[var(--bw-line-strong)] ps-2.5">
-            <span className="block font-display text-[13px] font-extrabold tracking-tight text-[var(--bw-ink)]">
+          <span className="hidden 2xl:block leading-tight border-s border-[var(--bw-line-strong)] ps-2.5">
+            <span className="block font-display text-[12.5px] font-extrabold tracking-tight text-[var(--bw-ink)]">
               Mortgages OS <span className="text-[#119c78] dark:text-[#34f0bc]">v3</span>
             </span>
-            <span className="block text-[10px] font-bold text-[#9a7123] dark:text-[#fbe8a4]">Dubai · 24 UAE Banks</span>
+            <span className="block text-[9.5px] font-bold text-[#9a7123] dark:text-[#fbe8a4]">Dubai · 24 UAE Banks</span>
           </span>
         </Link>
 
         {/* Primary Capsule Navigation Pills (White at rest, Glossy Black with Emerald glow when active) */}
         <nav
-          className="flex items-center gap-1.5 overflow-x-auto max-w-full order-5 sm:order-none w-full sm:w-auto pt-1 sm:pt-0 [&::-webkit-scrollbar]:hidden [scrollbar-width:none]"
+          className="flex items-center gap-1 overflow-x-auto max-w-full order-5 lg:order-none w-full lg:w-auto shrink-0 pt-1 lg:pt-0 [&::-webkit-scrollbar]:hidden [scrollbar-width:none]"
           aria-label="Primary navigation"
         >
           <Link href="/os" onMouseEnter={() => prefetchApi('/api/v1/dashboard/overview')} className={`bw-primary-pill ${pathname === '/os' ? 'active' : ''}`}>
@@ -355,27 +355,27 @@ export function OsShell({ children }: { children: React.ReactNode }) {
           )}
         </nav>
 
-        <div className="flex-1 hidden sm:block" />
+        <div className="flex-1 hidden lg:block min-w-[8px]" />
 
         {/* Right Floating Utility Controls */}
-        <div className="flex items-center gap-2 ms-auto sm:ms-0">
+        <div className="flex items-center gap-1.5 shrink-0 ms-auto lg:ms-0">
           <a
             href="/api/v1/utilities/master-backup-excel"
-            className="hidden 2xl:inline-flex items-center gap-1.5 px-3.5 h-10 rounded-full bg-[#0a0e14] text-[#34f0bc] hover:text-white border border-[#22e2ad]/40 text-[11.5px] font-bold shadow-md transition hover:-translate-y-0.5"
-            title="Download all live OS data in one Excel workbook"
+            className="hidden xl:inline-flex items-center gap-1.5 px-3 h-9 rounded-full bg-[#0a0e14] text-[#34f0bc] hover:text-white border border-[#22e2ad]/45 text-[11px] font-extrabold shadow-md transition hover:-translate-y-0.5 shrink-0"
+            title="Download all live OS data in one 17-sheet Excel workbook"
           >
             <Download size={13} /> Full Excel
           </a>
 
-          <span className="hidden xl:inline-flex items-center gap-1.5 px-3.5 h-10 rounded-full bg-[var(--bw-soft)] border border-[var(--bw-line)] text-[11.5px] font-mono-num font-bold text-[var(--bw-ink)]">
+          <span className="hidden 2xl:inline-flex items-center gap-1.5 px-3 h-9 rounded-full bg-[var(--bw-soft)] border border-[var(--bw-line)] text-[11px] font-mono-num font-bold text-[var(--bw-ink)] shrink-0">
             <span className="size-2 rounded-full bg-[#22e2ad] shadow-[0_0_8px_#22e2ad]" />
             EIBOR {EIBOR_SNAPSHOT.latest.threeMonth.toFixed(2)}%
           </span>
 
-          <button type="button" onClick={() => setSearchOpen(true)} className="bw-tb-btn" aria-label="Search OS">
-            <Search size={15} />
-            <span className="hidden md:inline">Search</span>
-            <kbd className="hidden xl:inline text-[10px] px-1.5 py-0.5 rounded bg-[var(--bw-soft)] text-[var(--bw-muted)] border border-[var(--bw-line-strong)]">
+          <button type="button" onClick={() => setSearchOpen(true)} className="bw-tb-btn !h-9 !px-3" aria-label="Search OS">
+            <Search size={14} />
+            <span className="hidden xl:inline text-[11.5px]">Search</span>
+            <kbd className="hidden 2xl:inline text-[10px] px-1.5 py-0.5 rounded bg-[var(--bw-soft)] text-[var(--bw-muted)] border border-[var(--bw-line-strong)]">
               Ctrl K
             </kbd>
           </button>

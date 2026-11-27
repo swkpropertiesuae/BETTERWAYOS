@@ -3,7 +3,7 @@
 import React, { createContext, useCallback, useContext, useEffect, useState } from 'react';
 import type { SessionUser } from '@/lib/domain/types';
 import type { RoleCapabilities } from '@/lib/auth/rbac';
-import { invalidateApiCache, prefetchApi, readCachedJson, writeCachedJson } from '@/lib/client-cache';
+import { invalidateApiCache, markClientHydrated, prefetchApi, readCachedJson, writeCachedJson } from '@/lib/client-cache';
 
 interface ToastItem {
   id: string;
@@ -89,6 +89,7 @@ export function OsProvider({ children }: { children: React.ReactNode }) {
   }, []);
 
   useEffect(() => {
+    markClientHydrated();
     const cached = readCachedJson<AuthMePayload>('/api/v1/auth/me', 300_000);
     if (cached?.user) {
       setUser(cached.user);

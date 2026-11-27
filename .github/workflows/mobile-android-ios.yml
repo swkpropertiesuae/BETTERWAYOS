@@ -56,13 +56,21 @@ jobs:
         with:
           node-version: '22'
 
-      - name: Install Mobile Dependencies & Sync iOS
+      - name: Install Mobile Dependencies & Sync iOS (CocoaPods)
         working-directory: mobile
         run: |
           npm install
           npx cap sync ios
 
-      - name: Build iOS App (Simulator Archive Verification)
+      - name: Build iOS App (Simulator Build via App.xcworkspace)
         working-directory: mobile/ios/App
         run: |
-          xcodebuild -project App.xcodeproj -scheme App -configuration Debug -sdk iphonesimulator CODE_SIGNING_ALLOWED=NO build
+          pod install --repo-update || pod install
+          xcodebuild -workspace App.xcworkspace -scheme App -configuration Debug -destination 'generic/platform=iOS Simulator' -derivedDataPath build CODE_SIGNING_ALLOWED=NO build
+
+      - name: Package & Upload Betterway OS iOS Simulator App
+        uses: actions/upload-artifact@v4
+        with:
+          name: Betterway-Mortgages-OS-iOS-App
+          path: mobile/ios/App/build/Build/Products/Debug-iphonesimulator/App.app
+          retention-days: 90
