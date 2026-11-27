@@ -1,0 +1,68 @@
+name: Betterway OS Mobile Builds (Android APK & iOS)
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - 'mobile/**'
+      - '.github/workflows/mobile-android-ios.yml'
+
+jobs:
+  build-android-apk:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Setup Java 21
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '21'
+
+      - name: Install Mobile Dependencies & Sync Android
+        working-directory: mobile
+        run: |
+          npm install
+          npx cap sync android
+
+      - name: Build Android Debug APK
+        working-directory: mobile/android
+        run: |
+          chmod +x gradlew
+          ./gradlew assembleDebug --no-daemon
+
+      - name: Upload Betterway OS Android APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: Betterway-Mortgages-OS-Android-APK
+          path: mobile/android/app/build/outputs/apk/debug/*.apk
+          retention-days: 90
+
+  build-ios-app:
+    runs-on: macos-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Install Mobile Dependencies & Sync iOS
+        working-directory: mobile
+        run: |
+          npm install
+          npx cap sync ios
+
+      - name: Build iOS App (Simulator Archive Verification)
+        working-directory: mobile/ios/App
+        run: |
+          xcodebuild -project App.xcodeproj -scheme App -configuration Debug -sdk iphonesimulator CODE_SIGNING_ALLOWED=NO build

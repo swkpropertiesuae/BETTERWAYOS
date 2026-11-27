@@ -1,6 +1,6 @@
 @import "tailwindcss";
 
-/* Self-hosted Calm Operating Wallet Typography (Plus Jakarta Sans + Instrument Sans + Noto Sans Arabic) */
+/* Self-hosted Typography (Plus Jakarta Sans + Instrument Sans + Noto Sans Arabic) */
 @font-face {
   font-family: 'Instrument Sans';
   src: url('/fonts/instrument-sans.woff2') format('woff2');
@@ -36,76 +36,98 @@
   --font-sans: 'Instrument Sans', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
   --font-display: 'Plus Jakarta Sans', 'Instrument Sans', system-ui, sans-serif;
 
-  /* Calm Operating Wallet Palette — Betterway Mortgages LLC */
-  --bw-bg: #f1f6f3;
+  /* Premium White + Glossy Shining Black + Official Betterway Logo Jewel Colors */
+  --bw-bg: #ffffff;
+  --bw-canvas-tint: #f8faf9;
   --bw-card: #ffffff;
-  --bw-soft: #edf2ee;
-  --bw-hover: #f0f5f1;
-  --bw-ink: #161d1a;
-  --bw-body: #3f4f47;
-  --bw-muted: #53655b;
-  --bw-line: #e6ebe7;
-  --bw-line-strong: #cbd6ce;
+  --bw-soft: #f4f6f7;
+  --bw-hover: #f1f5f4;
+  --bw-ink: #090d12;
+  --bw-body: #2c3742;
+  --bw-muted: #586573;
+  --bw-line: #e6eaee;
+  --bw-line-strong: #cdd5dc;
 
-  --bw-emerald: #007b52;
-  --bw-fold: #025e3d;
-  --bw-focus: #1fa06b;
-  --bw-emerald-bright: #34dfac;
-  --bw-signal: #c32135;
-  --bw-graphite: #161d1a;
-  --bw-navy: #025e3d;
+  /* Official Betterway Logo Jewel Accents (extracted from 4K Vector SVG) */
+  --bw-emerald: #119c78;
+  --bw-emerald-luminous: #22e2ad;
+  --bw-emerald-bright: #34f0bc;
+  --bw-fold: #070c12;
+  --bw-obsidian: #080b10;
+  --bw-obsidian-elevated: #111720;
+  --bw-focus: #22e2ad;
+  --bw-signal: #e11d48;
+  --bw-graphite: #0a0f16;
+  --bw-navy: #070e1a;
 
-  /* Betterway Champagne / Gold & Workspace Tints */
-  --bw-gold: #d4af37;
-  --bw-gold-soft: #fcf1b7;
-  --bw-mint: #dcf1e6;
-  --bw-mint-soft: #edf5f0;
-  --bw-sand: #f7ead8;
-  --bw-champagne-tint: #f5f1e9;
-  --bw-sky: #dfecfa;
-  --bw-lilac: #e8e3f7;
-  --bw-blush: #fbe1e4;
-  --bw-gold-tint: #f6e9c3;
-  --bw-reverse-muted: #d3eee0;
+  /* Official Betterway Brushed Gold (from 4K Vector SVG) */
+  --bw-gold: #d9b356;
+  --bw-gold-deep: #9a7123;
+  --bw-gold-soft: #fbe8a4;
+  --bw-gold-bright: #fff0b8;
 
-  /* Restrained Diffuse Green Elevation & Motion */
-  --bw-shadow-raised: 0 8px 24px -14px rgba(23, 61, 41, 0.16);
-  --bw-shadow-floating: 0 20px 48px -24px rgba(23, 61, 41, 0.28);
-  --bw-shadow-cash: 0 15px 28px -19px rgba(2, 94, 61, 0.52);
-  --bw-focus-ring: 0 0 0 3px rgba(0, 123, 82, 0.16);
+  /* Soft Highlight Tints for White Surfaces */
+  --bw-mint: #e3fbf3;
+  --bw-mint-soft: #f0fdf8;
+  --bw-sand: #fdf7e7;
+  --bw-champagne-tint: #fbf5e6;
+  --bw-sky: #eef5ff;
+  --bw-blush: #fff0f3;
+  --bw-gold-tint: #fdf4dc;
+  --bw-reverse-muted: #cbd5e1;
+
+  /* Crisp Gallery White + Deep Floating Glossy Black Elevation */
+  --bw-shadow-raised: 0 10px 30px -16px rgba(7, 14, 26, 0.14), 0 1px 3px rgba(7, 14, 26, 0.04);
+  --bw-shadow-floating: 0 24px 54px -20px rgba(7, 14, 26, 0.24), 0 4px 12px rgba(17, 156, 120, 0.08);
+  --bw-shadow-obsidian: 0 28px 60px -22px rgba(4, 8, 15, 0.78), 0 8px 24px -10px rgba(17, 156, 120, 0.22);
+  --bw-shadow-cash: 0 28px 60px -22px rgba(4, 8, 15, 0.78), 0 0 0 1px rgba(255, 255, 255, 0.08) inset;
+  --bw-focus-ring: 0 0 0 3px rgba(34, 226, 173, 0.25);
   --bw-ease: cubic-bezier(0.16, 1, 0.3, 1);
-  --bw-motion-fast: 180ms;
+  --bw-motion-fast: 160ms;
 }
 
 .dark {
-  --bw-bg: #111713;
-  --bw-card: #1b241e;
-  --bw-soft: #24332a;
-  --bw-hover: #293a30;
-  --bw-ink: #eef3ef;
-  --bw-body: #c4d0c7;
-  --bw-muted: #a6b9ac;
-  --bw-line: #304237;
-  --bw-line-strong: #52695b;
-  --bw-mint: #243e31;
-  --bw-mint-soft: #1d2f26;
-  --bw-sand: #3d3425;
-  --bw-champagne-tint: #2f2a20;
-  --bw-sky: #243a4b;
-  --bw-blush: #3f2026;
-  --bw-gold-tint: #3a311f;
-  --bw-shadow-raised: 0 10px 26px -16px rgba(0, 0, 0, 0.5);
-  --bw-shadow-floating: 0 24px 52px -22px rgba(0, 0, 0, 0.65);
+  --bw-bg: #05070a;
+  --bw-canvas-tint: #090d13;
+  --bw-card: #0d1219;
+  --bw-soft: #131a24;
+  --bw-hover: #18212e;
+  --bw-ink: #f8fafc;
+  --bw-body: #d3dde7;
+  --bw-muted: #94a3b8;
+  --bw-line: #1e2937;
+  --bw-line-strong: #2d3c4f;
+  --bw-mint: #0d2b24;
+  --bw-mint-soft: #09211b;
+  --bw-sand: #241e12;
+  --bw-champagne-tint: #211c11;
+  --bw-sky: #102136;
+  --bw-blush: #2d121a;
+  --bw-gold-tint: #261f10;
+  --bw-shadow-raised: 0 14px 36px -16px rgba(0, 0, 0, 0.72);
+  --bw-shadow-floating: 0 28px 60px -20px rgba(0, 0, 0, 0.85), 0 0 24px -8px rgba(34, 226, 173, 0.18);
 }
 
 html,
 body {
   background-color: var(--bw-bg);
+  background-image:
+    radial-gradient(960px 420px at 12% -6%, rgba(34, 226, 173, 0.065), transparent 62%),
+    radial-gradient(840px 380px at 92% -4%, rgba(217, 179, 86, 0.06), transparent 60%);
+  background-attachment: fixed;
   color: var(--bw-ink);
   font-family: var(--font-sans);
   caret-color: var(--bw-emerald);
   -webkit-font-smoothing: antialiased;
   font-variant-numeric: tabular-nums;
+}
+
+.dark body,
+html.dark {
+  background-color: #05070a;
+  background-image:
+    radial-gradient(960px 420px at 14% -8%, rgba(34, 226, 173, 0.11), transparent 60%),
+    radial-gradient(820px 380px at 88% -6%, rgba(217, 179, 86, 0.09), transparent 60%);
 }
 
 h1,
@@ -114,7 +136,7 @@ h3,
 h4,
 .font-display {
   font-family: var(--font-display);
-  letter-spacing: -0.025em;
+  letter-spacing: -0.028em;
 }
 
 html[dir='rtl'] body,
@@ -138,12 +160,12 @@ html[dir='rtl'] .font-display {
 }
 
 ::selection {
-  background: #bfe8d3;
-  color: #0b3b28;
+  background: rgba(34, 226, 173, 0.28);
+  color: #053b2e;
 }
 
 :focus-visible {
-  outline: 3px solid var(--bw-focus);
+  outline: 2.5px solid var(--bw-emerald-luminous);
   outline-offset: 2px;
 }
 
@@ -151,13 +173,16 @@ html[dir='rtl'] .font-display {
   font-variant-numeric: tabular-nums;
 }
 
-/* ------- Floating Calm Operating Surfaces ------- */
+/* ------- Premium Pure White Gallery Card ------- */
 .bw-card {
   background-color: var(--bw-card);
   border: 1px solid var(--bw-line);
-  border-radius: 16px;
+  border-radius: 20px;
   box-shadow: var(--bw-shadow-raised);
-  transition: box-shadow var(--bw-motion-fast) var(--bw-ease), border-color var(--bw-motion-fast) var(--bw-ease);
+  transition: box-shadow var(--bw-motion-fast) var(--bw-ease), border-color var(--bw-motion-fast) var(--bw-ease), transform var(--bw-motion-fast) var(--bw-ease);
+}
+.bw-card:hover {
+  border-color: var(--bw-line-strong);
 }
 
 .bw-surface-soft {
@@ -165,29 +190,242 @@ html[dir='rtl'] .font-display {
   border-radius: 16px;
 }
 
+/* ------- 21st.dev Glossy Floating Shining Black Card (Obsidian Mirror + Betterway Emerald/Gold Highlight) ------- */
+@keyframes bwGlossSheen {
+  0% {
+    transform: translateX(-140%) skewX(-22deg);
+  }
+  100% {
+    transform: translateX(260%) skewX(-22deg);
+  }
+}
+
+.bw-glossy-black {
+  position: relative;
+  overflow: hidden;
+  border-radius: 22px;
+  background: linear-gradient(155deg, #171e27 0%, #0b0f15 44%, #05070a 100%);
+  color: #ffffff;
+  border: 1px solid rgba(255, 255, 255, 0.13);
+  box-shadow:
+    0 24px 52px -20px rgba(4, 7, 12, 0.72),
+    0 4px 18px -6px rgba(17, 156, 120, 0.18),
+    inset 0 1px 0 0 rgba(255, 255, 255, 0.22),
+    inset 0 -1px 0 0 rgba(34, 226, 173, 0.14);
+  transition: transform 240ms var(--bw-ease), box-shadow 240ms var(--bw-ease), border-color 240ms var(--bw-ease);
+}
+
+.bw-glossy-black::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    linear-gradient(125deg, rgba(255, 255, 255, 0.14) 0%, rgba(255, 255, 255, 0.03) 26%, transparent 52%),
+    radial-gradient(520px circle at var(--mx, 20%) var(--my, 15%), rgba(34, 226, 173, 0.16), transparent 46%),
+    radial-gradient(420px circle at 92% 94%, rgba(217, 179, 86, 0.15), transparent 52%);
+  z-index: 0;
+}
+
+.bw-glossy-black::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  width: 42%;
+  pointer-events: none;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.11), transparent);
+  transform: translateX(-160%) skewX(-22deg);
+  transition: opacity 250ms ease;
+  z-index: 1;
+}
+
+.bw-glossy-black:hover {
+  transform: translateY(-3px);
+  border-color: rgba(34, 226, 173, 0.42);
+  box-shadow:
+    0 32px 64px -18px rgba(3, 6, 10, 0.85),
+    0 0 0 1px rgba(217, 179, 86, 0.22),
+    0 12px 30px -10px rgba(34, 226, 173, 0.25),
+    inset 0 1px 0 0 rgba(255, 255, 255, 0.28);
+}
+
+.bw-glossy-black:hover::after {
+  animation: bwGlossSheen 950ms var(--bw-ease) forwards;
+}
+
+.bw-glossy-black > * {
+  position: relative;
+  z-index: 2;
+}
+
+/* Signature 3D-Tilt Shining Obsidian Account / Loan-Book Wallet Card */
+.bw-cash-card {
+  position: relative;
+  overflow: hidden;
+  padding: 24px;
+  border-radius: 22px;
+  background: linear-gradient(138deg, #1a222d 0%, #0a0e14 48%, #040608 100%);
+  color: #ffffff;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  box-shadow:
+    0 28px 58px -20px rgba(3, 7, 12, 0.84),
+    0 10px 26px -12px rgba(34, 226, 173, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.25);
+  transform: rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg));
+  transition: transform 220ms var(--bw-ease), box-shadow 220ms var(--bw-ease), border-color 220ms var(--bw-ease);
+}
+.bw-cash-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    linear-gradient(118deg, rgba(255, 255, 255, 0.17) 0%, rgba(255, 255, 255, 0.02) 32%, transparent 54%),
+    radial-gradient(360px circle at 10% 10%, rgba(34, 226, 173, 0.22), transparent 58%),
+    radial-gradient(340px circle at 92% 90%, rgba(217, 179, 86, 0.22), transparent 58%);
+}
+.bw-cash-card:hover {
+  border-color: rgba(34, 226, 173, 0.48);
+}
+
+/* ------- 21st.dev Shine & Spotlight Hover Buttons ------- */
+.bw-btn {
+  position: relative;
+  overflow: hidden;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 40px;
+  padding: 9px 18px;
+  border-radius: 999px;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  border: 1px solid transparent;
+  cursor: pointer;
+  transition: transform 180ms var(--bw-ease), box-shadow 200ms var(--bw-ease), background 200ms var(--bw-ease), border-color 200ms var(--bw-ease), color 200ms var(--bw-ease);
+}
+.bw-btn::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  width: 45%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.28), transparent);
+  transform: translateX(-160%) skewX(-24deg);
+  pointer-events: none;
+}
+.bw-btn:hover:not(:disabled) {
+  transform: translateY(-1.5px);
+}
+.bw-btn:hover:not(:disabled)::after {
+  animation: bwGlossSheen 750ms var(--bw-ease) forwards;
+}
+.bw-btn:active:not(:disabled) {
+  transform: translateY(0px) scale(0.985);
+}
+
+/* Glossy Shining Black Primary CTA with Luminous Betterway Emerald + Gold Aura */
+.bw-btn-obsidian,
+.bw-btn-dark {
+  background: linear-gradient(180deg, #1b222c 0%, #090c11 100%);
+  color: #ffffff;
+  border-color: rgba(255, 255, 255, 0.16);
+  box-shadow: 0 12px 26px -12px rgba(4, 7, 12, 0.8), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+.bw-btn-obsidian:hover:not(:disabled),
+.bw-btn-dark:hover:not(:disabled) {
+  background: linear-gradient(180deg, #212b38 0%, #070a0f 100%);
+  border-color: rgba(34, 226, 173, 0.65);
+  box-shadow: 0 16px 32px -12px rgba(4, 7, 12, 0.85), 0 0 18px -4px rgba(34, 226, 173, 0.38);
+}
+
+/* Official Betterway Logo Luminous Emerald Button */
+.bw-btn-primary {
+  background: linear-gradient(135deg, #0b5442 0%, #119c78 65%, #16b88e 100%);
+  color: #ffffff;
+  border-color: rgba(34, 226, 173, 0.38);
+  box-shadow: 0 12px 24px -12px rgba(17, 156, 120, 0.72), inset 0 1px 0 rgba(255, 255, 255, 0.24);
+}
+.bw-btn-primary:hover:not(:disabled) {
+  filter: brightness(1.06);
+  box-shadow: 0 16px 30px -10px rgba(17, 156, 120, 0.82), 0 0 18px -4px rgba(34, 226, 173, 0.45);
+}
+
+/* Brushed Betterway Gold Highlight Button */
+.bw-btn-gold {
+  background: linear-gradient(135deg, #cfa547 0%, #f5da84 55%, #d9b356 100%);
+  color: #070e1a;
+  border-color: rgba(255, 240, 184, 0.7);
+  box-shadow: 0 12px 24px -12px rgba(154, 113, 35, 0.58), inset 0 1px 0 rgba(255, 255, 255, 0.65);
+}
+.bw-btn-gold:hover:not(:disabled) {
+  filter: brightness(1.04);
+  box-shadow: 0 16px 30px -10px rgba(217, 179, 86, 0.7);
+}
+
+.bw-btn-outline {
+  background: var(--bw-card);
+  color: var(--bw-ink);
+  border-color: var(--bw-line-strong);
+  box-shadow: 0 4px 12px -8px rgba(7, 14, 26, 0.14);
+}
+.bw-btn-outline:hover:not(:disabled) {
+  background: var(--bw-soft);
+  border-color: var(--bw-emerald);
+  color: #053b2e;
+}
+.dark .bw-btn-outline:hover:not(:disabled) {
+  color: #34f0bc;
+}
+
+.bw-btn-back {
+  background: #0a0e14;
+  color: #ffffff;
+  border-color: rgba(34, 226, 173, 0.35);
+  min-height: 36px;
+  padding: 6px 15px;
+  font-size: 12.5px;
+  box-shadow: 0 10px 22px -12px rgba(7, 14, 26, 0.55);
+}
+.bw-btn-back:hover:not(:disabled) {
+  border-color: #22e2ad;
+  color: #34f0bc;
+}
+
 /* ------- Primary Topbar Capsule Pills & Rail Shortcuts ------- */
 .bw-primary-pill {
+  position: relative;
+  overflow: hidden;
   display: inline-flex;
   align-items: center;
   gap: 7px;
-  padding: 10px 16px;
+  padding: 9px 16px;
   border-radius: 999px;
   background: var(--bw-card);
   color: var(--bw-body);
+  border: 1px solid var(--bw-line);
   font-size: 12.5px;
-  font-weight: 650;
+  font-weight: 700;
   white-space: nowrap;
-  box-shadow: 0 4px 12px -8px rgba(23, 61, 41, 0.16);
-  transition: background var(--bw-motion-fast) var(--bw-ease), color var(--bw-motion-fast) var(--bw-ease), transform var(--bw-motion-fast) var(--bw-ease);
+  box-shadow: 0 4px 12px -8px rgba(7, 14, 26, 0.12);
+  transition: all 180ms var(--bw-ease);
 }
 .bw-primary-pill:hover {
   background: var(--bw-soft);
   color: var(--bw-ink);
+  border-color: rgba(17, 156, 120, 0.45);
+  transform: translateY(-1px);
 }
 .bw-primary-pill.active {
-  background: var(--bw-emerald);
+  background: linear-gradient(145deg, #19212b 0%, #070a0f 100%);
   color: #ffffff;
-  box-shadow: 0 8px 18px -10px rgba(0, 123, 82, 0.55);
+  border-color: rgba(34, 226, 173, 0.5);
+  box-shadow: 0 10px 22px -10px rgba(5, 8, 14, 0.72), 0 0 12px -4px rgba(34, 226, 173, 0.35);
 }
 
 .bw-tb-btn {
@@ -201,190 +439,160 @@ html[dir='rtl'] .font-display {
   background: var(--bw-card);
   color: var(--bw-ink);
   font-size: 12.5px;
-  font-weight: 600;
-  border: 1px solid transparent;
-  box-shadow: 0 4px 12px -8px rgba(23, 61, 41, 0.16);
+  font-weight: 650;
+  border: 1px solid var(--bw-line);
+  box-shadow: 0 4px 12px -8px rgba(7, 14, 26, 0.12);
   cursor: pointer;
-  transition: background var(--bw-motion-fast) var(--bw-ease), border-color var(--bw-motion-fast) var(--bw-ease), transform var(--bw-motion-fast) var(--bw-ease);
+  transition: all 180ms var(--bw-ease);
 }
 .bw-tb-btn:hover {
-  background: var(--bw-soft);
+  background: #0b0f15;
+  color: #ffffff;
+  border-color: rgba(34, 226, 173, 0.45);
+  transform: translateY(-1px);
 }
 .bw-tb-btn:active {
-  transform: translateY(1px);
+  transform: translateY(0px);
 }
 
 .bw-workspace-rail {
-  width: 98px;
+  width: 96px;
   flex: none;
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 8px;
   padding: 14px 8px 24px;
-  background: var(--bw-soft);
+  background: rgba(255, 255, 255, 0.92);
   border-inline-end: 1px solid var(--bw-line);
   overflow-y: auto;
 }
+.dark .bw-workspace-rail {
+  background: #080b10;
+}
+
 .bw-rail-shortcut {
   width: 100%;
-  min-height: 60px;
-  padding: 9px 4px;
+  min-height: 58px;
+  padding: 8px 4px;
   flex: none;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   gap: 5px;
-  border: 0;
-  border-radius: 12px;
+  border: 1px solid var(--bw-line);
+  border-radius: 14px;
   background: var(--bw-card);
   color: var(--bw-body);
   cursor: pointer;
-  font-size: 11px;
-  line-height: 1.25;
-  font-weight: 600;
+  font-size: 10.5px;
+  line-height: 1.2;
+  font-weight: 700;
   text-align: center;
-  transition: background var(--bw-motion-fast) var(--bw-ease), color var(--bw-motion-fast) var(--bw-ease), transform var(--bw-motion-fast) var(--bw-ease);
+  transition: all 180ms var(--bw-ease);
 }
 .bw-rail-shortcut:hover {
-  color: var(--bw-emerald);
-  background: var(--bw-hover);
+  color: #ffffff;
+  background: linear-gradient(150deg, #182029 0%, #090c11 100%);
+  border-color: rgba(34, 226, 173, 0.5);
+  transform: translateY(-1.5px);
+  box-shadow: 0 10px 20px -12px rgba(4, 8, 15, 0.7);
 }
 .bw-rail-shortcut.active {
-  color: #ffffff;
-  background: var(--bw-fold);
-  box-shadow: 0 8px 18px -12px rgba(2, 94, 61, 0.7);
+  color: #34f0bc;
+  background: linear-gradient(150deg, #161e28 0%, #06080c 100%);
+  border-color: rgba(34, 226, 173, 0.55);
+  box-shadow: 0 12px 24px -10px rgba(4, 8, 15, 0.78), inset 0 1px 0 rgba(255, 255, 255, 0.18);
 }
 
-/* ------- Tinted Workspace & Feature Cards (Calm Wallet Composition) ------- */
+/* ------- Glossy Floating Black + Crisp Highlight Workspace Cards ------- */
 .bw-workspace-card {
-  display: flex;
-  flex-direction: column;
-  min-height: 232px;
-  padding: 24px;
-  border-radius: 16px;
-  color: var(--bw-ink);
-  box-shadow: var(--bw-shadow-raised);
-  transition: background var(--bw-motion-fast) var(--bw-ease), box-shadow var(--bw-motion-fast) var(--bw-ease), transform var(--bw-motion-fast) var(--bw-ease);
-  text-decoration: none;
-}
-.bw-workspace-card:hover {
-  transform: translateY(-2px);
-  box-shadow: var(--bw-shadow-floating);
-}
-.bw-workspace-card.tone-fold {
-  background: linear-gradient(145deg, #025e3d 0%, #007b52 100%);
-  color: #ffffff;
-  box-shadow: var(--bw-shadow-cash);
-}
-.bw-workspace-card.tone-mint {
-  background: var(--bw-mint);
-}
-.bw-workspace-card.tone-sand {
-  background: var(--bw-sand);
-}
-.bw-workspace-card.tone-sky {
-  background: var(--bw-sky);
-}
-
-.bw-feature-card,
-.bw-app-tile {
-  display: flex;
-  flex-direction: column;
-  background-color: var(--bw-card);
-  border: 1px solid var(--bw-line);
-  border-radius: 16px;
-  box-shadow: var(--bw-shadow-raised);
-  transition: transform var(--bw-motion-fast) var(--bw-ease), border-color var(--bw-motion-fast) var(--bw-ease), box-shadow var(--bw-motion-fast) var(--bw-ease), background var(--bw-motion-fast) var(--bw-ease);
-}
-.bw-feature-card:hover,
-.bw-app-tile:hover {
-  transform: translateY(-2px);
-  background-color: var(--bw-hover);
-  border-color: var(--bw-line-strong);
-  box-shadow: var(--bw-shadow-floating);
-}
-
-/* ------- Deep Fold Emerald Cash / Loan-Book Wallet Card with 3D Tilt ------- */
-.bw-cash-card {
   position: relative;
   overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  min-height: 236px;
   padding: 24px;
-  border-radius: 16px;
-  background: linear-gradient(128deg, #163d30 0%, #025e3d 58%, #007b52 100%);
-  color: #ffffff;
-  box-shadow: var(--bw-shadow-cash);
-  transform: rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg));
-  transition: transform 240ms var(--bw-ease), box-shadow 240ms var(--bw-ease);
+  border-radius: 22px;
+  text-decoration: none;
+  transition: transform 240ms var(--bw-ease), box-shadow 240ms var(--bw-ease), border-color 240ms var(--bw-ease);
 }
-.bw-cash-card::after {
+
+.bw-workspace-card.tone-fold {
+  background: linear-gradient(152deg, #18202a 0%, #090d12 48%, #040608 100%);
+  color: #ffffff;
+  border: 1px solid rgba(34, 226, 173, 0.34);
+  box-shadow:
+    0 24px 52px -20px rgba(4, 8, 15, 0.8),
+    0 8px 24px -10px rgba(34, 226, 173, 0.24),
+    inset 0 1px 0 rgba(255, 255, 255, 0.24);
+}
+.bw-workspace-card.tone-fold::before {
   content: '';
   position: absolute;
   inset: 0;
   pointer-events: none;
-  background: linear-gradient(120deg, rgba(255, 255, 255, 0.1), transparent 46%, rgba(212, 175, 55, 0.12));
+  background:
+    linear-gradient(125deg, rgba(255, 255, 255, 0.14) 0%, transparent 40%),
+    radial-gradient(320px circle at 88% 12%, rgba(34, 226, 173, 0.22), transparent 60%),
+    radial-gradient(280px circle at 12% 92%, rgba(217, 179, 86, 0.18), transparent 60%);
+}
+.bw-workspace-card.tone-mint {
+  background: #ffffff;
+  color: var(--bw-ink);
+  border: 1px solid #d2efe4;
+  box-shadow: var(--bw-shadow-raised);
+}
+.bw-workspace-card.tone-sand {
+  background: #ffffff;
+  color: var(--bw-ink);
+  border: 1px solid #efe1bd;
+  box-shadow: var(--bw-shadow-raised);
+}
+.bw-workspace-card.tone-sky {
+  background: #ffffff;
+  color: var(--bw-ink);
+  border: 1px solid #d9e6f6;
+  box-shadow: var(--bw-shadow-raised);
+}
+.dark .bw-workspace-card.tone-mint,
+.dark .bw-workspace-card.tone-sand,
+.dark .bw-workspace-card.tone-sky {
+  background: linear-gradient(155deg, #131a22 0%, #0b0f15 100%);
+  color: #f8fafc;
+  border-color: rgba(255, 255, 255, 0.1);
+}
+.bw-workspace-card:hover {
+  transform: translateY(-4px);
+  border-color: #22e2ad;
+  box-shadow: var(--bw-shadow-floating);
 }
 
-/* ------- Capsule Buttons & Clean Inputs ------- */
-.bw-btn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 7px;
-  min-height: 40px;
-  padding: 9px 18px;
-  border-radius: 999px;
-  font-size: 13px;
-  font-weight: 650;
-  border: 1px solid transparent;
-  cursor: pointer;
-  transition: background var(--bw-motion-fast) var(--bw-ease), filter var(--bw-motion-fast) var(--bw-ease), box-shadow var(--bw-motion-fast) var(--bw-ease), transform var(--bw-motion-fast) var(--bw-ease);
+.bw-feature-card,
+.bw-app-tile {
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  background-color: var(--bw-card);
+  border: 1px solid var(--bw-line);
+  border-radius: 20px;
+  box-shadow: var(--bw-shadow-raised);
+  transition: transform 200ms var(--bw-ease), border-color 200ms var(--bw-ease), box-shadow 200ms var(--bw-ease), background 200ms var(--bw-ease);
 }
-.bw-btn:active:not(:disabled) {
-  transform: translateY(1px);
-}
-.bw-btn-primary {
-  background: var(--bw-emerald);
-  color: #ffffff;
-}
-.bw-btn-primary:hover:not(:disabled) {
-  filter: brightness(0.93);
-  box-shadow: 0 6px 14px -8px rgba(2, 94, 61, 0.65);
-}
-.bw-btn-dark {
-  background: var(--bw-graphite);
-  color: #ffffff;
-}
-.bw-btn-dark:hover:not(:disabled) {
-  background: var(--bw-fold);
-}
-.bw-btn-outline {
-  background: var(--bw-card);
-  color: var(--bw-ink);
-  border-color: var(--bw-line-strong);
-}
-.bw-btn-outline:hover:not(:disabled) {
-  background: var(--bw-hover);
-}
-.bw-btn-back {
-  background: var(--bw-mint);
-  color: var(--bw-fold);
-  border-color: rgba(2, 94, 61, 0.25);
-  min-height: 36px;
-  padding: 6px 14px;
-  font-size: 12.5px;
-}
-.dark .bw-btn-back {
-  color: #b9dec9;
-  border-color: rgba(185, 222, 201, 0.28);
+.bw-feature-card:hover,
+.bw-app-tile:hover {
+  transform: translateY(-3px);
+  border-color: rgba(17, 156, 120, 0.55);
+  box-shadow: 0 22px 44px -20px rgba(7, 14, 26, 0.25), 0 0 0 1px rgba(34, 226, 173, 0.18);
 }
 
 /* ------- Calm Disclosure Accordions ------- */
 .bw-disclosure {
   background: var(--bw-card);
   border: 1px solid var(--bw-line);
-  border-radius: 16px;
+  border-radius: 20px;
   box-shadow: var(--bw-shadow-raised);
   overflow: hidden;
 }
@@ -395,7 +603,7 @@ html[dir='rtl'] .font-display {
   padding: 15px 20px;
   font-family: var(--font-display);
   font-size: 14.5px;
-  font-weight: 700;
+  font-weight: 800;
   color: var(--bw-ink);
   cursor: pointer;
   list-style: none;
@@ -404,8 +612,8 @@ html[dir='rtl'] .font-display {
   content: '';
   width: 7px;
   height: 7px;
-  border-right: 1.75px solid currentColor;
-  border-bottom: 1.75px solid currentColor;
+  border-right: 2px solid var(--bw-emerald);
+  border-bottom: 2px solid var(--bw-emerald);
   transform: rotate(-45deg);
   transition: transform var(--bw-motion-fast) var(--bw-ease);
   flex: none;
@@ -418,20 +626,28 @@ html[dir='rtl'] .font-display {
 @keyframes bwWorkspaceOpen {
   from {
     opacity: 0.25;
-    transform: translateX(-16px) scale(0.985);
+    transform: translateY(8px) scale(0.985);
   }
   to {
     opacity: 1;
-    transform: translateX(0) scale(1);
+    transform: translateY(0) scale(1);
   }
 }
 .bw-workspace-popup {
-  animation: bwWorkspaceOpen 240ms var(--bw-ease) both;
+  animation: bwWorkspaceOpen 220ms var(--bw-ease) both;
 }
 
+/* Mobile App Native Dock & Safe Area Insets (Android & iOS) */
+.bw-mobile-dock {
+  display: none;
+}
 @media (max-width: 639px) {
   .bw-workspace-rail {
     display: none;
+  }
+  .bw-mobile-dock {
+    display: flex;
+    padding-bottom: max(10px, env(safe-area-inset-bottom));
   }
 }
 
@@ -442,21 +658,24 @@ html[dir='rtl'] .font-display {
     animation-duration: 0.01ms !important;
     transition-duration: 0.01ms !important;
   }
-  .bw-cash-card {
+  .bw-cash-card,
+  .bw-glossy-black {
     transform: none !important;
   }
 }
 
 @media print {
   .no-print,
-  .bw-workspace-rail {
+  .bw-workspace-rail,
+  .bw-mobile-dock {
     display: none !important;
   }
   body {
     background: #ffffff !important;
     color: #000000 !important;
   }
-  .bw-card {
+  .bw-card,
+  .bw-glossy-black {
     box-shadow: none !important;
   }
 }

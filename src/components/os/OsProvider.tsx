@@ -3,6 +3,7 @@
 import React, { createContext, useCallback, useContext, useEffect, useState } from 'react';
 import type { SessionUser } from '@/lib/domain/types';
 import type { RoleCapabilities } from '@/lib/auth/rbac';
+import { invalidateApiCache, prefetchApi, readCachedJson, writeCachedJson } from '@/lib/client-cache';
 
 interface ToastItem {
   id: string;
@@ -20,6 +21,13 @@ interface DemoAccount {
   avatarUrl: string | null;
   portraitUrl: string | null;
   initials: string;
+}
+
+interface AuthMePayload {
+  user: SessionUser | null;
+  capabilities: RoleCapabilities | null;
+  demoMode: boolean;
+  demoAccounts: DemoAccount[];
 }
 
 interface OsContextValue {
@@ -59,11 +67,20 @@ export function OsProvider({ children }: { children: React.ReactNode }) {
   const refreshUser = useCallback(async () => {
     try {
       const res = await fetch('/api/v1/auth/me', { cache: 'no-store' });
-      const data = await res.json();
+      const data = (await res.json()) as AuthMePayload;
       setUser(data.user ?? null);
       setCapabilities(data.capabilities ?? null);
       setDemoMode(Boolean(data.demoMode));
       setDemoAccounts(data.demoAccounts ?? []);
+      if (data.user) {
+        writeCachedJson('/api/v1/auth/me', data);
+        // Zero-loading background warm-up of primary workspaces
+        prefetchApi('/api/v1/dashboard/overview');
+        prefetchApi('/api/v1/mortgage-desk');
+        if (data.user.isOwner) {
+          prefetchApi('/api/v1/executive/overview');
+        }
+      }
     } catch {
       setUser(null);
     } finally {
@@ -72,6 +89,14 @@ export function OsProvider({ children }: { children: React.ReactNode }) {
   }, []);
 
   useEffect(() => {
+    const cached = readCachedJson<AuthMePayload>('/api/v1/auth/me', 300_000);
+    if (cached?.user) {
+      setUser(cached.user);
+      setCapabilities(cached.capabilities ?? null);
+      setDemoMode(Boolean(cached.demoMode));
+      setDemoAccounts(cached.demoAccounts ?? []);
+      setLoading(false);
+    }
     void refreshUser();
   }, [refreshUser]);
 
@@ -85,6 +110,7 @@ export function OsProvider({ children }: { children: React.ReactNode }) {
 
   const logout = useCallback(async () => {
     await fetch('/api/v1/auth/logout', { method: 'POST' });
+    invalidateApiCache();
     setUser(null);
     window.location.href = '/login';
   }, []);
@@ -101,6 +127,7 @@ export function OsProvider({ children }: { children: React.ReactNode }) {
         toast(err.error || 'Unable to switch role', 'err');
         return;
       }
+      invalidateApiCache();
       await refreshUser();
       toast(`Switched workspace to ${email}`);
       window.location.href = '/os';
@@ -127,16 +154,16 @@ export function OsProvider({ children }: { children: React.ReactNode }) {
       }}
     >
       {children}
-      <div className="fixed bottom-4 end-4 z-[90] flex flex-col gap-2 max-w-sm no-print">
+      <div className="fixed bottom-20 sm:bottom-5 end-4 z-[90] flex flex-col gap-2 max-w-sm no-print">
         {toasts.map((t) => (
           <div
             key={t.id}
-            className={`px-4 py-3 rounded-2xl text-xs font-semibold shadow-xl border backdrop-blur ${
+            className={`px-4 py-3 rounded-2xl text-xs font-bold shadow-2xl border backdrop-blur-xl ${
               t.tone === 'err'
-                ? 'bg-red-950/95 text-red-100 border-red-500/40'
+                ? 'bg-[#1f0910]/95 text-[#ffc5cf] border-[#e11d48]/50'
                 : t.tone === 'info'
-                  ? 'bg-[#025e3d]/95 text-[#FCF1B7] border-[#D4AF37]/40'
-                  : 'bg-[#025e3d]/95 text-emerald-50 border-[#34DFAC]/40'
+                  ? 'bg-[#090d13]/95 text-[#fbe8a4] border-[#d9b356]/50'
+                  : 'bg-[#090d13]/95 text-[#34f0bc] border-[#22e2ad]/50'
             }`}
           >
             {t.text}

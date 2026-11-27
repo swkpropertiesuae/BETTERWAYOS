@@ -6,14 +6,12 @@ import { usePathname, useRouter } from 'next/navigation';
 import {
   ArrowLeft,
   Bell,
-  Briefcase,
   Calculator,
   Check,
   ChevronRight,
   Crown,
   Database,
-  FileLock2,
-  Globe,
+  Download,
   HelpCircle,
   KanbanSquare,
   Languages,
@@ -21,24 +19,19 @@ import {
   LayoutGrid,
   LogOut,
   MapPin,
-  MessagesSquare,
   Moon,
-  Radar,
   Search,
-  Settings,
-  ShieldCheck,
   Sparkles,
   Sun,
-  UserPlus,
   Users,
   Wallet,
-  Wrench,
   X,
   type LucideIcon,
 } from 'lucide-react';
 import { useOs } from './OsProvider';
 import { StaffAvatar } from './UiKit';
 import { EIBOR_SNAPSHOT } from '@/lib/domain/banks';
+import { prefetchApi } from '@/lib/client-cache';
 
 interface RailGroup {
   id: string;
@@ -75,7 +68,7 @@ function DubaiClock({ compact = false }: { compact?: boolean }) {
 }
 
 export function OsShell({ children }: { children: React.ReactNode }) {
-  const { user, loading, dark, toggleDark, toggleRtl, logout } = useOs();
+  const { user, dark, toggleDark, toggleRtl, logout } = useOs();
   const pathname = usePathname();
   const router = useRouter();
   const [searchOpen, setSearchOpen] = useState(false);
@@ -85,6 +78,14 @@ export function OsShell({ children }: { children: React.ReactNode }) {
   const [notifOpen, setNotifOpen] = useState(false);
   const [activeRailPopup, setActiveRailPopup] = useState<RailGroup | null>(null);
   const [guideOpen, setGuideOpen] = useState(false);
+
+  // Instant route prefetching for zero-loading clicks
+  useEffect(() => {
+    const warmRoutes = ['/os', '/os/dashboard', '/os/pipeline', '/os/mortgage-desk', '/os/executive', '/os/utilities', '/os/crm'];
+    for (const r of warmRoutes) {
+      router.prefetch(r);
+    }
+  }, [router]);
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
@@ -145,19 +146,6 @@ export function OsShell({ children }: { children: React.ReactNode }) {
     }
   };
 
-  if (loading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-[#025e3d] text-white">
-        <div className="flex flex-col items-center gap-3.5">
-          <img src="/brand/icon-gold.svg" alt="Betterway Mortgages" className="size-12 animate-pulse" />
-          <div className="text-xs font-semibold tracking-[0.2em] uppercase text-[#d3eee0]">
-            Opening Betterway Mortgages OS v3...
-          </div>
-        </div>
-      </div>
-    );
-  }
-
   const isOwner = Boolean(user?.isOwner);
   const isOwnerOrAdmin = user?.role === 'OWNER' || user?.role === 'OFFICE_ADMIN';
   const hasPipelineAccess = user?.role !== 'HR_MANAGER' && user?.role !== 'IT_MARKETING';
@@ -171,7 +159,8 @@ export function OsShell({ children }: { children: React.ReactNode }) {
             id: 'executive',
             label: ownerWorkspaceName,
             shortLabel: user?.email?.toLowerCase().includes('warda') ? "Warda's" : "Shabib's",
-            description: 'Co-Owner command sanctuary: daily team directives, GPS mortgage field meetings, APL brochures, CBUAE forms, 5-track disbursals, DSA ledger & Privacy Fast Track.',
+            description:
+              'Owner desk for daily team tasks, GPS mortgage meetings, bank brochures, fillable Word/JPEG forms, 5-track closings, advisor payouts, and private VIP deals.',
             icon: Crown,
             primaryHref: '/os/executive',
             items: [
@@ -180,9 +169,9 @@ export function OsShell({ children }: { children: React.ReactNode }) {
               { label: 'APL Catalog & Brochures', href: '/os/executive?tab=catalog', badge: '24 Banks' },
               { label: 'Mortgage Forms (Word / JPEG)', href: '/os/executive?tab=legal', badge: 'Fillable' },
               { label: 'Pin-to-Pin Disbursals (5 Tracks)', href: '/os/executive?tab=closings', badge: 'Cheques' },
-              { label: 'Advisor DSA & Expenses', href: '/os/executive?tab=commissions', badge: 'BT/Botim' },
+              { label: 'Advisor DSA & Expenses', href: '/os/executive?tab=commissions', badge: 'BT / Botim' },
               { label: user?.privacyLaneTitle || 'Privacy Fast Track', href: '/os/executive?tab=fasttrack', badge: 'Private' },
-              { label: 'All Owner Approvals & Consolidated VAT', href: '/os/executive?tab=approvals', badge: '1-of-2 / 2-of-2' },
+              { label: 'Owner Approvals & VAT 201', href: '/os/executive?tab=approvals', badge: '1-of-2 / 2-of-2' },
             ],
           },
         ]
@@ -191,29 +180,30 @@ export function OsShell({ children }: { children: React.ReactNode }) {
       ? [
           {
             id: 'origination',
-            label: 'Origination & Pipeline',
+            label: 'Leads & Pipeline',
             shortLabel: 'Pipeline',
-            description: '100% daily enquiry capture, PDPL-masked borrower vault, 12-stage CBUAE mortgage Kanban, and live command radar.',
+            description: 'Daily leads, phone-protected client list, 12-step mortgage board, and live war room.',
             icon: KanbanSquare,
             primaryHref: '/os/pipeline',
             items: [
               { label: '12-Step Mortgage Pipeline', href: '/os/pipeline', badge: 'Kanban' },
-              { label: 'Daily CRM & Masked Vault', href: '/os/crm', badge: 'PDPL' },
+              { label: 'Daily Leads & Client Vault', href: '/os/crm', badge: 'PDPL' },
               { label: 'Command Center War Room', href: '/os/command-center', badge: 'Live' },
-              { label: 'Business & Task Dashboard', href: '/os/dashboard', badge: 'Daily' },
+              { label: 'Daily Control Dashboard', href: '/os/dashboard', badge: 'Today' },
             ],
           },
           {
             id: 'desk',
-            label: '24-Bank Desk & Vault',
+            label: 'Bank Hub & Proposals',
             shortLabel: '24 Banks',
-            description: 'Compare 24 UAE Conventional & Islamic banks, run 8 CBUAE calculators, analyze CTO/Average Balance, and manage encrypted borrower vaults.',
+            description:
+              'Live 18-bank policy & rates, 140+ bank RM contacts, 3-bank Auto-Eco Proposal Maker, 60-sec eligibility matcher, AI policy finder & statement check.',
             icon: Calculator,
             primaryHref: '/os/mortgage-desk',
             items: [
-              { label: 'Mortgage Exclusive Desk (24 Banks)', href: '/os/mortgage-desk', badge: 'CBUAE' },
+              { label: '18-Bank Rates, 140+ RMs & Proposals', href: '/os/mortgage-desk', badge: 'Pro Hub' },
               { label: 'Client Document Vault', href: '/os/vault', badge: 'Encrypted' },
-              { label: 'Bank Quotes & RERA Partner Hub', href: '/os/sales', badge: 'Proposals' },
+              { label: 'Bank Quotes & Partner Desk', href: '/os/sales', badge: 'Share Link' },
             ],
           },
         ]
@@ -222,9 +212,9 @@ export function OsShell({ children }: { children: React.ReactNode }) {
       ? [
           {
             id: 'finance',
-            label: 'Accounts, DSA & VAT',
+            label: 'Accounts & Bank DSA',
             shortLabel: 'Finance',
-            description: 'Double-entry GL, UAE 5% FTA VAT 201, Bank DSA invoices, and corporate-account-only ORN payout controls.',
+            description: 'Company ledger, 5% UAE VAT 201, bank DSA invoices, and corporate partner payouts.',
             icon: Wallet,
             primaryHref: '/os/accounts',
             items: [
@@ -235,15 +225,15 @@ export function OsShell({ children }: { children: React.ReactNode }) {
           },
           {
             id: 'governance',
-            label: 'Master Log & Compliance',
+            label: 'Master Log & Rules',
             shortLabel: 'Master Log',
-            description: '22 core headquarters registries, CBUAE KFS compliance, AML/goAML screening, 2-of-2 Delete Bin, and Oud Metha settings.',
+            description: '22 headquarters lists, CBUAE compliance, AML checks, delete bin, and office settings.',
             icon: Database,
             primaryHref: '/os/master-log',
             items: [
-              { label: 'Master Log (22 CORE Registries)', href: '/os/master-log', badge: 'CORE' },
-              { label: 'CBUAE Compliance & Delete Bin', href: '/os/compliance', badge: 'PDPL' },
-              { label: 'System & Geofence Settings', href: '/os/settings', badge: 'Config' },
+              { label: 'Master Log (22 Lists)', href: '/os/master-log', badge: 'CORE' },
+              { label: 'CBUAE Rules & Delete Bin', href: '/os/compliance', badge: 'PDPL' },
+              { label: 'Office & Backup Settings', href: '/os/settings', badge: 'Config' },
             ],
           },
         ]
@@ -252,26 +242,26 @@ export function OsShell({ children }: { children: React.ReactNode }) {
       id: 'team',
       label: 'Team, QR & Field GPS',
       shortLabel: 'Field & QR',
-      description: 'Oud Metha 20s rotating QR attendance, staff visas & WPS, GPS-pinned mortgage field meetings with SOS, and internal team channels.',
+      description: 'Oud Metha QR attendance, staff payroll/WPS, live GPS mortgage meetings with SOS, and team chat.',
       icon: Users,
       primaryHref: '/os/employees',
       items: [
-        { label: 'Employees & Oud Metha QR Attendance', href: '/os/employees', badge: 'WPS' },
-        { label: 'Mortgage Field GPS & Forensic Reports', href: '/os/field-gps', badge: 'GPS + SOS' },
-        { label: 'Team Group Channels (Inside)', href: '/os/inside', badge: 'Live Feed' },
+        { label: 'Staff & Oud Metha QR Check-In', href: '/os/employees', badge: 'WPS' },
+        { label: 'GPS Field Meetings & SOS', href: '/os/field-gps', badge: 'GPS + SOS' },
+        { label: 'Team Channels (Inside)', href: '/os/inside', badge: 'Live Chat' },
       ],
     },
     {
       id: 'tools',
-      label: 'Forms, AI & Website',
-      shortLabel: 'Forms & AI',
-      description: 'Fillable Word/JPEG UAE mortgage forms, 50-spec Excel Data Hub, PII-shielded Case-Study AI Copilot, and live betterwaymortgages.com studio.',
+      label: 'Excel, Backups & AI',
+      shortLabel: 'Excel & AI',
+      description: 'Full-data Master Excel download, automated daily backups, fillable Word/JPEG forms, AI helper & live website editor.',
       icon: Sparkles,
       primaryHref: '/os/utilities',
       items: [
-        { label: 'Mortgage Forms (Word/JPEG) & 50 Excel Hub', href: '/os/utilities', badge: '12 Forms' },
-        { label: 'AI Case-Study Copilot', href: '/os/ai', badge: 'PII Shield' },
-        ...(hasWebsiteAccess ? [{ label: 'Website & Social Studio (Live Sync)', href: '/os/website-studio', badge: 'CMS' }] : []),
+        { label: 'All-Data Excel, Backups & Forms', href: '/os/utilities', badge: 'Daily Backup' },
+        { label: 'AI Case-Study Copilot', href: '/os/ai', badge: 'PII Safe' },
+        ...(hasWebsiteAccess ? [{ label: 'Website & Social Studio', href: '/os/website-studio', badge: 'Live Sync' }] : []),
       ],
     },
   ];
@@ -289,68 +279,97 @@ export function OsShell({ children }: { children: React.ReactNode }) {
     '/os/dashboard': 'Dashboard',
     '/os/command-center': 'Command Center',
     '/os/pipeline': '12-Step Pipeline',
-    '/os/crm': 'CRM & Masked Vault',
-    '/os/mortgage-desk': '24-Bank Mortgage Desk',
-    '/os/vault': 'Client Document Vault',
-    '/os/sales': 'Bank Quotes & Partner Hub',
-    '/os/accounts': 'Accounts & UAE VAT',
-    '/os/compliance': 'CBUAE & PDPL Compliance',
-    '/os/master-log': 'Master Log (CORE)',
-    '/os/website-studio': 'Website & Social Studio',
-    '/os/employees': 'Employees & Oud Metha QR',
-    '/os/inside': 'Team Group (Inside)',
-    '/os/field-gps': 'Mortgage Field GPS',
-    '/os/ai': 'AI Case-Study Copilot',
-    '/os/utilities': 'Mortgage Forms & 50 Excel Hub',
-    '/os/settings': 'System Settings',
+    '/os/crm': 'Leads & Vault',
+    '/os/mortgage-desk': 'Bank Hub & Proposals',
+    '/os/vault': 'Document Vault',
+    '/os/sales': 'Quotes & Partners',
+    '/os/accounts': 'Accounts & VAT',
+    '/os/compliance': 'CBUAE Rules',
+    '/os/master-log': 'Master Log',
+    '/os/website-studio': 'Website Studio',
+    '/os/employees': 'Staff & QR',
+    '/os/inside': 'Team Chat',
+    '/os/field-gps': 'Field GPS',
+    '/os/ai': 'AI Copilot',
+    '/os/utilities': 'Excel, Backups & Forms',
+    '/os/settings': 'Settings',
   };
   const currentTitle =
     pageLabelMap[pathname] ||
-    (pathname.startsWith('/os/master-log/') ? 'Master Log Registry' : 'Operating Workspace');
+    (pathname.startsWith('/os/master-log/') ? 'Master Log List' : 'Betterway OS');
 
   return (
     <div className="h-[100dvh] flex flex-col overflow-hidden bg-[var(--bw-bg)] text-[var(--bw-ink)]">
-      {/* Calm Operating Wallet Flat Topbar */}
-      <header className="flex-none min-h-[76px] px-4 lg:px-7 py-3 bg-[var(--bw-bg)] flex flex-wrap items-center gap-2.5 lg:gap-4 no-print z-40">
-        <Link href="/os" className="flex items-center gap-2.5 shrink-0 me-1 lg:me-3" aria-label="Betterway Mortgages OS Home">
+      {/* Subtle Official Betterway Logo Jewel Top Accent Line */}
+      <div
+        className="h-[3px] w-full flex-none no-print"
+        style={{ background: 'linear-gradient(90deg, #070e1a 0%, #119c78 36%, #22e2ad 62%, #d9b356 88%, #fbe8a4 100%)' }}
+      />
+
+      {/* Premium Pure White Floating Topbar */}
+      <header className="flex-none min-h-[72px] px-4 lg:px-7 py-2.5 bg-white/90 dark:bg-[#080b10]/92 backdrop-blur-xl border-b border-[var(--bw-line)] flex flex-wrap items-center gap-2.5 lg:gap-4 no-print z-40">
+        <Link href="/os" className="flex items-center gap-2.5 shrink-0 me-1 lg:me-3 group" aria-label="Betterway Mortgages OS Home">
           <img
-            src={dark ? '/brand/logo-horizontal-dark.svg' : '/brand/logo-horizontal-light.svg'}
+            src={dark ? '/brand/betterway-logo-horizontal-dark-4k-transparent.png' : '/brand/betterway-logo-horizontal-light-4k-transparent.png'}
             alt="Betterway Mortgages"
-            className="h-8 w-auto object-contain"
+            className="h-8 sm:h-9 w-auto object-contain transition-transform duration-200 group-hover:scale-[1.02]"
           />
           <span className="hidden xl:block leading-tight border-s border-[var(--bw-line-strong)] ps-2.5">
-            <span className="block font-display text-[13.5px] font-extrabold tracking-tight text-[var(--bw-ink)]">Mortgages OS</span>
-            <span className="block text-[10px] font-semibold text-[var(--bw-muted)]">CBUAE v3 · Dubai</span>
+            <span className="block font-display text-[13px] font-extrabold tracking-tight text-[var(--bw-ink)]">
+              Mortgages OS <span className="text-[#119c78] dark:text-[#34f0bc]">v3</span>
+            </span>
+            <span className="block text-[10px] font-bold text-[#9a7123] dark:text-[#fbe8a4]">Dubai · 24 UAE Banks</span>
           </span>
         </Link>
 
-        {/* Primary Capsule Navigation Pills (White at rest, Emerald when active) */}
-        <nav className="flex items-center gap-1.5 overflow-x-auto max-w-full order-5 sm:order-none w-full sm:w-auto pt-1 sm:pt-0 [&::-webkit-scrollbar]:hidden [scrollbar-width:none]" aria-label="Primary navigation">
-          <Link href="/os" className={`bw-primary-pill ${pathname === '/os' ? 'active' : ''}`}>
-            <LayoutGrid size={14} /> Workspaces
+        {/* Primary Capsule Navigation Pills (White at rest, Glossy Black with Emerald glow when active) */}
+        <nav
+          className="flex items-center gap-1.5 overflow-x-auto max-w-full order-5 sm:order-none w-full sm:w-auto pt-1 sm:pt-0 [&::-webkit-scrollbar]:hidden [scrollbar-width:none]"
+          aria-label="Primary navigation"
+        >
+          <Link href="/os" onMouseEnter={() => prefetchApi('/api/v1/dashboard/overview')} className={`bw-primary-pill ${pathname === '/os' ? 'active' : ''}`}>
+            <LayoutGrid size={14} className={pathname === '/os' ? 'text-[#34f0bc]' : ''} /> Home
           </Link>
           {isOwner && (
-            <Link href="/os/executive" className={`bw-primary-pill ${pathname === '/os/executive' ? 'active' : ''}`}>
-              <Crown size={14} /> {user?.executiveAppTitle || "Warda's Place"}
+            <Link
+              href="/os/executive"
+              onMouseEnter={() => prefetchApi('/api/v1/executive/overview')}
+              className={`bw-primary-pill ${pathname === '/os/executive' ? 'active' : ''}`}
+            >
+              <Crown size={14} className={pathname === '/os/executive' ? 'text-[#fbe8a4]' : 'text-[#b58a2d]'} />{' '}
+              {user?.executiveAppTitle || "Warda's Place"}
             </Link>
           )}
-          <Link href="/os/dashboard" className={`bw-primary-pill ${pathname === '/os/dashboard' ? 'active' : ''}`}>
-            <LayoutDashboard size={14} /> Dashboard
+          <Link href="/os/dashboard" onMouseEnter={() => prefetchApi('/api/v1/dashboard/overview')} className={`bw-primary-pill ${pathname === '/os/dashboard' ? 'active' : ''}`}>
+            <LayoutDashboard size={14} className={pathname === '/os/dashboard' ? 'text-[#34f0bc]' : ''} /> Dashboard
           </Link>
           {hasPipelineAccess && (
-            <Link href="/os/pipeline" className={`bw-primary-pill ${pathname === '/os/pipeline' ? 'active' : ''}`}>
-              <KanbanSquare size={14} /> 12-Step
-            </Link>
+            <>
+              <Link href="/os/mortgage-desk" onMouseEnter={() => prefetchApi('/api/v1/mortgage-desk')} className={`bw-primary-pill ${pathname === '/os/mortgage-desk' ? 'active' : ''}`}>
+                <Calculator size={14} className={pathname === '/os/mortgage-desk' ? 'text-[#34f0bc]' : ''} /> 24-Bank Hub
+              </Link>
+              <Link href="/os/pipeline" className={`bw-primary-pill ${pathname === '/os/pipeline' ? 'active' : ''}`}>
+                <KanbanSquare size={14} className={pathname === '/os/pipeline' ? 'text-[#34f0bc]' : ''} /> 12-Step
+              </Link>
+            </>
           )}
         </nav>
 
         <div className="flex-1 hidden sm:block" />
 
-        {/* Right Floating Capsule Utility Toolbar */}
+        {/* Right Floating Utility Controls */}
         <div className="flex items-center gap-2 ms-auto sm:ms-0">
-          <span className="hidden 2xl:inline-flex items-center gap-1.5 px-3.5 h-10 rounded-full bg-[var(--bw-card)] text-[11.5px] font-mono-num font-bold text-[var(--bw-fold)] dark:text-[#b9dec9] shadow-[0_4px_12px_-8px_rgba(23,61,41,0.16)]">
-            <span className="size-2 rounded-full bg-[#007b52]" />
-            3M EIBOR {EIBOR_SNAPSHOT.latest.threeMonth.toFixed(3)}%
+          <a
+            href="/api/v1/utilities/master-backup-excel"
+            className="hidden 2xl:inline-flex items-center gap-1.5 px-3.5 h-10 rounded-full bg-[#0a0e14] text-[#34f0bc] hover:text-white border border-[#22e2ad]/40 text-[11.5px] font-bold shadow-md transition hover:-translate-y-0.5"
+            title="Download all live OS data in one Excel workbook"
+          >
+            <Download size={13} /> Full Excel
+          </a>
+
+          <span className="hidden xl:inline-flex items-center gap-1.5 px-3.5 h-10 rounded-full bg-[var(--bw-soft)] border border-[var(--bw-line)] text-[11.5px] font-mono-num font-bold text-[var(--bw-ink)]">
+            <span className="size-2 rounded-full bg-[#22e2ad] shadow-[0_0_8px_#22e2ad]" />
+            EIBOR {EIBOR_SNAPSHOT.latest.threeMonth.toFixed(2)}%
           </span>
 
           <button type="button" onClick={() => setSearchOpen(true)} className="bw-tb-btn" aria-label="Search OS">
@@ -361,7 +380,7 @@ export function OsShell({ children }: { children: React.ReactNode }) {
             </kbd>
           </button>
 
-          {/* Interactive Notification Popover */}
+          {/* Interactive Notification Bell Popover */}
           <div className="relative">
             <button
               type="button"
@@ -372,7 +391,7 @@ export function OsShell({ children }: { children: React.ReactNode }) {
               <Bell size={15} />
               <span
                 className={`inline-flex items-center justify-center min-w-[20px] h-5 px-1.5 rounded-full text-[11px] font-extrabold ${
-                  unreadCount > 0 ? 'bg-[#c32135] text-white' : 'bg-[var(--bw-soft)] text-[var(--bw-muted)]'
+                  unreadCount > 0 ? 'bg-[#e11d48] text-white' : 'bg-[var(--bw-soft)] text-[var(--bw-muted)]'
                 }`}
               >
                 {unreadCount > 9 ? '9+' : unreadCount}
@@ -380,13 +399,13 @@ export function OsShell({ children }: { children: React.ReactNode }) {
             </button>
             {notifOpen && (
               <div className="absolute end-0 mt-2 w-[340px] max-w-[90vw] bw-card shadow-2xl overflow-hidden z-50">
-                <div className="flex items-center justify-between px-4 py-3 border-b border-[var(--bw-line)] bg-[var(--bw-soft)]">
-                  <span className="font-display font-bold text-xs">Notifications ({unreadCount} unread)</span>
+                <div className="flex items-center justify-between px-4 py-3 border-b border-white/10 bg-[#0a0e14] text-white">
+                  <span className="font-display font-bold text-xs">Alerts ({unreadCount} unread)</span>
                   {unreadCount > 0 && (
                     <button
                       type="button"
                       onClick={() => void markAllRead()}
-                      className="inline-flex items-center gap-1 text-[11px] font-bold text-[var(--bw-emerald)] hover:underline cursor-pointer"
+                      className="inline-flex items-center gap-1 text-[11px] font-bold text-[#34f0bc] hover:underline cursor-pointer"
                     >
                       <Check size={12} /> Mark all read
                     </button>
@@ -394,7 +413,7 @@ export function OsShell({ children }: { children: React.ReactNode }) {
                 </div>
                 <div className="max-h-72 overflow-y-auto divide-y divide-[var(--bw-line)]">
                   {notifications.length === 0 ? (
-                    <div className="p-6 text-center text-xs text-[var(--bw-muted)]">You&apos;re all caught up.</div>
+                    <div className="p-6 text-center text-xs text-[var(--bw-muted)]">You are all caught up.</div>
                   ) : (
                     notifications.slice(0, 10).map((n) => (
                       <button
@@ -409,7 +428,7 @@ export function OsShell({ children }: { children: React.ReactNode }) {
                         }`}
                       >
                         <div className="flex items-start gap-2">
-                          {!n.is_read && <span className="size-2 rounded-full bg-[var(--bw-emerald)] mt-1.5 shrink-0" />}
+                          {!n.is_read && <span className="size-2 rounded-full bg-[#119c78] mt-1.5 shrink-0" />}
                           <div className="min-w-0">
                             <div className="text-xs font-bold text-[var(--bw-ink)]">{n.title}</div>
                             {n.body && <div className="text-[11px] text-[var(--bw-muted)] mt-0.5 line-clamp-2">{n.body}</div>}
@@ -423,28 +442,28 @@ export function OsShell({ children }: { children: React.ReactNode }) {
             )}
           </div>
 
-          <button type="button" onClick={toggleRtl} className="bw-tb-btn px-2.5" title="Switch English / Arabic RTL" aria-label="Switch language">
+          <button type="button" onClick={toggleRtl} className="bw-tb-btn px-2.5" title="Switch English / Arabic" aria-label="Switch language">
             <Languages size={15} />
           </button>
 
-          <button type="button" onClick={toggleDark} className="bw-tb-btn px-2.5" title="Toggle Light / Dark Theme" aria-label="Toggle theme">
+          <button type="button" onClick={toggleDark} className="bw-tb-btn px-2.5" title="Switch Light / Dark" aria-label="Toggle theme">
             {dark ? <Sun size={15} /> : <Moon size={15} />}
           </button>
 
           {user && (
-            <div className="inline-flex items-center gap-2 ps-1.5 pe-2 h-10 rounded-full bg-[var(--bw-card)] shadow-[0_4px_12px_-8px_rgba(23,61,41,0.16)]">
+            <div className="inline-flex items-center gap-2 ps-1.5 pe-2 h-10 rounded-full bg-[#0a0e14] text-white border border-white/12 shadow-md">
               <StaffAvatar name={user.name} avatarUrl={user.avatarUrl} initials={user.initials} size="sm" />
               <div className="hidden lg:block leading-tight pe-1">
-                <div className="text-[11.5px] font-bold flex items-center gap-1 text-[var(--bw-ink)]">
+                <div className="text-[11.5px] font-bold flex items-center gap-1 text-white">
                   {user.name.split(' ')[0]}
-                  {isOwner && <Crown size={11} className="text-[#d4af37]" />}
+                  {isOwner && <Crown size={11} className="text-[#fbe8a4]" />}
                 </div>
-                <div className="text-[9.5px] text-[var(--bw-muted)] max-w-[110px] truncate">{user.designation}</div>
+                <div className="text-[9.5px] text-[#34f0bc] max-w-[110px] truncate">{user.designation}</div>
               </div>
               <button
                 type="button"
                 onClick={() => void logout()}
-                className="size-7 rounded-full hover:bg-[#fbe1e4] hover:text-[#c32135] flex items-center justify-center cursor-pointer transition"
+                className="size-7 rounded-full hover:bg-[#e11d48]/25 hover:text-[#fda4af] text-slate-300 flex items-center justify-center cursor-pointer transition"
                 title="Sign Out"
                 aria-label="Sign Out"
               >
@@ -455,12 +474,12 @@ export function OsShell({ children }: { children: React.ReactNode }) {
         </div>
       </header>
 
-      {/* Main Body: Left Narrow Shortcut Rail + Independent Scrolling Canvas */}
+      {/* Main Body: Left Shortcut Rail + Fast Scrolling Canvas */}
       <div className="flex flex-1 min-h-0">
         <nav className="bw-workspace-rail no-print" aria-label="Workspace shortcuts">
           <Link href="/os" className={`bw-rail-shortcut ${pathname === '/os' ? 'active' : ''}`} title="All Workspaces">
             <LayoutGrid size={19} />
-            <span>Workspaces</span>
+            <span>Home</span>
           </Link>
           {railGroups.map((g) => {
             const Icon = g.icon;
@@ -469,6 +488,7 @@ export function OsShell({ children }: { children: React.ReactNode }) {
               <button
                 key={g.id}
                 type="button"
+                onMouseEnter={() => router.prefetch(g.primaryHref)}
                 onClick={() => setActiveRailPopup(g)}
                 aria-haspopup="dialog"
                 className={`bw-rail-shortcut ${isActive ? 'active' : ''}`}
@@ -483,7 +503,7 @@ export function OsShell({ children }: { children: React.ReactNode }) {
             type="button"
             onClick={() => setGuideOpen(true)}
             className="bw-rail-shortcut mt-auto"
-            title="Quick Guide & Shortcuts"
+            title="Quick Guide & Mobile App"
           >
             <HelpCircle size={19} />
             <span>Guide</span>
@@ -491,9 +511,9 @@ export function OsShell({ children }: { children: React.ReactNode }) {
         </nav>
 
         <div className="flex-1 min-w-0 flex flex-col">
-          <main className="flex-1 overflow-y-auto px-4 sm:px-6 lg:px-8 pt-3 pb-10 scroll-smooth">
+          <main className="flex-1 overflow-y-auto px-4 sm:px-6 lg:px-8 pt-4 pb-24 sm:pb-10 scroll-smooth">
             <div className="w-full max-w-[1480px] mx-auto">
-              {/* Shared Section Back Button & Wayfinding Breadcrumb */}
+              {/* Shared Glossy Black Back Pill & Breadcrumb */}
               {pathname !== '/os' && (
                 <div className="flex flex-wrap items-center gap-3 mb-5 no-print">
                   <button
@@ -504,8 +524,8 @@ export function OsShell({ children }: { children: React.ReactNode }) {
                     <ArrowLeft size={14} /> Back
                   </button>
                   <nav className="flex flex-wrap items-center gap-1.5 text-xs text-[var(--bw-muted)]" aria-label="Breadcrumb">
-                    <Link href="/os" className="inline-flex items-center gap-1 hover:text-[var(--bw-emerald)] font-semibold">
-                      <LayoutGrid size={13} /> Workspaces
+                    <Link href="/os" className="inline-flex items-center gap-1 hover:text-[#119c78] font-bold">
+                      <LayoutGrid size={13} /> Home
                     </Link>
                     {activeRailGroup && (
                       <>
@@ -513,14 +533,14 @@ export function OsShell({ children }: { children: React.ReactNode }) {
                         <button
                           type="button"
                           onClick={() => setActiveRailPopup(activeRailGroup)}
-                          className="hover:text-[var(--bw-emerald)] font-semibold cursor-pointer"
+                          className="hover:text-[#119c78] font-bold cursor-pointer"
                         >
                           {activeRailGroup.label}
                         </button>
                       </>
                     )}
                     <ChevronRight size={13} />
-                    <span className="font-bold text-[var(--bw-ink)]">{currentTitle}</span>
+                    <span className="font-extrabold text-[var(--bw-ink)]">{currentTitle}</span>
                   </nav>
                 </div>
               )}
@@ -529,40 +549,72 @@ export function OsShell({ children }: { children: React.ReactNode }) {
             </div>
           </main>
 
-          {/* Quiet Corporate Status Footer */}
-          <footer className="flex-none px-5 py-2 bg-[var(--bw-bg)] border-t border-[var(--bw-line)] text-[11px] text-[var(--bw-muted)] flex flex-wrap items-center justify-between gap-3 no-print">
-            <span>User: <strong className="text-[var(--bw-body)]">{user?.email || 'Authenticated'}</strong></span>
-            <span className="hidden sm:inline font-mono-num"><DubaiClock /></span>
-            <span className="font-semibold text-[var(--bw-fold)] dark:text-[#b9dec9]">
+          {/* Quiet Status Footer (Desktop) */}
+          <footer className="hidden sm:flex flex-none px-5 py-2 bg-white/95 dark:bg-[#080b10] border-t border-[var(--bw-line)] text-[11px] text-[var(--bw-muted)] flex-wrap items-center justify-between gap-3 no-print">
+            <span>
+              Signed in: <strong className="text-[var(--bw-ink)]">{user?.email || 'Betterway Staff'}</strong>
+            </span>
+            <span className="font-mono-num">
+              <DubaiClock />
+            </span>
+            <span className="font-bold text-[#0b5442] dark:text-[#34f0bc]">
               Betterway Mortgages LLC · Al Nasr Plaza, Oud Metha, Dubai
             </span>
           </footer>
+
+          {/* Native Android & iOS Mobile Bottom Dock */}
+          <nav
+            className="bw-mobile-dock fixed bottom-0 inset-x-0 z-40 bg-[#070a0f]/95 backdrop-blur-xl border-t border-white/12 px-2 pt-2 items-center justify-around text-[10px] font-bold text-slate-300 no-print"
+            aria-label="Mobile quick navigation"
+          >
+            {[
+              { label: 'Home', href: '/os', icon: LayoutGrid },
+              { label: 'Dashboard', href: '/os/dashboard', icon: LayoutDashboard },
+              { label: '24 Banks', href: '/os/mortgage-desk', icon: Calculator },
+              { label: 'Field GPS', href: '/os/field-gps', icon: MapPin },
+              { label: isOwner ? 'Owner' : 'Forms', href: isOwner ? '/os/executive' : '/os/utilities', icon: isOwner ? Crown : Sparkles },
+            ].map((m) => {
+              const Icon = m.icon;
+              const active = pathname === m.href;
+              return (
+                <Link
+                  key={m.href}
+                  href={m.href}
+                  className={`flex flex-col items-center gap-1 px-2.5 py-1 rounded-xl transition ${
+                    active ? 'text-[#34f0bc] bg-white/10' : 'text-slate-400 hover:text-white'
+                  }`}
+                >
+                  <Icon size={18} />
+                  <span>{m.label}</span>
+                </Link>
+              );
+            })}
+          </nav>
         </div>
       </div>
 
-      {/* Calm Workspace Quick-Jump Popup Modal (from Left Shortcut Rail) */}
+      {/* Glossy Shining Black Workspace Quick-Jump Popup Modal */}
       {activeRailPopup && (
         <div
-          className="fixed inset-0 z-50 bg-[#0b100e]/55 backdrop-blur-[2px] flex items-center justify-center p-4 no-print"
+          className="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-center justify-center p-4 no-print"
           onClick={() => setActiveRailPopup(null)}
         >
-          <div
-            className="w-full max-w-2xl bw-card overflow-hidden bw-workspace-popup"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <div className="px-6 py-5 bg-[#025e3d] text-white flex items-center justify-between gap-3">
+          <div className="w-full max-w-2xl bw-card overflow-hidden bw-workspace-popup" onClick={(e) => e.stopPropagation()}>
+            <div className="px-6 py-5 bg-gradient-to-r from-[#070a0f] via-[#0e151f] to-[#052920] text-white border-b border-[#22e2ad]/30 flex items-center justify-between gap-3">
               <div className="flex items-center gap-3">
-                <activeRailPopup.icon size={22} className="text-[#fcf1b7]" />
+                <span className="size-11 rounded-2xl bg-white/10 border border-[#22e2ad]/35 flex items-center justify-center">
+                  <activeRailPopup.icon size={21} className="text-[#34f0bc]" />
+                </span>
                 <div>
                   <h2 className="text-lg font-extrabold text-white">{activeRailPopup.label}</h2>
-                  <p className="text-xs text-[#d3eee0] mt-0.5">{activeRailPopup.description}</p>
+                  <p className="text-xs text-slate-300 mt-0.5">{activeRailPopup.description}</p>
                 </div>
               </div>
               <button
                 type="button"
                 onClick={() => setActiveRailPopup(null)}
                 className="size-8 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center cursor-pointer"
-                aria-label="Close workspace menu"
+                aria-label="Close menu"
               >
                 <X size={16} />
               </button>
@@ -574,27 +626,23 @@ export function OsShell({ children }: { children: React.ReactNode }) {
                     key={item.href}
                     href={item.href}
                     onClick={() => setActiveRailPopup(null)}
-                    className="flex items-center justify-between gap-3 px-4 py-3.5 rounded-xl bg-[var(--bw-soft)] hover:bg-[var(--bw-mint)] text-[var(--bw-ink)] font-semibold text-xs transition group"
+                    className="flex items-center justify-between gap-3 px-4 py-3.5 rounded-2xl bg-[var(--bw-soft)] hover:bg-[#090d13] text-[var(--bw-ink)] hover:text-white border border-[var(--bw-line)] hover:border-[#22e2ad]/50 font-bold text-xs transition group"
                   >
                     <span className="truncate">{item.label}</span>
                     <div className="flex items-center gap-1.5 shrink-0">
                       {item.badge && (
-                        <span className="px-2 py-0.5 rounded-full bg-[var(--bw-card)] text-[10px] font-bold text-[var(--bw-fold)] dark:text-[#b9dec9]">
+                        <span className="px-2 py-0.5 rounded-full bg-white dark:bg-white/10 text-[10px] font-extrabold text-[#0b5442] group-hover:bg-[#22e2ad]/20 group-hover:text-[#34f0bc]">
                           {item.badge}
                         </span>
                       )}
-                      <ChevronRight size={15} className="text-[var(--bw-emerald)] transition-transform group-hover:translate-x-0.5" />
+                      <ChevronRight size={15} className="text-[#119c78] group-hover:text-[#34f0bc] transition-transform group-hover:translate-x-1" />
                     </div>
                   </Link>
                 ))}
               </div>
               <div className="flex items-center justify-between pt-2 border-t border-[var(--bw-line)]">
-                <span className="text-[11px] text-[var(--bw-muted)]">100% UAE CBUAE Mortgage Operations</span>
-                <Link
-                  href={activeRailPopup.primaryHref}
-                  onClick={() => setActiveRailPopup(null)}
-                  className="bw-btn bw-btn-primary"
-                >
+                <span className="text-[11px] font-semibold text-[var(--bw-muted)]">100% UAE CBUAE Mortgage Operations</span>
+                <Link href={activeRailPopup.primaryHref} onClick={() => setActiveRailPopup(null)} className="bw-btn bw-btn-obsidian">
                   Open {activeRailPopup.label} <ChevronRight size={15} />
                 </Link>
               </div>
@@ -603,20 +651,20 @@ export function OsShell({ children }: { children: React.ReactNode }) {
         </div>
       )}
 
-      {/* Command Palette Search (Ctrl+K / Cmd+K) */}
+      {/* Command Palette Search (Ctrl+K) */}
       {searchOpen && (
         <div
-          className="fixed inset-0 z-50 bg-[#0b100e]/55 backdrop-blur-sm flex items-start justify-center pt-20 px-4 no-print"
+          className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-start justify-center pt-20 px-4 no-print"
           onClick={() => setSearchOpen(false)}
         >
           <div className="w-full max-w-xl bw-card overflow-hidden" onClick={(e) => e.stopPropagation()}>
             <div className="flex items-center gap-2.5 px-4 py-3.5 border-b border-[var(--bw-line)]">
-              <Search size={17} className="text-[var(--bw-emerald)]" />
+              <Search size={17} className="text-[#119c78]" />
               <input
                 autoFocus
                 value={searchQ}
                 onChange={(e) => void runSearch(e.target.value)}
-                placeholder="Search borrowers, mortgage case codes, 24 banks, communities, or developers..."
+                placeholder="Search clients, case codes, 24 banks, bank RMs, developers..."
                 className="flex-1 bg-transparent outline-none text-sm text-[var(--bw-ink)]"
               />
               <button type="button" onClick={() => setSearchOpen(false)} className="size-8 rounded-full hover:bg-[var(--bw-soft)] flex items-center justify-center cursor-pointer">
@@ -626,7 +674,7 @@ export function OsShell({ children }: { children: React.ReactNode }) {
             <div className="max-h-80 overflow-y-auto divide-y divide-[var(--bw-line)]">
               {searchRes.length === 0 ? (
                 <div className="p-6 text-center text-xs text-[var(--bw-muted)]">
-                  Type at least 2 characters to search across Betterway Mortgages OS (Privacy Fast Track strictly isolated to Owners).
+                  Type at least 2 characters to search across Betterway Mortgages OS.
                 </div>
               ) : (
                 searchRes.map((r, i) => (
@@ -640,7 +688,7 @@ export function OsShell({ children }: { children: React.ReactNode }) {
                       <div className="font-bold text-[var(--bw-ink)]">{r.title}</div>
                       <div className="text-[var(--bw-muted)]">{r.subtitle}</div>
                     </div>
-                    <span className="px-2.5 py-0.5 rounded-full bg-[var(--bw-mint)] text-[var(--bw-fold)] dark:text-[#b9dec9] text-[10px] font-bold uppercase">
+                    <span className="px-2.5 py-0.5 rounded-full bg-[#0a0e14] text-[#34f0bc] text-[10px] font-bold uppercase">
                       {r.type}
                     </span>
                   </Link>
@@ -651,31 +699,34 @@ export function OsShell({ children }: { children: React.ReactNode }) {
         </div>
       )}
 
-      {/* Quick Guide Modal */}
+      {/* Quick Guide & Mobile App Install Modal */}
       {guideOpen && (
         <div
-          className="fixed inset-0 z-50 bg-[#0b100e]/55 backdrop-blur-sm flex items-center justify-center p-4 no-print"
+          className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4 no-print"
           onClick={() => setGuideOpen(false)}
         >
           <div className="w-full max-w-xl bw-card overflow-hidden" onClick={(e) => e.stopPropagation()}>
-            <div className="px-6 py-4 border-b border-[var(--bw-line)] flex items-center justify-between bg-[var(--bw-soft)]">
-              <h3 className="font-display font-extrabold text-base">Betterway Mortgages OS · Quick Guide</h3>
-              <button type="button" onClick={() => setGuideOpen(false)} className="size-8 rounded-full hover:bg-[var(--bw-card)] flex items-center justify-center cursor-pointer">
+            <div className="px-6 py-4 bg-[#0a0e14] text-white flex items-center justify-between">
+              <div className="flex items-center gap-2.5">
+                <img src="/brand/betterway-icon.svg" alt="" className="size-6" />
+                <h3 className="font-display font-extrabold text-base">Quick Guide · Web, Excel &amp; Mobile App</h3>
+              </div>
+              <button type="button" onClick={() => setGuideOpen(false)} className="size-8 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center cursor-pointer">
                 <X size={16} />
               </button>
             </div>
             <div className="p-6 space-y-3.5 text-xs leading-relaxed text-[var(--bw-body)]">
               <div>
-                <strong className="text-[var(--bw-ink)] font-display">Search anything (Ctrl + K):</strong> Instantly find borrowers, mortgage case codes, 24 partner banks, APL developers, and communities.
+                <strong className="text-[var(--bw-ink)] font-display">1. Instant Search (Ctrl + K):</strong> Find any borrower, case, 24-bank rate, or developer in 1 second.
               </div>
               <div>
-                <strong className="text-[var(--bw-ink)] font-display">12-Step UAE Mortgage Flow:</strong> 01 Enquiry → 02 CBUAE Eligibility (50% DBR / LTV) → 03 Pick 24 Banks → 04 Vault Papers → 05 Pre-Approval (DIP) → 07 Valuation → 08 FOL → 09 Developer e-NOC → 10 DLD Trustee Disbursal → 11 Bank DSA Settlement → 12 Rate-Reset Watch.
+                <strong className="text-[var(--bw-ink)] font-display">2. Full Excel &amp; Daily Backup:</strong> Go to <strong>Excel, Backups &amp; Forms</strong> to download every single OS table in one `.xlsx` workbook or trigger an instant daily backup.
               </div>
               <div>
-                <strong className="text-[var(--bw-ink)] font-display">Owner Workspace (Warda &amp; Shabib):</strong> Manage daily advisor to-dos, verify GPS-pinned mortgage field meetings, build Bank-APL brochures, export Word/JPEG CBUAE forms, track 5-track disbursals, and settle advisor DSA &amp; RERA partner splits.
+                <strong className="text-[var(--bw-ink)] font-display">3. Android &amp; iOS Mobile App:</strong> Install directly on iPhone (Share → Add to Home Screen) or Android Chrome (Install App), or build native `.apk` / `.ipa` from the included <code>mobile/</code> Capacitor project.
               </div>
               <div className="pt-2 border-t border-[var(--bw-line)] text-[11px] text-[var(--bw-muted)]">
-                Betterway Mortgages LLC · Al Nasr Plaza, Oud Metha, Dubai · All timestamps in Asia/Dubai GST
+                Betterway Mortgages LLC · Al Nasr Plaza, Oud Metha, Dubai · Asia/Dubai GST
               </div>
             </div>
           </div>

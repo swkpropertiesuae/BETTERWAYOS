@@ -1,0 +1,109 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <defs>
+    <!-- Emerald Teal Gradient (Stem & Upper Arch) -->
+    <linearGradient id="bw-emerald" x1="12%" y1="4%" x2="72%" y2="96%">
+      <stop offset="0%" stop-color="#22E2AD"/>
+      <stop offset="38%" stop-color="#119C78"/>
+      <stop offset="78%" stop-color="#095E4A"/>
+      <stop offset="100%" stop-color="#053B2E"/>
+    </linearGradient>
+
+    <!-- Emerald Arch Highlight -->
+    <linearGradient id="bw-emerald-hi" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#34F0BC" stop-opacity="0.55"/>
+      <stop offset="60%" stop-color="#119C78" stop-opacity="0.1"/>
+      <stop offset="100%" stop-color="#053B2E" stop-opacity="0"/>
+    </linearGradient>
+
+    <!-- Emerald-to-Gold Soft Inner Depth -->
+    <linearGradient id="bw-inner-depth" x1="25%" y1="0%" x2="75%" y2="100%">
+      <stop offset="0%" stop-color="#063D2F" stop-opacity="0.72"/>
+      <stop offset="52%" stop-color="#0B5442" stop-opacity="0.28"/>
+      <stop offset="100%" stop-color="#D4AE52" stop-opacity="0"/>
+    </linearGradient>
+
+    <!-- Metallic Champagne Gold Gradient (Lower Bowl) -->
+    <linearGradient id="bw-gold" x1="15%" y1="15%" x2="88%" y2="85%">
+      <stop offset="0%" stop-color="#8C651D"/>
+      <stop offset="32%" stop-color="#D4AE52"/>
+      <stop offset="62%" stop-color="#FBE8A4"/>
+      <stop offset="84%" stop-color="#CFA547"/>
+      <stop offset="100%" stop-color="#8F671E"/>
+    </linearGradient>
+
+    <!-- Metallic Gold Roof & Door Gradient -->
+    <linearGradient id="bw-gold-roof" x1="10%" y1="0%" x2="90%" y2="100%">
+      <stop offset="0%" stop-color="#FFF0B8"/>
+      <stop offset="48%" stop-color="#D9B356"/>
+      <stop offset="100%" stop-color="#9A7123"/>
+    </linearGradient>
+
+    <!-- Squircle Background -->
+    <linearGradient id="bw-navy-bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#12233D"/>
+      <stop offset="100%" stop-color="#070E1A"/>
+    </linearGradient>
+
+    <!-- Clip Path for the 'b' Outer Silhouette -->
+    <clipPath id="bw-b-clip">
+      <path d="M 108,36
+               C 162,36 196,76 196,132
+               L 196,190
+               C 224,168 260,156 298,156
+               C 389,156 462,229 462,320
+               C 462,411 389,484 298,484
+               C 207,484 108,420 108,312
+               Z"/>
+    </clipPath>
+  </defs>
+  <g transform="translate(-28, -4)">
+    <g clip-path="url(#bw-b-clip)">
+      <!-- Full Gold Lower Bowl -->
+      <rect x="90" y="30" width="390" height="470" fill="url(#bw-gold)"/>
+      <!-- Soft Emerald-to-Gold Transition Behind Roof -->
+      <ellipse cx="302" cy="242" rx="145" ry="105" fill="url(#bw-inner-depth)"/>
+      <!-- Emerald Teal Stem & Sweeping Upper Arch -->
+      <path d="M 96,30
+               L 206,30
+               L 206,184
+               C 232,162 266,150 304,150
+               C 394,150 468,224 468,314
+               C 452,248 394,204 322,204
+               C 254,204 204,252 204,322
+               L 204,394
+               C 204,424 180,444 152,444
+               C 120,444 96,400 96,312
+               Z" fill="url(#bw-emerald)"/>
+      <!-- Subtle Inner Rim Highlight -->
+      <path d="M 108,36
+               C 158,36 190,74 190,130
+               L 190,196
+               C 220,172 258,160 298,160
+               C 382,160 448,222 458,302
+               C 442,232 380,186 306,186
+               C 242,186 196,222 178,274
+               L 178,130
+               C 178,86 150,52 108,46 Z" fill="url(#bw-emerald-hi)"/>
+    </g>
+
+    <!-- House Interior Cutout -->
+    <path d="M 294,244
+             L 372,312
+             L 372,398
+             L 216,398
+             L 216,312 Z" fill="#070E1A"/>
+
+    <!-- Metallic Gold Roof & Chimney -->
+    <path d="M 294,218
+             L 394,306
+             L 378,322
+             L 294,248
+             L 210,322
+             L 194,306 Z" fill="url(#bw-gold-roof)"/>
+    <rect x="342" y="236" width="24" height="44" rx="2" fill="url(#bw-gold-roof)"/>
+
+    <!-- Metallic Gold Door & Doorknob -->
+    <rect x="272" y="330" width="44" height="70" rx="2" fill="url(#bw-gold-roof)"/>
+    <circle cx="283" cy="366" r="4.5" fill="#070E1A"/>
+  </g>
+</svg>

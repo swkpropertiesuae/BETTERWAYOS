@@ -223,47 +223,47 @@ export default function ExecutiveOwnerDeskPage() {
 
   return (
     <div className="space-y-6">
-      {/* Calm Operating Wallet Deep Fold Emerald Executive Sanctuary — Warda's Workspace & Shabib's Workspace */}
-      <section
-        className="rounded-2xl text-white p-6 sm:p-7 space-y-5 shadow-[var(--bw-shadow-cash)] no-print"
-        style={{ background: 'linear-gradient(135deg, #025e3d 0%, #007b52 62%, #0a6e4c 100%)' }}
-      >
+      {/* 21st.dev Glossy Floating Shining Black Executive Sanctuary — Warda's Workspace & Shabib's Workspace */}
+      <section className="bw-glossy-black p-6 sm:p-7 space-y-5 no-print">
         <div className="flex flex-wrap items-center justify-between gap-4">
           <div className="flex items-center gap-4">
             <StaffAvatar name={user.name} avatarUrl={user.avatarUrl} initials={user.initials} size="lg" />
             <div>
-              <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/12 border border-white/20 text-[#fcf1b7] text-[10.5px] font-bold uppercase tracking-[0.16em]">
-                <Crown size={12} /> {ownerTitle} · 100% Equal Co-Owner Authority (Warda &amp; Shabib)
+              <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/10 border border-[#22e2ad]/35 text-[#fbe8a4] text-[10.5px] font-extrabold uppercase tracking-[0.14em]">
+                <Crown size={12} className="text-[#d9b356]" /> {ownerTitle} · Equal Co-Owner Control (Warda &amp; Shabib)
               </div>
-              <h1 className="font-display text-2xl sm:text-[30px] font-bold mt-1.5 tracking-[-0.03em] text-white">
-                {workspaceLabel} <span className="text-[#fcf1b7] font-semibold">· Executive Command Suite</span>
+              <h1 className="font-display text-2xl sm:text-[32px] font-extrabold mt-1.5 tracking-[-0.03em] text-white">
+                {workspaceLabel}{' '}
+                <span className="bg-gradient-to-r from-[#34f0bc] to-[#fbe8a4] bg-clip-text text-transparent">
+                  · Command Desk
+                </span>
               </h1>
-              <p className="text-xs sm:text-[13.5px] text-[#d3eee0] mt-1 max-w-3xl">
-                100% UAE Mortgage Command Hub: Mortgage Team Roles &amp; Daily To-Do, GPS Forensic Field Meetings (Client, Bank RM, Valuation, SOA/NOC &amp; DLD Trustee), Bank-APL Catalog &amp; Proposal Brochures, CBUAE Mortgage Forms (Word/JPEG/Fillable), 5-Track Pin-to-Pin Disbursals, Advisor DSA &amp; Expenses, plus <strong className="text-white">{privacyTitle}</strong>.
+              <p className="text-xs sm:text-[13.5px] text-slate-300 mt-1 max-w-3xl">
+                Simple owner hub for team daily tasks, GPS mortgage meetings, bank brochures, fillable Word/JPEG forms, 5-track closings, advisor payouts, full Excel backups &amp; <strong className="text-[#fbe8a4]">{privacyTitle}</strong>.
               </p>
             </div>
           </div>
           <div className="flex flex-wrap gap-2">
-            <Link
-              href="/os/master-log"
-              className="px-4 py-2.5 rounded-full bg-white/12 hover:bg-white/20 border border-white/20 text-xs font-bold inline-flex items-center gap-1.5 transition"
+            <a
+              href="/api/v1/utilities/master-backup-excel"
+              className="bw-btn bw-btn-gold text-xs py-2 min-h-[38px]"
             >
-              <Database size={14} /> Open Master Log (CORE)
-            </Link>
+              <Database size={14} /> Full Excel Backup
+            </a>
             <Link
-              href="/os/ai"
-              className="px-4 py-2.5 rounded-full bg-white text-[#025e3d] hover:bg-[#fcf1b7] text-xs font-extrabold inline-flex items-center gap-1.5 transition shadow-sm"
+              href="/os/mortgage-desk"
+              className="px-4 py-2 rounded-full bg-white/10 hover:bg-white/20 border border-white/15 text-white text-xs font-bold inline-flex items-center gap-1.5 transition"
             >
-              <Sparkles size={14} /> AI Case-Study Copilot
+              <Sparkles size={14} className="text-[#34f0bc]" /> 18-Bank &amp; Proposals
             </Link>
           </div>
         </div>
 
-        {/* Grouped Calm Capsule Navigation — Row 1: UAE Mortgage Daily Operations | Row 2: Executive Vault, Approvals & VAT */}
-        <div className="space-y-3 pt-4 border-t border-white/15">
+        {/* High-Contrast Glossy Capsule Tabs (Zero white-on-white flicker) */}
+        <div className="space-y-3 pt-4 border-t border-white/12">
           <div className="space-y-2">
-            <div className="text-[10.5px] font-bold uppercase tracking-[0.16em] text-[#d3eee0]">
-              1 · Quick-Access UAE Mortgage Operations (Team · Field Meetings · APL Brochures · Mortgage Forms · Disbursals · DSA)
+            <div className="text-[10.5px] font-extrabold uppercase tracking-[0.15em] text-[#34f0bc]">
+              1 · Daily UAE Mortgage Operations
             </div>
             <div className="flex flex-wrap gap-2">
               {[
@@ -275,15 +275,16 @@ export default function ExecutiveOwnerDeskPage() {
                 { id: 'commissions', label: 'Advisor DSA & Expenses', icon: Wallet },
               ].map((t) => {
                 const Icon = t.icon;
+                const active = tab === t.id;
                 return (
                   <button
                     key={t.id}
                     type="button"
                     onClick={() => setTab(t.id as ExecTab)}
-                    className={`px-4 py-2 rounded-full text-xs font-bold inline-flex items-center gap-1.5 transition cursor-pointer ${
-                      tab === t.id
-                        ? 'bg-white text-[#025e3d] shadow-md'
-                        : 'bg-white/12 text-white hover:bg-white/22 border border-white/15'
+                    className={`px-4 py-2 rounded-full text-xs font-extrabold inline-flex items-center gap-1.5 cursor-pointer ${
+                      active
+                        ? 'bg-[#22e2ad] text-[#070e1a] shadow-[0_8px_20px_-6px_rgba(34,226,173,0.7)] ring-2 ring-[#34f0bc]/60'
+                        : 'bg-white/[0.08] text-white hover:bg-white/[0.16] border border-white/15'
                     }`}
                   >
                     <Icon size={13} /> {t.label}
@@ -294,8 +295,8 @@ export default function ExecutiveOwnerDeskPage() {
           </div>
 
           <div className="space-y-2">
-            <div className="text-[10.5px] font-bold uppercase tracking-[0.16em] text-[#fcf1b7]/90">
-              2 · Executive Vault, Gold-Rush Kanban, Bulk AI, Approvals &amp; Consolidated VAT
+            <div className="text-[10.5px] font-extrabold uppercase tracking-[0.15em] text-[#fbe8a4]">
+              2 · Private Fast Track, Gold-Rush Kanban, Bulk AI, Approvals &amp; VAT 201
             </div>
             <div className="flex flex-wrap gap-2">
               {[
@@ -312,10 +313,10 @@ export default function ExecutiveOwnerDeskPage() {
                   key={t.id}
                   type="button"
                   onClick={() => setTab(t.id as ExecTab)}
-                  className={`px-3.5 py-1.5 rounded-full text-xs font-bold transition cursor-pointer ${
+                  className={`px-3.5 py-1.5 rounded-full text-xs font-extrabold cursor-pointer ${
                     tab === t.id
-                      ? 'bg-[#fcf1b7] text-[#025e3d] shadow-sm'
-                      : 'bg-black/15 text-[#eef6f1] hover:bg-white/15 border border-white/12'
+                      ? 'bg-[#fbe8a4] text-[#070e1a] shadow-md ring-2 ring-[#d9b356]/70'
+                      : 'bg-white/[0.06] text-slate-200 hover:bg-white/[0.14] border border-white/12'
                   }`}
                 >
                   {t.label}

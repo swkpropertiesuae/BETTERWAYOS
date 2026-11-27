@@ -13,3 +13,11 @@ data/
 .superpowers/
 .vercel/
 *.tsbuildinfo
+
+backups/
+mobile/node_modules/
+mobile/android/.gradle/
+mobile/android/build/
+mobile/android/app/build/
+mobile/ios/App/Pods/
+mobile/ios/App/build/

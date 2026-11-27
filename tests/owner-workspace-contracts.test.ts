@@ -2,6 +2,15 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { describe, it, expect } from 'vitest';
 import {
+  answerBankPolicyQuery,
+  calculateProposalOption,
+  computeCreditCardDbrImpact,
+  evaluateAllBanksEligibility,
+  PROPOSAL_DOCUMENT_CHECKLISTS,
+  UAE_BANK_POLICIES,
+  UAE_BANK_RMS,
+} from '@/lib/domain/bank-intelligence';
+import {
   assertCleanBetterwayPublicText,
   BROCHURE_THEME_PRESETS,
   buildDefaultStagesForTrack,
@@ -277,15 +286,89 @@ describe('Warda & Shabib UAE Mortgage Command Suite — Offline Domain, Schema &
       'src/components/workspace/LegalFormsStudioTab.tsx',
       'src/components/workspace/PinToPinClosingsTab.tsx',
       'src/components/workspace/CommissionsExpensesTab.tsx',
+      'src/components/workspace/ProposalStudioTab.tsx',
+      'src/components/workspace/BankRmAndPolicyTab.tsx',
+      'src/app/os/mortgage-desk/page.tsx',
+      'src/app/os/sales/page.tsx',
+      'src/app/os/utilities/page.tsx',
+      'src/lib/domain/bank-intelligence.ts',
     ];
-    const forbiddenRefBrandTerms = ['elvora', 'elvorashipping', 'freight forwarding', 'bill of lading', 'container shipment'];
+    const forbiddenRefBrandTerms = ['elvora', 'elvorashipping', 'freight forwarding', 'bill of lading', 'container shipment', 'huspy'];
     for (const rel of uiFilesToAudit) {
       const content = fs.readFileSync(path.join(process.cwd(), rel), 'utf8');
       for (const term of forbiddenRefBrandTerms) {
-        expect(content, `Forbidden reference brand term "${term}" found in ${rel}`).not.toMatch(
+        expect(content, `Forbidden reference/competitor brand term "${term}" found in ${rel}`).not.toMatch(
           new RegExp(term.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'i'),
         );
       }
     }
+  });
+
+  it('verifies 18-Bank Policy Matrix, 120+ Direct Bank RM Contacts, 3-Bank Proposal math, Master Excel Daily Backup & Native Mobile App', () => {
+    expect(UAE_BANK_POLICIES.length).toBeGreaterThanOrEqual(18);
+    expect(UAE_BANK_RMS.length).toBeGreaterThanOrEqual(120);
+    expect(Object.keys(PROPOSAL_DOCUMENT_CHECKLISTS)).toHaveLength(5);
+
+    const opt = calculateProposalOption({
+      bankCode: 'ENBD',
+      propertyValueAed: 3_500_000,
+      loanAmountAed: 2_800_000,
+      tenorMonths: 300,
+      fixedRatePct: 3.89,
+      fixedMonths: 36,
+      variableRatePct: 5.5,
+      lifeInsurancePaPct: 0.2052,
+      processingFeePct: 0.25,
+      valuationFeeAed: 3150,
+      personalLoanAmountAed: 100_000,
+      personalLoanMonths: 48,
+    });
+    expect(opt.fixedPeriodEmiAed).toBeGreaterThan(14_000);
+    expect(opt.fixedPeriodTotalMonthlyAed).toBeGreaterThan(opt.fixedPeriodEmiAed);
+    expect(opt.personalLoanMonthlyAed).toBeGreaterThan(2_000);
+    expect(opt.schedulePreview.length).toBeGreaterThanOrEqual(12);
+
+    const matches = evaluateAllBanksEligibility({
+      monthlyIncomeAed: 45_000,
+      propertyValueAed: 3_000_000,
+      existingEmisAed: 1_500,
+      creditCardLimitsAed: 30_000,
+      residency: 'expat_resident',
+      employment: 'salaried',
+      preference: 'all',
+      tenorYears: 25,
+    });
+    expect(matches.length).toBe(UAE_BANK_POLICIES.length);
+    expect(matches.some((m) => m.verdict === 'Eligible')).toBe(true);
+
+    const aiReply = answerBankPolicyQuery('Non-Resident 60% LTV');
+    expect(aiReply.matchedBanks.length).toBeGreaterThanOrEqual(5);
+
+    const cc = computeCreditCardDbrImpact([{ bank: 'EIB', oldLimitAed: 70_000, newLimitAed: 20_000 }]);
+    expect(cc.limitReduced).toBe(50_000);
+    expect(cc.monthlyDbrFreedAed).toBe(2_500);
+    expect(cc.extraMortgageCapacityAed).toBeGreaterThan(350_000);
+
+    // Master Excel, Daily Backup Cron, GitHub Actions & Native Android/iOS Capacitor project presence
+    const requiredFiles = [
+      'src/lib/backup/master-workbook.ts',
+      'src/app/api/v1/utilities/master-backup-excel/route.ts',
+      'src/app/api/v1/utilities/proposal-excel/route.ts',
+      'src/app/api/v1/utilities/daily-backup/route.ts',
+      'scripts/daily-backup.ts',
+      'vercel.json',
+      '.github/workflows/daily-backup.yml',
+      '.github/workflows/mobile-android-ios.yml',
+      'mobile/capacitor.config.ts',
+      'mobile/android/app/src/main/AndroidManifest.xml',
+      'mobile/ios/App/App/Info.plist',
+    ];
+    for (const rel of requiredFiles) {
+      expect(fs.existsSync(path.join(process.cwd(), rel)), `Missing required deliverable ${rel}`).toBe(true);
+    }
+
+    // Zero-SWK guard on Sales page
+    const salesSrc = fs.readFileSync(path.join(process.cwd(), 'src/app/os/sales/page.tsx'), 'utf8');
+    expect(salesSrc).not.toMatch(/\bswk\b/i);
   });
 });

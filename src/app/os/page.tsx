@@ -1,13 +1,15 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import Link from 'next/link';
 import {
+  ArrowRight,
   ArrowUpRight,
   Briefcase,
   Calculator,
   Crown,
   Database,
+  Download,
   FileLock2,
   Globe,
   KanbanSquare,
@@ -18,6 +20,7 @@ import {
   Search,
   Settings,
   ShieldCheck,
+  Smartphone,
   Sparkles,
   UserPlus,
   Users,
@@ -26,7 +29,8 @@ import {
   type LucideIcon,
 } from 'lucide-react';
 import { useOs } from '@/components/os/OsProvider';
-import { fmtAed, StatusPill } from '@/components/os/UiKit';
+import { fmtAed, GlossyBlackCard, ShineLink, StatusPill } from '@/components/os/UiKit';
+import { useInstantApi } from '@/lib/client-cache';
 
 interface AppIconDef {
   key: string;
@@ -44,7 +48,8 @@ interface WorkspaceCardDef {
   title: string;
   href: string;
   icon: LucideIcon;
-  tone: 'fold' | 'mint' | 'sand' | 'sky';
+  style: 'glossy-black' | 'pearl-white';
+  accent: 'emerald' | 'gold' | 'dual';
   previews: string[];
   featureCount: number;
   visible: boolean;
@@ -53,24 +58,19 @@ interface WorkspaceCardDef {
 export default function OsAppLauncherPage() {
   const { user } = useOs();
   const [filter, setFilter] = useState('');
-  const [stats, setStats] = useState<{
-    loanBookAed: number;
-    expectedDsaAed: number;
-    todayEnquiriesCount: number;
-    checkedInCount: number;
-    totalStaffCount: number;
-    pendingApprovalsCount: number;
-    activeFieldVisitsCount: number;
-  } | null>(null);
+  const { data: overview } = useInstantApi<{
+    kpis?: {
+      loanBookAed: number;
+      expectedDsaAed: number;
+      todayEnquiriesCount: number;
+      checkedInCount: number;
+      totalStaffCount: number;
+      pendingApprovalsCount: number;
+      activeFieldVisitsCount: number;
+    };
+  }>('/api/v1/dashboard/overview');
 
-  useEffect(() => {
-    fetch('/api/v1/dashboard/overview')
-      .then((r) => (r.ok ? r.json() : null))
-      .then((d) => {
-        if (d?.kpis) setStats(d.kpis);
-      })
-      .catch(() => {});
-  }, []);
+  const stats = overview?.kpis ?? null;
 
   const isOwner = Boolean(user?.isOwner);
   const isOwnerOrAdmin = user?.role === 'OWNER' || user?.role === 'OFFICE_ADMIN';
@@ -78,7 +78,6 @@ export default function OsAppLauncherPage() {
   const hasWebsiteStudioAccess = isOwnerOrAdmin || user?.role === 'IT_MARKETING';
   const ownerWorkspaceLabel = user?.email?.toLowerCase().includes('warda') ? "Warda's Workspace" : "Shabib's Workspace";
 
-  // Calm Operating Wallet Tinted Workspace Cards (3 columns alternating fold / mint / sand / sky)
   const workspaceCards: WorkspaceCardDef[] = (
     [
       {
@@ -86,59 +85,65 @@ export default function OsAppLauncherPage() {
         title: ownerWorkspaceLabel,
         href: '/os/executive',
         icon: Crown,
-        tone: 'fold',
-        previews: ['Team & Daily To-Do + Verifiers', 'Mortgage Field Meetings (GPS)', 'APL Brochures, Forms, Disbursals & DSA'],
+        style: 'glossy-black',
+        accent: 'dual',
+        previews: ['Team Roles, Daily To-Do & Field Verifiers', 'GPS Mortgage Field Meetings & Proofs', 'APL Brochures, Fillable Forms, Closings & Payouts'],
         featureCount: 11,
         visible: isOwner,
       },
       {
+        id: 'mortgage-desk',
+        title: '18-Bank Policy, RMs & Proposals',
+        href: '/os/mortgage-desk',
+        icon: Calculator,
+        style: 'glossy-black',
+        accent: 'emerald',
+        previews: ['Live 18-Bank Rate Matrix & 140+ Direct Bank RMs', '3-Bank Auto-Eco Proposal & 300-Month Schedule', '60-Sec Matcher, AI Policy Finder & Statement Check'],
+        featureCount: 8,
+        visible: hasPipelineAccess,
+      },
+      {
         id: 'origination',
-        title: 'Origination & Pipeline',
+        title: 'Daily Leads & 12-Step Pipeline',
         href: '/os/pipeline',
         icon: KanbanSquare,
-        tone: isOwner ? 'mint' : 'fold',
-        previews: ['12-Step Mortgage Kanban', '100% Daily Enquiry CRM & Masked Vault', 'Live Command Center Radar'],
+        style: 'pearl-white',
+        accent: 'emerald',
+        previews: ['12-Step UAE Mortgage Kanban Board', 'Daily Lead Capture & PDPL-Protected Client List', 'Live War Room & Coordinator Logins'],
         featureCount: 4,
         visible: hasPipelineAccess,
       },
       {
-        id: 'mortgage-desk',
-        title: '24-Bank Desk & Vault',
-        href: '/os/mortgage-desk',
-        icon: Calculator,
-        tone: 'sand',
-        previews: ['24 UAE Conventional & Islamic Banks', '8 CBUAE Calculators & CTO Analyzer', 'Encrypted Borrower Document Vault'],
-        featureCount: 3,
-        visible: hasPipelineAccess,
-      },
-      {
         id: 'finance',
-        title: 'Accounts, Bank DSA & VAT',
+        title: 'Accounts, Bank DSA & VAT 201',
         href: '/os/accounts',
         icon: Wallet,
-        tone: 'sky',
-        previews: ['Double-Entry GL & UAE 5% VAT 201', 'Corporate-Account-Only ORN Guard', 'Advisor DSA & Partner Settlements'],
+        style: 'pearl-white',
+        accent: 'gold',
+        previews: ['Double-Entry Ledger & 5% UAE FTA VAT 201', 'Corporate-Account-Only RERA Partner Payouts', 'Advisor DSA Commission & Expense Tracker'],
         featureCount: isOwner ? 3 : 1,
         visible: isOwnerOrAdmin,
       },
       {
         id: 'team-field',
-        title: 'Team, QR & Field GPS',
+        title: 'Staff, Oud Metha QR & Field GPS',
         href: '/os/employees',
         icon: Users,
-        tone: 'mint',
-        previews: ['Oud Metha 20s QR Attendance & WPS', 'GPS Mortgage Field Meetings & SOS', 'Team Group Channels (Inside)'],
+        style: 'pearl-white',
+        accent: 'emerald',
+        previews: ['Oud Metha 20s Rotating QR Check-In & WPS', 'GPS Mortgage Field Meetings & 1-Tap SOS', 'Team Group Channels (Inside)'],
         featureCount: 3,
         visible: true,
       },
       {
-        id: 'forms-ai',
-        title: 'Mortgage Forms, AI & Master Log',
+        id: 'forms-excel',
+        title: 'All-Data Excel, Backups & AI',
         href: '/os/utilities',
         icon: Sparkles,
-        tone: 'sand',
-        previews: ['12 Fillable Word/JPEG CBUAE Forms', '50-Spec Excel Data Hub & AI Copilot', '22 CORE Registries, Compliance & CMS'],
-        featureCount: 4,
+        style: 'glossy-black',
+        accent: 'gold',
+        previews: ['1-Click Full 17-Sheet Master Excel Workbook', 'Automated Daily Backup (Local + Cloud + GitHub)', '12 Fillable Word/JPEG Mortgage Forms & AI Copilot'],
+        featureCount: 6,
         visible: true,
       },
     ] satisfies WorkspaceCardDef[]
@@ -149,37 +154,37 @@ export default function OsAppLauncherPage() {
       key: 'executive',
       label: user?.executiveAppTitle || "Warda's Place",
       group: ownerWorkspaceLabel,
-      blurb: `${user?.privacyLaneTitle || 'Privacy Fast Track'}, Team To-Do, Field Meetings, APL Brochures, CBUAE Forms, 5-Track Disbursals & DSA`,
-      badge: 'Owner HQ',
+      blurb: 'Team daily tasks, GPS field meetings, bank brochures, Word/JPEG forms, 5-track closings, advisor payouts & VIP fast track.',
+      badge: 'Owner Desk',
       href: '/os/executive',
       icon: Crown,
       visible: isOwner,
     },
     {
       key: 'dashboard',
-      label: 'Dashboard',
-      group: 'Origination & Pipeline',
-      blurb: 'Loan book, expected Bank DSA, 12-stage funnel, My Tasks Today, Team Task Monitor & Assigned Borrowers',
-      badge: 'Daily Pulse',
+      label: 'Daily Dashboard',
+      group: 'Leads & Pipeline',
+      blurb: 'Loan book totals, expected bank payouts, 12-step counts, your tasks today, team board & assigned clients.',
+      badge: 'Live Pulse',
       href: '/os/dashboard',
       icon: LayoutDashboard,
       visible: true,
     },
     {
-      key: 'command',
-      label: 'Command Center',
-      group: 'Origination & Pipeline',
-      blurb: 'Live daily enquiry ticker, 12-stage lead counts, critical alerts, Oud Metha attendance & field GPS radar',
-      badge: 'War Room',
-      href: '/os/command-center',
-      icon: Radar,
-      visible: true,
+      key: 'mortgage-desk',
+      label: '24-Bank & Proposal Hub',
+      group: 'Bank Hub & Proposals',
+      blurb: '18-bank live rates, 140+ bank RM contacts, 3-bank Auto-Eco Proposal Maker, 60-sec matcher, AI policy finder & statement analyzer.',
+      badge: '18 Banks + 140 RMs',
+      href: '/os/mortgage-desk',
+      icon: Calculator,
+      visible: hasPipelineAccess,
     },
     {
       key: 'pipeline',
       label: '12-Step Pipeline',
-      group: 'Origination & Pipeline',
-      blurb: 'Exact 1→12 UAE mortgage Kanban from Enquiry, Eligibility, 24 Banks & Papers to e-NOC, Disbursal & Care',
+      group: 'Leads & Pipeline',
+      blurb: 'Move every mortgage step-by-step from Enquiry and Pre-Approval to Valuation, FOL, e-NOC, Trustee Disbursal & Care.',
       badge: '12 Stages',
       href: '/os/pipeline',
       icon: KanbanSquare,
@@ -187,29 +192,29 @@ export default function OsAppLauncherPage() {
     },
     {
       key: 'crm',
-      label: 'CRM & Masked Vault',
-      group: 'Origination & Pipeline',
-      blurb: '100% daily enquiry ledger (Website, Chat, WhatsApp, Referrals), PDPL-masked borrower phones & call log',
+      label: 'Leads & Protected Vault',
+      group: 'Leads & Pipeline',
+      blurb: 'Capture every Website, WhatsApp, Call & Partner enquiry with PDPL phone masking and instant pipeline conversion.',
       badge: 'PDPL Safe',
       href: '/os/crm',
       icon: UserPlus,
       visible: hasPipelineAccess,
     },
     {
-      key: 'mortgage-desk',
-      label: '24-Bank Mortgage Desk',
-      group: '24-Bank Desk & Vault',
-      blurb: 'Schedules, valuations, Form F/FOL deadlines, 24 UAE banks, 8 CBUAE calculators & CTO/Avg Balance analyzer',
-      badge: '24 Banks',
-      href: '/os/mortgage-desk',
-      icon: Calculator,
-      visible: hasPipelineAccess,
+      key: 'command',
+      label: 'Command Center',
+      group: 'Leads & Pipeline',
+      blurb: 'Live daily enquiry ticker, stage numbers, urgent alerts, office attendance, and active field GPS radar.',
+      badge: 'War Room',
+      href: '/os/command-center',
+      icon: Radar,
+      visible: true,
     },
     {
       key: 'vault',
       label: 'Client Document Vault',
-      group: '24-Bank Desk & Vault',
-      blurb: 'Encrypted Supabase vault: Passport, EID, Visa, Payslips, Salary Cert, 6m Bank, AECB, Form F, Oqood, Title Deed',
+      group: 'Bank Hub & Proposals',
+      blurb: 'Safe encrypted storage for Passport, EID, Visa, Salary Certificate, 6-month Bank Statements, AECB, Form F & Title Deed.',
       badge: 'Encrypted',
       href: '/os/vault',
       icon: FileLock2,
@@ -218,18 +223,28 @@ export default function OsAppLauncherPage() {
     {
       key: 'sales',
       label: 'Quotes & RERA Partners',
-      group: '24-Bank Desk & Vault',
-      blurb: 'Branded bank comparison proposals, Takaful/Wills/Golden Visa cross-sell & RERA Partner Referral Hub',
-      badge: 'Proposals',
+      group: 'Bank Hub & Proposals',
+      blurb: 'Share white-label client tracking cards, bank comparisons, Takaful/Golden Visa add-ons & RERA partner referrals.',
+      badge: 'Client Tracker',
       href: '/os/sales',
       icon: Briefcase,
       visible: hasPipelineAccess,
     },
     {
+      key: 'utilities',
+      label: 'Excel, Daily Backups & Forms',
+      group: 'Excel, Backups & AI',
+      blurb: 'Download ALL OS data in 1 Master Excel file, run automated daily backups, and export Word/JPEG UAE mortgage forms.',
+      badge: 'Full Excel + Backup',
+      href: '/os/utilities',
+      icon: Wrench,
+      visible: true,
+    },
+    {
       key: 'accounts',
       label: 'Accounts & UAE VAT',
-      group: 'Accounts, Bank DSA & VAT',
-      blurb: 'Double-entry GL, Bank DSA invoices, UAE 5% VAT 201, PINT-AE XML & Corporate-Account-Only payout guard',
+      group: 'Accounts & Bank DSA',
+      blurb: 'Company accounting ledger, Bank DSA tax invoices, 5% UAE FTA VAT 201 & corporate-bank-only payout rules.',
       badge: 'FTA VAT',
       href: '/os/accounts',
       icon: Wallet,
@@ -237,9 +252,9 @@ export default function OsAppLauncherPage() {
     },
     {
       key: 'master-log',
-      label: 'Master Log (CORE)',
-      group: 'Governance & Compliance',
-      blurb: '22 headquarters registries: Communities, Developers, Oud Metha Geofence, Departments, COA, VAT & 24 Banks',
+      label: 'Master Log (22 Lists)',
+      group: 'Master Log & Rules',
+      blurb: 'Central control for Communities, Developers, Banks, Staff Departments, Office Geofence, Chart of Accounts & VAT codes.',
       badge: isOwner ? 'Direct Control' : 'Approval Gated',
       href: '/os/master-log',
       icon: Database,
@@ -248,78 +263,68 @@ export default function OsAppLauncherPage() {
     {
       key: 'compliance',
       label: 'CBUAE Compliance',
-      group: 'Governance & Compliance',
-      blurb: 'CBUAE Joint KFS gate, AML sanctions screening, goAML XML, UAE PDPL audit trail & 2-of-2 Owner Delete Bin',
+      group: 'Master Log & Rules',
+      blurb: 'CBUAE Key Facts Statement checks, AML screening, PDPL audit log & 2-of-2 Owner Delete Bin protection.',
       badge: 'CBUAE & PDPL',
       href: '/os/compliance',
       icon: ShieldCheck,
       visible: isOwnerOrAdmin,
     },
     {
-      key: 'website-studio',
-      label: 'Website & Social Studio',
-      group: 'Forms, AI & Website',
-      blurb: 'Live two-way control of betterwaymortgages.com (Hot Offers, Bank Rates, Banners, Team) & UTM Campaigns',
-      badge: 'Live Sync',
-      href: '/os/website-studio',
-      icon: Globe,
-      visible: hasWebsiteStudioAccess,
-    },
-    {
       key: 'employees',
-      label: 'Employees & QR',
+      label: 'Staff & Oud Metha QR',
       group: 'Team, QR & Field GPS',
-      blurb: 'Official studio roster, 20s Oud Metha Office QR + Geofence check-in, Visas, Leave & MOHRE WPS .SIF',
-      badge: 'Oud Metha QR',
+      blurb: 'Team profiles, 20-second rotating office QR check-in, visas, leave requests & UAE WPS salary export.',
+      badge: 'Office QR',
       href: '/os/employees',
       icon: Users,
-      visible: true,
-    },
-    {
-      key: 'inside',
-      label: 'Team Group (Inside)',
-      group: 'Team, QR & Field GPS',
-      blurb: 'Company channels & live #attendance-checkin feed automatically updated when staff scan Oud Metha QR',
-      badge: 'Live Feed',
-      href: '/os/inside',
-      icon: MessagesSquare,
       visible: true,
     },
     {
       key: 'field-gps',
       label: 'Mortgage Field GPS',
       group: 'Team, QR & Field GPS',
-      blurb: 'Track field staff live at Banks, Valuations, Developers & DLD Trustees with GPS pins & 1-Tap SOS alert',
+      blurb: 'GPS check-in & verified forensic reports for Bank RM, Valuation, Developer NOC & DLD Trustee meetings plus 1-Tap SOS.',
       badge: 'GPS + SOS',
       href: '/os/field-gps',
       icon: MapPin,
       visible: true,
     },
     {
+      key: 'inside',
+      label: 'Team Channels (Inside)',
+      group: 'Team, QR & Field GPS',
+      blurb: 'Internal channels and automatic live #attendance-checkin updates whenever staff scan in at Oud Metha.',
+      badge: 'Live Chat',
+      href: '/os/inside',
+      icon: MessagesSquare,
+      visible: true,
+    },
+    {
       key: 'ai',
-      label: 'AI Case-Study Copilot',
-      group: 'Forms, AI & Website',
-      blurb: 'PII-shielded UAE mortgage AI grounded in Betterway case studies + Train New Scenario knowledge studio',
-      badge: 'PII Shield',
+      label: 'AI Mortgage Copilot',
+      group: 'Excel, Backups & AI',
+      blurb: 'Privacy-safe UAE mortgage helper trained on Betterway case studies & 18-bank credit policies.',
+      badge: 'PII Safe AI',
       href: '/os/ai',
       icon: Sparkles,
       visible: true,
     },
     {
-      key: 'utilities',
-      label: 'Mortgage Forms & Excel',
-      group: 'Forms, AI & Website',
-      blurb: '12 fillable Word/JPEG CBUAE mortgage forms with Owner Corporate Seal, 9-Language Translator, OCR & 50 Excel Hub',
-      badge: '50 Excel + Forms',
-      href: '/os/utilities',
-      icon: Wrench,
-      visible: true,
+      key: 'website-studio',
+      label: 'Website & Social Studio',
+      group: 'Excel, Backups & AI',
+      blurb: 'Update live rates, hot offers, banners & team cards on betterwaymortgages.com directly from the OS.',
+      badge: 'Live Sync',
+      href: '/os/website-studio',
+      icon: Globe,
+      visible: hasWebsiteStudioAccess,
     },
     {
       key: 'settings',
-      label: 'Settings',
-      group: 'Governance & Compliance',
-      blurb: 'Oud Metha Wi-Fi/Geofence calibration, Reception QR rules, Website sync HMAC & Corporate IBAN whitelist',
+      label: 'Office & Mobile Settings',
+      group: 'Master Log & Rules',
+      blurb: 'Oud Metha geofence & Wi-Fi rules, automated daily backup schedule, website sync & Android/iOS mobile app setup.',
       badge: 'Config',
       href: '/os/settings',
       icon: Settings,
@@ -337,126 +342,209 @@ export default function OsAppLauncherPage() {
 
   return (
     <div className="space-y-7">
-      {/* Calm Operating Wallet Personal Greeting + Live Strip */}
+      {/* Premium White Hero Greeting + Glossy Black Action Strip */}
       <section className="flex flex-wrap items-end justify-between gap-4 pt-1">
         <div>
-          <h1 className="font-display text-[28px] sm:text-[36px] font-bold tracking-[-0.03em] leading-[1.15] text-[var(--bw-ink)]">
-            Good to see you{firstName ? `, ${firstName}` : ''}.
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#0a0e14] text-[#34f0bc] text-[10.5px] font-extrabold uppercase tracking-[0.14em] mb-2.5 shadow-sm border border-[#22e2ad]/30">
+            <img src="/brand/betterway-icon.svg" alt="" className="size-3.5" />
+            Betterway Mortgages LLC · Dubai OS
+          </div>
+          <h1 className="font-display text-[30px] sm:text-[38px] font-extrabold tracking-[-0.035em] leading-[1.1] text-[var(--bw-ink)]">
+            Welcome back{firstName ? `, ${firstName}` : ''}.
           </h1>
-          <p className="text-[13.5px] text-[var(--bw-muted)] mt-1.5 max-w-[58ch]">
-            Enquiry to Pre-Approval. Valuation to DLD Trustee Disbursal. Choose where to work today.
+          <p className="text-[14px] text-[var(--bw-muted)] mt-1.5 max-w-[62ch]">
+            Simple, fast control over every UAE mortgage — from 18-bank rate quotes and 140+ bank RMs to DLD Trustee disbursals and daily Excel backups.
           </p>
         </div>
 
-        <div className="flex flex-wrap items-center gap-2">
-          {stats && (
-            <div className="hidden xl:flex items-center gap-2 me-2 text-xs">
-              <span className="px-3.5 py-2 rounded-full bg-[var(--bw-card)] border border-[var(--bw-line)] font-mono-num font-bold shadow-[var(--bw-shadow-raised)]">
-                Loan Book <span className="text-[var(--bw-emerald)]">{fmtAed(stats.loanBookAed, true)}</span>
-              </span>
-              <span className="px-3.5 py-2 rounded-full bg-[var(--bw-card)] border border-[var(--bw-line)] font-mono-num font-bold shadow-[var(--bw-shadow-raised)]">
-                Bank DSA <span className="text-[var(--bw-fold)] dark:text-[#b9dec9]">{fmtAed(stats.expectedDsaAed, true)}</span>
-              </span>
-              <span className="px-3.5 py-2 rounded-full bg-[var(--bw-card)] border border-[var(--bw-line)] font-mono-num font-bold shadow-[var(--bw-shadow-raised)]">
-                Team {stats.checkedInCount}/{stats.totalStaffCount} In
-              </span>
-            </div>
-          )}
-          <Link href="/os/dashboard" className="bw-btn bw-btn-dark">
-            <LayoutDashboard size={15} /> Dashboard
-          </Link>
+        <div className="flex flex-wrap items-center gap-2.5">
+          <a href="/api/v1/utilities/master-backup-excel" className="bw-btn bw-btn-outline group">
+            <Download size={14} className="text-[#119c78]" /> All Data Excel
+          </a>
+          <ShineLink href="/os/dashboard" variant="obsidian">
+            Dashboard
+          </ShineLink>
           {isOwner && (
-            <Link href="/os/executive" className="bw-btn bw-btn-primary">
-              <Crown size={15} /> {ownerWorkspaceLabel}
-            </Link>
+            <ShineLink href="/os/executive" variant="emerald">
+              {ownerWorkspaceLabel}
+            </ShineLink>
           )}
         </div>
       </section>
 
-      {/* Owner Direct 1-Click Access Strip (6 UAE Mortgage Executive Modules) */}
-      {isOwner && (
-        <section className="bw-card p-5 space-y-3.5">
-          <div className="flex flex-wrap items-center justify-between gap-2">
+      {/* Glossy Floating Shining Black Executive Snapshot Ribbon */}
+      <GlossyBlackCard className="p-5 sm:p-6" accent="dual">
+        <div className="flex flex-wrap items-center justify-between gap-4">
+          <div className="flex flex-wrap items-center gap-5 sm:gap-8">
             <div>
-              <div className="text-[11px] font-bold uppercase tracking-[0.14em] text-[var(--bw-emerald)]">
-                {ownerWorkspaceLabel} · Direct 1-Click Access
+              <div className="text-[10.5px] font-bold uppercase tracking-[0.12em] text-slate-400">Active Loan Book</div>
+              <div className="font-display text-2xl sm:text-[28px] font-extrabold font-mono-num text-white mt-0.5">
+                {fmtAed(stats?.loanBookAed ?? 0, true)}
               </div>
-              <h2 className="font-display text-[15px] font-bold text-[var(--bw-ink)] mt-0.5">
-                Executive Mortgage Operations, Field Meetings, APL Brochures, CBUAE Forms &amp; DSA Settlements
-              </h2>
             </div>
-            <Link href="/os/executive" className="text-xs font-bold text-[var(--bw-emerald)] hover:underline inline-flex items-center gap-1">
-              Open Full Workspace <ArrowUpRight size={14} />
+            <div className="h-9 w-px bg-white/12 hidden sm:block" />
+            <div>
+              <div className="text-[10.5px] font-bold uppercase tracking-[0.12em] text-[#fbe8a4]">Expected Bank DSA</div>
+              <div className="font-display text-2xl sm:text-[28px] font-extrabold font-mono-num text-[#34f0bc] mt-0.5">
+                {fmtAed(stats?.expectedDsaAed ?? 0, true)}
+              </div>
+            </div>
+            <div className="h-9 w-px bg-white/12 hidden md:block" />
+            <div>
+              <div className="text-[10.5px] font-bold uppercase tracking-[0.12em] text-slate-400">Team Checked In</div>
+              <div className="font-display text-2xl sm:text-[28px] font-extrabold font-mono-num text-[#fbe8a4] mt-0.5">
+                {stats ? `${stats.checkedInCount}/${stats.totalStaffCount}` : '0/9'}
+              </div>
+            </div>
+            <div className="h-9 w-px bg-white/12 hidden lg:block" />
+            <div>
+              <div className="text-[10.5px] font-bold uppercase tracking-[0.12em] text-slate-400">Live Bank Panel</div>
+              <div className="font-display text-2xl sm:text-[28px] font-extrabold font-mono-num text-white mt-0.5">
+                24 Banks <span className="text-xs font-bold text-[#34f0bc]">· 140+ RMs</span>
+              </div>
+            </div>
+          </div>
+
+          <div className="flex flex-wrap items-center gap-2">
+            <Link
+              href="/os/mortgage-desk"
+              className="bw-btn bw-btn-gold text-xs py-2 min-h-[38px]"
+            >
+              <Calculator size={14} /> 3-Bank Proposal Maker
+            </Link>
+            <Link
+              href="/os/utilities"
+              className="px-4 py-2 rounded-full bg-white/10 hover:bg-white/20 text-white border border-white/15 text-xs font-bold inline-flex items-center gap-1.5 transition"
+            >
+              <Smartphone size={14} className="text-[#34f0bc]" /> Daily Backup &amp; App
             </Link>
           </div>
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2.5 text-xs">
-            {[
-              { tab: 'team', label: 'Team & Daily To-Do', hint: 'Roles & Field Verifiers' },
-              { tab: 'visits', label: 'Mortgage Field Meetings', hint: 'GPS + Bank RM + Verify' },
-              { tab: 'catalog', label: 'APL Catalog & Brochures', hint: '24-Bank APL & Themes' },
-              { tab: 'legal', label: 'Mortgage Forms Studio', hint: 'KFS · DIP · SOA · FOL' },
-              { tab: 'closings', label: 'Pin-to-Pin Disbursals', hint: '5 Mortgage Tracks' },
-              { tab: 'commissions', label: 'Advisor DSA & Expenses', hint: 'Cash · BT · Botim · ORN' },
-            ].map((q) => (
-              <Link
-                key={q.tab}
-                href={`/os/executive?tab=${q.tab}`}
-                className="p-3.5 rounded-2xl bg-[var(--bw-soft)] hover:bg-[var(--bw-mint)] border border-[var(--bw-line)] transition group"
-              >
-                <div className="font-bold text-[var(--bw-ink)] truncate flex items-center justify-between gap-1">
-                  <span className="truncate">{q.label}</span>
-                  <ArrowUpRight size={13} className="text-[var(--bw-emerald)] shrink-0 opacity-70 group-hover:opacity-100" />
-                </div>
-                <div className="text-[11px] text-[var(--bw-muted)] mt-1 truncate">{q.hint}</div>
-              </Link>
-            ))}
-          </div>
-        </section>
-      )}
+        </div>
 
-      {/* Floating Capsule Workspace Search Bar */}
+        {/* Owner 1-Click 6-Module Dock Inside Glossy Shining Black Card */}
+        {isOwner && (
+          <div className="mt-5 pt-4 border-t border-white/12">
+            <div className="flex items-center justify-between gap-2 mb-3">
+              <span className="text-[10.5px] font-extrabold uppercase tracking-[0.15em] text-[#fbe8a4]">
+                {ownerWorkspaceLabel} · Quick Jump (Zero Loading)
+              </span>
+              <Link href="/os/executive" className="text-xs font-bold text-[#34f0bc] hover:underline inline-flex items-center gap-1">
+                Open Full Desk <ArrowUpRight size={13} />
+              </Link>
+            </div>
+            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2 text-xs">
+              {[
+                { tab: 'team', label: 'Team & To-Do', hint: 'Roles & Verifiers' },
+                { tab: 'visits', label: 'Field Meetings', hint: 'GPS + Proof Photos' },
+                { tab: 'catalog', label: 'APL Brochures', hint: 'Colors & Templates' },
+                { tab: 'legal', label: 'Word / JPEG Forms', hint: 'Fill & Seal Docs' },
+                { tab: 'closings', label: '5-Track Closings', hint: 'Cheque Ledger' },
+                { tab: 'commissions', label: 'DSA & Expenses', hint: 'Cash · BT · Botim' },
+              ].map((q) => (
+                <Link
+                  key={q.tab}
+                  href={`/os/executive?tab=${q.tab}`}
+                  className="p-3 rounded-2xl bg-white/[0.06] hover:bg-white/[0.14] border border-white/10 hover:border-[#22e2ad]/60 transition group"
+                >
+                  <div className="font-extrabold text-white truncate flex items-center justify-between gap-1">
+                    <span className="truncate">{q.label}</span>
+                    <ArrowRight size={12} className="text-[#34f0bc] shrink-0 transition-transform group-hover:translate-x-0.5" />
+                  </div>
+                  <div className="text-[10.5px] text-slate-300 mt-0.5 truncate">{q.hint}</div>
+                </Link>
+              ))}
+            </div>
+          </div>
+        )}
+      </GlossyBlackCard>
+
+      {/* Instant Capsule Search */}
       <div className="flex flex-wrap items-center justify-between gap-3">
-        <label className="relative block w-full sm:w-[420px]">
-          <Search size={17} className="absolute start-4 top-1/2 -translate-y-1/2 text-[var(--bw-muted)] pointer-events-none" />
+        <label className="relative block w-full sm:w-[440px]">
+          <Search size={17} className="absolute start-4 top-1/2 -translate-y-1/2 text-[#119c78] pointer-events-none" />
           <input
             type="search"
             value={filter}
             onChange={(e) => setFilter(e.target.value)}
-            placeholder="Find a mortgage workspace, 24-bank tool, or workflow..."
-            aria-label="Find a mortgage workspace or feature"
-            className="w-full h-11 ps-11 pe-4 rounded-full bg-[var(--bw-card)] border border-[var(--bw-line)] text-sm text-[var(--bw-ink)] shadow-[var(--bw-shadow-raised)] outline-none focus:border-[var(--bw-emerald)] focus:shadow-[var(--bw-focus-ring)]"
+            placeholder="Find any tool, bank rate, RM contact, proposal, or Excel export..."
+            aria-label="Find a mortgage tool"
+            className="w-full h-11 ps-11 pe-4 rounded-full bg-[var(--bw-card)] border border-[var(--bw-line-strong)] text-sm text-[var(--bw-ink)] shadow-[var(--bw-shadow-raised)] outline-none focus:border-[#119c78] focus:shadow-[var(--bw-focus-ring)]"
           />
         </label>
-        <div className="text-xs text-[var(--bw-muted)] font-medium">
-          {workspaceCards.length} workspaces · {visibleApps.length} operating modules
+        <div className="text-xs text-[var(--bw-muted)] font-semibold">
+          {workspaceCards.length} workspaces · {visibleApps.length} mortgage apps · 100% UAE CBUAE
         </div>
       </div>
 
-      {/* Primary Tinted 3-Column Workspace Cards (Hidden while searching specific feature) */}
+      {/* Primary 3-Column Hybrid Glossy Black + Pure White Workspaces */}
       {!needle && (
         <>
           <section className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5" aria-label="Mortgage workspaces">
             {workspaceCards.map((card) => {
               const Icon = card.icon;
-              const isFold = card.tone === 'fold';
+              const isDark = card.style === 'glossy-black';
+              if (isDark) {
+                return (
+                  <Link key={card.id} href={card.href} className="block group">
+                    <GlossyBlackCard className="p-6 min-h-[244px] h-full flex flex-col" accent={card.accent}>
+                      <div className="flex items-center justify-between mb-5">
+                        <span className="size-12 rounded-2xl bg-white/10 border border-[#22e2ad]/35 flex items-center justify-center text-[#34f0bc]">
+                          <Icon size={24} strokeWidth={1.75} />
+                        </span>
+                        <span className="size-9 rounded-full bg-white/8 group-hover:bg-[#22e2ad] text-[#fbe8a4] group-hover:text-[#070e1a] flex items-center justify-center transition">
+                          <ArrowUpRight size={17} />
+                        </span>
+                      </div>
+                      <h2 className="font-display text-[21px] font-extrabold tracking-[-0.025em] text-white mb-3">
+                        {card.title}
+                      </h2>
+                      <div className="grid gap-1.5 text-[12.5px] leading-snug text-slate-300 mb-6">
+                        {card.previews.map((p) => (
+                          <span key={p} className="flex items-center gap-2">
+                            <span className="size-1.5 rounded-full bg-[#22e2ad] shrink-0" />
+                            <span>{p}</span>
+                          </span>
+                        ))}
+                      </div>
+                      <div className="mt-auto flex items-center justify-between text-xs pt-3 border-t border-white/10">
+                        <span className="text-slate-400 font-semibold">{card.featureCount} tools inside</span>
+                        <span className="inline-flex items-center gap-1 font-extrabold text-[#34f0bc] group-hover:text-[#fbe8a4] transition">
+                          Open now <ArrowRight size={14} className="transition-transform group-hover:translate-x-1" />
+                        </span>
+                      </div>
+                    </GlossyBlackCard>
+                  </Link>
+                );
+              }
               return (
-                <Link key={card.id} href={card.href} className={`bw-workspace-card tone-${card.tone}`}>
-                  <div className={`flex items-center justify-between mb-6 ${isFold ? 'text-[#d3eee0]' : 'text-[var(--bw-emerald)]'}`}>
-                    <Icon size={28} strokeWidth={1.65} />
-                    <ArrowUpRight size={19} />
+                <Link
+                  key={card.id}
+                  href={card.href}
+                  className="bw-card p-6 min-h-[244px] flex flex-col hover:-translate-y-1 hover:border-[#119c78]/60 hover:shadow-[var(--bw-shadow-floating)] group"
+                >
+                  <div className="flex items-center justify-between mb-5">
+                    <span className="size-12 rounded-2xl bg-[#0a0e14] text-[#34f0bc] border border-[#22e2ad]/30 shadow-md flex items-center justify-center">
+                      <Icon size={23} strokeWidth={1.75} />
+                    </span>
+                    <span className="size-9 rounded-full bg-[var(--bw-soft)] group-hover:bg-[#0a0e14] text-[var(--bw-ink)] group-hover:text-[#34f0bc] flex items-center justify-center transition">
+                      <ArrowUpRight size={17} />
+                    </span>
                   </div>
-                  <h2 className={`font-display text-[22px] font-bold tracking-[-0.025em] mb-3 ${isFold ? 'text-white' : 'text-[var(--bw-ink)]'}`}>
+                  <h2 className="font-display text-[21px] font-extrabold tracking-[-0.025em] text-[var(--bw-ink)] mb-3">
                     {card.title}
                   </h2>
-                  <div className={`grid gap-1.5 text-[12.5px] leading-snug mb-6 ${isFold ? 'text-[#d3eee0]' : 'text-[var(--bw-muted)]'}`}>
+                  <div className="grid gap-1.5 text-[12.5px] leading-snug text-[var(--bw-muted)] mb-6">
                     {card.previews.map((p) => (
-                      <span key={p}>{p}</span>
+                      <span key={p} className="flex items-center gap-2">
+                        <span className="size-1.5 rounded-full bg-[#119c78] shrink-0" />
+                        <span>{p}</span>
+                      </span>
                     ))}
                   </div>
-                  <div className={`mt-auto flex items-center justify-between text-xs pt-2 ${isFold ? 'text-[#d3eee0]' : 'text-[var(--bw-muted)]'}`}>
-                    <span>{card.featureCount} tools</span>
-                    <span className={`inline-flex items-center gap-1 font-bold ${isFold ? 'text-white' : 'text-[var(--bw-emerald)]'}`}>
-                      Open workspace <ArrowUpRight size={14} />
+                  <div className="mt-auto flex items-center justify-between text-xs pt-3 border-t border-[var(--bw-line)]">
+                    <span className="text-[var(--bw-muted)] font-semibold">{card.featureCount} tools inside</span>
+                    <span className="inline-flex items-center gap-1 font-extrabold text-[#0b5442] dark:text-[#34f0bc]">
+                      Open now <ArrowRight size={14} className="transition-transform group-hover:translate-x-1" />
                     </span>
                   </div>
                 </Link>
@@ -464,29 +552,25 @@ export default function OsAppLauncherPage() {
             })}
           </section>
 
-          {/* Calm Mortgage Flow Ribbon (Enquiry to Bank DSA Settlement) */}
+          {/* Simple 6-Step UAE Mortgage Journey Ribbon */}
           <nav
-            className="bw-card px-6 py-4 flex flex-wrap items-center justify-between gap-3 text-xs font-semibold text-[var(--bw-body)]"
-            aria-label="UAE Mortgage Workflow from Enquiry to Bank DSA"
+            className="bw-card px-6 py-4 flex flex-wrap items-center justify-between gap-3 text-xs font-bold text-[var(--bw-body)]"
+            aria-label="Simple Mortgage Flow"
           >
-            <span className="text-[11px] font-bold uppercase tracking-[0.14em] text-[var(--bw-emerald)]">
-              Enquiry to Bank DSA Flow
+            <span className="inline-flex items-center gap-2 text-[11px] font-extrabold uppercase tracking-[0.14em] text-[#119c78] dark:text-[#34f0bc]">
+              <span className="size-2 rounded-full bg-[#d9b356]" /> Simple Mortgage Flow
             </span>
             <div className="flex flex-wrap items-center gap-x-5 gap-y-2">
               {[
-                ['01 Daily Enquiry', '/os/crm'],
-                ['03 24-Bank Shortlist', '/os/mortgage-desk'],
-                ['05 Pre-Approval (DIP)', '/os/pipeline'],
-                ['08 FOL & e-NOC', '/os/utilities'],
-                ['10 Trustee Disbursal', isOwner ? '/os/executive?tab=closings' : '/os/pipeline'],
-                ['11 Bank DSA Settlement', isOwnerOrAdmin ? '/os/accounts' : '/os/dashboard'],
+                ['01 New Lead', '/os/crm'],
+                ['02 Bank Rates & Proposal', '/os/mortgage-desk'],
+                ['03 Pre-Approval', '/os/pipeline'],
+                ['04 Forms & e-NOC', '/os/utilities'],
+                ['05 Disbursal', isOwner ? '/os/executive?tab=closings' : '/os/pipeline'],
+                ['06 Bank Payout', isOwnerOrAdmin ? '/os/accounts' : '/os/dashboard'],
               ].map(([label, href]) => (
-                <Link
-                  key={label}
-                  href={href}
-                  className="inline-flex items-center gap-1 hover:text-[var(--bw-emerald)] transition"
-                >
-                  {label} <ArrowUpRight size={13} className="text-[var(--bw-emerald)]" />
+                <Link key={label} href={href} className="inline-flex items-center gap-1 hover:text-[#119c78] transition group">
+                  {label} <ArrowUpRight size={13} className="text-[#119c78] transition-transform group-hover:translate-x-0.5" />
                 </Link>
               ))}
             </div>
@@ -494,16 +578,14 @@ export default function OsAppLauncherPage() {
         </>
       )}
 
-      {/* Full Permitted Feature Cards Grid (All 18 Operating Apps) */}
+      {/* All Permitted Apps Grid */}
       <section className="space-y-3.5" aria-label="All Betterway OS applications">
         <div className="flex items-center justify-between">
           <div>
-            <h2 className="font-display text-lg font-bold tracking-tight text-[var(--bw-ink)]">
-              {needle ? `Matching Tools (${matchingApps.length})` : 'All Operating Applications'}
+            <h2 className="font-display text-lg font-extrabold tracking-tight text-[var(--bw-ink)]">
+              {needle ? `Matching Apps (${matchingApps.length})` : 'Every Tool in One Place'}
             </h2>
-            <p className="text-xs text-[var(--bw-muted)]">
-              Direct access to every permitted Betterway Mortgages OS application.
-            </p>
+            <p className="text-xs text-[var(--bw-muted)]">Click any card to open instantly — zero waiting.</p>
           </div>
           {needle && (
             <button type="button" onClick={() => setFilter('')} className="bw-btn bw-btn-outline text-xs py-1.5 min-h-[34px]">
@@ -516,7 +598,7 @@ export default function OsAppLauncherPage() {
           <div className="bw-card p-10 text-center space-y-3">
             <div className="text-sm font-bold">No matching mortgage tools found</div>
             <button type="button" onClick={() => setFilter('')} className="bw-btn bw-btn-outline">
-              Reset filter
+              Show all tools
             </button>
           </div>
         ) : (
@@ -527,17 +609,17 @@ export default function OsAppLauncherPage() {
                 <Link key={app.key} href={app.href} className="bw-feature-card p-5 gap-3 group">
                   <div className="flex items-start justify-between gap-3">
                     <div className="flex items-center gap-3 min-w-0">
-                      <span className="size-11 rounded-xl bg-[var(--bw-mint)] text-[var(--bw-fold)] dark:text-[#b9dec9] flex items-center justify-center shrink-0">
-                        <Icon size={20} strokeWidth={1.75} />
+                      <span className="size-11 rounded-2xl bg-[#0a0e14] text-[#34f0bc] border border-[#22e2ad]/30 shadow-sm flex items-center justify-center shrink-0 group-hover:border-[#d9b356]/70 transition">
+                        <Icon size={19} strokeWidth={1.8} />
                       </span>
                       <div className="min-w-0">
-                        <div className="font-display text-[15px] font-bold text-[var(--bw-ink)] group-hover:text-[var(--bw-emerald)] transition truncate">
+                        <div className="font-display text-[15px] font-extrabold text-[var(--bw-ink)] group-hover:text-[#119c78] transition truncate">
                           {app.label}
                         </div>
-                        <div className="text-[11px] text-[var(--bw-muted)] truncate">{app.group}</div>
+                        <div className="text-[11px] font-semibold text-[var(--bw-muted)] truncate">{app.group}</div>
                       </div>
                     </div>
-                    <ArrowUpRight size={17} className="text-[var(--bw-emerald)] shrink-0 mt-1 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+                    <ArrowUpRight size={17} className="text-[#119c78] shrink-0 mt-1 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
                   </div>
                   <p className="text-xs text-[var(--bw-muted)] leading-relaxed line-clamp-2">{app.blurb}</p>
                   <div className="mt-auto pt-1">

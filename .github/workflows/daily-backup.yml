@@ -1,0 +1,41 @@
+name: Betterway OS Daily Master Excel Backup
+
+on:
+  schedule:
+    # Runs every day at 00:00 Asia/Dubai (GST = UTC+4 -> 20:00 UTC)
+    - cron: '0 20 * * *'
+  workflow_dispatch:
+
+jobs:
+  daily-excel-backup:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Generate 17-Sheet Master Excel & JSON Daily Backup
+        if: env.NEXT_PUBLIC_SUPABASE_URL != ''
+        env:
+          NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+          NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.NEXT_PUBLIC_SUPABASE_ANON_KEY }}
+          BW_BACKEND_AUTH_EMAIL: ${{ secrets.BW_BACKEND_AUTH_EMAIL }}
+          BW_BACKEND_AUTH_PASSWORD: ${{ secrets.BW_BACKEND_AUTH_PASSWORD }}
+        run: npx tsx scripts/daily-backup.ts
+
+      - name: Archive Daily Excel Backup (90-Day Retention)
+        if: hashFiles('backups/daily/*.xlsx') != ''
+        uses: actions/upload-artifact@v4
+        with:
+          name: betterway-daily-excel-backup-${{ github.run_number }}
+          path: backups/daily/
+          retention-days: 90
