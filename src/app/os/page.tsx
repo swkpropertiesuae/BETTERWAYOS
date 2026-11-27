@@ -330,6 +330,42 @@ export default function OsAppLauncherPage() {
         </div>
       </section>
 
+      {/* Owner Quick-Access Strip for Warda's Workspace & Shabib's Workspace */}
+      {isOwner && (
+        <section className="bw-card p-4 sm:p-5 border-[#D4AF37]/45 bg-gradient-to-r from-[#0A1128]/[0.03] to-[#D4AF37]/[0.07] space-y-3">
+          <div className="flex flex-wrap items-center justify-between gap-2">
+            <div>
+              <div className="text-[10px] font-extrabold uppercase tracking-[0.18em] text-[#0D8A6A]">
+                {user?.email?.toLowerCase().includes('warda') ? "Warda's Workspace" : "Shabib's Workspace"} · Direct 1-Click Access
+              </div>
+              <h2 className="text-sm font-extrabold">Executive Daily Operations, Forensic Dossiers, Brochures, Legal Forms &amp; Commissions</h2>
+            </div>
+            <Link href="/os/executive" className="text-xs font-extrabold text-[#0D8A6A] hover:underline">
+              Open Full Workspace →
+            </Link>
+          </div>
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2 text-xs">
+            {[
+              { tab: 'team', label: 'Team & Daily To-Do', hint: 'Roles & Verifiers' },
+              { tab: 'visits', label: 'Site Visits & Viewings', hint: 'GPS + Photos + Verify' },
+              { tab: 'catalog', label: 'Catalog & Brochures', hint: 'Colors & Templates' },
+              { tab: 'legal', label: 'Legal Forms Studio', hint: 'A2A · LOI · Ejari · NOC' },
+              { tab: 'closings', label: 'Pin-to-Pin Closings', hint: '5 Tracks + Cheques' },
+              { tab: 'commissions', label: 'Commissions & Expenses', hint: 'Cash · BT · Botim · 3rd' },
+            ].map((q) => (
+              <Link
+                key={q.tab}
+                href={`/os/executive?tab=${q.tab}`}
+                className="p-3 rounded-2xl border border-[var(--bw-line)] bg-[var(--bw-card)] hover:border-[#D4AF37] hover:-translate-y-0.5 transition"
+              >
+                <div className="font-extrabold text-[var(--bw-ink)] truncate">{q.label}</div>
+                <div className="text-[10.5px] text-[var(--bw-muted)] mt-0.5 truncate">{q.hint}</div>
+              </Link>
+            ))}
+          </div>
+        </section>
+      )}
+
       {/* Filter Header */}
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div>

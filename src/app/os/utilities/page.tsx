@@ -14,6 +14,7 @@ import {
 } from 'lucide-react';
 import { EXCEL_SPECS } from '@/lib/domain/excel-specs';
 import { PageHeader, StatusPill } from '@/components/os/UiKit';
+import { LegalFormsStudioTab } from '@/components/workspace/LegalFormsStudioTab';
 
 export default function UtilitiesPage() {
   const [tab, setTab] = useState<'word' | 'excel' | 'translate' | 'ocr' | 'search'>('word');
@@ -151,7 +152,9 @@ export default function UtilitiesPage() {
         ))}
       </div>
 
-      {tab === 'word' && (
+      {tab === 'word' && <LegalFormsStudioTab />}
+
+      {false && tab === 'word' && (
         <div className="grid lg:grid-cols-3 gap-5">
           <form onSubmit={saveDoc} className="lg:col-span-2 rounded-2xl bg-[var(--bw-card)] border border-[var(--bw-line)] p-5 space-y-3">
             <div className="flex flex-wrap items-center justify-between gap-2">

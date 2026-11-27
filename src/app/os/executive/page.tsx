@@ -3,29 +3,71 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import Link from 'next/link';
 import {
+  Building2,
   CheckCircle2,
   Crown,
   Database,
+  FileCheck2,
   FileText,
   Flame,
   Lock,
+  MapPin,
   Printer,
   Receipt,
   ShieldCheck,
   Sparkles,
   Upload,
+  Users,
+  Wallet,
   XCircle,
 } from 'lucide-react';
 import { useOs } from '@/components/os/OsProvider';
 import { fmtAed, MetricTile, StaffAvatar, StatusPill } from '@/components/os/UiKit';
+import { TeamDailyWorkspaceTab } from '@/components/workspace/TeamDailyWorkspaceTab';
+import { ForensicVisitsTab } from '@/components/workspace/ForensicVisitsTab';
+import { CatalogBrochureStudioTab } from '@/components/workspace/CatalogBrochureStudioTab';
+import { LegalFormsStudioTab } from '@/components/workspace/LegalFormsStudioTab';
+import { PinToPinClosingsTab } from '@/components/workspace/PinToPinClosingsTab';
+import { CommissionsExpensesTab } from '@/components/workspace/CommissionsExpensesTab';
 
-type ExecTab = 'goldrush' | 'fasttrack' | 'bulkai' | 'approvals' | 'vat';
+type ExecTab =
+  | 'team'
+  | 'visits'
+  | 'catalog'
+  | 'legal'
+  | 'closings'
+  | 'commissions'
+  | 'goldrush'
+  | 'fasttrack'
+  | 'bulkai'
+  | 'approvals'
+  | 'vat';
+
+const VALID_TABS: readonly ExecTab[] = [
+  'team',
+  'visits',
+  'catalog',
+  'legal',
+  'closings',
+  'commissions',
+  'goldrush',
+  'fasttrack',
+  'bulkai',
+  'approvals',
+  'vat',
+];
 
 export default function ExecutiveOwnerDeskPage() {
   const { user, toast } = useOs();
-  const [tab, setTab] = useState<ExecTab>('goldrush');
+  const [tab, setTab] = useState<ExecTab>('team');
   const [data, setData] = useState<any>(null);
   const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    const qp = new URLSearchParams(window.location.search).get('tab') as ExecTab | null;
+    if (qp && VALID_TABS.includes(qp)) setTab(qp);
+  }, []);
 
   // Privacy Fast Track creation form
   const [ftForm, setFtForm] = useState({
@@ -175,25 +217,26 @@ export default function ExecutiveOwnerDeskPage() {
   };
 
   const ownerTitle = user.executiveAppTitle || "Warda's Place";
+  const workspaceLabel = user.email.toLowerCase().includes('warda') ? "Warda's Workspace" : "Shabib's Workspace";
   const privacyTitle = user.privacyLaneTitle || "Warda's Client — Privacy Fast Track";
   const vat = data?.consolidatedVat;
 
   return (
     <div className="space-y-6">
-      {/* Crown Executive Header */}
+      {/* Crown Executive Header — Warda's Workspace & Shabib's Workspace */}
       <section className="rounded-3xl bg-[#0A1128] text-white border border-[#D4AF37]/45 p-6 sm:p-7 space-y-5 shadow-xl no-print">
         <div className="flex flex-wrap items-center justify-between gap-4">
           <div className="flex items-center gap-4">
             <StaffAvatar name={user.name} avatarUrl={user.avatarUrl} initials={user.initials} size="lg" />
             <div>
               <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#D4AF37]/20 border border-[#D4AF37]/45 text-[#FCF1B7] text-[10.5px] font-extrabold uppercase tracking-[0.18em]">
-                <Crown size={12} /> 100% Equal Co-Owner Authority · Strictly Private to Warda &amp; Shabib
+                <Crown size={12} /> {ownerTitle} · 100% Equal Co-Owner Authority (Warda &amp; Shabib)
               </div>
               <h1 className="text-2xl sm:text-3xl font-extrabold mt-1.5 tracking-tight">
-                {ownerTitle} <span className="text-[#FCF1B7] font-semibold">· Executive Command</span>
+                {workspaceLabel} <span className="text-[#FCF1B7] font-semibold">· Executive Command Suite</span>
               </h1>
-              <p className="text-xs sm:text-sm text-slate-300 mt-1 max-w-2xl">
-                1–12 Gold-Rush Kanban, <strong>{privacyTitle}</strong> (bypass Master Log for urgent cash clients), Bulk AI Upload, Owner Approvals (1-of-2 &amp; 2-of-2), and Owner-Only Consolidated VAT 201.
+              <p className="text-xs sm:text-sm text-slate-300 mt-1 max-w-3xl">
+                Quick-access command hub: Team Roles &amp; Daily To-Do, GPS Forensic Site Visits &amp; Viewings, Community/Developer/Project/Unit Brochure Studio, Legal Forms (Word/JPEG/Fillable), 5-Track Pin-to-Pin Closings, Agent Commissions &amp; Expenses, plus <strong>{privacyTitle}</strong>.
               </p>
             </div>
           </div>
@@ -213,36 +256,83 @@ export default function ExecutiveOwnerDeskPage() {
           </div>
         </div>
 
-        {/* Executive Navigation Tabs */}
-        <div className="flex flex-wrap gap-2 pt-4 border-t border-white/10">
-          {[
-            { id: 'goldrush', label: '1–12 Gold-Rush Playbook & Kanban' },
-            { id: 'fasttrack', label: `${privacyTitle} (${data?.fastTrackJobs?.length ?? 0})` },
-            { id: 'bulkai', label: 'Bulk AI Uploading' },
-            {
-              id: 'approvals',
-              label: `All Owner Approvals (${(data?.pendingApprovals?.length ?? 0) + (data?.pendingMasterRequests?.length ?? 0)})`,
-            },
-            { id: 'vat', label: 'Owner Consolidated P&L & VAT 201' },
-          ].map((t) => (
-            <button
-              key={t.id}
-              type="button"
-              onClick={() => setTab(t.id as ExecTab)}
-              className={`px-4 py-2 rounded-full text-xs font-bold transition cursor-pointer ${
-                tab === t.id
-                  ? 'bg-[#D4AF37] text-[#0A1128]'
-                  : 'bg-white/8 text-slate-200 hover:bg-white/15 border border-white/10'
-              }`}
-            >
-              {t.label}
-            </button>
-          ))}
+        {/* Grouped Executive Navigation — Row 1: Owner Daily & Forensic Operations | Row 2: Executive Finance & Approvals */}
+        <div className="space-y-3 pt-4 border-t border-white/10">
+          <div className="space-y-1.5">
+            <div className="text-[10px] font-extrabold uppercase tracking-[0.18em] text-[#34DFAC]">
+              1 · Quick-Access Workspace Operations (Team · Forensic Field · Brochures · Legal · Closings · Commissions)
+            </div>
+            <div className="flex flex-wrap gap-2">
+              {[
+                { id: 'team', label: 'Team & Daily To-Do', icon: Users },
+                { id: 'visits', label: 'Forensic Visits & Viewings', icon: MapPin },
+                { id: 'catalog', label: 'Catalog & Brochure Studio', icon: Building2 },
+                { id: 'legal', label: 'Legal Forms (Word / JPEG)', icon: FileText },
+                { id: 'closings', label: 'Pin-to-Pin Closings (5 Tracks)', icon: FileCheck2 },
+                { id: 'commissions', label: 'Commissions & Agent Expenses', icon: Wallet },
+              ].map((t) => {
+                const Icon = t.icon;
+                return (
+                  <button
+                    key={t.id}
+                    type="button"
+                    onClick={() => setTab(t.id as ExecTab)}
+                    className={`px-3.5 py-2 rounded-full text-xs font-bold inline-flex items-center gap-1.5 transition cursor-pointer ${
+                      tab === t.id
+                        ? 'bg-[#D4AF37] text-[#0A1128] shadow'
+                        : 'bg-white/10 text-white hover:bg-white/20 border border-white/15'
+                    }`}
+                  >
+                    <Icon size={13} /> {t.label}
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+
+          <div className="space-y-1.5">
+            <div className="text-[10px] font-extrabold uppercase tracking-[0.18em] text-[#FCF1B7]/80">
+              2 · Executive Vault, Gold-Rush Kanban, Bulk AI, Approvals &amp; Consolidated VAT
+            </div>
+            <div className="flex flex-wrap gap-2">
+              {[
+                { id: 'goldrush', label: '1–12 Gold-Rush Playbook & Kanban' },
+                { id: 'fasttrack', label: `${privacyTitle} (${data?.fastTrackJobs?.length ?? 0})` },
+                { id: 'bulkai', label: 'Bulk AI Uploading' },
+                {
+                  id: 'approvals',
+                  label: `All Owner Approvals (${(data?.pendingApprovals?.length ?? 0) + (data?.pendingMasterRequests?.length ?? 0)})`,
+                },
+                { id: 'vat', label: 'Owner Consolidated P&L & VAT 201' },
+              ].map((t) => (
+                <button
+                  key={t.id}
+                  type="button"
+                  onClick={() => setTab(t.id as ExecTab)}
+                  className={`px-3.5 py-1.5 rounded-full text-xs font-bold transition cursor-pointer ${
+                    tab === t.id
+                      ? 'bg-[#0D8A6A] text-white'
+                      : 'bg-white/6 text-slate-200 hover:bg-white/15 border border-white/10'
+                  }`}
+                >
+                  {t.label}
+                </button>
+              ))}
+            </div>
+          </div>
         </div>
       </section>
 
-      {loading && !data ? (
-        <div className="bw-card p-10 text-center text-xs text-[var(--bw-muted)]">Loading Executive Workspace...</div>
+      {/* NEW WARDA & SHABIB WORKSPACE MODULES */}
+      {tab === 'team' && <TeamDailyWorkspaceTab />}
+      {tab === 'visits' && <ForensicVisitsTab />}
+      {tab === 'catalog' && <CatalogBrochureStudioTab />}
+      {tab === 'legal' && <LegalFormsStudioTab />}
+      {tab === 'closings' && <PinToPinClosingsTab />}
+      {tab === 'commissions' && <CommissionsExpensesTab />}
+
+      {loading && !data && ['goldrush', 'fasttrack', 'bulkai', 'approvals', 'vat'].includes(tab) ? (
+        <div className="bw-card p-10 text-center text-xs text-[var(--bw-muted)]">Loading Executive Ledger...</div>
       ) : null}
 
       {/* TAB 1: 1-12 Gold-Rush Playbook & Full Kanban */}

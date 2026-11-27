@@ -1,12 +1,14 @@
 'use client';
 
 import React, { useCallback, useEffect, useState } from 'react';
-import { AlertOctagon, CheckCircle2, ExternalLink, MapPin, Navigation } from 'lucide-react';
+import { AlertOctagon, CheckCircle2, ClipboardCheck, ExternalLink, MapPin, Navigation } from 'lucide-react';
 import { useOs } from '@/components/os/OsProvider';
 import { PageHeader, StatusPill } from '@/components/os/UiKit';
+import { ForensicVisitsTab } from '@/components/workspace/ForensicVisitsTab';
 
 export default function FieldGpsPage() {
   const { toast } = useOs();
+  const [section, setSection] = useState<'gps' | 'forensic'>('forensic');
   const [visits, setVisits] = useState<any[]>([]);
   const [purpose, setPurpose] = useState('DLD Trustee Transfer');
   const [destination, setDestination] = useState('Dubai Land Department Trustee — Al Barsha');
@@ -101,6 +103,30 @@ export default function FieldGpsPage() {
         subtitle="Track field staff regularly across Bank Desks, Property Valuations, Developer NOC Offices, and DLD Trustees with live GPS coordinates, waypoints, and 1-tap SOS alerts to Owners."
       />
 
+      <div className="flex flex-wrap gap-2 text-xs">
+        <button
+          type="button"
+          onClick={() => setSection('forensic')}
+          className={`px-4 py-2 rounded-full font-extrabold inline-flex items-center gap-1.5 cursor-pointer ${
+            section === 'forensic' ? 'bg-[#0A1128] text-[#FCF1B7]' : 'border border-[var(--bw-line)] bg-[var(--bw-card)]'
+          }`}
+        >
+          <ClipboardCheck size={14} /> Forensic Site Visit / Viewing Report &amp; Authority Queue
+        </button>
+        <button
+          type="button"
+          onClick={() => setSection('gps')}
+          className={`px-4 py-2 rounded-full font-extrabold inline-flex items-center gap-1.5 cursor-pointer ${
+            section === 'gps' ? 'bg-[#0D8A6A] text-white' : 'border border-[var(--bw-line)] bg-[var(--bw-card)]'
+          }`}
+        >
+          <Navigation size={14} /> Live Field GPS Check-In &amp; 1-Tap SOS ({visits.length})
+        </button>
+      </div>
+
+      {section === 'forensic' ? (
+        <ForensicVisitsTab compactStaffMode />
+      ) : (
       <div className="grid lg:grid-cols-12 gap-6">
         <form onSubmit={startVisit} className="lg:col-span-4 bw-card p-5 space-y-3 text-xs">
           <h3 className="text-sm font-extrabold flex items-center gap-1.5">
@@ -181,6 +207,7 @@ export default function FieldGpsPage() {
           )}
         </div>
       </div>
+      )}
     </div>
   );
 }
