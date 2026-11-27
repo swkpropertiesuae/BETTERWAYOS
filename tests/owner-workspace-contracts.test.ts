@@ -371,4 +371,34 @@ describe('Warda & Shabib UAE Mortgage Command Suite — Offline Domain, Schema &
     const salesSrc = fs.readFileSync(path.join(process.cwd(), 'src/app/os/sales/page.tsx'), 'utf8');
     expect(salesSrc).not.toMatch(/\bswk\b/i);
   });
+
+  it('verifies shining-black home SVG consistency, Place vs Corner routes, Coordinator workflow & recreated 6-sheet 2026 Bank Matrix workbook', async () => {
+    const { buildUpdated2026BankMatrixWorkbook } = await import('@/lib/backup/bank-matrix-workbook');
+    const matrix = await buildUpdated2026BankMatrixWorkbook();
+    expect(matrix.sheetCount).toBe(6);
+    expect(matrix.bankCount).toBe(18);
+    expect(matrix.rmCount).toBeGreaterThanOrEqual(140);
+    expect(matrix.buffer.subarray(0, 2).toString('utf8')).toBe('PK');
+
+    for (const svg of [
+      'public/brand/betterway-icon.svg',
+      'public/brand/betterway-favicon.svg',
+      'public/brand/betterway-logo-horizontal-light-transparent.svg',
+      'public/brand/betterway-logo-horizontal-dark-transparent.svg',
+    ]) {
+      const content = fs.readFileSync(path.join(process.cwd(), svg), 'utf8');
+      expect(content, `${svg} missing shining black home gradient`).toContain('bw-shining-black-home');
+    }
+
+    for (const rel of [
+      'src/app/os/place/page.tsx',
+      'src/app/os/corner/page.tsx',
+      'src/app/os/coordinator/page.tsx',
+      'src/components/workspace/OwnerSectionView.tsx',
+      'src/components/workspace/DailyPlanAndReportTab.tsx',
+      'src/app/api/v1/utilities/bank-matrix-excel/route.ts',
+    ]) {
+      expect(fs.existsSync(path.join(process.cwd(), rel)), `Missing ${rel}`).toBe(true);
+    }
+  });
 });

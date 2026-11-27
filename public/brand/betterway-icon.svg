@@ -55,6 +55,20 @@
                C 207,484 108,420 108,312
                Z"/>
     </clipPath>
+      <!-- Shining Glossy Black Home Icon Gradient & Specular Gloss -->
+    <linearGradient id="bw-shining-black-home" x1="8%" y1="6%" x2="92%" y2="94%">
+      <stop offset="0%" stop-color="#273244"/>
+      <stop offset="26%" stop-color="#0B0F17"/>
+      <stop offset="56%" stop-color="#030508"/>
+      <stop offset="84%" stop-color="#141C29"/>
+      <stop offset="100%" stop-color="#020305"/>
+    </linearGradient>
+    <linearGradient id="bw-home-gloss" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FFFFFF" stop-opacity="0.52"/>
+      <stop offset="38%" stop-color="#FFFFFF" stop-opacity="0.14"/>
+      <stop offset="72%" stop-color="#FFFFFF" stop-opacity="0"/>
+      <stop offset="100%" stop-color="#FFFFFF" stop-opacity="0"/>
+    </linearGradient>
   </defs>
   <g transform="translate(-28, -4)">
     <g clip-path="url(#bw-b-clip)">
@@ -86,12 +100,21 @@
                C 178,86 150,52 108,46 Z" fill="url(#bw-emerald-hi)"/>
     </g>
 
-    <!-- House Interior Cutout -->
+        <!-- Shining Glossy Black House Interior -->
     <path d="M 294,244
              L 372,312
              L 372,398
              L 216,398
-             L 216,312 Z" fill="#070E1A"/>
+             L 216,312 Z" fill="url(#bw-shining-black-home)"/>
+    <path d="M 294,244
+             L 354,296
+             L 216,356
+             L 216,312 Z" fill="url(#bw-home-gloss)"/>
+    <path d="M 294,244
+             L 372,312
+             L 372,398
+             L 216,398
+             L 216,312 Z" fill="none" stroke="#FFFFFF" stroke-opacity="0.22" stroke-width="2.5"/>
 
     <!-- Metallic Gold Roof & Chimney -->
     <path d="M 294,218
@@ -104,6 +127,6 @@
 
     <!-- Metallic Gold Door & Doorknob -->
     <rect x="272" y="330" width="44" height="70" rx="2" fill="url(#bw-gold-roof)"/>
-    <circle cx="283" cy="366" r="4.5" fill="#070E1A"/>
+    <circle cx="283" cy="366" r="4.5" fill="#04070C"/>
   </g>
 </svg>

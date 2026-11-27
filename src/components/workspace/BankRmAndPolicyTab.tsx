@@ -33,7 +33,7 @@ export function BankRmAndPolicyTab({ mode }: { mode: 'matcher' | 'matrix' | 'rms
   const [policyQ, setPolicyQ] = useState('Non-Resident 60% LTV');
 
   // 18-Bank Matrix filters
-  const [matrixFilter, setMatrixFilter] = useState<'all' | 'islamic' | 'conventional' | 'nonres' | 'fastpass' | 'selfemp'>('all');
+  const [matrixFilter, setMatrixFilter] = useState<'all' | 'islamic' | 'conventional' | 'nonres' | 'fastpass' | 'selfemp' | 'commercial'>('all');
   const [matrixSearch, setMatrixSearch] = useState('');
 
   // 140+ RM Directory filters
@@ -65,6 +65,7 @@ export function BankRmAndPolicyTab({ mode }: { mode: 'matcher' | 'matrix' | 'rms
       if (matrixFilter === 'nonres' && !b.nonResidentSupported) return false;
       if (matrixFilter === 'fastpass' && !b.fastPass14Day) return false;
       if (matrixFilter === 'selfemp' && b.selfEmployedFriendly === 'Strict') return false;
+      if (matrixFilter === 'commercial' && !b.commercialSupported) return false;
       if (q && !`${b.name} ${b.short} ${b.stlFixedSummary} ${b.keyNotes} ${b.emirates}`.toLowerCase().includes(q)) return false;
       return true;
     });
@@ -273,8 +274,9 @@ export function BankRmAndPolicyTab({ mode }: { mode: 'matcher' | 'matrix' | 'rms
               ['fastpass', 'Fast-Pass (11–15d)'],
               ['islamic', 'Islamic'],
               ['conventional', 'Conventional'],
+              ['selfemp', 'Self-Employed'],
+              ['commercial', 'Commercial'],
               ['nonres', 'Non-Resident'],
-              ['selfemp', 'Self-Employed Friendly'],
             ].map(([k, label]) => (
               <button
                 key={k}

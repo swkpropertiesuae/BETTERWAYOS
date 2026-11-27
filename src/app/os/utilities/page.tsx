@@ -163,6 +163,9 @@ export default function UtilitiesPage() {
                 <a href="/api/v1/utilities/master-backup-excel" className="bw-btn bw-btn-primary text-xs">
                   <Download size={14} /> Download 17-Sheet Master Excel (.xlsx)
                 </a>
+                <a href="/api/v1/utilities/bank-matrix-excel" className="bw-btn bw-btn-obsidian text-xs border-[#22e2ad]/45">
+                  <FileSpreadsheet size={14} className="text-[#34f0bc]" /> Recreated 2026 Bank Matrix (.xlsx)
+                </a>
                 <button
                   type="button"
                   disabled={runningBackup}

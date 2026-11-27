@@ -1,12 +1,14 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React, { Suspense, useEffect, useState } from 'react';
+import { useSearchParams } from 'next/navigation';
 import {
   Building2,
   Calculator,
   CalendarClock,
   CheckSquare,
   CreditCard,
+  Download,
   FileSpreadsheet,
   PhoneCall,
   Sparkles,
@@ -23,11 +25,23 @@ import { useInstantApi } from '@/lib/client-cache';
 
 type DeskTab = 'proposal' | 'matcher' | 'matrix' | 'rms' | 'statement' | 'schedule';
 
-export default function MortgageDeskPage() {
+function MortgageDeskInner() {
   const { toast } = useOs();
+  const searchParams = useSearchParams();
   const [tab, setTab] = useState<DeskTab>('proposal');
   const { data: liveDesk, reload } = useInstantApi<{ events: any[]; valuations: any[]; banks: any[]; cases: any[] }>('/api/v1/mortgage-desk');
   const desk = liveDesk ?? { events: [], valuations: [], banks: [], cases: [] };
+
+  useEffect(() => {
+    const t = searchParams?.get('tab');
+    if (t === 'proposal' || t === 'matcher' || t === 'matrix' || t === 'rms') {
+      setTab(t);
+    } else if (t === 'cbuae' || t === 'statement') {
+      setTab('statement');
+    } else if (t === 'valuations' || t === 'schedule') {
+      setTab('schedule');
+    }
+  }, [searchParams]);
 
   // Valuation form
   const [valForm, setValForm] = useState({
@@ -116,10 +130,15 @@ export default function MortgageDeskPage() {
   return (
     <div className="space-y-6">
       <PageHeader
-        eyebrow="18-Bank Policy Matrix · 140+ Direct Bank RMs · 3-Bank Auto-Eco Proposal Maker"
+        eyebrow="18-Bank 2026 Policy Matrix · 159 Direct Bank RMs · 3-Bank Auto-Eco Proposal Maker"
         title="24-Bank Mortgage"
         accent="Super-Hub"
-        subtitle="Generate 3-bank client proposals in Excel/Word/JPEG, match borrowers across 18 UAE banks in 60 seconds, ask the AI Policy Finder, call 140+ bank RMs, analyze bank statements & credit card limits, and book bank valuations."
+        subtitle="Use the top bar sub-pages to switch instantly between 3-Bank Proposals, 60-Sec Matcher & AI Policy, Updated 2026 18-Bank Matrix, 159 Direct Bank RMs, CBUAE/CTO/Avg Balance & Bank Valuations."
+        actions={
+          <a href="/api/v1/utilities/bank-matrix-excel" className="bw-btn bw-btn-gold text-xs py-2 min-h-[38px]">
+            <Download size={14} /> Download 2026 Matrix (.xlsx)
+          </a>
+        }
       />
 
       {/* Glossy Shining Black Pill Switcher */}
@@ -408,5 +427,13 @@ export default function MortgageDeskPage() {
         </div>
       )}
     </div>
+  );
+}
+
+export default function MortgageDeskPage() {
+  return (
+    <Suspense fallback={<div className="p-8 text-xs text-[var(--bw-muted)]">Loading 24-Bank Mortgage Hub...</div>}>
+      <MortgageDeskInner />
+    </Suspense>
   );
 }

@@ -42,7 +42,7 @@ export default function LoginPage() {
       <GlossyBlackCard className="hidden lg:flex flex-col justify-between p-10 xl:p-12" accent="dual">
         <div className="space-y-6">
           <img
-            src="/brand/betterway-logo-horizontal-dark-4k-transparent.png"
+            src="/brand/betterway-logo-horizontal-dark-transparent.svg"
             alt="Betterway Mortgages LLC"
             className="h-11 w-auto object-contain"
           />
@@ -87,7 +87,7 @@ export default function LoginPage() {
               />
               <div className="min-w-0">
                 <div className="inline-flex items-center gap-1 text-[10px] font-extrabold uppercase tracking-wider text-[#fbe8a4]">
-                  <Crown size={11} /> Warda&apos;s Place
+                  <Crown size={11} /> Warda&apos;s Place &amp; Corner
                 </div>
                 <div className="font-display font-extrabold text-sm text-white truncate">Warda Kapadia</div>
                 <div className="text-[11.5px] text-[#34f0bc] truncate">Owner, Founder &amp; MD</div>
@@ -101,7 +101,7 @@ export default function LoginPage() {
               />
               <div className="min-w-0">
                 <div className="inline-flex items-center gap-1 text-[10px] font-extrabold uppercase tracking-wider text-[#fbe8a4]">
-                  <Crown size={11} /> Shabib&apos;s Corner
+                  <Crown size={11} /> Shabib&apos;s Place &amp; Corner
                 </div>
                 <div className="font-display font-extrabold text-sm text-white truncate">Shabib Siraj</div>
                 <div className="text-[11.5px] text-[#34f0bc] truncate">Executive Director</div>

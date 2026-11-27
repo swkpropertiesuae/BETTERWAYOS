@@ -36,17 +36,17 @@
   --font-sans: 'Instrument Sans', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
   --font-display: 'Plus Jakarta Sans', 'Instrument Sans', system-ui, sans-serif;
 
-  /* Premium White + Glossy Shining Black + Official Betterway Logo Jewel Colors */
-  --bw-bg: #ffffff;
-  --bw-canvas-tint: #f8faf9;
+  /* Warm Light Beige-Yellow Canvas + Pure White Split Cards + Glossy Shining Black Detail Cards */
+  --bw-bg: #fbf6e6;
+  --bw-canvas-tint: #f5edd4;
   --bw-card: #ffffff;
-  --bw-soft: #f4f6f7;
-  --bw-hover: #f1f5f4;
+  --bw-soft: #f7f0dc;
+  --bw-hover: #efe5c8;
   --bw-ink: #090d12;
-  --bw-body: #2c3742;
-  --bw-muted: #586573;
-  --bw-line: #e6eaee;
-  --bw-line-strong: #cdd5dc;
+  --bw-body: #25303b;
+  --bw-muted: #595547;
+  --bw-line: #e5d8b8;
+  --bw-line-strong: #d1be92;
 
   /* Official Betterway Logo Jewel Accents (extracted from 4K Vector SVG) */
   --bw-emerald: #119c78;
@@ -112,8 +112,9 @@ html,
 body {
   background-color: var(--bw-bg);
   background-image:
-    radial-gradient(960px 420px at 12% -6%, rgba(34, 226, 173, 0.065), transparent 62%),
-    radial-gradient(840px 380px at 92% -4%, rgba(217, 179, 86, 0.06), transparent 60%);
+    radial-gradient(1080px 480px at 14% -8%, rgba(247, 224, 152, 0.34), transparent 62%),
+    radial-gradient(900px 440px at 88% 10%, rgba(34, 226, 173, 0.08), transparent 64%),
+    linear-gradient(180deg, #fcf8ec 0%, #f9f2dc 55%, #f6edd2 100%);
   background-attachment: fixed;
   color: var(--bw-ink);
   font-family: var(--font-sans);
@@ -463,12 +464,56 @@ html[dir='rtl'] .font-display {
   align-items: center;
   gap: 8px;
   padding: 14px 8px 24px;
-  background: rgba(255, 255, 255, 0.92);
+  background: rgba(255, 252, 244, 0.94);
   border-inline-end: 1px solid var(--bw-line);
   overflow-y: auto;
 }
 .dark .bw-workspace-rail {
   background: #080b10;
+}
+
+/* Dynamic Sub-Page Tab in Top Header (appears when an App is opened from Sidebar) */
+.bw-subpage-tab {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 14px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 700;
+  white-space: nowrap;
+  color: var(--bw-body);
+  background: #ffffff;
+  border: 1px solid var(--bw-line);
+  transition: all 170ms var(--bw-ease);
+}
+.dark .bw-subpage-tab {
+  background: #101620;
+  color: #cbd5e1;
+  border-color: #1f2b3a;
+}
+.bw-subpage-tab:hover {
+  color: #090d12;
+  border-color: #119c78;
+  background: #fffdf6;
+  transform: translateY(-1px);
+}
+.dark .bw-subpage-tab:hover {
+  color: #ffffff;
+  background: #161f2d;
+}
+.bw-subpage-tab.active {
+  background: linear-gradient(145deg, #1b2430 0%, #06090e 100%);
+  color: #34f0bc;
+  border-color: rgba(34, 226, 173, 0.58);
+  box-shadow: 0 10px 20px -10px rgba(4, 7, 12, 0.72), inset 0 1px 0 rgba(255, 255, 255, 0.16);
+}
+.bw-subpage-tab.active-gold {
+  background: linear-gradient(145deg, #1d1a12 0%, #080705 100%);
+  color: #fbe8a4;
+  border-color: rgba(217, 179, 86, 0.62);
+  box-shadow: 0 10px 20px -10px rgba(4, 7, 12, 0.75), inset 0 1px 0 rgba(255, 240, 184, 0.2);
 }
 
 .bw-rail-shortcut {
