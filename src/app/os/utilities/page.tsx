@@ -1,16 +1,13 @@
 'use client';
 
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import {
-  CheckCircle2,
   Download,
   FileSpreadsheet,
   FileText,
   Languages,
-  Printer,
   ScanText,
   Search,
-  Stamp,
 } from 'lucide-react';
 import { EXCEL_SPECS } from '@/lib/domain/excel-specs';
 import { PageHeader, StatusPill } from '@/components/os/UiKit';
@@ -18,17 +15,6 @@ import { LegalFormsStudioTab } from '@/components/workspace/LegalFormsStudioTab'
 
 export default function UtilitiesPage() {
   const [tab, setTab] = useState<'word' | 'excel' | 'translate' | 'ocr' | 'search'>('word');
-  const [docs, setDocs] = useState<Array<Record<string, unknown>>>([]);
-  const [templates, setTemplates] = useState<Array<Record<string, unknown>>>([]);
-  const [notice, setNotice] = useState('');
-  const [error, setError] = useState('');
-
-  // Word studio form
-  const [title, setTitle] = useState('Official Mortgage Pre-Approval Advisory Letter');
-  const [category, setCategory] = useState('Mortgage Quote');
-  const [bodyText, setBodyText] = useState(
-    'Dear Client,\n\nBetterway Mortgages LLC (Al Nasr Plaza, Oud Metha, Dubai) is pleased to present your CBUAE-compliant 24-bank mortgage comparison with Zero Broker Fee.\n\nPrepared under Executive Oversight.',
-  );
 
   // Translator
   const [targetLang, setTargetLang] = useState('ar');
@@ -45,38 +31,6 @@ export default function UtilitiesPage() {
   const [searchQ, setSearchQ] = useState('');
   const [searchResults, setSearchResults] = useState<Array<Record<string, unknown>>>([]);
   const [excelFilter, setExcelFilter] = useState('');
-
-  const loadWord = useCallback(async () => {
-    const r = await fetch('/api/v1/utilities/word-studio', { cache: 'no-store' });
-    if (r.ok) {
-      const j = await r.json();
-      setDocs(j.docs ?? []);
-      setTemplates(j.templates ?? []);
-    }
-  }, []);
-
-  useEffect(() => {
-    loadWord();
-  }, [loadWord]);
-
-  async function saveDoc(e: React.FormEvent) {
-    e.preventDefault();
-    setError('');
-    setNotice('');
-    const r = await fetch('/api/v1/utilities/word-studio', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ title, category, bodyText }),
-    });
-    const j = await r.json();
-    if (!r.ok) return setError(j.error || 'Document save failed');
-    setNotice(
-      j.doc.seal_status === 'Sealed'
-        ? `Saved & Owner-Sealed ${j.doc.doc_code} immediately.`
-        : `Saved ${j.doc.doc_code} — queued for 1-of-2 Owner Corporate Seal approval.`,
-    );
-    await loadWord();
-  }
 
   async function runTranslate() {
     const r = await fetch('/api/v1/utilities/word-studio', {
@@ -116,23 +70,16 @@ export default function UtilitiesPage() {
   return (
     <div className="space-y-6">
       <PageHeader
-        eyebrow="Letter & Word Studio · 50-Spec Excel Data Hub · 9-Lang Translator · PII-Safe OCR"
+        eyebrow="Legal & Word/JPEG Forms Studio · 50-Spec Excel Data Hub · 9-Lang Translator · PII-Safe OCR"
         title="Utilities &"
         accent="Document Studio"
-        subtitle="Draft Owner-sealed corporate letters, download all 50 operational Excel workbooks, translate UAE mortgage clauses across 9 languages, extract PII-shielded OCR fields, and run zero-leak global search."
+        subtitle="Fill, edit & export A2A, LOI, Tenancy, Ejari, NOC & Agreements as Word (.doc), JPEG & PDF, download all 50 operational Excel workbooks, translate UAE mortgage clauses across 9 languages, run PII-shielded OCR, and execute zero-leak global search."
       />
-
-      {error && <div className="rounded-xl border border-red-400/40 bg-red-50 p-3 text-xs font-semibold text-red-700">{error}</div>}
-      {notice && (
-        <div className="rounded-xl border border-emerald-500/35 bg-emerald-50 dark:bg-emerald-950/30 p-3 text-xs font-semibold text-emerald-800 dark:text-emerald-300 flex items-center gap-2">
-          <CheckCircle2 size={14} /> {notice}
-        </div>
-      )}
 
       <div className="flex flex-wrap gap-2">
         {(
           [
-            ['word', 'Letter & Word Studio', FileText],
+            ['word', 'Legal & Word/JPEG Studio', FileText],
             ['excel', `50-Spec Excel Data Hub (${EXCEL_SPECS.length})`, FileSpreadsheet],
             ['translate', '9-Language Translator', Languages],
             ['ocr', 'PII-Shielded OCR', ScanText],
@@ -153,82 +100,6 @@ export default function UtilitiesPage() {
       </div>
 
       {tab === 'word' && <LegalFormsStudioTab />}
-
-      {false && tab === 'word' && (
-        <div className="grid lg:grid-cols-3 gap-5">
-          <form onSubmit={saveDoc} className="lg:col-span-2 rounded-2xl bg-[var(--bw-card)] border border-[var(--bw-line)] p-5 space-y-3">
-            <div className="flex flex-wrap items-center justify-between gap-2">
-              <h2 className="text-sm font-extrabold flex items-center gap-1.5">
-                <Stamp size={15} className="text-[var(--bw-emerald)]" /> Betterway Corporate Letter &amp; Quote Composer
-              </h2>
-              <button
-                type="button"
-                onClick={() => window.print()}
-                className="inline-flex items-center gap-1 rounded-lg border border-[var(--bw-line)] px-3 py-1.5 text-xs font-bold no-print"
-              >
-                <Printer size={13} /> Print / PDF
-              </button>
-            </div>
-            {templates.length > 0 && (
-              <div className="flex flex-wrap gap-1.5">
-                {templates.map((t) => (
-                  <button
-                    key={String(t.id)}
-                    type="button"
-                    onClick={() => {
-                      setTitle(String(t.title || t.code));
-                      setCategory(String(t.category || 'Mortgage Quote'));
-                      if (t.body_template) setBodyText(String(t.body_template));
-                    }}
-                    className="px-2.5 py-1 rounded-lg bg-slate-500/10 hover:bg-[#083B2E] hover:text-white text-[11px] font-semibold transition"
-                  >
-                    {String(t.code)} · {String(t.title || t.code)}
-                  </button>
-                ))}
-              </div>
-            )}
-            <div className="grid sm:grid-cols-3 gap-2">
-              <input
-                value={title}
-                onChange={(e) => setTitle(e.target.value)}
-                className="sm:col-span-2 rounded-xl border border-[var(--bw-line)] bg-transparent px-3 py-2 text-xs font-semibold"
-                required
-              />
-              <input
-                value={category}
-                onChange={(e) => setCategory(e.target.value)}
-                className="rounded-xl border border-[var(--bw-line)] bg-transparent px-3 py-2 text-xs"
-              />
-            </div>
-            <textarea
-              rows={9}
-              value={bodyText}
-              onChange={(e) => setBodyText(e.target.value)}
-              className="w-full rounded-xl border border-[var(--bw-line)] bg-transparent p-3.5 text-xs leading-relaxed font-serif"
-              required
-            />
-            <button className="rounded-xl bg-[#083B2E] text-white px-5 py-2.5 text-xs font-bold">
-              Save Document &amp; Request/Apply Corporate Seal
-            </button>
-          </form>
-
-          <div className="rounded-2xl bg-[var(--bw-card)] border border-[var(--bw-line)] p-5 space-y-3">
-            <h3 className="text-sm font-extrabold">Recent Sealed &amp; Draft Letters ({docs.length})</h3>
-            <div className="space-y-2 max-h-96 overflow-y-auto">
-              {docs.map((d) => (
-                <div key={String(d.id)} className="rounded-xl border border-[var(--bw-line)] p-3 space-y-1 text-xs">
-                  <div className="flex items-center justify-between gap-2">
-                    <span className="font-mono font-bold text-[var(--bw-emerald)]">{String(d.doc_code)}</span>
-                    <StatusPill label={String(d.seal_status)} tone={String(d.seal_status) === 'Sealed' ? 'emerald' : 'gold'} />
-                  </div>
-                  <div className="font-bold">{String(d.title)}</div>
-                  <div className="text-[11px] text-[var(--bw-muted)] line-clamp-2">{String(d.body_text)}</div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-      )}
 
       {tab === 'excel' && (
         <div className="rounded-2xl bg-[var(--bw-card)] border border-[var(--bw-line)] p-5 space-y-4">
