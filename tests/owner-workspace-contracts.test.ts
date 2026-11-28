@@ -534,6 +534,8 @@ describe('Warda & Shabib UAE Mortgage Command Suite — Offline Domain, Schema &
       'src/components/os/OsShell.tsx',
       'src/components/os/LiveBankMarquee.tsx',
       'src/components/os/CustomiseUiDrawer.tsx',
+      'src/components/os/AttachmentPicker.tsx',
+      'src/components/os/TaskFollowUpDrawer.tsx',
       'src/components/workspace/BankRmAndPolicyTab.tsx',
       'src/components/workspace/OwnerSectionView.tsx',
       'src/components/workspace/ProposalStudioTab.tsx',

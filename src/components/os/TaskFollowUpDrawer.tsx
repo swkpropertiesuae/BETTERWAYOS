@@ -8,13 +8,13 @@ import {
   Clock,
   FileText,
   History,
+  ListChecks,
   Loader2,
   Mail,
   MessageSquare,
   Paperclip,
   Phone,
   Send,
-  Sparkles,
   UserCheck,
   Users,
   X,
@@ -367,7 +367,7 @@ export function TaskFollowUpDrawer({
               <form onSubmit={submitFollowUp} className="p-4 rounded-2xl border border-[var(--bw-line-strong)] bg-[var(--bw-card)] space-y-3.5 shadow-xs">
                 <div className="flex items-center justify-between gap-2">
                   <div className="font-extrabold text-[var(--bw-ink)] flex items-center gap-1.5">
-                    <Sparkles size={13} className="text-[#0e5a49]" /> Quick Follow-Up Templates
+                    <ListChecks size={13} className="text-[#0e5a49]" /> Quick Follow-Up Templates
                   </div>
                   {loading && <Loader2 size={13} className="animate-spin text-[var(--bw-muted)]" />}
                 </div>
