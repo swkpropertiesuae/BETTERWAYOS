@@ -132,9 +132,9 @@ export function CustomiseUiDrawer({
         aria-label="Customise UI Studio"
       >
         {/* Dark Glossy Drawer Header */}
-        <div className="px-5 py-4 bg-[#080c12] text-white border-b border-[#22e2ad]/30 flex items-center justify-between gap-2">
+        <div className="px-5 py-4 bg-[#0a1627] text-white border-b border-[#47a88d]/30 flex items-center justify-between gap-2">
           <div className="flex items-center gap-2.5">
-            <span className="size-9 rounded-xl bg-white/10 border border-[#22e2ad]/40 text-[#34f0bc] flex items-center justify-center">
+            <span className="size-9 rounded-xl bg-white/10 border border-[#47a88d]/40 text-[#64c4a8] flex items-center justify-center">
               <Palette size={18} />
             </span>
             <div>
@@ -146,7 +146,7 @@ export function CustomiseUiDrawer({
             <button
               type="button"
               onClick={onReset}
-              className="px-2.5 py-1.5 rounded-full bg-white/10 hover:bg-white/20 text-[10.5px] font-bold text-[#fbe8a4] inline-flex items-center gap-1 cursor-pointer"
+              className="px-2.5 py-1.5 rounded-full bg-white/10 hover:bg-white/20 text-[10.5px] font-bold text-[#dfc285] inline-flex items-center gap-1 cursor-pointer"
               title="Reset to default Betterway theme"
             >
               <RotateCcw size={12} /> Reset
@@ -163,7 +163,7 @@ export function CustomiseUiDrawer({
         </div>
 
         {/* 4 Studio Tabs */}
-        <div className="grid grid-cols-4 gap-1 p-2 bg-[#f8f3e4] dark:bg-[#0e141e] border-b border-[var(--bw-line)] text-[11px] font-extrabold">
+        <div className="grid grid-cols-4 gap-1 p-2 bg-[#eef2f7] dark:bg-[#102138] border-b border-[var(--bw-line)] text-[11px] font-extrabold">
           {[
             { id: 'colors', label: 'Colors', icon: Palette },
             { id: 'fonts', label: 'Fonts', icon: Type },
@@ -178,7 +178,7 @@ export function CustomiseUiDrawer({
                 type="button"
                 onClick={() => setTab(t.id as any)}
                 className={`py-2 px-2 rounded-xl flex items-center justify-center gap-1 cursor-pointer transition ${
-                  active ? 'bg-[#090d13] text-[#34f0bc] shadow-sm' : 'text-slate-600 dark:text-slate-300 hover:bg-white/70'
+                  active ? 'bg-[#0b192c] text-[#64c4a8] shadow-sm' : 'text-slate-600 dark:text-slate-300 hover:bg-white/70'
                 }`}
               >
                 <Icon size={13} /> {t.label}
@@ -192,7 +192,7 @@ export function CustomiseUiDrawer({
           {tab === 'colors' && (
             <>
               <div className="space-y-2.5">
-                <div className="text-[10.5px] font-extrabold uppercase tracking-[0.14em] text-[#119c78]">
+                <div className="text-[10.5px] font-extrabold uppercase tracking-[0.14em] text-[#0e5a49]">
                   1-Click Theme Presets
                 </div>
                 <div className="grid grid-cols-2 gap-2">
@@ -205,8 +205,8 @@ export function CustomiseUiDrawer({
                         onClick={() => update({ presetId: p.id, ...p.patch })}
                         className={`p-2.5 rounded-xl border text-start cursor-pointer transition ${
                           active
-                            ? 'border-[#119c78] bg-[#e3fbf3]/60 dark:bg-[#0d2b24] ring-1 ring-[#22e2ad]'
-                            : 'border-[var(--bw-line)] bg-white dark:bg-[#111722] hover:border-[#119c78]'
+                            ? 'border-[#0e5a49] bg-[#eaf4f1]/60 dark:bg-[#0e2d29] ring-1 ring-[#47a88d]'
+                            : 'border-[var(--bw-line)] bg-white dark:bg-[#122642] hover:border-[#0e5a49]'
                         }`}
                       >
                         <div className="flex items-center justify-between gap-1 mb-1.5">
@@ -219,7 +219,7 @@ export function CustomiseUiDrawer({
                               />
                             ))}
                           </div>
-                          {active && <Check size={13} className="text-[#119c78]" />}
+                          {active && <Check size={13} className="text-[#0e5a49]" />}
                         </div>
                         <div className="font-bold text-[11px] leading-tight text-slate-900 dark:text-white">{p.name}</div>
                       </button>
@@ -229,7 +229,7 @@ export function CustomiseUiDrawer({
               </div>
 
               <div className="space-y-3 pt-2 border-t border-[var(--bw-line)]">
-                <div className="text-[10.5px] font-extrabold uppercase tracking-[0.14em] text-[#119c78]">
+                <div className="text-[10.5px] font-extrabold uppercase tracking-[0.14em] text-[#0e5a49]">
                   Fine-Tune Every Surface Color
                 </div>
                 {(
@@ -273,7 +273,7 @@ export function CustomiseUiDrawer({
                             ...(isBg ? { useCustomBgSolid: true } : {}),
                           } as Partial<UiCustomConfig>)
                         }
-                        className="w-20 h-8 px-2 rounded-lg border border-[var(--bw-line)] bg-white dark:bg-[#0d1219] font-mono text-[11px] text-slate-900 dark:text-white"
+                        className="w-20 h-8 px-2 rounded-lg border border-[var(--bw-line)] bg-white dark:bg-[#0e1d33] font-mono text-[11px] text-slate-900 dark:text-white"
                       />
                     </div>
                   </div>
@@ -285,7 +285,7 @@ export function CustomiseUiDrawer({
           {tab === 'fonts' && (
             <div className="space-y-5">
               <div className="space-y-2">
-                <div className="text-[10.5px] font-extrabold uppercase tracking-[0.14em] text-[#119c78]">
+                <div className="text-[10.5px] font-extrabold uppercase tracking-[0.14em] text-[#0e5a49]">
                   Font Type / Family
                 </div>
                 <div className="grid grid-cols-1 gap-2">
@@ -305,8 +305,8 @@ export function CustomiseUiDrawer({
                       onClick={() => update({ fontFamily: id })}
                       className={`px-3.5 py-2.5 rounded-xl border text-start font-bold cursor-pointer flex items-center justify-between ${
                         config.fontFamily === id
-                          ? 'bg-[#090d13] text-[#34f0bc] border-[#22e2ad]'
-                          : 'bg-white dark:bg-[#111722] border-[var(--bw-line)] text-slate-800 dark:text-slate-100 hover:border-[#119c78]'
+                          ? 'bg-[#0b192c] text-[#64c4a8] border-[#47a88d]'
+                          : 'bg-white dark:bg-[#122642] border-[var(--bw-line)] text-slate-800 dark:text-slate-100 hover:border-[#0e5a49]'
                       }`}
                     >
                       <span>{label}</span>
@@ -318,7 +318,7 @@ export function CustomiseUiDrawer({
 
               <div className="space-y-2 pt-2 border-t border-[var(--bw-line)]">
                 <div className="flex items-center justify-between">
-                  <span className="text-[10.5px] font-extrabold uppercase tracking-[0.14em] text-[#119c78]">
+                  <span className="text-[10.5px] font-extrabold uppercase tracking-[0.14em] text-[#0e5a49]">
                     Font Size Scale
                   </span>
                   <span className="font-mono font-extrabold text-slate-900 dark:text-white">{config.fontSizePct}%</span>
@@ -330,7 +330,7 @@ export function CustomiseUiDrawer({
                   step={2}
                   value={config.fontSizePct}
                   onChange={(e) => update({ fontSizePct: Number(e.target.value) })}
-                  className="w-full accent-[#119c78] cursor-pointer"
+                  className="w-full accent-[#0e5a49] cursor-pointer"
                 />
                 <div className="flex justify-between gap-1.5">
                   {[
@@ -345,8 +345,8 @@ export function CustomiseUiDrawer({
                       onClick={() => update({ fontSizePct: Number(pct) })}
                       className={`flex-1 py-1.5 rounded-lg text-[11px] font-bold border cursor-pointer ${
                         config.fontSizePct === pct
-                          ? 'bg-[#090d13] text-[#34f0bc] border-[#22e2ad]'
-                          : 'bg-white dark:bg-[#111722] border-[var(--bw-line)]'
+                          ? 'bg-[#0b192c] text-[#64c4a8] border-[#47a88d]'
+                          : 'bg-white dark:bg-[#122642] border-[var(--bw-line)]'
                       }`}
                     >
                       {lbl}
@@ -356,7 +356,7 @@ export function CustomiseUiDrawer({
               </div>
 
               <div className="space-y-2 pt-2 border-t border-[var(--bw-line)]">
-                <div className="text-[10.5px] font-extrabold uppercase tracking-[0.14em] text-[#119c78]">
+                <div className="text-[10.5px] font-extrabold uppercase tracking-[0.14em] text-[#0e5a49]">
                   Font Style &amp; Weight
                 </div>
                 <div className="grid grid-cols-3 gap-2">
@@ -373,8 +373,8 @@ export function CustomiseUiDrawer({
                       onClick={() => update({ fontStyle: st })}
                       className={`py-2 px-2 rounded-xl border font-bold text-[11px] cursor-pointer ${
                         config.fontStyle === st
-                          ? 'bg-[#090d13] text-[#fbe8a4] border-[#d9b356]'
-                          : 'bg-white dark:bg-[#111722] border-[var(--bw-line)]'
+                          ? 'bg-[#0b192c] text-[#dfc285] border-[#c49a45]'
+                          : 'bg-white dark:bg-[#122642] border-[var(--bw-line)]'
                       }`}
                     >
                       {lbl}
@@ -384,7 +384,7 @@ export function CustomiseUiDrawer({
               </div>
 
               <div className="space-y-2 pt-2 border-t border-[var(--bw-line)]">
-                <div className="text-[10.5px] font-extrabold uppercase tracking-[0.14em] text-[#119c78]">
+                <div className="text-[10.5px] font-extrabold uppercase tracking-[0.14em] text-[#0e5a49]">
                   Letter Spacing
                 </div>
                 <div className="grid grid-cols-3 gap-2">
@@ -395,8 +395,8 @@ export function CustomiseUiDrawer({
                       onClick={() => update({ letterSpacing: ls })}
                       className={`py-2 rounded-xl border font-bold capitalize cursor-pointer ${
                         config.letterSpacing === ls
-                          ? 'bg-[#090d13] text-[#34f0bc] border-[#22e2ad]'
-                          : 'bg-white dark:bg-[#111722] border-[var(--bw-line)]'
+                          ? 'bg-[#0b192c] text-[#64c4a8] border-[#47a88d]'
+                          : 'bg-white dark:bg-[#122642] border-[var(--bw-line)]'
                       }`}
                     >
                       {ls}
@@ -410,11 +410,11 @@ export function CustomiseUiDrawer({
           {tab === 'highlight' && (
             <div className="space-y-5">
               {/* Highlight Feature Toggle */}
-              <div className="p-4 rounded-2xl bg-[#090d13] text-white border border-[#22e2ad]/40 space-y-3">
+              <div className="p-4 rounded-2xl bg-[#0b192c] text-white border border-[#47a88d]/40 space-y-3">
                 <div className="flex items-center justify-between gap-3">
                   <div>
-                    <div className="font-display font-extrabold text-sm flex items-center gap-1.5 text-[#34f0bc]">
-                      <Sun size={15} className="text-[#fbe8a4]" /> Highlight Feature Mode
+                    <div className="font-display font-extrabold text-sm flex items-center gap-1.5 text-[#64c4a8]">
+                      <Sun size={15} className="text-[#dfc285]" /> Highlight Feature Mode
                     </div>
                     <p className="text-[11px] text-slate-300 mt-0.5">
                       Luminous border &amp; spotlight emphasis on pinned apps, live numbers, and key actions across the entire OS.
@@ -424,7 +424,7 @@ export function CustomiseUiDrawer({
                     type="button"
                     onClick={() => update({ highlightEnabled: !config.highlightEnabled })}
                     className={`px-3.5 py-1.5 rounded-full text-xs font-extrabold cursor-pointer transition shrink-0 ${
-                      config.highlightEnabled ? 'bg-[#22e2ad] text-[#070e1a]' : 'bg-white/15 text-slate-200'
+                      config.highlightEnabled ? 'bg-[#47a88d] text-[#0b192c]' : 'bg-white/15 text-slate-200'
                     }`}
                   >
                     {config.highlightEnabled ? 'ON' : 'OFF'}
@@ -446,7 +446,7 @@ export function CustomiseUiDrawer({
                       onClick={() => update({ highlightEnabled: true, highlightStyle: st })}
                       className={`py-2 px-3 rounded-xl text-[11px] font-bold border cursor-pointer transition ${
                         config.highlightEnabled && config.highlightStyle === st
-                          ? 'bg-[#fbe8a4] text-[#070e1a] border-[#fbe8a4]'
+                          ? 'bg-[#dfc285] text-[#0b192c] border-[#dfc285]'
                           : 'bg-white/8 text-slate-200 border-white/15 hover:bg-white/16'
                       }`}
                     >
@@ -459,7 +459,7 @@ export function CustomiseUiDrawer({
               {/* Card Roundness Slider */}
               <div className="space-y-2">
                 <div className="flex items-center justify-between">
-                  <span className="text-[10.5px] font-extrabold uppercase tracking-[0.14em] text-[#119c78] flex items-center gap-1.5">
+                  <span className="text-[10.5px] font-extrabold uppercase tracking-[0.14em] text-[#0e5a49] flex items-center gap-1.5">
                     <Sliders size={13} /> Card Corner Radius
                   </span>
                   <span className="font-mono font-extrabold">{config.cardRadiusPx}px</span>
@@ -471,13 +471,13 @@ export function CustomiseUiDrawer({
                   step={2}
                   value={config.cardRadiusPx}
                   onChange={(e) => update({ cardRadiusPx: Number(e.target.value) })}
-                  className="w-full accent-[#119c78] cursor-pointer"
+                  className="w-full accent-[#0e5a49] cursor-pointer"
                 />
               </div>
 
               {/* Card Density */}
               <div className="space-y-2 pt-2 border-t border-[var(--bw-line)]">
-                <div className="text-[10.5px] font-extrabold uppercase tracking-[0.14em] text-[#119c78]">
+                <div className="text-[10.5px] font-extrabold uppercase tracking-[0.14em] text-[#0e5a49]">
                   Card Spacing &amp; Size Density
                 </div>
                 <div className="grid grid-cols-3 gap-2">
@@ -488,8 +488,8 @@ export function CustomiseUiDrawer({
                       onClick={() => update({ density: d })}
                       className={`py-2 rounded-xl border font-bold capitalize cursor-pointer ${
                         config.density === d
-                          ? 'bg-[#090d13] text-[#34f0bc] border-[#22e2ad]'
-                          : 'bg-white dark:bg-[#111722] border-[var(--bw-line)]'
+                          ? 'bg-[#0b192c] text-[#64c4a8] border-[#47a88d]'
+                          : 'bg-white dark:bg-[#122642] border-[var(--bw-line)]'
                       }`}
                     >
                       {d}
@@ -503,10 +503,10 @@ export function CustomiseUiDrawer({
           {tab === 'pins' && (
             <div className="space-y-5">
               {/* Floating Draggable Pinned Options Widget Control */}
-              <div className="p-4 rounded-2xl bg-[#090d13] text-white border border-[#d9b356]/40 space-y-3">
+              <div className="p-4 rounded-2xl bg-[#0b192c] text-white border border-[#c49a45]/40 space-y-3">
                 <div className="flex items-center justify-between gap-2">
                   <div>
-                    <div className="font-display font-extrabold text-sm text-[#fbe8a4] flex items-center gap-1.5">
+                    <div className="font-display font-extrabold text-sm text-[#dfc285] flex items-center gap-1.5">
                       <Pin size={14} /> Floating Draggable Quick Bar
                     </div>
                     <p className="text-[11px] text-slate-300 mt-0.5">
@@ -517,7 +517,7 @@ export function CustomiseUiDrawer({
                     type="button"
                     onClick={() => update({ dockMode: config.dockMode === 'floating' ? 'hidden' : 'floating' })}
                     className={`px-3 py-1.5 rounded-full text-xs font-extrabold cursor-pointer shrink-0 ${
-                      config.dockMode === 'floating' ? 'bg-[#22e2ad] text-[#070e1a]' : 'bg-white/15 text-slate-200'
+                      config.dockMode === 'floating' ? 'bg-[#47a88d] text-[#0b192c]' : 'bg-white/15 text-slate-200'
                     }`}
                   >
                     {config.dockMode === 'floating' ? 'VISIBLE' : 'SHOW'}
@@ -534,7 +534,7 @@ export function CustomiseUiDrawer({
                         onClick={() => toggleShortcut(sc.id)}
                         className={`px-2.5 py-1 rounded-full text-[10.5px] font-bold inline-flex items-center gap-1 cursor-pointer transition ${
                           active
-                            ? 'bg-[#22e2ad] text-[#070e1a]'
+                            ? 'bg-[#47a88d] text-[#0b192c]'
                             : 'bg-white/10 text-slate-200 hover:bg-white/20 border border-white/10'
                         }`}
                       >
@@ -547,7 +547,7 @@ export function CustomiseUiDrawer({
 
               {/* Drag & Pin Order for Applications Grid */}
               <div className="space-y-2">
-                <div className="text-[10.5px] font-extrabold uppercase tracking-[0.14em] text-[#119c78]">
+                <div className="text-[10.5px] font-extrabold uppercase tracking-[0.14em] text-[#0e5a49]">
                   Pin &amp; Drag Apps Order (Also Draggable Directly on Home!)
                 </div>
                 <p className="text-[11px] text-[var(--bw-muted)]">
@@ -565,8 +565,8 @@ export function CustomiseUiDrawer({
                         onDrop={() => dropAppOn(key)}
                         className={`p-2.5 rounded-xl border flex items-center justify-between gap-2 cursor-grab active:cursor-grabbing ${
                           pinned
-                            ? 'bg-[#fdf4dc]/70 dark:bg-[#221b0d] border-[#d9b356]'
-                            : 'bg-white dark:bg-[#111722] border-[var(--bw-line)]'
+                            ? 'bg-[#faf6ed]/70 dark:bg-[#221b0d] border-[#c49a45]'
+                            : 'bg-white dark:bg-[#122642] border-[var(--bw-line)]'
                         }`}
                       >
                         <div className="flex items-center gap-2 min-w-0">
@@ -596,7 +596,7 @@ export function CustomiseUiDrawer({
                             type="button"
                             onClick={() => togglePinApp(key)}
                             className={`size-7 rounded-lg flex items-center justify-center cursor-pointer ${
-                              pinned ? 'bg-[#090d13] text-[#fbe8a4]' : 'hover:bg-black/10 text-slate-500'
+                              pinned ? 'bg-[#0b192c] text-[#dfc285]' : 'hover:bg-black/10 text-slate-500'
                             }`}
                             title={pinned ? 'Unpin app' : 'Pin app'}
                           >
@@ -613,7 +613,7 @@ export function CustomiseUiDrawer({
         </div>
 
         {/* Footer Confirm */}
-        <div className="px-5 py-3 border-t border-[var(--bw-line)] bg-[#fffcf4] dark:bg-[#080c12] flex items-center justify-between text-[11px]">
+        <div className="px-5 py-3 border-t border-[var(--bw-line)] bg-[#fffcf4] dark:bg-[#0a1627] flex items-center justify-between text-[11px]">
           <span className="text-[var(--bw-muted)] font-semibold">Saved automatically for this browser</span>
           <button type="button" onClick={onClose} className="bw-btn bw-btn-obsidian text-xs py-1.5 min-h-[34px] px-4">
             Done
@@ -664,7 +664,7 @@ export function FloatingPinnedDock({
     <div
       ref={dockRef}
       style={{ left: `${config.dockPos.x}%`, top: `${config.dockPos.y}%` }}
-      className="fixed z-[65] no-print flex items-center gap-1.5 px-2.5 py-2 rounded-full bg-[#090d13]/95 backdrop-blur-xl text-white border border-[#22e2ad]/45 shadow-2xl max-w-[92vw] overflow-x-auto"
+      className="fixed z-[65] no-print flex items-center gap-1.5 px-2.5 py-2 rounded-full bg-[#0b192c]/95 backdrop-blur-xl text-white border border-[#47a88d]/45 shadow-2xl max-w-[92vw] overflow-x-auto"
       aria-label="Pinned Quick Options Dock"
     >
       <button
@@ -676,7 +676,7 @@ export function FloatingPinnedDock({
           }
           setDragging(true);
         }}
-        className="size-7 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center cursor-grab active:cursor-grabbing shrink-0 text-[#fbe8a4]"
+        className="size-7 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center cursor-grab active:cursor-grabbing shrink-0 text-[#dfc285]"
         title="Drag pinned bar anywhere on screen"
         aria-label="Drag pinned bar"
       >
@@ -686,7 +686,7 @@ export function FloatingPinnedDock({
       {config.pinnedShortcuts.map((sc) => {
         const isApi = sc.href.startsWith('/api/');
         const cls =
-          'px-3 py-1 rounded-full text-[11px] font-bold whitespace-nowrap bg-white/10 hover:bg-[#22e2ad] hover:text-[#070e1a] transition shrink-0';
+          'px-3 py-1 rounded-full text-[11px] font-bold whitespace-nowrap bg-white/10 hover:bg-[#47a88d] hover:text-[#0b192c] transition shrink-0';
         return isApi ? (
           <a key={sc.id} href={sc.href} className={cls}>
             {sc.label}
@@ -701,7 +701,7 @@ export function FloatingPinnedDock({
       <button
         type="button"
         onClick={onOpenCustomizer}
-        className="size-7 rounded-full bg-white/10 hover:bg-white/20 text-[#34f0bc] flex items-center justify-center cursor-pointer shrink-0"
+        className="size-7 rounded-full bg-white/10 hover:bg-white/20 text-[#64c4a8] flex items-center justify-center cursor-pointer shrink-0"
         title="Customise pinned bar"
       >
         <Palette size={13} />

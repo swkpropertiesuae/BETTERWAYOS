@@ -227,7 +227,7 @@ export function ForensicVisitsTab({ compactStaffMode = false }: { compactStaffMo
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div>
           <h2 className="text-base font-extrabold flex items-center gap-2">
-            <MapPin size={16} className="text-[#007b52]" /> Forensic Mortgage Field Meetings &amp; Inspections (GPS + Authority Verified)
+            <MapPin size={16} className="text-[#0e5243]" /> Forensic Mortgage Field Meetings &amp; Inspections (GPS + Authority Verified)
           </h2>
           <p className="text-xs text-[var(--bw-muted)]">
             Every Borrower Consultation, Bank RM / FOL Signing, Valuation Inspection, Developer SOA/NOC, and DLD Trustee Transfer includes GPS pin, evidence photos, Bank RM &amp; RERA referrer details, valuation vs. loan LTV, outcome reason &amp; full payment stage breakdown.
@@ -236,7 +236,7 @@ export function ForensicVisitsTab({ compactStaffMode = false }: { compactStaffMo
         <button
           type="button"
           onClick={() => setShowForm((v) => !v)}
-          className="px-4 py-2 rounded-full bg-[#007b52] text-white text-xs font-extrabold inline-flex items-center gap-1.5 cursor-pointer"
+          className="px-4 py-2 rounded-full bg-[#0e5243] text-white text-xs font-extrabold inline-flex items-center gap-1.5 cursor-pointer"
         >
           <Plus size={14} /> {showForm ? 'Hide Report Form' : 'Log Mortgage Field Meeting'}
         </button>
@@ -253,13 +253,13 @@ export function ForensicVisitsTab({ compactStaffMode = false }: { compactStaffMo
 
       {/* Submission Form */}
       {showForm && (
-        <form onSubmit={submitReport} className="bw-card p-5 space-y-4 text-xs border-[#007b52]/40">
+        <form onSubmit={submitReport} className="bw-card p-5 space-y-4 text-xs border-[#0e5243]/40">
           <div className="flex flex-wrap items-center justify-between gap-2 pb-3 border-b border-[var(--bw-line)]">
             <h3 className="text-sm font-extrabold">New Forensic UAE Mortgage Field Meeting Dossier</h3>
             <button
               type="button"
               onClick={pinGps}
-              className="px-3.5 py-1.5 rounded-full bg-[#025e3d] text-[#FCF1B7] font-bold inline-flex items-center gap-1.5 cursor-pointer"
+              className="px-3.5 py-1.5 rounded-full bg-[#0e5243] text-[#ebd5a6] font-bold inline-flex items-center gap-1.5 cursor-pointer"
             >
               <MapPin size={13} /> Pin Live GPS ({form.gpsLat.toFixed(4)}, {form.gpsLng.toFixed(4)})
             </button>
@@ -298,7 +298,7 @@ export function ForensicVisitsTab({ compactStaffMode = false }: { compactStaffMo
           {/* Whom Met & Bank RM / Institutional Contact */}
           <div className="grid md:grid-cols-2 gap-4 pt-2 border-t border-[var(--bw-line)]">
             <div className="space-y-2">
-              <div className="font-extrabold text-[#007b52]">1. Whom You Met (Borrower / Bank RM / Valuer / Trustee)</div>
+              <div className="font-extrabold text-[#0e5243]">1. Whom You Met (Borrower / Bank RM / Valuer / Trustee)</div>
               <div className="grid grid-cols-2 gap-2">
                 <input required value={form.metPersonName} onChange={(e) => setForm({ ...form, metPersonName: e.target.value })} placeholder="Full Name *" className="h-9 px-3 rounded-xl border border-[var(--bw-line)] bg-[var(--bw-bg)]" />
                 <select value={form.metPersonRole} onChange={(e) => setForm({ ...form, metPersonRole: e.target.value })} className="h-9 px-3 rounded-xl border border-[var(--bw-line)] bg-[var(--bw-bg)]">
@@ -311,7 +311,7 @@ export function ForensicVisitsTab({ compactStaffMode = false }: { compactStaffMo
               </div>
             </div>
             <div className="space-y-2">
-              <div className="font-extrabold text-[#007b52]">2. Lending Bank RM / Valuation Desk Contact</div>
+              <div className="font-extrabold text-[#0e5243]">2. Lending Bank RM / Valuation Desk Contact</div>
               <div className="grid grid-cols-3 gap-2">
                 <input value={form.ownerOrAgentName} onChange={(e) => setForm({ ...form, ownerOrAgentName: e.target.value })} placeholder="Bank & RM Name" className="h-9 px-3 rounded-xl border border-[var(--bw-line)] bg-[var(--bw-bg)]" />
                 <input value={form.ownerOrAgentPhone} onChange={(e) => setForm({ ...form, ownerOrAgentPhone: e.target.value })} placeholder="RM Phone" className="h-9 px-3 rounded-xl border border-[var(--bw-line)] bg-[var(--bw-bg)]" />
@@ -376,11 +376,11 @@ export function ForensicVisitsTab({ compactStaffMode = false }: { compactStaffMo
           ) : (
             <div className="p-3.5 rounded-2xl bg-emerald-50/50 dark:bg-emerald-950/20 border border-emerald-400/40 space-y-2">
               <div className="flex items-center justify-between">
-                <span className="font-extrabold text-[#007b52]">Signed / Disbursed — Stage-Wise Mortgage Fee &amp; Manager Cheque Breakdown</span>
+                <span className="font-extrabold text-[#0e5243]">Signed / Disbursed — Stage-Wise Mortgage Fee &amp; Manager Cheque Breakdown</span>
                 <button
                   type="button"
                   onClick={() => setPayments([...payments, { stage: 'DLD 0.25% Mortgage Reg / Disbursal Cheque', paymentMode: 'Manager Cheque', chequeNo: '', bankName: '', amountAed: 0, status: 'Pending' }])}
-                  className="px-2.5 py-1 rounded-full bg-[#007b52] text-white text-[11px] font-bold cursor-pointer"
+                  className="px-2.5 py-1 rounded-full bg-[#0e5243] text-white text-[11px] font-bold cursor-pointer"
                 >
                   + Add Payment Stage
                 </button>
@@ -413,7 +413,7 @@ export function ForensicVisitsTab({ compactStaffMode = false }: { compactStaffMo
           <div className="grid md:grid-cols-2 gap-3 pt-2 border-t border-[var(--bw-line)]">
             <div className="space-y-2">
               <label className="font-bold flex items-center gap-1.5">
-                <Camera size={13} className="text-[#007b52]" /> Upload Valuation / FOL / Trustee Evidence Photos (Up to 6)
+                <Camera size={13} className="text-[#0e5243]" /> Upload Valuation / FOL / Trustee Evidence Photos (Up to 6)
               </label>
               <input type="file" accept="image/*" multiple onChange={handlePhotoUpload} className="block w-full text-[11px]" />
               {photos.length > 0 && (
@@ -430,7 +430,7 @@ export function ForensicVisitsTab({ compactStaffMode = false }: { compactStaffMo
             </div>
           </div>
 
-          <button type="submit" className="px-6 py-2.5 rounded-full bg-[#025e3d] text-[#FCF1B7] font-extrabold cursor-pointer">
+          <button type="submit" className="px-6 py-2.5 rounded-full bg-[#0e5243] text-[#ebd5a6] font-extrabold cursor-pointer">
             Submit GPS-Pinned Mortgage Field Report
           </button>
         </form>
@@ -444,7 +444,7 @@ export function ForensicVisitsTab({ compactStaffMode = false }: { compactStaffMo
             type="button"
             onClick={() => setFilterType(t)}
             className={`px-3 py-1.5 rounded-full font-bold cursor-pointer ${
-              filterType === t ? 'bg-[#025e3d] text-[#FCF1B7]' : 'border border-[var(--bw-line)] bg-[var(--bw-card)]'
+              filterType === t ? 'bg-[#0e5243] text-[#ebd5a6]' : 'border border-[var(--bw-line)] bg-[var(--bw-card)]'
             }`}
           >
             {t === 'ALL' ? 'All Mortgage Meetings' : t}
@@ -456,7 +456,7 @@ export function ForensicVisitsTab({ compactStaffMode = false }: { compactStaffMo
             type="button"
             onClick={() => setFilterOutcome(o)}
             className={`px-3 py-1.5 rounded-full font-bold cursor-pointer ${
-              filterOutcome === o ? 'bg-[#007b52] text-white' : 'border border-[var(--bw-line)] bg-[var(--bw-card)]'
+              filterOutcome === o ? 'bg-[#0e5243] text-white' : 'border border-[var(--bw-line)] bg-[var(--bw-card)]'
             }`}
           >
             {o === 'ALL' ? 'All Outcomes' : outcomeDisplay(o)}
@@ -478,12 +478,12 @@ export function ForensicVisitsTab({ compactStaffMode = false }: { compactStaffMo
                 type="button"
                 onClick={() => setSelected(r)}
                 className={`w-full text-start bw-card p-4 space-y-2 text-xs transition cursor-pointer ${
-                  selected?.id === r.id ? 'border-[#007b52] ring-1 ring-[#007b52]' : ''
+                  selected?.id === r.id ? 'border-[#0e5243] ring-1 ring-[#0e5243]' : ''
                 }`}
               >
                 <div className="flex flex-wrap items-center justify-between gap-2">
                   <div>
-                    <span className="font-mono-num font-bold text-[#007b52]">{r.report_no}</span> ·{' '}
+                    <span className="font-mono-num font-bold text-[#0e5243]">{r.report_no}</span> ·{' '}
                     <span className="font-extrabold">{r.building_or_project || r.community}</span>{' '}
                     {r.unit_no && <span className="text-[var(--bw-muted)]">({r.unit_no})</span>}
                   </div>
@@ -513,22 +513,22 @@ export function ForensicVisitsTab({ compactStaffMode = false }: { compactStaffMo
             <>
               <div className="flex flex-wrap items-start justify-between gap-2 pb-3 border-b border-[var(--bw-line)]">
                 <div>
-                  <div className="font-mono-num text-[11px] font-bold text-[#007b52]">{selected.report_no} · {selected.report_type}</div>
+                  <div className="font-mono-num text-[11px] font-bold text-[#0e5243]">{selected.report_no} · {selected.report_type}</div>
                   <h3 className="text-base font-extrabold">{selected.building_or_project || selected.community} {selected.unit_no ? `— ${selected.unit_no}` : ''}</h3>
                   <a
                     href={`https://maps.google.com/?q=${selected.gps_lat},${selected.gps_lng}`}
                     target="_blank"
                     rel="noreferrer"
-                    className="inline-flex items-center gap-1 text-[11px] font-mono-num font-bold text-[#007b52] hover:underline mt-0.5"
+                    className="inline-flex items-center gap-1 text-[11px] font-mono-num font-bold text-[#0e5243] hover:underline mt-0.5"
                   >
                     <MapPin size={12} /> GPS {selected.gps_lat}, {selected.gps_lng} (Open Map Pin) <ExternalLink size={10} />
                   </a>
                 </div>
                 <div className="flex flex-wrap gap-1.5">
-                  <button type="button" onClick={() => downloadWordDocument(buildExportPayload(selected))} className="px-2.5 py-1.5 rounded-lg bg-[#025e3d] text-[#FCF1B7] font-bold inline-flex items-center gap-1 cursor-pointer">
+                  <button type="button" onClick={() => downloadWordDocument(buildExportPayload(selected))} className="px-2.5 py-1.5 rounded-lg bg-[#0e5243] text-[#ebd5a6] font-bold inline-flex items-center gap-1 cursor-pointer">
                     <FileText size={12} /> .DOC
                   </button>
-                  <button type="button" onClick={() => void downloadJpegDocument(buildExportPayload(selected))} className="px-2.5 py-1.5 rounded-lg bg-[#007b52] text-white font-bold inline-flex items-center gap-1 cursor-pointer">
+                  <button type="button" onClick={() => void downloadJpegDocument(buildExportPayload(selected))} className="px-2.5 py-1.5 rounded-lg bg-[#0e5243] text-white font-bold inline-flex items-center gap-1 cursor-pointer">
                     <ImageIcon size={12} /> .JPEG
                   </button>
                   <button type="button" onClick={() => printBrandedDocument(buildExportPayload(selected))} className="px-2.5 py-1.5 rounded-lg border border-[var(--bw-line)] font-bold inline-flex items-center gap-1 cursor-pointer">
@@ -565,7 +565,7 @@ export function ForensicVisitsTab({ compactStaffMode = false }: { compactStaffMo
                 </div>
                 <div className="p-2.5 rounded-xl bg-[var(--bw-bg)] border border-[var(--bw-line)]">
                   <div className="text-[9.5px] uppercase text-[var(--bw-muted)]">Loan Amount</div>
-                  <div className="font-bold text-[#007b52]">{fmtAed(selected.final_price_aed, true)}</div>
+                  <div className="font-bold text-[#0e5243]">{fmtAed(selected.final_price_aed, true)}</div>
                 </div>
                 <div className="p-2.5 rounded-xl bg-[var(--bw-bg)] border border-[var(--bw-line)]">
                   <div className="text-[9.5px] uppercase text-[var(--bw-muted)]">Monthly Income</div>
@@ -586,13 +586,13 @@ export function ForensicVisitsTab({ compactStaffMode = false }: { compactStaffMo
 
               {(selected.payment_summary_json ?? []).length > 0 && (
                 <div className="space-y-1.5">
-                  <div className="font-extrabold text-[#007b52]">Mortgage Fee &amp; Manager Cheque Breakdown</div>
+                  <div className="font-extrabold text-[#0e5243]">Mortgage Fee &amp; Manager Cheque Breakdown</div>
                   {selected.payment_summary_json.map((p: any, idx: number) => (
                     <div key={idx} className="p-2.5 rounded-xl bg-[var(--bw-bg)] border border-[var(--bw-line)] flex items-center justify-between gap-2">
                       <div>
                         <span className="font-bold">{p.stage}</span> · {p.paymentMode} {p.chequeNo ? `(#${p.chequeNo})` : ''} · {p.bankName}
                       </div>
-                      <span className="font-mono-num font-bold text-[#007b52]">{fmtAed(p.amountAed)} ({p.status})</span>
+                      <span className="font-mono-num font-bold text-[#0e5243]">{fmtAed(p.amountAed)} ({p.status})</span>
                     </div>
                   ))}
                 </div>
@@ -613,9 +613,9 @@ export function ForensicVisitsTab({ compactStaffMode = false }: { compactStaffMo
 
               {/* Authority Verification Box */}
               {isVerifier && (
-                <div className="p-3.5 rounded-2xl bg-[#025e3d] text-white space-y-2.5">
+                <div className="p-3.5 rounded-2xl bg-[#0e5243] text-white space-y-2.5">
                   <div className="flex items-center justify-between">
-                    <span className="font-extrabold text-[#FCF1B7] inline-flex items-center gap-1.5">
+                    <span className="font-extrabold text-[#ebd5a6] inline-flex items-center gap-1.5">
                       <ShieldCheck size={14} /> Authority Verification Decision
                     </span>
                     <StatusPill label={selected.verification_status} tone={selected.verification_status === 'Verified' ? 'emerald' : 'gold'} />
@@ -627,10 +627,10 @@ export function ForensicVisitsTab({ compactStaffMode = false }: { compactStaffMo
                     className="w-full h-9 px-3 rounded-xl bg-white/10 border border-white/15 text-white placeholder:text-slate-400"
                   />
                   <div className="flex flex-wrap gap-2">
-                    <button type="button" onClick={() => void verifyReport(selected.id, 'Verified')} className="px-4 py-1.5 rounded-full bg-[#007b52] text-white font-extrabold inline-flex items-center gap-1 cursor-pointer">
+                    <button type="button" onClick={() => void verifyReport(selected.id, 'Verified')} className="px-4 py-1.5 rounded-full bg-[#0e5243] text-white font-extrabold inline-flex items-center gap-1 cursor-pointer">
                       <CheckCircle2 size={13} /> Verify &amp; Stamp
                     </button>
-                    <button type="button" onClick={() => void verifyReport(selected.id, 'Flagged')} className="px-4 py-1.5 rounded-full bg-amber-500 text-[#025e3d] font-extrabold inline-flex items-center gap-1 cursor-pointer">
+                    <button type="button" onClick={() => void verifyReport(selected.id, 'Flagged')} className="px-4 py-1.5 rounded-full bg-amber-500 text-[#0e5243] font-extrabold inline-flex items-center gap-1 cursor-pointer">
                       <Flag size={13} /> Flag for Review
                     </button>
                     <button type="button" onClick={() => void verifyReport(selected.id, 'Rejected')} className="px-4 py-1.5 rounded-full bg-red-600 text-white font-extrabold inline-flex items-center gap-1 cursor-pointer">

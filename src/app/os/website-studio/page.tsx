@@ -129,7 +129,7 @@ export default function WebsiteStudioPage() {
               href="/api/v1/public/cms"
               target="_blank"
               rel="noreferrer"
-              className="inline-flex items-center gap-1.5 rounded-xl border border-[var(--bw-line)] bg-[var(--bw-card)] px-3.5 py-2 text-xs font-bold hover:border-[#007b52]"
+              className="inline-flex items-center gap-1.5 rounded-xl border border-[var(--bw-line)] bg-[var(--bw-card)] px-3.5 py-2 text-xs font-bold hover:border-[#0e5243]"
             >
               <Globe size={13} /> Inspect Live CMS JSON
             </a>
@@ -137,7 +137,7 @@ export default function WebsiteStudioPage() {
               type="button"
               disabled={busy}
               onClick={() => void publish({ kind: 'revalidate' }, 'Website cache-bust ping dispatched.')}
-              className="inline-flex items-center gap-1.5 rounded-xl bg-[#025e3d] text-white px-3.5 py-2 text-xs font-bold hover:brightness-110"
+              className="inline-flex items-center gap-1.5 rounded-xl bg-[#0e5243] text-white px-3.5 py-2 text-xs font-bold hover:brightness-110"
             >
               <RefreshCw size={13} /> Push Instant Sync
             </button>
@@ -145,11 +145,11 @@ export default function WebsiteStudioPage() {
         }
       />
 
-      <div className="rounded-2xl bg-[#025e3d] text-white border border-[#D4AF37]/35 p-4 flex flex-wrap items-center justify-between gap-3 text-xs">
+      <div className="rounded-2xl bg-[#0e5243] text-white border border-[#c49a45]/35 p-4 flex flex-wrap items-center justify-between gap-3 text-xs">
         <div className="flex items-center gap-2.5">
-          <ShieldCheck size={16} className="text-[#34DFAC] shrink-0" />
+          <ShieldCheck size={16} className="text-[#64c4a8] shrink-0" />
           <span>
-            <strong className="text-[#FCF1B7]">Zero-SWK Public Guard Active:</strong> Every public CMS payload served to <code>betterwaymortgages.com</code> is strictly sanitized so internal brokerage partner records never leak to the public website.
+            <strong className="text-[#ebd5a6]">Zero-SWK Public Guard Active:</strong> Every public CMS payload served to <code>betterwaymortgages.com</code> is strictly sanitized so internal brokerage partner records never leak to the public website.
           </span>
         </div>
         <StatusPill label={`${data?.offers.length ?? 0} Offers · ${data?.rates.length ?? 0} Rates · ${data?.team.length ?? 8} Team`} tone="emerald" />
@@ -177,7 +177,7 @@ export default function WebsiteStudioPage() {
             type="button"
             onClick={() => setTab(k)}
             className={`inline-flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-bold border transition ${
-              tab === k ? 'bg-[#025e3d] text-white border-[#025e3d]' : 'bg-[var(--bw-card)] border-[var(--bw-line)]'
+              tab === k ? 'bg-[#0e5243] text-white border-[#0e5243]' : 'bg-[var(--bw-card)] border-[var(--bw-line)]'
             }`}
           >
             <Icon size={14} /> {label}
@@ -226,7 +226,7 @@ export default function WebsiteStudioPage() {
               <input value={offCtaLabel} onChange={(e) => setOffCtaLabel(e.target.value)} placeholder="CTA Label" className="rounded-xl border border-[var(--bw-line)] bg-transparent px-3 py-2 text-xs" />
               <input value={offCtaHref} onChange={(e) => setOffCtaHref(e.target.value)} placeholder="/get-started" className="rounded-xl border border-[var(--bw-line)] bg-transparent px-3 py-2 text-xs font-mono" />
             </div>
-            <button disabled={busy} className="w-full rounded-xl bg-[#025e3d] text-white py-2.5 text-xs font-bold">
+            <button disabled={busy} className="w-full rounded-xl bg-[#0e5243] text-white py-2.5 text-xs font-bold">
               {offId ? `Update Offer ${offId} Live` : 'Publish New Offer Live'}
             </button>
           </form>
@@ -288,12 +288,12 @@ export default function WebsiteStudioPage() {
           className="rounded-2xl bg-[var(--bw-card)] border border-[var(--bw-line)] p-5 space-y-4 max-w-2xl"
         >
           <h2 className="text-sm font-extrabold">Live Website Announcement Banner</h2>
-          <div className="rounded-xl bg-[#025e3d] text-white px-4 py-2.5 flex flex-wrap items-center justify-between gap-2 text-xs">
+          <div className="rounded-xl bg-[#0e5243] text-white px-4 py-2.5 flex flex-wrap items-center justify-between gap-2 text-xs">
             <div className="flex items-center gap-2">
-              <span className="px-2 py-0.5 rounded-full bg-[#D4AF37] text-[#025e3d] font-extrabold text-[10px]">{bnrBadge}</span>
+              <span className="px-2 py-0.5 rounded-full bg-[#c49a45] text-[#0e5243] font-extrabold text-[10px]">{bnrBadge}</span>
               <span>{bnrMessage}</span>
             </div>
-            <span className="text-[#34DFAC] font-bold">{bnrCtaLabel} →</span>
+            <span className="text-[#dfc285] font-bold">{bnrCtaLabel} →</span>
           </div>
           <div className="grid sm:grid-cols-2 gap-3 text-xs">
             <input value={bnrBadge} onChange={(e) => setBnrBadge(e.target.value)} placeholder="Badge" className="rounded-xl border border-[var(--bw-line)] bg-transparent px-3 py-2" required />
@@ -301,7 +301,7 @@ export default function WebsiteStudioPage() {
           </div>
           <input value={bnrMessage} onChange={(e) => setBnrMessage(e.target.value)} placeholder="Live announcement message..." className="w-full rounded-xl border border-[var(--bw-line)] bg-transparent px-3 py-2 text-xs" required />
           <input value={bnrCtaHref} onChange={(e) => setBnrCtaHref(e.target.value)} placeholder="Target path (/hot-offers)" className="w-full rounded-xl border border-[var(--bw-line)] bg-transparent px-3 py-2 text-xs font-mono" required />
-          <button disabled={busy} className="rounded-xl bg-[#025e3d] text-white px-5 py-2.5 text-xs font-bold">
+          <button disabled={busy} className="rounded-xl bg-[#0e5243] text-white px-5 py-2.5 text-xs font-bold">
             Publish Live Banner to betterwaymortgages.com
           </button>
         </form>
@@ -345,7 +345,7 @@ export default function WebsiteStudioPage() {
               <input type="checkbox" checked={rateIslamic} onChange={(e) => setRateIslamic(e.target.checked)} />
               Islamic Sharia-Compliant Product (Ijara / Murabaha)
             </label>
-            <button disabled={busy} className="w-full rounded-xl bg-[#025e3d] text-white py-2.5 text-xs font-bold">
+            <button disabled={busy} className="w-full rounded-xl bg-[#0e5243] text-white py-2.5 text-xs font-bold">
               Push Live Rate Update
             </button>
           </form>
@@ -416,7 +416,7 @@ export default function WebsiteStudioPage() {
             </div>
             <input value={socUtm} onChange={(e) => setSocUtm(e.target.value)} placeholder="UTM Campaign Tag" className="w-full rounded-xl border border-[var(--bw-line)] bg-transparent px-3 py-2 text-xs font-mono" required />
             <textarea rows={3} value={socCaption} onChange={(e) => setSocCaption(e.target.value)} placeholder="Post caption / ad copy..." className="w-full rounded-xl border border-[var(--bw-line)] bg-transparent p-2.5 text-xs" />
-            <button disabled={busy} className="w-full rounded-xl bg-[#025e3d] text-[#FCF1B7] py-2.5 text-xs font-bold">
+            <button disabled={busy} className="w-full rounded-xl bg-[#0e5243] text-[#ebd5a6] py-2.5 text-xs font-bold">
               Launch Tracked Social Campaign
             </button>
           </form>

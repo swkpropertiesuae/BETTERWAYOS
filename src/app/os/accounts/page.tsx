@@ -212,7 +212,7 @@ export default function AccountsPage() {
         actions={
           user?.isOwner ? (
             <Link href="/os/corner?tab=vat" className="bw-btn bw-btn-obsidian text-xs py-2 min-h-[36px]">
-              <Lock size={13} className="text-[#fbe8a4]" /> Owner Consolidated VAT 201
+              <Lock size={13} className="text-[#dfc285]" /> Owner Consolidated VAT 201
             </Link>
           ) : null
         }
@@ -250,7 +250,7 @@ export default function AccountsPage() {
             <div className="grid lg:grid-cols-3 gap-5">
               <form onSubmit={submitInvoice} className="bw-card p-5 space-y-3">
                 <h2 className="text-sm font-extrabold flex items-center gap-1.5">
-                  <Plus size={15} className="text-[#119c78]" /> Issue Bank DSA Tax Invoice
+                  <Plus size={15} className="text-[#0e5a49]" /> Issue Bank DSA Tax Invoice
                 </h2>
                 <p className="text-[11px] text-[var(--bw-muted)]">Auto-applies 5% UAE FTA VAT, posts double-entry GL (`1100` Dr / `4000` Cr), and locks to Betterway Corporate IBAN.</p>
                 <input value={invCounterparty} onChange={(e) => setInvCounterparty(e.target.value)} placeholder="Bank / Counterparty Legal Name" className="w-full rounded-xl border border-[var(--bw-line-strong)] bg-[var(--bw-soft)] px-3 py-2 text-xs" required />
@@ -284,7 +284,7 @@ export default function AccountsPage() {
                         <td className="py-2.5 pr-3 font-mono-num">{fmtAed(Number(inv.vat_amount_aed))}</td>
                         <td className="py-2.5 pr-3 font-mono-num font-bold">{fmtAed(Number(inv.total_aed))}</td>
                         <td className="py-2.5">
-                          <a href={`/api/v1/accounts?pintInvoiceId=${String(inv.id)}`} className="inline-flex items-center gap-1 text-[11px] font-bold text-[#119c78] hover:underline">
+                          <a href={`/api/v1/accounts?pintInvoiceId=${String(inv.id)}`} className="inline-flex items-center gap-1 text-[11px] font-bold text-[#0e5a49] hover:underline">
                             <Download size={12} /> XML
                           </a>
                         </td>
@@ -314,7 +314,7 @@ export default function AccountsPage() {
                       <div className="text-[11px] text-[var(--bw-muted)]">IBAN: {String(inv.receiving_corporate_iban || invIban)}</div>
                     </div>
                     <div className="flex items-center gap-2">
-                      <span className="font-mono-num font-extrabold text-[#119c78]">{fmtAed(Number(inv.total_aed))}</span>
+                      <span className="font-mono-num font-extrabold text-[#0e5a49]">{fmtAed(Number(inv.total_aed))}</span>
                       <StatusPill label={String(inv.status || 'ISSUED')} tone="emerald" />
                     </div>
                   </div>
@@ -352,7 +352,7 @@ export default function AccountsPage() {
                 <div className="flex items-center justify-between">
                   <h3 className="font-display text-sm font-extrabold">Advisor DSA &amp; RERA Referral Payout Ledger</h3>
                   {user?.isOwner && (
-                    <Link href="/os/place?tab=commissions" className="text-xs font-extrabold text-[#119c78] hover:underline">
+                    <Link href="/os/place?tab=commissions" className="text-xs font-extrabold text-[#0e5a49] hover:underline">
                       Open Full Cash / BT / Botim Settlement →
                     </Link>
                   )}
@@ -523,7 +523,7 @@ export default function AccountsPage() {
                           setMatchedIds((p) => ({ ...p, [id]: !p[id] }));
                           toast(ok ? 'Unmatched bank entry' : `Matched ${String(inv.invoice_no)} to bank feed!`);
                         }}
-                        className={`px-3.5 py-1.5 rounded-full font-extrabold cursor-pointer ${ok ? 'bg-[#119c78] text-white' : 'bg-[#090d13] text-[#34f0bc]'}`}
+                        className={`px-3.5 py-1.5 rounded-full font-extrabold cursor-pointer ${ok ? 'bg-[#0e5a49] text-white' : 'bg-[#0b192c] text-[#64c4a8]'}`}
                       >
                         {ok ? '✓ Matched to Bank' : 'Match Bank Credit'}
                       </button>
@@ -539,26 +539,26 @@ export default function AccountsPage() {
             <div className="space-y-5">
               <div className="grid md:grid-cols-3 gap-4 text-xs">
                 <div className="bw-card p-5 space-y-2">
-                  <div className="font-extrabold text-[#119c78] uppercase text-[10.5px]">Statement of Profit &amp; Loss</div>
+                  <div className="font-extrabold text-[#0e5a49] uppercase text-[10.5px]">Statement of Profit &amp; Loss</div>
                   <div className="flex justify-between"><span>Bank DSA Revenue</span><strong className="font-mono-num">{fmtAed(data?.summary.revenueAed)}</strong></div>
                   <div className="flex justify-between"><span>Operating Expenses</span><strong className="font-mono-num">{fmtAed(data?.summary.expensesAed)}</strong></div>
                   <div className="flex justify-between pt-2 border-t border-[var(--bw-line)] text-sm font-extrabold">
-                    <span>Net Profit (Standard)</span><span className="font-mono-num text-[#119c78]">{fmtAed(data?.summary.netProfitAed)}</span>
+                    <span>Net Profit (Standard)</span><span className="font-mono-num text-[#0e5a49]">{fmtAed(data?.summary.netProfitAed)}</span>
                   </div>
                 </div>
                 <div className="bw-card p-5 space-y-2">
-                  <div className="font-extrabold text-[#b88a1e] uppercase text-[10.5px]">UAE FTA VAT 201 Summary (5%)</div>
+                  <div className="font-extrabold text-[#967028] uppercase text-[10.5px]">UAE FTA VAT 201 Summary (5%)</div>
                   <div className="flex justify-between"><span>Box 1 Output VAT</span><strong className="font-mono-num">{fmtAed(data?.summary.outputVatAed)}</strong></div>
                   <div className="flex justify-between"><span>Box 9 Recoverable Input VAT</span><strong className="font-mono-num">{fmtAed(data?.summary.inputVatAed)}</strong></div>
                   <div className="flex justify-between pt-2 border-t border-[var(--bw-line)] text-sm font-extrabold">
-                    <span>Net FTA VAT Payable</span><span className="font-mono-num text-[#b88a1e]">{fmtAed(data?.summary.netVatPayableAed)}</span>
+                    <span>Net FTA VAT Payable</span><span className="font-mono-num text-[#967028]">{fmtAed(data?.summary.netVatPayableAed)}</span>
                   </div>
                 </div>
                 <div className="bw-card p-5 space-y-2">
                   <div className="font-extrabold text-[var(--bw-ink)] uppercase text-[10.5px]">IFRS Balance &amp; Exports</div>
                   <p className="text-[11px] text-[var(--bw-muted)]">Export complete Trial Balance, GL &amp; VAT 201 inside the 17-sheet Master Excel workbook.</p>
                   <a href="/api/v1/utilities/master-backup-excel" className="bw-btn bw-btn-obsidian w-full text-xs py-2 min-h-[36px] mt-1">
-                    <Download size={13} className="text-[#34f0bc]" /> Export GL &amp; VAT (.xlsx)
+                    <Download size={13} className="text-[#64c4a8]" /> Export GL &amp; VAT (.xlsx)
                   </a>
                 </div>
               </div>
@@ -569,7 +569,7 @@ export default function AccountsPage() {
                   {(data?.coa ?? []).map((a) => (
                     <div key={a.code} className="flex items-center justify-between rounded-xl border border-[var(--bw-line)] px-3 py-2 text-xs">
                       <div>
-                        <span className="font-mono font-bold text-[#119c78] mr-2">{a.code}</span>
+                        <span className="font-mono font-bold text-[#0e5a49] mr-2">{a.code}</span>
                         <span className="font-medium">{a.name}</span>
                       </div>
                       <StatusPill label={a.account_type} tone="slate" />

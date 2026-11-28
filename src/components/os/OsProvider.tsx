@@ -213,10 +213,10 @@ export function OsProvider({ children }: { children: React.ReactNode }) {
             key={t.id}
             className={`px-4 py-3 rounded-2xl text-xs font-bold shadow-2xl border backdrop-blur-xl ${
               t.tone === 'err'
-                ? 'bg-[#1f0910]/95 text-[#ffc5cf] border-[#e11d48]/50'
+                ? 'bg-[#1f0910]/95 text-[#ffc5cf] border-[#9f243b]/50'
                 : t.tone === 'info'
-                  ? 'bg-[#090d13]/95 text-[#fbe8a4] border-[#d9b356]/50'
-                  : 'bg-[#090d13]/95 text-[#34f0bc] border-[#22e2ad]/50'
+                  ? 'bg-[#0b192c]/95 text-[#dfc285] border-[#c49a45]/50'
+                  : 'bg-[#0b192c]/95 text-[#64c4a8] border-[#47a88d]/50'
             }`}
           >
             {t.text}

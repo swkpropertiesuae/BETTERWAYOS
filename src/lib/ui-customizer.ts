@@ -90,16 +90,16 @@ export const DEFAULT_APP_ORDER: string[] = [
 ];
 
 export const DEFAULT_UI_CONFIG: UiCustomConfig = {
-  presetId: 'beige-obsidian',
-  bgColor: '#fbf6e6',
+  presetId: 'sovereign-corporate',
+  bgColor: '#f3f5f8',
   useCustomBgSolid: false,
   cardBgColor: '#ffffff',
-  heroBgColor: '#090d14',
-  textColor: '#090d12',
-  mutedColor: '#595547',
-  highlightColor: '#119c78',
-  goldColor: '#d9b356',
-  borderColor: '#e5d8b8',
+  heroBgColor: '#0b192c',
+  textColor: '#0b192c',
+  mutedColor: '#5a6b82',
+  highlightColor: '#0e5a49',
+  goldColor: '#c49a45',
+  borderColor: '#d6dee8',
   fontFamily: 'jakarta',
   fontSizePct: 100,
   fontStyle: 'normal',
@@ -107,7 +107,7 @@ export const DEFAULT_UI_CONFIG: UiCustomConfig = {
   cardRadiusPx: 20,
   density: 'balanced',
   highlightEnabled: false,
-  highlightStyle: 'emerald-glow',
+  highlightStyle: 'gold-ring',
   pinnedAppKeys: ['place', 'corner', 'mortgage-desk', 'coordinator'],
   appOrder: DEFAULT_APP_ORDER,
   pinnedShortcuts: [
@@ -129,119 +129,141 @@ export interface UiPreset {
 
 export const UI_PRESETS: UiPreset[] = [
   {
-    id: 'beige-obsidian',
-    name: 'Beige-Yellow & Shining Black',
-    swatch: ['#fbf6e6', '#090d14', '#119c78'],
+    id: 'sovereign-corporate',
+    name: 'Sovereign Navy & Platinum',
+    swatch: ['#f3f5f8', '#0b192c', '#0e5a49'],
     patch: {
-      bgColor: '#fbf6e6',
+      bgColor: '#f3f5f8',
       useCustomBgSolid: false,
       cardBgColor: '#ffffff',
-      heroBgColor: '#090d14',
-      textColor: '#090d12',
-      mutedColor: '#595547',
-      highlightColor: '#119c78',
-      goldColor: '#d9b356',
-      borderColor: '#e5d8b8',
+      heroBgColor: '#0b192c',
+      textColor: '#0b192c',
+      mutedColor: '#5a6b82',
+      highlightColor: '#0e5a49',
+      goldColor: '#c49a45',
+      borderColor: '#d6dee8',
     },
   },
   {
-    id: 'gallery-white',
-    name: 'Pure White & Obsidian',
-    swatch: ['#ffffff', '#080b10', '#22e2ad'],
+    id: 'swiss-gallery',
+    name: 'Swiss White & Oxford Navy',
+    swatch: ['#ffffff', '#0c1c33', '#1d3d63'],
     patch: {
       bgColor: '#ffffff',
       useCustomBgSolid: true,
       cardBgColor: '#ffffff',
-      heroBgColor: '#080b10',
-      textColor: '#090d12',
-      mutedColor: '#586573',
-      highlightColor: '#119c78',
-      goldColor: '#d9b356',
-      borderColor: '#e4e9ef',
+      heroBgColor: '#0c1c33',
+      textColor: '#0b192c',
+      mutedColor: '#55657a',
+      highlightColor: '#1d3d63',
+      goldColor: '#b88e3a',
+      borderColor: '#dde4ee',
     },
   },
   {
-    id: 'champagne-gold',
-    name: 'Royal Champagne Gold',
-    swatch: ['#f7ecd0', '#161108', '#c6972c'],
+    id: 'mayfair-limestone',
+    name: 'Mayfair Limestone & Pine',
+    swatch: ['#f5f3ee', '#0d3b31', '#967028'],
     patch: {
-      bgColor: '#f7ecd0',
-      useCustomBgSolid: true,
-      cardBgColor: '#fffdf7',
-      heroBgColor: '#141008',
-      textColor: '#1c1507',
-      mutedColor: '#695a3a',
-      highlightColor: '#b5841d',
-      goldColor: '#e0b74f',
-      borderColor: '#e4d1a0',
-    },
-  },
-  {
-    id: 'emerald-mint',
-    name: 'Betterway Emerald Mint',
-    swatch: ['#eef9f5', '#053b2e', '#119c78'],
-    patch: {
-      bgColor: '#eef9f5',
+      bgColor: '#f5f3ee',
       useCustomBgSolid: true,
       cardBgColor: '#ffffff',
-      heroBgColor: '#052b22',
-      textColor: '#06201a',
-      mutedColor: '#3f6359',
-      highlightColor: '#0e8d6c',
-      goldColor: '#d9b356',
-      borderColor: '#cbe9de',
+      heroBgColor: '#0d3b31',
+      textColor: '#161f1d',
+      mutedColor: '#5c6662',
+      highlightColor: '#0e5243',
+      goldColor: '#967028',
+      borderColor: '#dfd9cc',
     },
   },
   {
-    id: 'midnight-pro',
-    name: 'Midnight Obsidian Pro',
-    swatch: ['#070a10', '#121824', '#34f0bc'],
+    id: 'geneva-bronze',
+    name: 'Geneva Slate & Bronze',
+    swatch: ['#eef2f6', '#132236', '#a67c2e'],
     patch: {
-      bgColor: '#070a10',
-      useCustomBgSolid: true,
-      cardBgColor: '#111722',
-      heroBgColor: '#05070b',
-      textColor: '#f8fafc',
-      mutedColor: '#94a3b8',
-      highlightColor: '#22e2ad',
-      goldColor: '#fbe8a4',
-      borderColor: '#223044',
-    },
-  },
-  {
-    id: 'pearl-blue',
-    name: 'Dubai DIFC Slate Blue',
-    swatch: ['#f1f5fa', '#0d192b', '#0284c7'],
-    patch: {
-      bgColor: '#f1f5fa',
+      bgColor: '#eef2f6',
       useCustomBgSolid: true,
       cardBgColor: '#ffffff',
-      heroBgColor: '#0b1628',
-      textColor: '#0f172a',
-      mutedColor: '#475569',
-      highlightColor: '#0284c7',
-      goldColor: '#d9b356',
-      borderColor: '#d7e2f0',
+      heroBgColor: '#132236',
+      textColor: '#0f1c2e',
+      mutedColor: '#56677d',
+      highlightColor: '#8f6922',
+      goldColor: '#c49a45',
+      borderColor: '#d4dce6',
+    },
+  },
+  {
+    id: 'difc-midnight',
+    name: 'DIFC Midnight Sovereign',
+    swatch: ['#070e1a', '#0e1a2b', '#64c4a8'],
+    patch: {
+      bgColor: '#070e1a',
+      useCustomBgSolid: true,
+      cardBgColor: '#0e1a2b',
+      heroBgColor: '#081221',
+      textColor: '#f4f7fb',
+      mutedColor: '#8fa1b8',
+      highlightColor: '#64c4a8',
+      goldColor: '#dfc285',
+      borderColor: '#1f3149',
+    },
+  },
+  {
+    id: 'private-reserve',
+    name: 'Private Reserve Burgundy',
+    swatch: ['#f4f5f7', '#0c1a2e', '#8b1e36'],
+    patch: {
+      bgColor: '#f4f5f7',
+      useCustomBgSolid: true,
+      cardBgColor: '#ffffff',
+      heroBgColor: '#0c1a2e',
+      textColor: '#0e1a2b',
+      mutedColor: '#5b687a',
+      highlightColor: '#8b1e36',
+      goldColor: '#b88e3a',
+      borderColor: '#d8dfe8',
     },
   },
 ];
 
-const STORAGE_KEY = 'bw_customise_ui_v3';
+const STORAGE_KEY = 'bw_customise_ui_v4';
+const LEGACY_STORAGE_KEY = 'bw_customise_ui_v3';
 
 export function loadUiCustomConfig(): UiCustomConfig {
   if (typeof window === 'undefined') return DEFAULT_UI_CONFIG;
   try {
     const raw = window.localStorage.getItem(STORAGE_KEY);
-    if (!raw) return DEFAULT_UI_CONFIG;
-    const parsed = JSON.parse(raw) as Partial<UiCustomConfig>;
-    return {
-      ...DEFAULT_UI_CONFIG,
-      ...parsed,
-      pinnedAppKeys: Array.isArray(parsed.pinnedAppKeys) ? parsed.pinnedAppKeys : DEFAULT_UI_CONFIG.pinnedAppKeys,
-      appOrder: Array.isArray(parsed.appOrder) && parsed.appOrder.length > 0 ? parsed.appOrder : DEFAULT_UI_CONFIG.appOrder,
-      pinnedShortcuts: Array.isArray(parsed.pinnedShortcuts) ? parsed.pinnedShortcuts : DEFAULT_UI_CONFIG.pinnedShortcuts,
-      dockPos: parsed.dockPos && typeof parsed.dockPos.x === 'number' ? parsed.dockPos : DEFAULT_UI_CONFIG.dockPos,
-    };
+    if (raw) {
+      const parsed = JSON.parse(raw) as Partial<UiCustomConfig>;
+      return {
+        ...DEFAULT_UI_CONFIG,
+        ...parsed,
+        pinnedAppKeys: Array.isArray(parsed.pinnedAppKeys) ? parsed.pinnedAppKeys : DEFAULT_UI_CONFIG.pinnedAppKeys,
+        appOrder: Array.isArray(parsed.appOrder) && parsed.appOrder.length > 0 ? parsed.appOrder : DEFAULT_UI_CONFIG.appOrder,
+        pinnedShortcuts: Array.isArray(parsed.pinnedShortcuts) ? parsed.pinnedShortcuts : DEFAULT_UI_CONFIG.pinnedShortcuts,
+        dockPos: parsed.dockPos && typeof parsed.dockPos.x === 'number' ? parsed.dockPos : DEFAULT_UI_CONFIG.dockPos,
+      };
+    }
+    // Preserve layout/pin/font preferences from v3 while upgrading to the new Sovereign Corporate color palette
+    const legacyRaw = window.localStorage.getItem(LEGACY_STORAGE_KEY);
+    if (legacyRaw) {
+      const legacy = JSON.parse(legacyRaw) as Partial<UiCustomConfig>;
+      return {
+        ...DEFAULT_UI_CONFIG,
+        fontFamily: legacy.fontFamily ?? DEFAULT_UI_CONFIG.fontFamily,
+        fontSizePct: legacy.fontSizePct ?? DEFAULT_UI_CONFIG.fontSizePct,
+        fontStyle: legacy.fontStyle ?? DEFAULT_UI_CONFIG.fontStyle,
+        letterSpacing: legacy.letterSpacing ?? DEFAULT_UI_CONFIG.letterSpacing,
+        cardRadiusPx: legacy.cardRadiusPx ?? DEFAULT_UI_CONFIG.cardRadiusPx,
+        density: legacy.density ?? DEFAULT_UI_CONFIG.density,
+        pinnedAppKeys: Array.isArray(legacy.pinnedAppKeys) ? legacy.pinnedAppKeys : DEFAULT_UI_CONFIG.pinnedAppKeys,
+        appOrder: Array.isArray(legacy.appOrder) && legacy.appOrder.length > 0 ? legacy.appOrder : DEFAULT_UI_CONFIG.appOrder,
+        pinnedShortcuts: Array.isArray(legacy.pinnedShortcuts) ? legacy.pinnedShortcuts : DEFAULT_UI_CONFIG.pinnedShortcuts,
+        dockMode: legacy.dockMode ?? DEFAULT_UI_CONFIG.dockMode,
+        dockPos: legacy.dockPos && typeof legacy.dockPos.x === 'number' ? legacy.dockPos : DEFAULT_UI_CONFIG.dockPos,
+      };
+    }
+    return DEFAULT_UI_CONFIG;
   } catch {
     return DEFAULT_UI_CONFIG;
   }

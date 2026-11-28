@@ -211,7 +211,7 @@ export default function CoordinatorAndLoginsPage() {
     <div className="space-y-6">
       <div className="flex flex-wrap items-end justify-between gap-4 border-b border-[var(--bw-line-strong)] pb-4">
         <div>
-          <div className="text-[11px] font-extrabold uppercase tracking-[0.14em] text-[#0b5442] dark:text-[#34f0bc]">
+          <div className="text-[11px] font-extrabold uppercase tracking-[0.14em] text-[#0a3f34] dark:text-[#64c4a8]">
             Exact CRM Requirement Excel Workflow · 32-Column Master Tracker
           </div>
           <h1 className="font-display text-2xl sm:text-3xl font-extrabold text-[var(--bw-ink)] mt-1">
@@ -233,8 +233,8 @@ export default function CoordinatorAndLoginsPage() {
               onClick={() => setSection(t.id as any)}
               className={`px-4 py-2 rounded-full text-xs font-extrabold cursor-pointer transition ${
                 section === t.id
-                  ? 'bg-[#090d13] text-[#34f0bc] border border-[#22e2ad]/50 shadow-md'
-                  : 'bg-white dark:bg-[#0e131b] text-[var(--bw-ink)] border border-[var(--bw-line)]'
+                  ? 'bg-[#0b192c] text-[#64c4a8] border border-[#47a88d]/50 shadow-md'
+                  : 'bg-white dark:bg-[#0f2036] text-[var(--bw-ink)] border border-[var(--bw-line)]'
               }`}
             >
               {t.label}
@@ -251,29 +251,29 @@ export default function CoordinatorAndLoginsPage() {
         <GlossyBlackCard className="p-4 space-y-1" accent="emerald">
           <div className="text-[10.5px] font-bold uppercase tracking-[0.08em] text-slate-400">Logged Bank Files</div>
           <div className="font-display text-2xl font-extrabold text-white font-mono-num">{rows.length}</div>
-          <div className="text-[11px] text-[#34f0bc]">{rows.filter((r) => r.docsFull === 'Yes').length} docs complete</div>
+          <div className="text-[11px] text-[#64c4a8]">{rows.filter((r) => r.docsFull === 'Yes').length} docs complete</div>
         </GlossyBlackCard>
         <GlossyBlackCard className="p-4 space-y-1" accent="dual">
           <div className="text-[10.5px] font-bold uppercase tracking-[0.08em] text-slate-400">Logged Loan Volume</div>
-          <div className="font-display text-2xl font-extrabold text-[#34f0bc] font-mono-num">{fmtAed(totalLoanVol, true)}</div>
+          <div className="font-display text-2xl font-extrabold text-[#64c4a8] font-mono-num">{fmtAed(totalLoanVol, true)}</div>
           <div className="text-[11px] text-slate-300">Across Banks 1 / 2 / 3</div>
         </GlossyBlackCard>
         <GlossyBlackCard className="p-4 space-y-1" accent="gold">
           <div className="text-[10.5px] font-bold uppercase tracking-[0.08em] text-slate-400">Disbursed Volume</div>
-          <div className="font-display text-2xl font-extrabold text-[#fbe8a4] font-mono-num">{fmtAed(totalDisb, true)}</div>
+          <div className="font-display text-2xl font-extrabold text-[#dfc285] font-mono-num">{fmtAed(totalDisb, true)}</div>
           <div className="text-[11px] text-slate-300">Transferred &amp; Title Deed</div>
         </GlossyBlackCard>
         <GlossyBlackCard className="p-4 space-y-1" accent="emerald">
           <div className="text-[10.5px] font-bold uppercase tracking-[0.08em] text-slate-400">Expected Bank Payouts</div>
           <div className="font-display text-2xl font-extrabold text-white font-mono-num">{fmtAed(totalPayout, true)}</div>
-          <div className="text-[11px] text-[#34f0bc]">Advisor + 3rd Party split</div>
+          <div className="text-[11px] text-[#64c4a8]">Advisor + 3rd Party split</div>
         </GlossyBlackCard>
       </div>
 
       {/* Add New Bank Login Form (Split Clean Card) */}
       <section className="bw-card p-5 space-y-4">
         <h2 className="font-display text-sm font-extrabold flex items-center gap-2">
-          <Plus size={16} className="text-[#119c78]" /> Log New Bank Submission (Full CRM Requirement Fields)
+          <Plus size={16} className="text-[#0e5a49]" /> Log New Bank Submission (Full CRM Requirement Fields)
         </h2>
         <form onSubmit={addLogin} className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2.5 text-xs">
           <input value={form.clientName} onChange={(e) => setForm({ ...form, clientName: e.target.value })} placeholder="Client Name *" className="h-9 px-3 rounded-xl border border-[var(--bw-line-strong)] bg-[var(--bw-soft)]" />
@@ -325,14 +325,14 @@ export default function CoordinatorAndLoginsPage() {
         <section className="bw-card overflow-hidden">
           <div className="px-5 py-3.5 border-b border-[var(--bw-line)] flex items-center justify-between">
             <h2 className="font-display text-sm font-extrabold flex items-center gap-2">
-              <ClipboardList size={16} className="text-[#119c78]" /> Coordinator Master Sheet (Documents + Full 32-Column Bank Login Ledger)
+              <ClipboardList size={16} className="text-[#0e5a49]" /> Coordinator Master Sheet (Documents + Full 32-Column Bank Login Ledger)
             </h2>
             <StatusPill label="32 Columns Live" tone="navy" />
           </div>
           <div className="overflow-x-auto">
             <table className="w-full text-[11.5px] min-w-[1680px]">
               <thead>
-                <tr className="bg-[#090d13] text-white text-[10px] uppercase tracking-wider">
+                <tr className="bg-[#0b192c] text-white text-[10px] uppercase tracking-wider">
                   <th className="py-2.5 px-2.5 text-start">No</th>
                   <th className="py-2.5 px-2.5 text-start">Date</th>
                   <th className="py-2.5 px-2.5 text-start">Docs Full / Incomplete</th>
@@ -372,7 +372,7 @@ export default function CoordinatorAndLoginsPage() {
                       <div className="text-[10px] text-[var(--bw-muted)]">{r.clientPhone} · {r.clientEmail}</div>
                     </td>
                     <td className="py-2.5 px-2.5">
-                      <div className="font-bold text-[#0b5442]">{r.txType}</div>
+                      <div className="font-bold text-[#0a3f34]">{r.txType}</div>
                       <div className="text-[10px] text-[var(--bw-muted)]">{r.loanType}</div>
                     </td>
                     <td className="py-2.5 px-2.5 text-end font-mono-num font-extrabold">{fmtAed(r.loanAmountAed, true)}</td>
@@ -381,7 +381,7 @@ export default function CoordinatorAndLoginsPage() {
                     <td className="py-2.5 px-2.5 font-bold">{[r.bank1, r.bank2, r.bank3, r.otherBank].filter(Boolean).join(' / ')}</td>
                     <td className="py-2.5 px-2.5">
                       <div className="font-mono-num">{r.preApprovalDate}</div>
-                      <div className="text-[10px] font-bold text-[#119c78]">{r.preApprovalAmountAed ? fmtAed(r.preApprovalAmountAed, true) : '-'}</div>
+                      <div className="text-[10px] font-bold text-[#0e5a49]">{r.preApprovalAmountAed ? fmtAed(r.preApprovalAmountAed, true) : '-'}</div>
                     </td>
                     <td className="py-2.5 px-2.5">
                       <div className="font-mono-num">{r.valuationDate}</div>
@@ -391,7 +391,7 @@ export default function CoordinatorAndLoginsPage() {
                     <td className="py-2.5 px-2.5 text-center">
                       <StatusPill label={r.folStatus} tone={r.folStatus === 'Pending' ? 'gold' : 'emerald'} />
                     </td>
-                    <td className="py-2.5 px-2.5 text-end font-mono-num font-extrabold text-[#119c78]">
+                    <td className="py-2.5 px-2.5 text-end font-mono-num font-extrabold text-[#0e5a49]">
                       {r.disbursedAmountAed ? fmtAed(r.disbursedAmountAed, true) : '-'}
                     </td>
                     <td className="py-2.5 px-2.5 text-center">
@@ -412,7 +412,7 @@ export default function CoordinatorAndLoginsPage() {
         <section className="bw-card overflow-hidden">
           <div className="px-5 py-3.5 border-b border-[var(--bw-line)]">
             <h2 className="font-display text-sm font-extrabold flex items-center gap-2">
-              <Landmark size={16} className="text-[#119c78]" /> Advisor Bank Logins Sheet
+              <Landmark size={16} className="text-[#0e5a49]" /> Advisor Bank Logins Sheet
             </h2>
           </div>
           <div className="overflow-x-auto">
@@ -437,7 +437,7 @@ export default function CoordinatorAndLoginsPage() {
                   <tr key={r.id} className="hover:bg-[var(--bw-hover)]">
                     <td className="py-2.5 px-3 font-mono-num">{r.date}</td>
                     <td className="py-2.5 px-3 font-bold">{r.clientName}</td>
-                    <td className="py-2.5 px-3 font-bold text-[#0b5442]">{r.txType}</td>
+                    <td className="py-2.5 px-3 font-bold text-[#0a3f34]">{r.txType}</td>
                     <td className="py-2.5 px-3">{r.loanType}</td>
                     <td className="py-2.5 px-3 text-center">{r.withPersonalLoan}</td>
                     <td className="py-2.5 px-3">{r.employment} · {r.residency}</td>
@@ -445,7 +445,7 @@ export default function CoordinatorAndLoginsPage() {
                     <td className="py-2.5 px-3 text-end font-mono-num font-extrabold">{fmtAed(r.loanAmountAed)}</td>
                     <td className="py-2.5 px-3 text-center">{r.valuationDate}</td>
                     <td className="py-2.5 px-3 text-center">{r.folStatus}</td>
-                    <td className="py-2.5 px-3 text-end font-mono-num font-bold text-[#119c78]">{fmtAed(r.disbursedAmountAed)}</td>
+                    <td className="py-2.5 px-3 text-end font-mono-num font-bold text-[#0e5a49]">{fmtAed(r.disbursedAmountAed)}</td>
                   </tr>
                 ))}
               </tbody>
@@ -474,7 +474,7 @@ export default function CoordinatorAndLoginsPage() {
                   <tr key={r.id}>
                     <td className="py-2.5 px-4 font-bold">{r.disbursedMonth}</td>
                     <td className="py-2.5 px-4 font-bold">{r.clientName}</td>
-                    <td className="py-2.5 px-4 text-end font-mono-num font-extrabold text-[#119c78]">{fmtAed(r.disbursedAmountAed || r.loanAmountAed)}</td>
+                    <td className="py-2.5 px-4 text-end font-mono-num font-extrabold text-[#0e5a49]">{fmtAed(r.disbursedAmountAed || r.loanAmountAed)}</td>
                     <td className="py-2.5 px-4 text-[var(--bw-muted)]">{r.bank1} · {r.txType}</td>
                   </tr>
                 ))}
@@ -485,7 +485,7 @@ export default function CoordinatorAndLoginsPage() {
           <section className="bw-card overflow-hidden">
             <div className="px-5 py-3.5 border-b border-[var(--bw-line)]">
               <h2 className="font-display text-sm font-extrabold flex items-center gap-2">
-                <Receipt size={15} className="text-[#119c78]" /> Bank Payouts, Advisor Split &amp; 3rd-Party Partner Ledger
+                <Receipt size={15} className="text-[#0e5a49]" /> Bank Payouts, Advisor Split &amp; 3rd-Party Partner Ledger
               </h2>
             </div>
             <table className="w-full text-xs">
@@ -509,8 +509,8 @@ export default function CoordinatorAndLoginsPage() {
                       </td>
                       <td className="py-2.5 px-3 text-center font-mono-num font-bold">{r.bankPayoutPct}%</td>
                       <td className="py-2.5 px-3 text-end font-mono-num font-extrabold">{fmtAed(gross)}</td>
-                      <td className="py-2.5 px-3 text-end font-mono-num font-bold text-[#119c78]">{fmtAed(r.payAdvisorAed)}</td>
-                      <td className="py-2.5 px-3 text-end font-mono-num text-[#9a7123]">{fmtAed(r.payThirdPartyAed)}</td>
+                      <td className="py-2.5 px-3 text-end font-mono-num font-bold text-[#0e5a49]">{fmtAed(r.payAdvisorAed)}</td>
+                      <td className="py-2.5 px-3 text-end font-mono-num text-[#7d5b1c]">{fmtAed(r.payThirdPartyAed)}</td>
                     </tr>
                   );
                 })}

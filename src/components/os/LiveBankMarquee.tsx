@@ -74,13 +74,13 @@ export function LiveBankMarquee({ compact = false }: { compact?: boolean }) {
 
   return (
     <section
-      className="w-full rounded-[20px] overflow-hidden border border-[#22e2ad]/25 bg-[#070b11] text-white shadow-lg no-print"
+      className="w-full rounded-[20px] overflow-hidden border border-[#47a88d]/25 bg-[#091526] text-white shadow-lg no-print"
       aria-label="Live UAE Banks & CBUAE Mortgage Marquee"
     >
       {/* Row 1: Calm Luxury Pace Live UAE 18-Bank Logo & 2026 Rate Marquee */}
       <div className="flex items-center border-b border-white/10">
-        <div className="shrink-0 px-3.5 py-2.5 bg-gradient-to-r from-[#053b2e] to-[#0b5442] text-[10.5px] font-extrabold uppercase tracking-[0.12em] text-[#fbe8a4] flex items-center gap-1.5 border-e border-[#22e2ad]/30 z-10">
-          <span className="size-2 rounded-full bg-[#34f0bc] animate-pulse" />
+        <div className="shrink-0 px-3.5 py-2.5 bg-gradient-to-r from-[#0a3f34] to-[#0a3f34] text-[10.5px] font-extrabold uppercase tracking-[0.12em] text-[#dfc285] flex items-center gap-1.5 border-e border-[#47a88d]/30 z-10">
+          <span className="size-2 rounded-full bg-[#64c4a8] animate-pulse" />
           <span className="hidden sm:inline">Live UAE Banks</span>
           <span className="sm:hidden">Banks</span>
         </div>
@@ -90,22 +90,22 @@ export function LiveBankMarquee({ compact = false }: { compact?: boolean }) {
               <Link
                 key={`${b.code}-${i}`}
                 href="/os/mortgage-desk?tab=matrix"
-                className="inline-flex items-center gap-2.5 px-3 py-1.5 rounded-full bg-white/[0.06] hover:bg-white/[0.15] border border-white/10 hover:border-[#22e2ad]/60 transition shrink-0"
+                className="inline-flex items-center gap-2.5 px-3 py-1.5 rounded-full bg-white/[0.06] hover:bg-white/[0.15] border border-white/10 hover:border-[#47a88d]/60 transition shrink-0"
               >
                 {b.logo ? (
                   <span className="h-5 px-1.5 rounded bg-white flex items-center justify-center shrink-0">
                     <img src={b.logo} alt={b.short} className="h-3.5 max-w-[54px] object-contain" />
                   </span>
                 ) : (
-                  <span className="px-1.5 py-0.5 rounded bg-[#22e2ad]/20 text-[#34f0bc] text-[10px] font-extrabold">
+                  <span className="px-1.5 py-0.5 rounded bg-[#47a88d]/20 text-[#64c4a8] text-[10px] font-extrabold">
                     {b.short}
                   </span>
                 )}
                 <span className="text-[11px] font-extrabold text-white">{b.short}</span>
-                <span className="font-mono-num text-[11.5px] font-extrabold text-[#34f0bc]">{b.rate}</span>
+                <span className="font-mono-num text-[11.5px] font-extrabold text-[#64c4a8]">{b.rate}</span>
                 <span className="text-[9.5px] text-slate-300 font-semibold">{b.loanType}</span>
                 {b.fastPass && (
-                  <span className="px-1.5 py-0.5 rounded-full bg-[#fbe8a4] text-[#070e1a] text-[9px] font-extrabold">
+                  <span className="px-1.5 py-0.5 rounded-full bg-[#dfc285] text-[#0b192c] text-[9px] font-extrabold">
                     {b.tat} FAST
                   </span>
                 )}
@@ -117,9 +117,9 @@ export function LiveBankMarquee({ compact = false }: { compact?: boolean }) {
 
       {/* Row 2: Calm Pace CBUAE Benchmarks, DLD Fees & UAE Mortgage Rules */}
       {!compact && (
-        <div className="flex items-center bg-[#0b1019]">
-          <div className="shrink-0 px-3.5 py-1.5 bg-[#121926] text-[10px] font-extrabold uppercase tracking-[0.12em] text-[#34f0bc] flex items-center gap-1.5 border-e border-white/10 z-10">
-            <Activity size={11} className="text-[#fbe8a4]" />
+        <div className="flex items-center bg-[#0c1c31]">
+          <div className="shrink-0 px-3.5 py-1.5 bg-[#132742] text-[10px] font-extrabold uppercase tracking-[0.12em] text-[#64c4a8] flex items-center gap-1.5 border-e border-white/10 z-10">
+            <Activity size={11} className="text-[#dfc285]" />
             <span className="hidden sm:inline">Dubai Pulse</span>
           </div>
           <div className="flex-1 overflow-hidden py-1.5">
@@ -127,12 +127,12 @@ export function LiveBankMarquee({ compact = false }: { compact?: boolean }) {
               {[...MARKET_FACTS, ...MARKET_FACTS].map((m, i) => (
                 <div key={`${m.label}-${i}`} className="inline-flex items-center gap-1.5 text-[10.5px] whitespace-nowrap">
                   {m.tone === 'emerald' ? (
-                    <TrendingDown size={11} className="text-[#34f0bc]" />
+                    <TrendingDown size={11} className="text-[#64c4a8]" />
                   ) : (
-                    <ShieldCheck size={11} className="text-[#fbe8a4]" />
+                    <ShieldCheck size={11} className="text-[#dfc285]" />
                   )}
                   <span className="text-slate-400 font-bold">{m.label}:</span>
-                  <span className={`font-mono-num font-extrabold ${m.tone === 'emerald' ? 'text-[#34f0bc]' : 'text-[#fbe8a4]'}`}>
+                  <span className={`font-mono-num font-extrabold ${m.tone === 'emerald' ? 'text-[#64c4a8]' : 'text-[#dfc285]'}`}>
                     {m.value}
                   </span>
                 </div>
@@ -141,7 +141,7 @@ export function LiveBankMarquee({ compact = false }: { compact?: boolean }) {
           </div>
           <Link
             href="/os/calculators"
-            className="hidden md:inline-flex items-center gap-1.5 px-3 py-1.5 bg-[#053b2e] hover:bg-[#119c78] text-[#fbe8a4] hover:text-white text-[10px] font-extrabold whitespace-nowrap border-s border-[#22e2ad]/30 transition shrink-0"
+            className="hidden md:inline-flex items-center gap-1.5 px-3 py-1.5 bg-[#0a3f34] hover:bg-[#0e5a49] text-[#dfc285] hover:text-white text-[10px] font-extrabold whitespace-nowrap border-s border-[#47a88d]/30 transition shrink-0"
           >
             <Calculator size={11} /> 12 Calculators →
           </Link>

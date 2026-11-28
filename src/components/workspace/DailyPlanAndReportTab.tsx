@@ -206,22 +206,22 @@ export function DailyPlanAndReportTab() {
         <GlossyBlackCard className="p-4 space-y-1" accent="emerald">
           <div className="text-[10.5px] font-bold uppercase tracking-[0.08em] text-slate-400">Daily Calls Logged</div>
           <div className="font-display text-2xl font-extrabold text-white font-mono-num">{totCalls}</div>
-          <div className="text-[11px] text-[#34f0bc]">{reports.length} advisor reports</div>
+          <div className="text-[11px] text-[#64c4a8]">{reports.length} advisor reports</div>
         </GlossyBlackCard>
         <GlossyBlackCard className="p-4 space-y-1" accent="dual">
           <div className="text-[10.5px] font-bold uppercase tracking-[0.08em] text-slate-400">Bank Logins Today</div>
-          <div className="font-display text-2xl font-extrabold text-[#34f0bc] font-mono-num">{totLogins}</div>
+          <div className="font-display text-2xl font-extrabold text-[#64c4a8] font-mono-num">{totLogins}</div>
           <div className="text-[11px] text-slate-300">Docs received → submitted</div>
         </GlossyBlackCard>
         <GlossyBlackCard className="p-4 space-y-1" accent="gold">
           <div className="text-[10.5px] font-bold uppercase tracking-[0.08em] text-slate-400">Pre-Approvals &amp; FOL</div>
-          <div className="font-display text-2xl font-extrabold text-[#fbe8a4] font-mono-num">{totPreApp}</div>
+          <div className="font-display text-2xl font-extrabold text-[#dfc285] font-mono-num">{totPreApp}</div>
           <div className="text-[11px] text-slate-300">Active bank approvals</div>
         </GlossyBlackCard>
         <GlossyBlackCard className="p-4 space-y-1" accent="emerald">
           <div className="text-[10.5px] font-bold uppercase tracking-[0.08em] text-slate-400">Disbursed Deals</div>
           <div className="font-display text-2xl font-extrabold text-white font-mono-num">{totDisb}</div>
-          <div className="text-[11px] text-[#34f0bc]">Ready for Bank DSA payout</div>
+          <div className="text-[11px] text-[#64c4a8]">Ready for Bank DSA payout</div>
         </GlossyBlackCard>
       </div>
 
@@ -230,14 +230,14 @@ export function DailyPlanAndReportTab() {
         <div className="flex flex-wrap items-center justify-between gap-2 border-b border-[var(--bw-line)] pb-3">
           <div>
             <h2 className="font-display text-base font-extrabold flex items-center gap-2 text-[var(--bw-ink)]">
-              <CalendarClock size={17} className="text-[#119c78]" /> Next Day Plan (Calls, Meetings, Partner Tie-Ups &amp; All 8 Social Channels)
+              <CalendarClock size={17} className="text-[#0e5a49]" /> Next Day Plan (Calls, Meetings, Partner Tie-Ups &amp; All 8 Social Channels)
             </h2>
             <p className="text-xs text-[var(--bw-muted)] mt-0.5">
               Plan tomorrow&apos;s Calls, Bank/Partner Meetings, Real Estate Tie-ups, WhatsApp, FB, Instagram, TikTok, Snapchat, Reddit, LinkedIn &amp; X targets.
             </p>
           </div>
           <a href="/api/v1/utilities/master-backup-excel" className="bw-btn bw-btn-outline text-xs py-1.5 min-h-[34px]">
-            <Download size={13} className="text-[#119c78]" /> Export Excel
+            <Download size={13} className="text-[#0e5a49]" /> Export Excel
           </a>
         </div>
 
@@ -308,7 +308,7 @@ export function DailyPlanAndReportTab() {
                   <td className="py-2.5 px-3 font-bold">{p.advisor}</td>
                   <td className="py-2.5 px-2 text-center font-mono-num font-bold">{p.calls}</td>
                   <td className="py-2.5 px-2 text-center font-mono-num">{p.visits}</td>
-                  <td className="py-2.5 px-2 text-center font-mono-num text-[#119c78] font-bold">{p.realEstateTieUps}</td>
+                  <td className="py-2.5 px-2 text-center font-mono-num text-[#0e5a49] font-bold">{p.realEstateTieUps}</td>
                   <td className="py-2.5 px-2 text-center font-mono-num">{p.whatsapp}</td>
                   <td className="py-2.5 px-2 text-center font-mono-num">{p.fb}</td>
                   <td className="py-2.5 px-2 text-center font-mono-num">{p.instagram}</td>
@@ -330,7 +330,7 @@ export function DailyPlanAndReportTab() {
         <div className="flex flex-wrap items-center justify-between gap-2 border-b border-[var(--bw-line)] pb-3">
           <div>
             <h2 className="font-display text-base font-extrabold flex items-center gap-2 text-[var(--bw-ink)]">
-              <ClipboardCheck size={17} className="text-[#119c78]" /> Daily Mortgage Activity Report (Calls → Docs → Logins → PA → Valuation → FOL → Disbursed)
+              <ClipboardCheck size={17} className="text-[#0e5a49]" /> Daily Mortgage Activity Report (Calls → Docs → Logins → PA → Valuation → FOL → Disbursed)
             </h2>
             <p className="text-xs text-[var(--bw-muted)] mt-0.5">
               End-of-day conversion report per mortgage advisor across bank submissions, approvals, and social channels.
@@ -409,11 +409,11 @@ export function DailyPlanAndReportTab() {
                   <td className="py-2.5 px-2 text-center font-mono-num">{r.followups}</td>
                   <td className="py-2.5 px-2 text-center font-mono-num">{r.realEstateTieUps}</td>
                   <td className="py-2.5 px-2 text-center font-mono-num font-bold">{r.documentsReceived}</td>
-                  <td className="py-2.5 px-2 text-center font-mono-num font-extrabold text-[#119c78]">{r.logins}</td>
+                  <td className="py-2.5 px-2 text-center font-mono-num font-extrabold text-[#0e5a49]">{r.logins}</td>
                   <td className="py-2.5 px-2 text-center font-mono-num font-bold">{r.preApproval}</td>
                   <td className="py-2.5 px-2 text-center font-mono-num">{r.valuation}</td>
                   <td className="py-2.5 px-2 text-center font-mono-num">{r.fol}</td>
-                  <td className="py-2.5 px-2 text-center font-mono-num font-extrabold text-[#9a7123]">{r.disbursed}</td>
+                  <td className="py-2.5 px-2 text-center font-mono-num font-extrabold text-[#7d5b1c]">{r.disbursed}</td>
                   <td className="py-2.5 px-2 text-center font-mono-num text-[11px]">{r.fb + r.instagram + r.tiktok + r.snapchat + r.reddit + r.linkedin + r.x}</td>
                   <td className="py-2.5 px-3 text-[var(--bw-muted)]">{r.other}</td>
                 </tr>

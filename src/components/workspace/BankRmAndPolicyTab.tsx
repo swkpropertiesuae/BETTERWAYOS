@@ -95,7 +95,7 @@ export function BankRmAndPolicyTab({ mode }: { mode: 'matcher' | 'matrix' | 'rms
             <div className="flex flex-wrap items-center justify-between gap-2">
               <div>
                 <h2 className="font-display text-base font-extrabold flex items-center gap-2">
-                  <Zap size={16} className="text-[#119c78]" /> 60-Second Instant Multi-Bank Matcher
+                  <Zap size={16} className="text-[#0e5a49]" /> 60-Second Instant Multi-Bank Matcher
                 </h2>
                 <p className="text-xs text-[var(--bw-muted)]">
                   Enter client numbers once to see every matching UAE bank, exact LTV, stressed DBR &amp; 14-Day Fast-Pass lenders.
@@ -174,7 +174,7 @@ export function BankRmAndPolicyTab({ mode }: { mode: 'matcher' | 'matrix' | 'rms
                   <div className="flex items-center gap-4 font-mono-num text-end shrink-0">
                     <div>
                       <div className="text-[10px] text-[var(--bw-muted)]">From Rate</div>
-                      <div className="font-extrabold text-[#119c78]">{m.bank.indicativeBestRatePct}%</div>
+                      <div className="font-extrabold text-[#0e5a49]">{m.bank.indicativeBestRatePct}%</div>
                     </div>
                     <div>
                       <div className="text-[10px] text-[var(--bw-muted)]">Max Loan ({m.maxAllowedLtvPct}%)</div>
@@ -186,7 +186,7 @@ export function BankRmAndPolicyTab({ mode }: { mode: 'matcher' | 'matrix' | 'rms
                     </div>
                     <div>
                       <div className="text-[10px] text-[var(--bw-muted)]">Stress DBR</div>
-                      <div className={`font-extrabold ${m.stressedDbrPct <= 50 ? 'text-[#119c78]' : 'text-[#e11d48]'}`}>
+                      <div className={`font-extrabold ${m.stressedDbrPct <= 50 ? 'text-[#0e5a49]' : 'text-[#9f243b]'}`}>
                         {m.stressedDbrPct}%
                       </div>
                     </div>
@@ -199,8 +199,8 @@ export function BankRmAndPolicyTab({ mode }: { mode: 'matcher' | 'matrix' | 'rms
           {/* Right: Glossy Black Credit Desk Bank Policy Quick Lookup */}
           <GlossyBlackCard className="lg:col-span-5 p-5 space-y-4" accent="dual">
             <div>
-              <div className="inline-flex items-center gap-1.5 text-[10.5px] font-extrabold uppercase tracking-[0.14em] text-[#34f0bc]">
-                <BookOpen size={13} className="text-[#fbe8a4]" /> Credit Desk Bank Policy Lookup
+              <div className="inline-flex items-center gap-1.5 text-[10.5px] font-extrabold uppercase tracking-[0.14em] text-[#64c4a8]">
+                <BookOpen size={13} className="text-[#dfc285]" /> Credit Desk Bank Policy Lookup
               </div>
               <h3 className="font-display text-lg font-extrabold text-white mt-1">
                 Ask any UAE bank policy rule
@@ -211,12 +211,12 @@ export function BankRmAndPolicyTab({ mode }: { mode: 'matcher' | 'matrix' | 'rms
             </div>
 
             <div className="relative">
-              <Search size={15} className="absolute start-3.5 top-1/2 -translate-y-1/2 text-[#34f0bc]" />
+              <Search size={15} className="absolute start-3.5 top-1/2 -translate-y-1/2 text-[#64c4a8]" />
               <input
                 value={policyQ}
                 onChange={(e) => setPolicyQ(e.target.value)}
                 placeholder="Ask: airline pilots, non-resident, 30% partial, optional life..."
-                className="w-full h-10 ps-10 pe-3 rounded-xl bg-white/10 border border-white/15 text-xs text-white placeholder:text-slate-400 outline-none focus:border-[#22e2ad]"
+                className="w-full h-10 ps-10 pe-3 rounded-xl bg-white/10 border border-white/15 text-xs text-white placeholder:text-slate-400 outline-none focus:border-[#47a88d]"
               />
             </div>
 
@@ -235,7 +235,7 @@ export function BankRmAndPolicyTab({ mode }: { mode: 'matcher' | 'matrix' | 'rms
                   onClick={() => setPolicyQ(chip)}
                   className={`px-2.5 py-1 rounded-full font-bold cursor-pointer transition ${
                     policyQ === chip
-                      ? 'bg-[#22e2ad] text-[#070e1a]'
+                      ? 'bg-[#47a88d] text-[#0b192c]'
                       : 'bg-white/10 text-slate-200 hover:bg-white/20'
                   }`}
                 >
@@ -245,15 +245,15 @@ export function BankRmAndPolicyTab({ mode }: { mode: 'matcher' | 'matrix' | 'rms
             </div>
 
             <div className="space-y-2.5 pt-2 border-t border-white/12 max-h-[380px] overflow-y-auto pe-1">
-              <div className="text-xs font-extrabold text-[#fbe8a4]">{aiAnswer.headline}</div>
+              <div className="text-xs font-extrabold text-[#dfc285]">{aiAnswer.headline}</div>
               {aiAnswer.matchedBanks.map((hit) => (
                 <div key={hit.bank} className="p-3 rounded-xl bg-white/[0.06] border border-white/10 text-xs space-y-1">
                   <div className="font-extrabold text-white flex items-center gap-1.5">
-                    <CheckCircle2 size={13} className="text-[#34f0bc] shrink-0" /> {hit.bank}
+                    <CheckCircle2 size={13} className="text-[#64c4a8] shrink-0" /> {hit.bank}
                   </div>
                   <div className="text-[11px] text-slate-300 leading-relaxed">{hit.highlight}</div>
                   {hit.rmContact && (
-                    <div className="text-[10.5px] font-semibold text-[#fbe8a4] pt-0.5">
+                    <div className="text-[10.5px] font-semibold text-[#dfc285] pt-0.5">
                       Direct RM: {hit.rmContact}
                     </div>
                   )}
@@ -286,7 +286,7 @@ export function BankRmAndPolicyTab({ mode }: { mode: 'matcher' | 'matrix' | 'rms
                 onClick={() => setMatrixFilter(k as any)}
                 className={`px-3.5 py-1.5 rounded-full font-extrabold cursor-pointer transition ${
                   matrixFilter === k
-                    ? 'bg-[#0a0e14] text-[#34f0bc] border border-[#22e2ad]/50'
+                    ? 'bg-[#0b192c] text-[#64c4a8] border border-[#47a88d]/50'
                     : 'bg-[var(--bw-card)] border border-[var(--bw-line)] text-[var(--bw-body)]'
                 }`}
               >
@@ -306,7 +306,7 @@ export function BankRmAndPolicyTab({ mode }: { mode: 'matcher' | 'matrix' | 'rms
           <div className="overflow-x-auto">
             <table className="w-full text-xs min-w-[1100px]">
               <thead>
-                <tr className="bg-[#0a0e14] text-white text-[10.5px] uppercase tracking-wider">
+                <tr className="bg-[#0b192c] text-white text-[10.5px] uppercase tracking-wider">
                   <th className="py-3 px-3.5 text-start">Bank &amp; Type</th>
                   <th className="py-3 px-3 text-start">STL Fixed (2026)</th>
                   <th className="py-3 px-3 text-start">NSTL &amp; Self-Employed</th>
@@ -327,7 +327,7 @@ export function BankRmAndPolicyTab({ mode }: { mode: 'matcher' | 'matrix' | 'rms
                       </div>
                       <div className="text-[10.5px] text-[var(--bw-muted)] mt-1">{b.emirates}</div>
                     </td>
-                    <td className="py-3 px-3 font-semibold text-[#0b5442] dark:text-[#34f0bc] max-w-[200px]">
+                    <td className="py-3 px-3 font-semibold text-[#0a3f34] dark:text-[#64c4a8] max-w-[200px]">
                       {b.stlFixedSummary}
                     </td>
                     <td className="py-3 px-3 max-w-[220px] space-y-1">
@@ -351,7 +351,7 @@ export function BankRmAndPolicyTab({ mode }: { mode: 'matcher' | 'matrix' | 'rms
                     <td className="py-3 px-3 text-[11px] font-mono-num space-y-0.5">
                       <div>Local {b.maxLtvLocalPct}% · Expat {b.maxLtvExpatPct}% · NR {b.maxLtvNonResPct}%</div>
                       <div>Min Sal: {fmtAed(b.minSalaryExpatAed)} · Max {fmtAed(b.maxLoanAed, true)}</div>
-                      <div className="font-sans font-bold text-[#119c78]">TAT: ~{b.totalTatDays} working days (PA {b.paTatDays}d)</div>
+                      <div className="font-sans font-bold text-[#0e5a49]">TAT: ~{b.totalTatDays} working days (PA {b.paTatDays}d)</div>
                     </td>
                   </tr>
                 ))}
@@ -369,7 +369,7 @@ export function BankRmAndPolicyTab({ mode }: { mode: 'matcher' | 'matrix' | 'rms
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div>
           <h2 className="font-display text-base font-extrabold flex items-center gap-2">
-            <Building2 size={16} className="text-[#119c78]" /> Direct UAE Bank RM &amp; Escalation Directory ({filteredRms.length} Contacts)
+            <Building2 size={16} className="text-[#0e5a49]" /> Direct UAE Bank RM &amp; Escalation Directory ({filteredRms.length} Contacts)
           </h2>
           <p className="text-xs text-[var(--bw-muted)]">
             1-click call or email verified bank RMs, submission desks, and escalation heads across 18 UAE lenders.
@@ -391,7 +391,7 @@ export function BankRmAndPolicyTab({ mode }: { mode: 'matcher' | 'matrix' | 'rms
             onClick={() => setRmBank(bank)}
             className={`px-3 py-1.5 rounded-full font-bold cursor-pointer transition ${
               rmBank === bank
-                ? 'bg-[#0a0e14] text-[#34f0bc] border border-[#22e2ad]/50'
+                ? 'bg-[#0b192c] text-[#64c4a8] border border-[#47a88d]/50'
                 : 'bg-[var(--bw-card)] border border-[var(--bw-line)]'
             }`}
           >
@@ -405,7 +405,7 @@ export function BankRmAndPolicyTab({ mode }: { mode: 'matcher' | 'matrix' | 'rms
           <div key={`${rm.bank}-${rm.rmName}-${i}`} className="bw-card p-4 space-y-2.5 text-xs">
             <div className="flex items-start justify-between gap-2">
               <div>
-                <div className="text-[10.5px] font-extrabold uppercase tracking-wider text-[#119c78]">
+                <div className="text-[10.5px] font-extrabold uppercase tracking-wider text-[#0e5a49]">
                   {rm.bank} · {rm.desk}
                 </div>
                 <div className="font-display font-extrabold text-sm text-[var(--bw-ink)] mt-0.5">{rm.rmName}</div>
@@ -428,26 +428,26 @@ export function BankRmAndPolicyTab({ mode }: { mode: 'matcher' | 'matrix' | 'rms
                         category: 'Bank RM',
                       })
                     }
-                    className="px-3 py-1.5 rounded-full bg-[#0a0e14] hover:bg-[#119c78] text-[#34f0bc] hover:text-white font-mono-num font-bold inline-flex items-center gap-1 cursor-pointer transition"
+                    className="px-3 py-1.5 rounded-full bg-[#0b192c] hover:bg-[#0e5a49] text-[#64c4a8] hover:text-white font-mono-num font-bold inline-flex items-center gap-1 cursor-pointer transition"
                     title={`Dial ${rm.rmName} via Betterway SIP`}
                   >
                     <PhoneCall size={11} /> SIP {rm.phone}
                   </button>
                   <a
                     href={`tel:${rm.phone.replace(/\s+/g, '')}`}
-                    className="px-2.5 py-1.5 rounded-full bg-[var(--bw-soft)] border border-[var(--bw-line)] text-[var(--bw-ink)] font-semibold inline-flex items-center gap-1 hover:border-[#119c78]"
+                    className="px-2.5 py-1.5 rounded-full bg-[var(--bw-soft)] border border-[var(--bw-line)] text-[var(--bw-ink)] font-semibold inline-flex items-center gap-1 hover:border-[#0e5a49]"
                     title="Call via device dialer"
                   >
-                    <Phone size={11} className="text-[#119c78]" /> Tel
+                    <Phone size={11} className="text-[#0e5a49]" /> Tel
                   </a>
                 </>
               )}
               {rm.email && (
                 <a
                   href={`mailto:${rm.email}`}
-                  className="px-3 py-1.5 rounded-full bg-[var(--bw-soft)] border border-[var(--bw-line)] text-[var(--bw-ink)] font-semibold inline-flex items-center gap-1 hover:border-[#119c78] truncate max-w-full"
+                  className="px-3 py-1.5 rounded-full bg-[var(--bw-soft)] border border-[var(--bw-line)] text-[var(--bw-ink)] font-semibold inline-flex items-center gap-1 hover:border-[#0e5a49] truncate max-w-full"
                 >
-                  <Mail size={11} className="text-[#119c78] shrink-0" />
+                  <Mail size={11} className="text-[#0e5a49] shrink-0" />
                   <span className="truncate">{rm.email}</span>
                 </a>
               )}
@@ -455,7 +455,7 @@ export function BankRmAndPolicyTab({ mode }: { mode: 'matcher' | 'matrix' | 'rms
 
             {rm.escalationName && (
               <div className="pt-2 border-t border-[var(--bw-line)] text-[11px] text-[var(--bw-muted)]">
-                <strong className="text-[#9a7123] dark:text-[#fbe8a4]">Escalation POC:</strong> {rm.escalationName}
+                <strong className="text-[#7d5b1c] dark:text-[#dfc285]">Escalation POC:</strong> {rm.escalationName}
                 {rm.escalationPhone ? ` · ${rm.escalationPhone}` : ''}
                 {rm.escalationEmail ? ` · ${rm.escalationEmail}` : ''}
               </div>

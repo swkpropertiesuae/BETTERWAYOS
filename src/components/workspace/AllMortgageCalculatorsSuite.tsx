@@ -232,21 +232,21 @@ export function AllMortgageCalculatorsSuite() {
               onClick={() => setActive(t.id)}
               className={`p-3 rounded-2xl border text-start cursor-pointer transition flex flex-col justify-between gap-2 ${
                 isAct
-                  ? 'bg-[#090d13] text-white border-[#22e2ad]/60 shadow-lg ring-1 ring-[#22e2ad]/40'
-                  : 'bg-white dark:bg-[#0e131b] text-[var(--bw-ink)] border-[var(--bw-line)] hover:border-[#119c78]'
+                  ? 'bg-[#0b192c] text-white border-[#47a88d]/60 shadow-lg ring-1 ring-[#47a88d]/40'
+                  : 'bg-white dark:bg-[#0f2036] text-[var(--bw-ink)] border-[var(--bw-line)] hover:border-[#0e5a49]'
               }`}
             >
               <div className="flex items-center justify-between gap-1">
                 <span
                   className={`size-7 rounded-lg flex items-center justify-center ${
-                    isAct ? 'bg-[#22e2ad]/20 text-[#34f0bc]' : 'bg-[var(--bw-soft)] text-[#119c78]'
+                    isAct ? 'bg-[#47a88d]/20 text-[#64c4a8]' : 'bg-[var(--bw-soft)] text-[#0e5a49]'
                   }`}
                 >
                   <Icon size={14} />
                 </span>
                 <span
                   className={`text-[9.5px] font-extrabold px-2 py-0.5 rounded-full ${
-                    isAct ? 'bg-[#fbe8a4] text-[#070e1a]' : 'bg-[var(--bw-soft)] text-[var(--bw-muted)]'
+                    isAct ? 'bg-[#dfc285] text-[#0b192c]' : 'bg-[var(--bw-soft)] text-[var(--bw-muted)]'
                   }`}
                 >
                   {t.tag}
@@ -263,7 +263,7 @@ export function AllMortgageCalculatorsSuite() {
         <div className="grid lg:grid-cols-12 gap-5">
           <div className="lg:col-span-5 bw-card p-5 space-y-4">
             <h2 className="font-display text-base font-extrabold flex items-center gap-2">
-              <Calculator size={16} className="text-[#119c78]" /> UAE Mortgage EMI &amp; Fixed→Variable Schedule
+              <Calculator size={16} className="text-[#0e5a49]" /> UAE Mortgage EMI &amp; Fixed→Variable Schedule
             </h2>
             <div className="grid grid-cols-2 gap-3 text-xs">
               <label className="col-span-2 space-y-1">
@@ -317,12 +317,12 @@ export function AllMortgageCalculatorsSuite() {
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
               <GlossyBlackCard className="p-4" accent="emerald">
                 <div className="text-[10px] font-bold uppercase text-slate-400">Fixed Monthly EMI</div>
-                <div className="font-display text-xl font-extrabold font-mono-num text-[#34f0bc] mt-1">{fmtAed(emiOut.fixedEmiAed)}</div>
+                <div className="font-display text-xl font-extrabold font-mono-num text-[#64c4a8] mt-1">{fmtAed(emiOut.fixedEmiAed)}</div>
                 <div className="text-[10px] text-slate-300">Incl. Ins: {fmtAed(emiOut.totalMonthlyWithInsAed)}</div>
               </GlossyBlackCard>
               <GlossyBlackCard className="p-4" accent="gold">
                 <div className="text-[10px] font-bold uppercase text-slate-400">Post-Fixed EMI</div>
-                <div className="font-display text-xl font-extrabold font-mono-num text-[#fbe8a4] mt-1">{fmtAed(emiOut.postFixedEmiAed)}</div>
+                <div className="font-display text-xl font-extrabold font-mono-num text-[#dfc285] mt-1">{fmtAed(emiOut.postFixedEmiAed)}</div>
                 <div className="text-[10px] text-slate-300">@ {emiIn.reversionRatePct}% reversion</div>
               </GlossyBlackCard>
               <GlossyBlackCard className="p-4" accent="dual">
@@ -333,7 +333,7 @@ export function AllMortgageCalculatorsSuite() {
               <GlossyBlackCard className="p-4" accent="emerald">
                 <div className="text-[10px] font-bold uppercase text-slate-400">Total Interest</div>
                 <div className="font-display text-xl font-extrabold font-mono-num text-white mt-1">{fmtAed(emiOut.totalInterestAed, true)}</div>
-                <div className="text-[10px] text-[#34f0bc]">Total: {fmtAed(emiOut.totalPayableAed, true)}</div>
+                <div className="text-[10px] text-[#64c4a8]">Total: {fmtAed(emiOut.totalPayableAed, true)}</div>
               </GlossyBlackCard>
             </div>
 
@@ -343,7 +343,7 @@ export function AllMortgageCalculatorsSuite() {
               </div>
               <div className="max-h-72 overflow-y-auto">
                 <table className="w-full text-xs">
-                  <thead className="sticky top-0 bg-[#090d13] text-white text-[10px]">
+                  <thead className="sticky top-0 bg-[#0b192c] text-white text-[10px]">
                     <tr>
                       <th className="py-2 px-3 text-start">Yr</th>
                       <th className="py-2 px-3 text-center">Rate</th>
@@ -359,8 +359,8 @@ export function AllMortgageCalculatorsSuite() {
                         <td className="py-2 px-3 font-bold">Y{row.year}</td>
                         <td className="py-2 px-3 text-center">{row.ratePct}%</td>
                         <td className="py-2 px-3 text-end font-bold">{fmtAed(row.emiAed)}</td>
-                        <td className="py-2 px-3 text-end text-[#119c78]">{fmtAed(row.principalPaidAed)}</td>
-                        <td className="py-2 px-3 text-end text-[#9a7123]">{fmtAed(row.interestPaidAed)}</td>
+                        <td className="py-2 px-3 text-end text-[#0e5a49]">{fmtAed(row.principalPaidAed)}</td>
+                        <td className="py-2 px-3 text-end text-[#7d5b1c]">{fmtAed(row.interestPaidAed)}</td>
                         <td className="py-2 px-3 text-end font-bold">{fmtAed(row.endingBalanceAed)}</td>
                       </tr>
                     ))}
@@ -377,7 +377,7 @@ export function AllMortgageCalculatorsSuite() {
         <div className="grid lg:grid-cols-12 gap-5">
           <div className="lg:col-span-6 bw-card p-5 space-y-4">
             <h2 className="font-display text-base font-extrabold flex items-center gap-2">
-              <ShieldCheck size={16} className="text-[#119c78]" /> CBUAE 50% DBR &amp; Maximum Loan Power
+              <ShieldCheck size={16} className="text-[#0e5a49]" /> CBUAE 50% DBR &amp; Maximum Loan Power
             </h2>
             <div className="grid grid-cols-2 gap-3 text-xs">
               <label className="space-y-1">
@@ -431,18 +431,18 @@ export function AllMortgageCalculatorsSuite() {
               </div>
               <div className="p-3.5 rounded-xl bg-white/[0.06] border border-white/10">
                 <div className="text-[10px] text-slate-400 uppercase font-bold">Max Allowed Loan</div>
-                <div className="font-mono-num text-xl font-extrabold text-[#34f0bc] mt-0.5">{fmtAed(dbrOut.requestedLoanAed, true)}</div>
+                <div className="font-mono-num text-xl font-extrabold text-[#64c4a8] mt-0.5">{fmtAed(dbrOut.requestedLoanAed, true)}</div>
                 <div className="text-[10px] text-slate-300">Max LTV {dbrOut.maxLtvPct}% · {dbrOut.maxTenureYears} yrs</div>
               </div>
               <div className="p-3.5 rounded-xl bg-white/[0.06] border border-white/10">
                 <div className="text-[10px] text-slate-400 uppercase font-bold">Stressed DBR %</div>
-                <div className="font-mono-num text-xl font-extrabold text-[#fbe8a4] mt-0.5">{dbrOut.stressedDbrPct.toFixed(1)}%</div>
+                <div className="font-mono-num text-xl font-extrabold text-[#dfc285] mt-0.5">{dbrOut.stressedDbrPct.toFixed(1)}%</div>
                 <div className="text-[10px] text-slate-300">50% CBUAE legal ceiling</div>
               </div>
               <div className="p-3.5 rounded-xl bg-white/[0.06] border border-white/10">
                 <div className="text-[10px] text-slate-400 uppercase font-bold">Monthly EMI (Base)</div>
                 <div className="font-mono-num text-xl font-extrabold text-white mt-0.5">{fmtAed(dbrOut.monthlyEmiAtRateAed)}</div>
-                <div className="text-[10px] text-[#34f0bc]">CC 5% burden: {fmtAed(Math.round(dbrIn.creditCardLimitsAed * 0.05))}</div>
+                <div className="text-[10px] text-[#64c4a8]">CC 5% burden: {fmtAed(Math.round(dbrIn.creditCardLimitsAed * 0.05))}</div>
               </div>
             </div>
           </GlossyBlackCard>
@@ -454,7 +454,7 @@ export function AllMortgageCalculatorsSuite() {
         <div className="grid lg:grid-cols-12 gap-5">
           <div className="lg:col-span-5 bw-card p-5 space-y-4">
             <h2 className="font-display text-base font-extrabold flex items-center gap-2">
-              <Building2 size={16} className="text-[#119c78]" /> UAE Upfront Cash-to-Close &amp; DLD Calculator
+              <Building2 size={16} className="text-[#0e5a49]" /> UAE Upfront Cash-to-Close &amp; DLD Calculator
             </h2>
             <div className="grid grid-cols-2 gap-3 text-xs">
               <label className="col-span-2 space-y-1">
@@ -492,7 +492,7 @@ export function AllMortgageCalculatorsSuite() {
           <GlossyBlackCard className="lg:col-span-7 p-6 space-y-4" accent="gold">
             <div className="flex items-center justify-between">
               <div>
-                <div className="text-[10.5px] uppercase font-extrabold text-[#fbe8a4]">Net Cash Required on Transfer Day</div>
+                <div className="text-[10.5px] uppercase font-extrabold text-[#dfc285]">Net Cash Required on Transfer Day</div>
                 <div className="font-display text-3xl font-extrabold font-mono-num text-white mt-0.5">{fmtAed(cashOut.netUpfrontCashAed)}</div>
               </div>
               <StatusPill label="AED 0 Betterway Fee" tone="emerald" />
@@ -510,7 +510,7 @@ export function AllMortgageCalculatorsSuite() {
               ].map(([lbl, amt]) => (
                 <div key={String(lbl)} className="flex items-center justify-between px-3.5 py-2.5 rounded-xl bg-white/[0.06] border border-white/10">
                   <span className="text-slate-300">{lbl}</span>
-                  <span className={`font-mono-num font-extrabold ${Number(amt) < 0 ? 'text-[#34f0bc]' : 'text-white'}`}>
+                  <span className={`font-mono-num font-extrabold ${Number(amt) < 0 ? 'text-[#64c4a8]' : 'text-white'}`}>
                     {Number(amt) < 0 ? `- ${fmtAed(Math.abs(Number(amt)))}` : fmtAed(Number(amt))}
                   </span>
                 </div>
@@ -525,7 +525,7 @@ export function AllMortgageCalculatorsSuite() {
         <div className="grid lg:grid-cols-12 gap-5">
           <div className="lg:col-span-5 bw-card p-5 space-y-4">
             <h2 className="font-display text-base font-extrabold flex items-center gap-2">
-              <RefreshCw size={16} className="text-[#119c78]" /> Mortgage Buyout &amp; Equity Release Calculator
+              <RefreshCw size={16} className="text-[#0e5a49]" /> Mortgage Buyout &amp; Equity Release Calculator
             </h2>
             <div className="grid grid-cols-2 gap-3 text-xs">
               <label className="space-y-1">
@@ -555,11 +555,11 @@ export function AllMortgageCalculatorsSuite() {
             <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
               <div className="p-3.5 rounded-xl bg-white/[0.06] border border-white/10">
                 <div className="text-[10px] uppercase font-bold text-slate-400">Monthly Saving (Pure Buyout)</div>
-                <div className="font-mono-num text-xl font-extrabold text-[#34f0bc] mt-0.5">{fmtAed(buyoutOut.monthlyPureSavingAed)}/mo</div>
+                <div className="font-mono-num text-xl font-extrabold text-[#64c4a8] mt-0.5">{fmtAed(buyoutOut.monthlyPureSavingAed)}/mo</div>
               </div>
               <div className="p-3.5 rounded-xl bg-white/[0.06] border border-white/10">
                 <div className="text-[10px] uppercase font-bold text-slate-400">Break-Even Time</div>
-                <div className="font-mono-num text-xl font-extrabold text-[#fbe8a4] mt-0.5">{buyoutOut.breakEvenMonths} Months</div>
+                <div className="font-mono-num text-xl font-extrabold text-[#dfc285] mt-0.5">{buyoutOut.breakEvenMonths} Months</div>
               </div>
               <div className="p-3.5 rounded-xl bg-white/[0.06] border border-white/10">
                 <div className="text-[10px] uppercase font-bold text-slate-400">5-Year Net Savings</div>
@@ -568,9 +568,9 @@ export function AllMortgageCalculatorsSuite() {
             </div>
             <div className="grid sm:grid-cols-2 gap-2.5 text-xs pt-2 border-t border-white/10">
               <div className="flex justify-between"><span>Old EMI ({buyoutIn.currentRatePct}%):</span><strong className="font-mono-num">{fmtAed(buyoutOut.oldEmiAed)}</strong></div>
-              <div className="flex justify-between"><span>New EMI (w/ Equity {fmtAed(buyoutIn.equityReleaseAed, true)}):</span><strong className="font-mono-num text-[#34f0bc]">{fmtAed(buyoutOut.newEmiAed)}</strong></div>
+              <div className="flex justify-between"><span>New EMI (w/ Equity {fmtAed(buyoutIn.equityReleaseAed, true)}):</span><strong className="font-mono-num text-[#64c4a8]">{fmtAed(buyoutOut.newEmiAed)}</strong></div>
               <div className="flex justify-between"><span>CBUAE Early Settlement Cap (1% / 10k+VAT):</span><strong className="font-mono-num">{fmtAed(buyoutOut.earlySettlementFeeAed)}</strong></div>
-              <div className="flex justify-between"><span>Total Switching Cost (incl. DLD 0.25% &amp; Trustee):</span><strong className="font-mono-num text-[#fbe8a4]">{fmtAed(buyoutOut.totalSwitchingCostAed)}</strong></div>
+              <div className="flex justify-between"><span>Total Switching Cost (incl. DLD 0.25% &amp; Trustee):</span><strong className="font-mono-num text-[#dfc285]">{fmtAed(buyoutOut.totalSwitchingCostAed)}</strong></div>
             </div>
           </GlossyBlackCard>
         </div>
@@ -581,7 +581,7 @@ export function AllMortgageCalculatorsSuite() {
         <div className="grid lg:grid-cols-12 gap-5">
           <div className="lg:col-span-5 bw-card p-5 space-y-4">
             <h2 className="font-display text-base font-extrabold flex items-center gap-2">
-              <PiggyBank size={16} className="text-[#119c78]" /> Annual Partial Settlement &amp; Lump-Sum Saver
+              <PiggyBank size={16} className="text-[#0e5a49]" /> Annual Partial Settlement &amp; Lump-Sum Saver
             </h2>
             <div className="grid grid-cols-2 gap-3 text-xs">
               <label className="space-y-1">
@@ -606,11 +606,11 @@ export function AllMortgageCalculatorsSuite() {
           <GlossyBlackCard className="lg:col-span-7 p-6 grid sm:grid-cols-3 gap-4 items-center" accent="emerald">
             <div>
               <div className="text-[10.5px] uppercase font-bold text-slate-400">Total Interest Saved</div>
-              <div className="font-display text-2xl font-extrabold font-mono-num text-[#34f0bc] mt-1">{fmtAed(prepayOut.interestSavedAed)}</div>
+              <div className="font-display text-2xl font-extrabold font-mono-num text-[#64c4a8] mt-1">{fmtAed(prepayOut.interestSavedAed)}</div>
             </div>
             <div>
               <div className="text-[10.5px] uppercase font-bold text-slate-400">Time Cut Off Mortgage</div>
-              <div className="font-display text-2xl font-extrabold font-mono-num text-[#fbe8a4] mt-1">{prepayOut.yearsSaved} Years</div>
+              <div className="font-display text-2xl font-extrabold font-mono-num text-[#dfc285] mt-1">{prepayOut.yearsSaved} Years</div>
               <div className="text-[11px] text-slate-300">({prepayOut.monthsSaved} months saved)</div>
             </div>
             <div>
@@ -627,7 +627,7 @@ export function AllMortgageCalculatorsSuite() {
         <div className="grid lg:grid-cols-12 gap-5">
           <div className="lg:col-span-5 bw-card p-5 space-y-4">
             <h2 className="font-display text-base font-extrabold flex items-center gap-2">
-              <Home size={16} className="text-[#119c78]" /> Dubai Rent vs Buy Wealth Break-Even
+              <Home size={16} className="text-[#0e5a49]" /> Dubai Rent vs Buy Wealth Break-Even
             </h2>
             <div className="grid grid-cols-2 gap-3 text-xs">
               <label className="space-y-1">
@@ -661,11 +661,11 @@ export function AllMortgageCalculatorsSuite() {
               </div>
               <div className="p-3.5 rounded-xl bg-white/[0.06] border border-white/10">
                 <div className="text-[10px] uppercase font-bold text-slate-400">Net Home Equity Built</div>
-                <div className="font-mono-num text-lg font-extrabold text-[#34f0bc] mt-0.5">{fmtAed(rvbOut.netEquityBuiltAed, true)}</div>
+                <div className="font-mono-num text-lg font-extrabold text-[#64c4a8] mt-0.5">{fmtAed(rvbOut.netEquityBuiltAed, true)}</div>
               </div>
               <div className="p-3.5 rounded-xl bg-white/[0.06] border border-white/10">
                 <div className="text-[10px] uppercase font-bold text-slate-400">Monthly EMI</div>
-                <div className="font-mono-num text-lg font-extrabold text-[#fbe8a4] mt-0.5">{fmtAed(rvbOut.emiAed)}</div>
+                <div className="font-mono-num text-lg font-extrabold text-[#dfc285] mt-0.5">{fmtAed(rvbOut.emiAed)}</div>
               </div>
             </div>
           </GlossyBlackCard>
@@ -694,18 +694,18 @@ export function AllMortgageCalculatorsSuite() {
               <StatusPill label="CBUAE Off-Plan Cap: 50% LTV" tone="gold" />
               <h3 className="font-display text-lg font-extrabold text-white">Off-Plan Construction / Handover</h3>
               <div className="text-xs text-slate-300 space-y-1.5 pt-1">
-                <div className="flex justify-between"><span>Buyer Cash Required (50% + 4% Oqood):</span><strong className="font-mono-num text-[#fbe8a4]">{fmtAed(offplanPrice * 0.54)}</strong></div>
+                <div className="flex justify-between"><span>Buyer Cash Required (50% + 4% Oqood):</span><strong className="font-mono-num text-[#dfc285]">{fmtAed(offplanPrice * 0.54)}</strong></div>
                 <div className="flex justify-between"><span>Max Bank Mortgage (50% LTV):</span><strong className="font-mono-num text-white">{fmtAed(offplanPrice * 0.5)}</strong></div>
-                <div className="flex justify-between"><span>Est. Monthly EMI (25Y @ {offplanRate}%):</span><strong className="font-mono-num text-[#34f0bc]">{fmtAed(calcAmortizationSummary({ propertyPriceAed: offplanPrice, ltvPct: 50, fixedRatePct: offplanRate, fixedYears: 3, reversionRatePct: offplanRate + 1, tenureYears: 25, lifeInsAnnualPct: 0.2, propInsAnnualPct: 0.04 }).fixedEmiAed)}/mo</strong></div>
+                <div className="flex justify-between"><span>Est. Monthly EMI (25Y @ {offplanRate}%):</span><strong className="font-mono-num text-[#64c4a8]">{fmtAed(calcAmortizationSummary({ propertyPriceAed: offplanPrice, ltvPct: 50, fixedRatePct: offplanRate, fixedYears: 3, reversionRatePct: offplanRate + 1, tenureYears: 25, lifeInsAnnualPct: 0.2, propInsAnnualPct: 0.04 }).fixedEmiAed)}/mo</strong></div>
               </div>
             </GlossyBlackCard>
             <GlossyBlackCard className="p-6 space-y-2.5" accent="emerald">
               <StatusPill label="CBUAE Ready Cap: 80% LTV Expat" tone="emerald" />
               <h3 className="font-display text-lg font-extrabold text-white">Ready Resale / Secondary</h3>
               <div className="text-xs text-slate-300 space-y-1.5 pt-1">
-                <div className="flex justify-between"><span>Buyer Cash Required (20% + ~6.5% DLD/Fees):</span><strong className="font-mono-num text-[#34f0bc]">{fmtAed(offplanPrice * 0.265)}</strong></div>
+                <div className="flex justify-between"><span>Buyer Cash Required (20% + ~6.5% DLD/Fees):</span><strong className="font-mono-num text-[#64c4a8]">{fmtAed(offplanPrice * 0.265)}</strong></div>
                 <div className="flex justify-between"><span>Max Bank Mortgage (80% LTV):</span><strong className="font-mono-num text-white">{fmtAed(offplanPrice * 0.8)}</strong></div>
-                <div className="flex justify-between"><span>Est. Monthly EMI (25Y @ {readyRate}%):</span><strong className="font-mono-num text-[#fbe8a4]">{fmtAed(calcAmortizationSummary({ propertyPriceAed: offplanPrice, ltvPct: 80, fixedRatePct: readyRate, fixedYears: 3, reversionRatePct: readyRate + 1.5, tenureYears: 25, lifeInsAnnualPct: 0.2, propInsAnnualPct: 0.04 }).fixedEmiAed)}/mo</strong></div>
+                <div className="flex justify-between"><span>Est. Monthly EMI (25Y @ {readyRate}%):</span><strong className="font-mono-num text-[#dfc285]">{fmtAed(calcAmortizationSummary({ propertyPriceAed: offplanPrice, ltvPct: 80, fixedRatePct: readyRate, fixedYears: 3, reversionRatePct: readyRate + 1.5, tenureYears: 25, lifeInsAnnualPct: 0.2, propInsAnnualPct: 0.04 }).fixedEmiAed)}/mo</strong></div>
               </div>
             </GlossyBlackCard>
           </div>
@@ -717,7 +717,7 @@ export function AllMortgageCalculatorsSuite() {
         <div className="grid lg:grid-cols-12 gap-5">
           <div className="lg:col-span-5 bw-card p-5 space-y-4">
             <h2 className="font-display text-base font-extrabold flex items-center gap-2">
-              <TrendingUp size={16} className="text-[#119c78]" /> Buy-to-Let Rental Yield &amp; Investor DSCR
+              <TrendingUp size={16} className="text-[#0e5a49]" /> Buy-to-Let Rental Yield &amp; Investor DSCR
             </h2>
             <div className="grid grid-cols-2 gap-3 text-xs">
               <label className="space-y-1">
@@ -747,15 +747,15 @@ export function AllMortgageCalculatorsSuite() {
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
               <div className="p-3 rounded-xl bg-white/[0.06] border border-white/10">
                 <div className="text-[10px] uppercase text-slate-400 font-bold">Gross Yield</div>
-                <div className="font-mono-num text-xl font-extrabold text-[#34f0bc]">{yieldOut.grossYieldPct}%</div>
+                <div className="font-mono-num text-xl font-extrabold text-[#64c4a8]">{yieldOut.grossYieldPct}%</div>
               </div>
               <div className="p-3 rounded-xl bg-white/[0.06] border border-white/10">
                 <div className="text-[10px] uppercase text-slate-400 font-bold">Net Yield</div>
-                <div className="font-mono-num text-xl font-extrabold text-[#fbe8a4]">{yieldOut.netYieldPct}%</div>
+                <div className="font-mono-num text-xl font-extrabold text-[#dfc285]">{yieldOut.netYieldPct}%</div>
               </div>
               <div className="p-3 rounded-xl bg-white/[0.06] border border-white/10">
                 <div className="text-[10px] uppercase text-slate-400 font-bold">Monthly Cashflow</div>
-                <div className={`font-mono-num text-xl font-extrabold ${yieldOut.monthlyNetCashflowAed >= 0 ? 'text-[#34f0bc]' : 'text-[#fda4af]'}`}>
+                <div className={`font-mono-num text-xl font-extrabold ${yieldOut.monthlyNetCashflowAed >= 0 ? 'text-[#64c4a8]' : 'text-[#fda4af]'}`}>
                   {fmtAed(yieldOut.monthlyNetCashflowAed)}
                 </div>
               </div>
@@ -773,7 +773,7 @@ export function AllMortgageCalculatorsSuite() {
         <div className="grid lg:grid-cols-12 gap-5">
           <div className="lg:col-span-4 bw-card p-5 space-y-3 text-xs">
             <h2 className="font-display text-base font-extrabold flex items-center gap-2">
-              <Activity size={16} className="text-[#119c78]" /> Fixed vs EIBOR Rate Shock
+              <Activity size={16} className="text-[#0e5a49]" /> Fixed vs EIBOR Rate Shock
             </h2>
             <label className="block space-y-1">
               <span className="font-bold">Loan Amount (AED)</span>
@@ -795,7 +795,7 @@ export function AllMortgageCalculatorsSuite() {
             </div>
             <table className="w-full text-xs">
               <thead>
-                <tr className="bg-[#090d13] text-white text-[10px]">
+                <tr className="bg-[#0b192c] text-white text-[10px]">
                   <th className="py-2.5 px-4 text-start">EIBOR Scenario</th>
                   <th className="py-2.5 px-3 text-center">Effective Rate</th>
                   <th className="py-2.5 px-3 text-end">Monthly EMI</th>
@@ -809,7 +809,7 @@ export function AllMortgageCalculatorsSuite() {
                     <td className="py-3 px-4 font-sans font-bold">{s.label}</td>
                     <td className="py-3 px-3 text-center font-bold">{s.ratePct}%</td>
                     <td className="py-3 px-3 text-end font-extrabold">{fmtAed(s.emiAed)}</td>
-                    <td className={`py-3 px-3 text-end font-bold ${s.monthlyDiffVsFixedAed <= 0 ? 'text-[#119c78]' : 'text-[#be123c]'}`}>
+                    <td className={`py-3 px-3 text-end font-bold ${s.monthlyDiffVsFixedAed <= 0 ? 'text-[#0e5a49]' : 'text-[#881b30]'}`}>
                       {s.monthlyDiffVsFixedAed >= 0 ? `+${fmtAed(s.monthlyDiffVsFixedAed)}` : fmtAed(s.monthlyDiffVsFixedAed)}
                     </td>
                     <td className="py-3 px-4 text-end font-bold">{fmtAed(s.threeYearDiffAed)}</td>
@@ -826,7 +826,7 @@ export function AllMortgageCalculatorsSuite() {
         <div className="grid lg:grid-cols-12 gap-5">
           <div className="lg:col-span-7 bw-card p-5 space-y-3 text-xs">
             <h2 className="font-display text-base font-extrabold flex items-center gap-2">
-              <CreditCard size={16} className="text-[#119c78]" /> UAE Credit Card Limit Reduction Optimizer (CBUAE 5% Rule)
+              <CreditCard size={16} className="text-[#0e5a49]" /> UAE Credit Card Limit Reduction Optimizer (CBUAE 5% Rule)
             </h2>
             {ccRows.map((c, idx) => (
               <div key={c.bank} className="grid grid-cols-3 gap-2 items-center">
@@ -841,17 +841,17 @@ export function AllMortgageCalculatorsSuite() {
                   type="number"
                   value={c.newLimitAed}
                   onChange={(e) => setCcRows((prev) => prev.map((x, i) => (i === idx ? { ...x, newLimitAed: Number(e.target.value) } : x)))}
-                  className="h-9 px-3 rounded-xl border border-[#119c78] bg-[#e3fbf3]/50 font-mono-num font-bold"
+                  className="h-9 px-3 rounded-xl border border-[#0e5a49] bg-[#eaf4f1]/50 font-mono-num font-bold"
                 />
               </div>
             ))}
           </div>
           <GlossyBlackCard className="lg:col-span-5 p-6 space-y-3" accent="emerald">
             <div className="text-[10.5px] uppercase font-bold text-slate-400">Extra Mortgage Capacity Unlocked</div>
-            <div className="font-display text-3xl font-extrabold font-mono-num text-[#34f0bc]">{fmtAed(ccOut.extraMortgageCapacityAed)}</div>
+            <div className="font-display text-3xl font-extrabold font-mono-num text-[#64c4a8]">{fmtAed(ccOut.extraMortgageCapacityAed)}</div>
             <div className="text-xs text-slate-300 space-y-1 pt-2 border-t border-white/10">
               <div className="flex justify-between"><span>Total CC Limit Reduced:</span><strong className="font-mono-num">{fmtAed(ccOut.limitReduced)}</strong></div>
-              <div className="flex justify-between"><span>Monthly DBR Freed (5%):</span><strong className="font-mono-num text-[#fbe8a4]">{fmtAed(ccOut.monthlyDbrFreedAed)}/mo</strong></div>
+              <div className="flex justify-between"><span>Monthly DBR Freed (5%):</span><strong className="font-mono-num text-[#dfc285]">{fmtAed(ccOut.monthlyDbrFreedAed)}/mo</strong></div>
             </div>
           </GlossyBlackCard>
         </div>
@@ -862,7 +862,7 @@ export function AllMortgageCalculatorsSuite() {
         <div className="grid lg:grid-cols-12 gap-5">
           <div className="lg:col-span-5 bw-card p-5 space-y-4">
             <h2 className="font-display text-base font-extrabold flex items-center gap-2">
-              <Award size={16} className="text-[#119c78]" /> Bank DSA Payout, Golden Visa &amp; Max Tenure Checker
+              <Award size={16} className="text-[#0e5a49]" /> Bank DSA Payout, Golden Visa &amp; Max Tenure Checker
             </h2>
             <div className="grid grid-cols-2 gap-3 text-xs">
               <label className="space-y-1">
@@ -901,7 +901,7 @@ export function AllMortgageCalculatorsSuite() {
           <GlossyBlackCard className="lg:col-span-7 p-6 space-y-4" accent="gold">
             <div className="flex flex-wrap items-center justify-between gap-2">
               <div className="inline-flex items-center gap-2 text-sm font-extrabold text-white">
-                <CheckCircle2 size={16} className={advOut.goldenVisaEligible ? 'text-[#34f0bc]' : 'text-amber-400'} />
+                <CheckCircle2 size={16} className={advOut.goldenVisaEligible ? 'text-[#64c4a8]' : 'text-amber-400'} />
                 {advOut.goldenVisaEligible
                   ? '10-Year UAE Golden Visa Eligible (Property >= AED 2M)'
                   : `Golden Visa Shortfall: ${fmtAed(advOut.goldenVisaShortfallAed)}`}
@@ -916,11 +916,11 @@ export function AllMortgageCalculatorsSuite() {
               </div>
               <div className="p-3 rounded-xl bg-white/[0.06] border border-white/10">
                 <div className="text-[10px] uppercase text-slate-400 font-bold">Advisor Split ({advIn.advisorSplitPct}%)</div>
-                <div className="font-mono-num text-lg font-extrabold text-[#34f0bc]">{fmtAed(advOut.advisorPayoutAed)}</div>
+                <div className="font-mono-num text-lg font-extrabold text-[#64c4a8]">{fmtAed(advOut.advisorPayoutAed)}</div>
               </div>
               <div className="p-3 rounded-xl bg-white/[0.06] border border-white/10">
                 <div className="text-[10px] uppercase text-slate-400 font-bold">3rd-Party ({advIn.thirdPartySplitPct}%)</div>
-                <div className="font-mono-num text-lg font-extrabold text-[#fbe8a4]">{fmtAed(advOut.thirdPartyPayoutAed)}</div>
+                <div className="font-mono-num text-lg font-extrabold text-[#dfc285]">{fmtAed(advOut.thirdPartyPayoutAed)}</div>
               </div>
               <div className="p-3 rounded-xl bg-white/[0.06] border border-white/10">
                 <div className="text-[10px] uppercase text-slate-400 font-bold">Betterway Net</div>
@@ -937,7 +937,7 @@ export function AllMortgageCalculatorsSuite() {
           <div className="flex flex-wrap items-center justify-between gap-3">
             <div>
               <h2 className="font-display text-base font-extrabold flex items-center gap-2">
-                <Landmark size={16} className="text-[#119c78]" /> Non-Resident &amp; International Buyer Currency Converter
+                <Landmark size={16} className="text-[#0e5a49]" /> Non-Resident &amp; International Buyer Currency Converter
               </h2>
               <p className="text-xs text-[var(--bw-muted)]">Instant AED conversion for USD, EUR, GBP, SAR &amp; INR international mortgage clients.</p>
             </div>
@@ -954,11 +954,11 @@ export function AllMortgageCalculatorsSuite() {
           <div className="grid grid-cols-2 sm:grid-cols-5 gap-3">
             {AED_FX_RATES.map((fx) => (
               <GlossyBlackCard key={fx.code} className="p-4 space-y-1" accent="emerald">
-                <div className="text-[10.5px] font-bold uppercase text-[#fbe8a4]">{fx.code} · {fx.name}</div>
+                <div className="text-[10.5px] font-bold uppercase text-[#dfc285]">{fx.code} · {fx.name}</div>
                 <div className="font-display text-xl font-extrabold font-mono-num text-white">
                   {Math.round(fxAmountAed * fx.perAed).toLocaleString('en-US')}
                 </div>
-                <div className="text-[10px] text-[#34f0bc] flex items-center gap-1">
+                <div className="text-[10px] text-[#64c4a8] flex items-center gap-1">
                   <Percent size={10} /> 1 AED = {fx.perAed.toFixed(4)} {fx.code}
                 </div>
               </GlossyBlackCard>

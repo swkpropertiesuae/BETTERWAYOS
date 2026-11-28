@@ -108,7 +108,7 @@ export default function FieldGpsPage() {
           type="button"
           onClick={() => setSection('forensic')}
           className={`px-4 py-2 rounded-full font-extrabold inline-flex items-center gap-1.5 cursor-pointer ${
-            section === 'forensic' ? 'bg-[#025e3d] text-[#FCF1B7]' : 'border border-[var(--bw-line)] bg-[var(--bw-card)]'
+            section === 'forensic' ? 'bg-[#0e5243] text-[#ebd5a6]' : 'border border-[var(--bw-line)] bg-[var(--bw-card)]'
           }`}
         >
           <ClipboardCheck size={14} /> Forensic Mortgage Field Meeting Report &amp; Authority Queue
@@ -117,7 +117,7 @@ export default function FieldGpsPage() {
           type="button"
           onClick={() => setSection('gps')}
           className={`px-4 py-2 rounded-full font-extrabold inline-flex items-center gap-1.5 cursor-pointer ${
-            section === 'gps' ? 'bg-[#007b52] text-white' : 'border border-[var(--bw-line)] bg-[var(--bw-card)]'
+            section === 'gps' ? 'bg-[#0e5243] text-white' : 'border border-[var(--bw-line)] bg-[var(--bw-card)]'
           }`}
         >
           <Navigation size={14} /> Live Field GPS Check-In &amp; 1-Tap SOS ({visits.length})
@@ -130,7 +130,7 @@ export default function FieldGpsPage() {
       <div className="grid lg:grid-cols-12 gap-6">
         <form onSubmit={startVisit} className="lg:col-span-4 bw-card p-5 space-y-3 text-xs">
           <h3 className="text-sm font-extrabold flex items-center gap-1.5">
-            <Navigation size={15} className="text-[#007b52]" /> Start Field Visit (GPS Check-In)
+            <Navigation size={15} className="text-[#0e5243]" /> Start Field Visit (GPS Check-In)
           </h3>
           <div>
             <label className="font-bold block mb-1">Visit Purpose</label>
@@ -149,14 +149,14 @@ export default function FieldGpsPage() {
           <div className="p-3 rounded-xl bg-[var(--bw-bg)] border border-[var(--bw-line)] font-mono-num text-[11px]">
             Current GPS Anchor: {coords.lat.toFixed(5)}, {coords.lng.toFixed(5)} (±{coords.accuracyM}m)
           </div>
-          <button type="submit" className="w-full h-10 rounded-full bg-[#007b52] text-white font-bold cursor-pointer">
+          <button type="submit" className="w-full h-10 rounded-full bg-[#0e5243] text-white font-bold cursor-pointer">
             Check-In &amp; Share Live GPS
           </button>
         </form>
 
         <div className="lg:col-span-8 bw-card p-5 space-y-3">
           <h3 className="text-sm font-extrabold flex items-center gap-1.5">
-            <MapPin size={15} className="text-[#007b52]" /> Field Staff Live Visit Log ({visits.length})
+            <MapPin size={15} className="text-[#0e5243]" /> Field Staff Live Visit Log ({visits.length})
           </h3>
           {visits.length === 0 ? (
             <div className="py-10 text-center text-xs text-[var(--bw-muted)]">No field visits logged yet.</div>
@@ -174,7 +174,7 @@ export default function FieldGpsPage() {
               >
                 <div className="flex flex-wrap items-center justify-between gap-2">
                   <div>
-                    <span className="font-extrabold text-sm">{v.user_name}</span> · <span className="font-bold text-[#007b52]">{v.purpose}</span>
+                    <span className="font-extrabold text-sm">{v.user_name}</span> · <span className="font-bold text-[#0e5243]">{v.purpose}</span>
                     <div className="text-[var(--bw-muted)]">{v.destination_label}</div>
                   </div>
                   <StatusPill label={v.status} tone={v.status === 'SOS' ? 'red' : v.status === 'ACTIVE' ? 'emerald' : 'slate'} />
@@ -184,7 +184,7 @@ export default function FieldGpsPage() {
                     href={`https://maps.google.com/?q=${v.last_lat},${v.last_lng}`}
                     target="_blank"
                     rel="noreferrer"
-                    className="font-mono-num text-[#007b52] font-bold inline-flex items-center gap-1 hover:underline"
+                    className="font-mono-num text-[#0e5243] font-bold inline-flex items-center gap-1 hover:underline"
                   >
                     GPS {Number(v.last_lat).toFixed(4)}, {Number(v.last_lng).toFixed(4)} ({(v.waypoints ?? []).length} pins) <ExternalLink size={11} />
                   </a>
@@ -193,7 +193,7 @@ export default function FieldGpsPage() {
                       <button type="button" onClick={() => void pingWaypoint(v.id)} className="px-3 py-1.5 rounded-full border border-[var(--bw-line)] font-bold cursor-pointer">
                         Ping GPS
                       </button>
-                      <button type="button" onClick={() => void endVisit(v.id)} className="px-3 py-1.5 rounded-full bg-[#025e3d] text-[#FCF1B7] font-bold inline-flex items-center gap-1 cursor-pointer">
+                      <button type="button" onClick={() => void endVisit(v.id)} className="px-3 py-1.5 rounded-full bg-[#0e5243] text-[#ebd5a6] font-bold inline-flex items-center gap-1 cursor-pointer">
                         <CheckCircle2 size={12} /> End Visit
                       </button>
                       <button type="button" onClick={() => void sendSos(v.id)} className="px-3 py-1.5 rounded-full bg-red-600 text-white font-extrabold inline-flex items-center gap-1 cursor-pointer">

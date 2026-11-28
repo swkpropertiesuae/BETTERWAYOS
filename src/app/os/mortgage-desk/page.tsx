@@ -140,7 +140,7 @@ function MortgageDeskInner() {
         actions={
           <div className="flex flex-wrap gap-2">
             <Link href="/os/calculators" className="bw-btn bw-btn-obsidian text-xs py-2 min-h-[38px]">
-              <Calculator size={14} className="text-[#34f0bc]" /> All 12 UAE Calculators
+              <Calculator size={14} className="text-[#64c4a8]" /> All 12 UAE Calculators
             </Link>
             <a href="/api/v1/utilities/bank-matrix-excel" className="bw-btn bw-btn-gold text-xs py-2 min-h-[38px]">
               <Download size={14} /> Download 2026 Matrix (.xlsx)
@@ -168,11 +168,11 @@ function MortgageDeskInner() {
               onClick={() => setTab(t.id as DeskTab)}
               className={`px-4 py-2.5 rounded-full text-xs font-extrabold inline-flex items-center gap-1.5 cursor-pointer transition ${
                 active
-                  ? 'bg-[#0a0e14] text-[#34f0bc] border border-[#22e2ad]/60 shadow-lg'
-                  : 'bg-[var(--bw-card)] text-[var(--bw-body)] border border-[var(--bw-line)] hover:border-[#119c78]'
+                  ? 'bg-[#0b192c] text-[#64c4a8] border border-[#47a88d]/60 shadow-lg'
+                  : 'bg-[var(--bw-card)] text-[var(--bw-body)] border border-[var(--bw-line)] hover:border-[#0e5a49]'
               }`}
             >
-              <Icon size={14} className={active ? 'text-[#fbe8a4]' : 'text-[#119c78]'} /> {t.label}
+              <Icon size={14} className={active ? 'text-[#dfc285]' : 'text-[#0e5a49]'} /> {t.label}
             </button>
           );
         })}
@@ -189,7 +189,7 @@ function MortgageDeskInner() {
           <div className="grid lg:grid-cols-12 gap-5">
             <div className="lg:col-span-5 bw-card p-5 space-y-3 text-xs">
               <h3 className="font-display text-sm font-extrabold flex items-center gap-1.5">
-                <Calculator size={15} className="text-[#119c78]" /> CBUAE 50% DBR, LTV &amp; Buyout Calculator
+                <Calculator size={15} className="text-[#0e5a49]" /> CBUAE 50% DBR, LTV &amp; Buyout Calculator
               </h3>
               <div className="grid grid-cols-2 gap-2.5">
                 <div><label className="font-bold block mb-1">Property Price (AED)</label><input type="number" value={calc.propertyPriceAed} onChange={(e) => setCalc({ ...calc, propertyPriceAed: Number(e.target.value) })} className="w-full h-9 px-3 rounded-xl border border-[var(--bw-line-strong)] bg-[var(--bw-soft)] font-mono-num" /></div>
@@ -230,7 +230,7 @@ function MortgageDeskInner() {
                   <StatusPill label={elig.goldenVisaEligible ? 'Golden Visa AED 2M Eligible' : 'Standard Title'} tone={elig.goldenVisaEligible ? 'gold' : 'slate'} />
                 </div>
                 <div className="grid sm:grid-cols-3 gap-3 pt-2">
-                  <div>Monthly Savings: <strong className="font-mono-num text-[#119c78]">{fmtAed(buyout.monthlySavingsAed)}/mo</strong></div>
+                  <div>Monthly Savings: <strong className="font-mono-num text-[#0e5a49]">{fmtAed(buyout.monthlySavingsAed)}/mo</strong></div>
                   <div>CBUAE Exit Cap (+VAT): <strong className="font-mono-num">{fmtAed(buyout.earlySettlementInclVat)}</strong></div>
                   <div>Break-Even: <strong className="font-mono-num">{buyout.breakEvenMonths} months</strong></div>
                 </div>
@@ -243,7 +243,7 @@ function MortgageDeskInner() {
             <div className="lg:col-span-7 bw-card p-5 space-y-3 text-xs">
               <div className="flex items-center justify-between">
                 <h3 className="font-display text-sm font-extrabold flex items-center gap-1.5">
-                  <CreditCard size={15} className="text-[#119c78]" /> Credit Card Limit Reduction → Extra Mortgage Eligibility
+                  <CreditCard size={15} className="text-[#0e5a49]" /> Credit Card Limit Reduction → Extra Mortgage Eligibility
                 </h3>
                 <StatusPill label={`Freed DBR: ${fmtAed(ccImpact.monthlyDbrFreedAed)}/mo`} tone="emerald" />
               </div>
@@ -253,7 +253,7 @@ function MortgageDeskInner() {
                     <input value={c.bank} onChange={(e) => setCcCards((p) => p.map((x, i) => (i === idx ? { ...x, bank: e.target.value } : x)))} className="h-8 px-2.5 rounded-lg border border-[var(--bw-line)] bg-[var(--bw-soft)] font-bold" />
                     <input type="number" value={c.oldLimitAed} onChange={(e) => setCcCards((p) => p.map((x, i) => (i === idx ? { ...x, oldLimitAed: Number(e.target.value) } : x)))} className="h-8 px-2.5 rounded-lg border border-[var(--bw-line)] bg-[var(--bw-soft)] font-mono-num" placeholder="Old Limit" />
                     <input type="number" value={c.newLimitAed} onChange={(e) => setCcCards((p) => p.map((x, i) => (i === idx ? { ...x, newLimitAed: Number(e.target.value) } : x)))} className="h-8 px-2.5 rounded-lg border border-[var(--bw-line)] bg-[var(--bw-soft)] font-mono-num" placeholder="New Limit" />
-                    <div className="text-end font-mono-num font-bold text-[#119c78]">
+                    <div className="text-end font-mono-num font-bold text-[#0e5a49]">
                       -{fmtAed(Math.max(0, c.oldLimitAed - c.newLimitAed))}
                     </div>
                   </div>
@@ -266,18 +266,18 @@ function MortgageDeskInner() {
                 </div>
                 <div>
                   <div className="text-[10px] text-slate-400 uppercase">5% Monthly DBR Saved</div>
-                  <div className="text-lg font-extrabold text-[#34f0bc]">{fmtAed(ccImpact.monthlyDbrFreedAed)}/mo</div>
+                  <div className="text-lg font-extrabold text-[#64c4a8]">{fmtAed(ccImpact.monthlyDbrFreedAed)}/mo</div>
                 </div>
                 <div>
                   <div className="text-[10px] text-slate-400 uppercase">Extra Loan Unlocked</div>
-                  <div className="text-lg font-extrabold text-[#fbe8a4]">+{fmtAed(ccImpact.extraMortgageCapacityAed, true)}</div>
+                  <div className="text-lg font-extrabold text-[#dfc285]">+{fmtAed(ccImpact.extraMortgageCapacityAed, true)}</div>
                 </div>
               </GlossyBlackCard>
             </div>
 
             <div className="lg:col-span-5 bw-card p-5 space-y-3 text-xs">
               <h3 className="font-display text-sm font-extrabold flex items-center gap-1.5">
-                <CheckSquare size={15} className="text-[#119c78]" /> 7-Point Credit Analyst Bank Statement Checklist
+                <CheckSquare size={15} className="text-[#0e5a49]" /> 7-Point Credit Analyst Bank Statement Checklist
               </h3>
               <div className="space-y-2">
                 {CREDIT_ANALYST_STATEMENT_CHECKLIST.map((item) => (
@@ -307,7 +307,7 @@ function MortgageDeskInner() {
                       type="button"
                       onClick={() => setCurrency(cur)}
                       className={`px-3 py-1 rounded-full font-bold cursor-pointer ${
-                        currency === cur ? 'bg-[#0a0e14] text-[#34f0bc]' : 'border border-[var(--bw-line)]'
+                        currency === cur ? 'bg-[#0b192c] text-[#64c4a8]' : 'border border-[var(--bw-line)]'
                       }`}
                     >
                       {cur}
@@ -425,7 +425,7 @@ function MortgageDeskInner() {
                   <div className="font-display font-extrabold text-sm">{b.name}</div>
                   <div className="grid grid-cols-3 gap-1.5 pt-2 border-t border-[var(--bw-line)] font-mono-num">
                     <div><div className="text-[9.5px] text-[var(--bw-muted)]">3Y Fixed</div><strong>{b.indicativeFixed3Y}%</strong></div>
-                    <div><div className="text-[9.5px] text-[var(--bw-muted)]">DSA</div><strong className="text-[#119c78]">{b.dsaRatePct}%</strong></div>
+                    <div><div className="text-[9.5px] text-[var(--bw-muted)]">DSA</div><strong className="text-[#0e5a49]">{b.dsaRatePct}%</strong></div>
                     <div><div className="text-[9.5px] text-[var(--bw-muted)]">SLA</div><strong>{b.slaDays}d</strong></div>
                   </div>
                 </div>

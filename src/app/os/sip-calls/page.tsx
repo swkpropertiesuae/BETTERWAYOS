@@ -236,10 +236,10 @@ export default function BetterwaySipCallsPage() {
               onClick={simulateInbound}
               className="bw-btn bw-btn-outline text-xs py-2 min-h-[36px]"
             >
-              <PhoneIncoming size={13} className="text-[#119c78]" /> Test Inbound Ring
+              <PhoneIncoming size={13} className="text-[#0e5a49]" /> Test Inbound Ring
             </button>
             <Link href="/os/inside" className="bw-btn bw-btn-obsidian text-xs py-2 min-h-[36px]">
-              <MessagesSquare size={13} className="text-[#34f0bc]" /> Open Betterway Inside
+              <MessagesSquare size={13} className="text-[#64c4a8]" /> Open Betterway Inside
             </Link>
           </div>
         }
@@ -249,16 +249,16 @@ export default function BetterwaySipCallsPage() {
       <GlossyBlackCard className="p-5 sm:p-6 space-y-4" accent="dual">
         <div className="flex flex-wrap items-center justify-between gap-4">
           <div className="flex items-center gap-3.5 min-w-0">
-            <div className="size-12 rounded-2xl bg-[#119c78]/20 border border-[#34f0bc]/40 flex items-center justify-center text-[#34f0bc] shrink-0">
+            <div className="size-12 rounded-2xl bg-[#0e5a49]/20 border border-[#64c4a8]/40 flex items-center justify-center text-[#64c4a8] shrink-0">
               <Radio size={22} />
             </div>
             <div className="min-w-0">
               <div className="flex flex-wrap items-center gap-2">
-                <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-[#22e2ad]/15 border border-[#22e2ad]/40 text-[#34f0bc] text-[10px] font-extrabold uppercase tracking-wider">
-                  <span className="size-1.5 rounded-full bg-[#34f0bc] animate-pulse" />
+                <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-[#47a88d]/15 border border-[#47a88d]/40 text-[#64c4a8] text-[10px] font-extrabold uppercase tracking-wider">
+                  <span className="size-1.5 rounded-full bg-[#64c4a8] animate-pulse" />
                   {config.registered ? 'SIP Registered · Live' : 'SIP Offline'}
                 </span>
-                <span className="text-[11px] font-mono-num text-[#fbe8a4] font-bold">
+                <span className="text-[11px] font-mono-num text-[#dfc285] font-bold">
                   Ext {myExt.ext} · {myExt.name}
                 </span>
               </div>
@@ -275,11 +275,11 @@ export default function BetterwaySipCallsPage() {
             </div>
             <div className="px-3.5 py-2 rounded-xl bg-white/[0.06] border border-white/10">
               <div className="text-[9.5px] uppercase text-slate-400 font-bold">Bank RM Calls</div>
-              <div className="font-mono-num text-base font-extrabold text-[#34f0bc]">{stats.bankRmCalls}</div>
+              <div className="font-mono-num text-base font-extrabold text-[#64c4a8]">{stats.bankRmCalls}</div>
             </div>
             <div className="px-3.5 py-2 rounded-xl bg-white/[0.06] border border-white/10">
               <div className="text-[9.5px] uppercase text-slate-400 font-bold">Talk Duration</div>
-              <div className="font-mono-num text-base font-extrabold text-[#fbe8a4]">{formatCallDuration(stats.totalTalkSec)}</div>
+              <div className="font-mono-num text-base font-extrabold text-[#dfc285]">{formatCallDuration(stats.totalTalkSec)}</div>
             </div>
             <div className="px-3.5 py-2 rounded-xl bg-white/[0.06] border border-white/10">
               <div className="text-[9.5px] uppercase text-slate-400 font-bold">Recorded Audit</div>
@@ -305,7 +305,7 @@ export default function BetterwaySipCallsPage() {
                 onClick={() => setTab(t.id as PhoneTab)}
                 className={`px-4 py-2 rounded-full text-xs font-extrabold inline-flex items-center gap-1.5 cursor-pointer transition ${
                   active
-                    ? 'bg-[#e1b84c] text-[#070e1a] shadow-md'
+                    ? 'bg-[#c49a45] text-[#0b192c] shadow-md'
                     : 'bg-white/[0.08] text-slate-200 hover:bg-white/[0.16] border border-white/12'
                 }`}
               >
@@ -335,7 +335,7 @@ export default function BetterwaySipCallsPage() {
                   value={dialNumber}
                   onChange={(e) => setDialNumber(e.target.value)}
                   placeholder="+971 50 ... or Ext 104"
-                  className="w-full h-12 px-4 pe-10 rounded-2xl bg-[var(--bw-soft)] border border-[var(--bw-line-strong)] font-mono-num text-lg font-extrabold text-[var(--bw-ink)] outline-none focus:border-[#119c78]"
+                  className="w-full h-12 px-4 pe-10 rounded-2xl bg-[var(--bw-soft)] border border-[var(--bw-line-strong)] font-mono-num text-lg font-extrabold text-[var(--bw-ink)] outline-none focus:border-[#0e5a49]"
                 />
                 {dialNumber && (
                   <button
@@ -356,7 +356,7 @@ export default function BetterwaySipCallsPage() {
                     key={pre}
                     type="button"
                     onClick={() => setDialNumber(pre)}
-                    className="px-2.5 py-1 rounded-full bg-[var(--bw-soft)] hover:bg-[#090d13] hover:text-[#34f0bc] border border-[var(--bw-line)] cursor-pointer transition"
+                    className="px-2.5 py-1 rounded-full bg-[var(--bw-soft)] hover:bg-[#0b192c] hover:text-[#64c4a8] border border-[var(--bw-line)] cursor-pointer transition"
                   >
                     {pre.trim()}
                   </button>
@@ -391,11 +391,11 @@ export default function BetterwaySipCallsPage() {
                   key={k.digit}
                   type="button"
                   onClick={() => handleDialKey(k.digit)}
-                  className="h-14 rounded-2xl bg-[var(--bw-soft)] hover:bg-[#090d13] hover:text-white border border-[var(--bw-line)] hover:border-[#22e2ad]/60 flex flex-col items-center justify-center cursor-pointer transition group shadow-xs"
+                  className="h-14 rounded-2xl bg-[var(--bw-soft)] hover:bg-[#0b192c] hover:text-white border border-[var(--bw-line)] hover:border-[#47a88d]/60 flex flex-col items-center justify-center cursor-pointer transition group shadow-xs"
                 >
                   <span className="font-mono-num text-lg font-extrabold leading-none">{k.digit}</span>
                   {k.letters && (
-                    <span className="text-[9px] font-bold tracking-widest text-[var(--bw-muted)] group-hover:text-[#34f0bc] mt-0.5">
+                    <span className="text-[9px] font-bold tracking-widest text-[var(--bw-muted)] group-hover:text-[#64c4a8] mt-0.5">
                       {k.letters}
                     </span>
                   )}
@@ -418,8 +418,8 @@ export default function BetterwaySipCallsPage() {
               <GlossyBlackCard className="p-6 space-y-5" accent="emerald">
                 <div className="flex flex-wrap items-start justify-between gap-3">
                   <div>
-                    <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#22e2ad]/15 border border-[#22e2ad]/40 text-[#34f0bc] text-[10.5px] font-extrabold uppercase tracking-wider">
-                      <span className="size-2 rounded-full bg-[#34f0bc] animate-pulse" />
+                    <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#47a88d]/15 border border-[#47a88d]/40 text-[#64c4a8] text-[10.5px] font-extrabold uppercase tracking-wider">
+                      <span className="size-2 rounded-full bg-[#64c4a8] animate-pulse" />
                       {activeCall.state === 'RINGING'
                         ? 'Incoming SIP Ringing'
                         : activeCall.state === 'DIALING'
@@ -429,7 +429,7 @@ export default function BetterwaySipCallsPage() {
                             : `Live Audio · ${formatCallDuration(elapsedSec)}`}
                     </div>
                     <h3 className="font-display text-2xl font-extrabold text-white mt-2">{activeCall.remoteName}</h3>
-                    <div className="font-mono-num text-sm text-[#fbe8a4]">
+                    <div className="font-mono-num text-sm text-[#dfc285]">
                       {activeCall.remoteNumber} · {activeCall.category}
                     </div>
                   </div>
@@ -452,7 +452,7 @@ export default function BetterwaySipCallsPage() {
                     <button
                       type="button"
                       onClick={answerIncomingSipCall}
-                      className="py-3 rounded-full bg-[#119c78] hover:bg-[#14b58b] text-white text-sm font-extrabold inline-flex items-center justify-center gap-2 cursor-pointer"
+                      className="py-3 rounded-full bg-[#0e5a49] hover:bg-[#14705b] text-white text-sm font-extrabold inline-flex items-center justify-center gap-2 cursor-pointer"
                     >
                       <Phone size={16} /> Answer Call
                     </button>
@@ -481,7 +481,7 @@ export default function BetterwaySipCallsPage() {
                         type="button"
                         onClick={toggleSipHold}
                         className={`py-3 rounded-2xl inline-flex items-center justify-center gap-2 cursor-pointer transition ${
-                          activeCall.onHold ? 'bg-[#fbe8a4] text-black' : 'bg-white/10 hover:bg-white/18 text-white'
+                          activeCall.onHold ? 'bg-[#dfc285] text-black' : 'bg-white/10 hover:bg-white/18 text-white'
                         }`}
                       >
                         {activeCall.onHold ? <Play size={15} /> : <Pause size={15} />}
@@ -518,7 +518,7 @@ export default function BetterwaySipCallsPage() {
                               transferSipCall(transferTarget);
                               toast(`Call transferred to ${transferTarget}`);
                             }}
-                            className="px-3.5 h-9 rounded-xl bg-[#fbe8a4] text-[#070e1a] font-extrabold inline-flex items-center gap-1 cursor-pointer"
+                            className="px-3.5 h-9 rounded-xl bg-[#dfc285] text-[#0b192c] font-extrabold inline-flex items-center gap-1 cursor-pointer"
                           >
                             <PhoneForwarded size={13} /> Send
                           </button>
@@ -554,7 +554,7 @@ export default function BetterwaySipCallsPage() {
                           value={activeCall.notes}
                           onChange={(e) => updateActiveSipMeta({ notes: e.target.value })}
                           placeholder="Log mortgage desk notes (bank RM quote, FOL condition, valuation access timing)..."
-                          className="w-full p-2.5 rounded-xl bg-white/10 border border-white/15 text-xs text-white placeholder:text-slate-400 outline-none focus:border-[#22e2ad]"
+                          className="w-full p-2.5 rounded-xl bg-white/10 border border-white/15 text-xs text-white placeholder:text-slate-400 outline-none focus:border-[#47a88d]"
                         />
                       </div>
                     </div>
@@ -571,7 +571,7 @@ export default function BetterwaySipCallsPage() {
                   <button
                     type="button"
                     onClick={() => setTab('directory')}
-                    className="text-xs font-extrabold text-[#119c78] hover:underline cursor-pointer"
+                    className="text-xs font-extrabold text-[#0e5a49] hover:underline cursor-pointer"
                   >
                     + 159 Bank RMs →
                   </button>
@@ -586,7 +586,7 @@ export default function BetterwaySipCallsPage() {
                         <StaffAvatar name={ext.name} avatarUrl={ext.avatarUrl} initials={ext.initials} size="sm" />
                         <div className="min-w-0">
                           <div className="text-xs font-extrabold truncate">{ext.name}</div>
-                          <div className="text-[10px] font-mono-num text-[#119c78] font-bold">Ext {ext.ext}</div>
+                          <div className="text-[10px] font-mono-num text-[#0e5a49] font-bold">Ext {ext.ext}</div>
                         </div>
                       </div>
                       <button
@@ -599,7 +599,7 @@ export default function BetterwaySipCallsPage() {
                             direction: 'INTERNAL',
                           })
                         }
-                        className="size-8 rounded-full bg-[#090d13] hover:bg-[#119c78] text-[#34f0bc] hover:text-white flex items-center justify-center shrink-0 cursor-pointer transition"
+                        className="size-8 rounded-full bg-[#0b192c] hover:bg-[#0e5a49] text-[#64c4a8] hover:text-white flex items-center justify-center shrink-0 cursor-pointer transition"
                         title={`Call ${ext.name} (Ext ${ext.ext})`}
                       >
                         <Phone size={13} />
@@ -614,12 +614,12 @@ export default function BetterwaySipCallsPage() {
             <div className="bw-card p-5 space-y-3">
               <div className="flex items-center justify-between">
                 <h3 className="font-display text-sm font-extrabold flex items-center gap-1.5">
-                  <Clock size={14} className="text-[#119c78]" /> Latest SIP Calls
+                  <Clock size={14} className="text-[#0e5a49]" /> Latest SIP Calls
                 </h3>
                 <button
                   type="button"
                   onClick={() => setTab('history')}
-                  className="text-xs font-extrabold text-[#119c78] hover:underline cursor-pointer"
+                  className="text-xs font-extrabold text-[#0e5a49] hover:underline cursor-pointer"
                 >
                   Full Call Log →
                 </button>
@@ -637,7 +637,7 @@ export default function BetterwaySipCallsPage() {
                             ? 'bg-rose-100 text-rose-700'
                             : row.direction === 'INBOUND'
                               ? 'bg-emerald-100 text-emerald-700'
-                              : 'bg-[#090d13] text-[#34f0bc]'
+                              : 'bg-[#0b192c] text-[#64c4a8]'
                         }`}
                       >
                         {row.status === 'MISSED' ? (
@@ -668,7 +668,7 @@ export default function BetterwaySipCallsPage() {
                             caseRef: row.caseRef,
                           })
                         }
-                        className="px-3 py-1 rounded-full bg-[#090d13] text-[#34f0bc] font-bold text-[11px] hover:brightness-110 cursor-pointer"
+                        className="px-3 py-1 rounded-full bg-[#0b192c] text-[#64c4a8] font-bold text-[11px] hover:brightness-110 cursor-pointer"
                       >
                         Redial
                       </button>
@@ -686,7 +686,7 @@ export default function BetterwaySipCallsPage() {
         <div className="space-y-6">
           <div className="bw-card p-5 space-y-3">
             <h2 className="font-display text-sm font-extrabold flex items-center gap-2">
-              <Users size={15} className="text-[#119c78]" /> Betterway Oud Metha Internal Extensions (100–108)
+              <Users size={15} className="text-[#0e5a49]" /> Betterway Oud Metha Internal Extensions (100–108)
             </h2>
             <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3">
               {BETTERWAY_EXTENSIONS.map((ext) => (
@@ -699,7 +699,7 @@ export default function BetterwaySipCallsPage() {
                     <div className="min-w-0">
                       <div className="font-extrabold truncate">{ext.name}</div>
                       <div className="text-[10.5px] text-[var(--bw-muted)] truncate">{ext.designation}</div>
-                      <div className="text-[10.5px] font-mono-num font-bold text-[#119c78]">Ext {ext.ext}</div>
+                      <div className="text-[10.5px] font-mono-num font-bold text-[#0e5a49]">Ext {ext.ext}</div>
                     </div>
                   </div>
                   <div className="flex items-center gap-1.5 shrink-0">
@@ -714,13 +714,13 @@ export default function BetterwaySipCallsPage() {
                         });
                         setTab('dialer');
                       }}
-                      className="px-3 py-1.5 rounded-full bg-[#090d13] text-[#34f0bc] font-extrabold inline-flex items-center gap-1 cursor-pointer"
+                      className="px-3 py-1.5 rounded-full bg-[#0b192c] text-[#64c4a8] font-extrabold inline-flex items-center gap-1 cursor-pointer"
                     >
                       <Phone size={11} /> Call
                     </button>
                     <Link
                       href={`/os/inside?dm=${encodeURIComponent(ext.userId)}`}
-                      className="size-8 rounded-full border border-[var(--bw-line)] bg-white hover:border-[#119c78] flex items-center justify-center text-[var(--bw-ink)]"
+                      className="size-8 rounded-full border border-[var(--bw-line)] bg-white hover:border-[#0e5a49] flex items-center justify-center text-[var(--bw-ink)]"
                       title={`Message ${ext.name} in Betterway Inside`}
                     >
                       <MessagesSquare size={12} />
@@ -736,7 +736,7 @@ export default function BetterwaySipCallsPage() {
             <div className="flex flex-wrap items-center justify-between gap-3">
               <div>
                 <h2 className="font-display text-sm font-extrabold flex items-center gap-2">
-                  <Building2 size={15} className="text-[#119c78]" /> 159 Direct UAE Bank RMs — 1-Click SIP Speed-Dial ({filteredRms.length})
+                  <Building2 size={15} className="text-[#0e5a49]" /> 159 Direct UAE Bank RMs — 1-Click SIP Speed-Dial ({filteredRms.length})
                 </h2>
                 <p className="text-[11px] text-[var(--bw-muted)]">
                   Click any Bank RM to dial directly through your Betterway SIP extension with automatic CDR logging.
@@ -761,7 +761,7 @@ export default function BetterwaySipCallsPage() {
                   onClick={() => setRmBank(b)}
                   className={`px-3 py-1 rounded-full font-bold cursor-pointer transition ${
                     rmBank === b
-                      ? 'bg-[#090d13] text-[#34f0bc] border border-[#22e2ad]/50'
+                      ? 'bg-[#0b192c] text-[#64c4a8] border border-[#47a88d]/50'
                       : 'bg-[var(--bw-soft)] border border-[var(--bw-line)]'
                   }`}
                 >
@@ -778,7 +778,7 @@ export default function BetterwaySipCallsPage() {
                 >
                   <div className="flex items-start justify-between gap-2">
                     <div className="min-w-0">
-                      <div className="text-[10px] font-extrabold uppercase tracking-wider text-[#119c78]">
+                      <div className="text-[10px] font-extrabold uppercase tracking-wider text-[#0e5a49]">
                         {rm.bank} · {rm.desk}
                       </div>
                       <div className="font-display font-extrabold text-sm truncate">{rm.rmName}</div>
@@ -800,7 +800,7 @@ export default function BetterwaySipCallsPage() {
                           });
                           toast(`Calling ${rm.rmName} (${rm.bank}) via SIP`);
                         }}
-                        className="px-3 py-1.5 rounded-full bg-[#090d13] hover:bg-[#119c78] text-[#34f0bc] hover:text-white font-extrabold inline-flex items-center gap-1 cursor-pointer transition shrink-0"
+                        className="px-3 py-1.5 rounded-full bg-[#0b192c] hover:bg-[#0e5a49] text-[#64c4a8] hover:text-white font-extrabold inline-flex items-center gap-1 cursor-pointer transition shrink-0"
                       >
                         <PhoneCall size={11} /> SIP Call
                       </button>
@@ -832,7 +832,7 @@ export default function BetterwaySipCallsPage() {
                   onClick={() => setCdrFilter(id as any)}
                   className={`px-3 py-1.5 rounded-full font-bold cursor-pointer transition ${
                     cdrFilter === id
-                      ? 'bg-[#090d13] text-[#34f0bc]'
+                      ? 'bg-[#0b192c] text-[#64c4a8]'
                       : 'bg-[var(--bw-soft)] border border-[var(--bw-line)]'
                   }`}
                 >
@@ -847,7 +847,7 @@ export default function BetterwaySipCallsPage() {
                 onClick={() => setMaskPdpl((v) => !v)}
                 className="px-3 py-1.5 rounded-full border border-[var(--bw-line)] bg-[var(--bw-soft)] text-xs font-bold inline-flex items-center gap-1.5 cursor-pointer"
               >
-                {maskPdpl ? <EyeOff size={13} className="text-[#119c78]" /> : <Eye size={13} />}
+                {maskPdpl ? <EyeOff size={13} className="text-[#0e5a49]" /> : <Eye size={13} />}
                 {maskPdpl ? 'PDPL Masked' : 'Full Numbers'}
               </button>
               <input
@@ -865,7 +865,7 @@ export default function BetterwaySipCallsPage() {
           <div className="overflow-x-auto">
             <table className="w-full text-xs min-w-[820px]">
               <thead>
-                <tr className="bg-[#090d13] text-white text-[10.5px] uppercase tracking-wider">
+                <tr className="bg-[#0b192c] text-white text-[10.5px] uppercase tracking-wider">
                   <th className="py-3 px-3.5 text-start">Contact &amp; Direction</th>
                   <th className="py-3 px-3 text-start">Number</th>
                   <th className="py-3 px-3 text-start">Category / Case</th>
@@ -894,7 +894,7 @@ export default function BetterwaySipCallsPage() {
                     </td>
                     <td className="py-3 px-3">
                       <div className="font-semibold">{row.category}</div>
-                      {row.caseRef && <div className="text-[10.5px] font-mono-num text-[#119c78] font-bold">{row.caseRef}</div>}
+                      {row.caseRef && <div className="text-[10.5px] font-mono-num text-[#0e5a49] font-bold">{row.caseRef}</div>}
                     </td>
                     <td className="py-3 px-3 space-y-1">
                       <StatusPill
@@ -920,7 +920,7 @@ export default function BetterwaySipCallsPage() {
                           });
                           setTab('dialer');
                         }}
-                        className="px-3 py-1.5 rounded-full bg-[#090d13] text-[#34f0bc] font-bold inline-flex items-center gap-1 cursor-pointer"
+                        className="px-3 py-1.5 rounded-full bg-[#0b192c] text-[#64c4a8] font-bold inline-flex items-center gap-1 cursor-pointer"
                       >
                         <Phone size={11} /> Call
                       </button>
@@ -961,7 +961,7 @@ export default function BetterwaySipCallsPage() {
                       stunServer: p.stunServer,
                     }))
                   }
-                  className="px-3 py-1.5 rounded-full bg-[var(--bw-soft)] hover:bg-[#090d13] hover:text-[#34f0bc] border border-[var(--bw-line)] font-bold cursor-pointer transition"
+                  className="px-3 py-1.5 rounded-full bg-[var(--bw-soft)] hover:bg-[#0b192c] hover:text-[#64c4a8] border border-[var(--bw-line)] font-bold cursor-pointer transition"
                 >
                   {p.label}
                 </button>
@@ -1052,8 +1052,8 @@ export default function BetterwaySipCallsPage() {
           </form>
 
           <GlossyBlackCard className="lg:col-span-5 p-5 space-y-4 text-xs" accent="gold">
-            <div className="inline-flex items-center gap-1.5 text-[10.5px] font-extrabold uppercase tracking-[0.14em] text-[#fbe8a4]">
-              <ShieldCheck size={13} className="text-[#34f0bc]" /> UAE TDRA &amp; CBUAE Call Governance
+            <div className="inline-flex items-center gap-1.5 text-[10.5px] font-extrabold uppercase tracking-[0.14em] text-[#dfc285]">
+              <ShieldCheck size={13} className="text-[#64c4a8]" /> UAE TDRA &amp; CBUAE Call Governance
             </div>
             <h3 className="font-display text-base font-extrabold text-white">
               Oud Metha Office Telephony Standards

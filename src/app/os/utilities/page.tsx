@@ -182,8 +182,8 @@ export default function UtilitiesPage() {
           <GlossyBlackCard className="p-6 sm:p-7 space-y-5" accent="dual">
             <div className="flex flex-wrap items-center justify-between gap-4">
               <div className="space-y-1.5 max-w-2xl">
-                <div className="inline-flex items-center gap-2 text-[11px] font-extrabold uppercase tracking-[0.14em] text-[#34f0bc]">
-                  <DatabaseBackup size={14} className="text-[#fbe8a4]" /> Complete Master Excel + Automated 00:00 GST Daily Backup
+                <div className="inline-flex items-center gap-2 text-[11px] font-extrabold uppercase tracking-[0.14em] text-[#64c4a8]">
+                  <DatabaseBackup size={14} className="text-[#dfc285]" /> Complete Master Excel + Automated 00:00 GST Daily Backup
                 </div>
                 <h2 className="font-display text-2xl font-extrabold text-white">100% of Betterway OS Data in One Excel Workbook</h2>
                 <p className="text-xs sm:text-sm text-slate-300 leading-relaxed">
@@ -194,8 +194,8 @@ export default function UtilitiesPage() {
                 <a href="/api/v1/utilities/master-backup-excel" className="bw-btn bw-btn-primary text-xs">
                   <Download size={14} /> Download 17-Sheet Master Excel (.xlsx)
                 </a>
-                <a href="/api/v1/utilities/bank-matrix-excel" className="bw-btn bw-btn-obsidian text-xs border-[#22e2ad]/45">
-                  <FileSpreadsheet size={14} className="text-[#34f0bc]" /> Recreated 2026 Bank Matrix (.xlsx)
+                <a href="/api/v1/utilities/bank-matrix-excel" className="bw-btn bw-btn-obsidian text-xs border-[#47a88d]/45">
+                  <FileSpreadsheet size={14} className="text-[#64c4a8]" /> Recreated 2026 Bank Matrix (.xlsx)
                 </a>
                 <button type="button" disabled={runningBackup} onClick={() => void triggerBackupNow()} className="bw-btn bw-btn-gold text-xs">
                   <RefreshCw size={14} className={runningBackup ? 'animate-spin' : ''} /> {runningBackup ? 'Saving Backup…' : 'Run Daily Backup Now'}
@@ -207,16 +207,16 @@ export default function UtilitiesPage() {
               <div className="p-4 rounded-2xl bg-white/[0.06] border border-white/10">
                 <div className="text-[10.5px] font-bold uppercase text-slate-400">Workbook Coverage</div>
                 <div className="font-display text-2xl font-extrabold text-white mt-0.5">17 Sheets</div>
-                <div className="text-[11px] text-[#34f0bc]">All Supabase tables + 159 RMs</div>
+                <div className="text-[11px] text-[#64c4a8]">All Supabase tables + 159 RMs</div>
               </div>
               <div className="p-4 rounded-2xl bg-white/[0.06] border border-white/10">
                 <div className="text-[10.5px] font-bold uppercase text-slate-400">Automatic Schedule</div>
-                <div className="font-display text-2xl font-extrabold text-[#fbe8a4] mt-0.5">00:00 GST</div>
+                <div className="font-display text-2xl font-extrabold text-[#dfc285] mt-0.5">00:00 GST</div>
                 <div className="text-[11px] text-slate-300">Vercel Cron + GitHub Actions 90d</div>
               </div>
               <div className="p-4 rounded-2xl bg-white/[0.06] border border-white/10">
                 <div className="text-[10.5px] font-bold uppercase text-slate-400">Saved Snapshots</div>
-                <div className="font-display text-2xl font-extrabold text-[#34f0bc] mt-0.5">
+                <div className="font-display text-2xl font-extrabold text-[#64c4a8] mt-0.5">
                   {(backupInfo?.localFiles?.length ?? 0) + (backupInfo?.history?.length ?? 0)}
                 </div>
                 <div className="text-[11px] text-slate-300">Local + Supabase Storage</div>
@@ -224,19 +224,19 @@ export default function UtilitiesPage() {
               <div className="p-4 rounded-2xl bg-white/[0.06] border border-white/10">
                 <div className="text-[10.5px] font-bold uppercase text-slate-400">Mobile App Sync</div>
                 <div className="font-display text-2xl font-extrabold text-white mt-0.5 flex items-center gap-1.5">
-                  <Smartphone size={18} className="text-[#34f0bc]" /> iOS &amp; Android
+                  <Smartphone size={18} className="text-[#64c4a8]" /> iOS &amp; Android
                 </div>
                 <div className="text-[11px] text-slate-300">Capacitor 7 + PWA Ready</div>
               </div>
             </div>
 
             {lastRun && (
-              <div className="p-4 rounded-2xl bg-[#22e2ad]/12 border border-[#22e2ad]/40 text-xs flex flex-wrap items-center justify-between gap-2 text-[#e6fff7]">
+              <div className="p-4 rounded-2xl bg-[#47a88d]/12 border border-[#47a88d]/40 text-xs flex flex-wrap items-center justify-between gap-2 text-[#e6fff7]">
                 <span className="inline-flex items-center gap-2 font-bold">
-                  <CheckCircle2 size={15} className="text-[#34f0bc]" />
+                  <CheckCircle2 size={15} className="text-[#64c4a8]" />
                   Saved {lastRun.filename} · {lastRun.totalRows} rows · SHA-256 {String(lastRun.sha256).slice(0, 14)}…
                 </span>
-                {lastRun.localSavedPath && <span className="font-mono-num text-[#fbe8a4]">{lastRun.localSavedPath}</span>}
+                {lastRun.localSavedPath && <span className="font-mono-num text-[#dfc285]">{lastRun.localSavedPath}</span>}
               </div>
             )}
           </GlossyBlackCard>
@@ -267,7 +267,7 @@ export default function UtilitiesPage() {
             <div className="bw-card p-5 space-y-3 text-xs">
               <div className="flex items-center justify-between">
                 <h3 className="font-display text-sm font-extrabold flex items-center gap-1.5">
-                  <Clock size={14} className="text-[#119c78]" /> Automated Daily Backup Audit History
+                  <Clock size={14} className="text-[#0e5a49]" /> Automated Daily Backup Audit History
                 </h3>
                 <StatusPill label="00:00 Dubai GST" tone="gold" />
               </div>
@@ -312,11 +312,11 @@ export default function UtilitiesPage() {
                 onClick={() => setSelectedLetter(ltr)}
                 className={`w-full p-3 rounded-xl text-start cursor-pointer transition ${
                   selectedLetter.code === ltr.code
-                    ? 'bg-[#090d13] text-white border border-[#d9b356]/50'
+                    ? 'bg-[#0b192c] text-white border border-[#c49a45]/50'
                     : 'bg-[var(--bw-soft)]/50 hover:bg-[var(--bw-soft)] border border-[var(--bw-line)]'
                 }`}
               >
-                <div className="font-mono text-[10px] text-[#34f0bc] font-bold">{ltr.code}</div>
+                <div className="font-mono text-[10px] text-[#64c4a8] font-bold">{ltr.code}</div>
                 <div className="font-extrabold mt-0.5">{ltr.title}</div>
               </button>
             ))}
@@ -332,7 +332,7 @@ export default function UtilitiesPage() {
                 }}
                 className="bw-btn bw-btn-obsidian text-xs py-1.5 min-h-[34px]"
               >
-                <Copy size={12} className="text-[#34f0bc]" /> Copy Official Letter
+                <Copy size={12} className="text-[#64c4a8]" /> Copy Official Letter
               </button>
             </div>
             <textarea
@@ -375,13 +375,13 @@ export default function UtilitiesPage() {
                 <div key={sp.num} className="rounded-2xl border border-[var(--bw-line)] p-4 flex flex-col justify-between gap-2.5">
                   <div>
                     <div className="flex items-center justify-between gap-2 mb-1">
-                      <span className="font-mono text-[11px] font-extrabold text-[#119c78]">#{sp.num}</span>
+                      <span className="font-mono text-[11px] font-extrabold text-[#0e5a49]">#{sp.num}</span>
                       <StatusPill label={sp.owner} tone="slate" />
                     </div>
                     <div className="text-xs font-bold break-all">{sp.filename}</div>
                   </div>
                   <a href={`/api/v1/utilities/excel-export?num=${sp.num}`} className="bw-btn bw-btn-obsidian w-full text-[11px] py-1.5 min-h-[34px]">
-                    <Download size={12} className="text-[#34f0bc]" /> Download .xlsx
+                    <Download size={12} className="text-[#64c4a8]" /> Download .xlsx
                   </a>
                 </div>
               ))}
@@ -421,7 +421,7 @@ export default function UtilitiesPage() {
       {tab === 'calc_qr' && (
         <div className="grid lg:grid-cols-2 gap-5 text-xs">
           <GlossyBlackCard className="p-6 space-y-4" accent="emerald">
-            <div className="inline-flex items-center gap-1.5 text-[10.5px] font-extrabold uppercase tracking-[0.14em] text-[#34f0bc]">
+            <div className="inline-flex items-center gap-1.5 text-[10.5px] font-extrabold uppercase tracking-[0.14em] text-[#64c4a8]">
               <Calculator size={13} /> 12 Institutional UAE Calculators
             </div>
             <h3 className="font-display text-xl font-extrabold text-white">Complete CBUAE 2026 Calculation Suite</h3>
@@ -431,7 +431,7 @@ export default function UtilitiesPage() {
             <Link href="/os/calculators" className="bw-btn bw-btn-primary text-xs">Open All 12 UAE Calculators →</Link>
           </GlossyBlackCard>
           <div className="bw-card p-6 space-y-4">
-            <div className="inline-flex items-center gap-1.5 text-[10.5px] font-extrabold uppercase tracking-[0.14em] text-[#119c78]">
+            <div className="inline-flex items-center gap-1.5 text-[10.5px] font-extrabold uppercase tracking-[0.14em] text-[#0e5a49]">
               <QrCode size={13} /> Betterway Office &amp; Borrower QR Terminals
             </div>
             <h3 className="font-display text-lg font-extrabold">Oud Metha 20s Rotating Reception QR</h3>
@@ -468,10 +468,10 @@ export default function UtilitiesPage() {
       {tab === 'mobile' && (
         <div className="grid md:grid-cols-2 gap-5 text-xs">
           <GlossyBlackCard className="p-6 space-y-3" accent="dual">
-            <div className="text-[10.5px] font-extrabold uppercase tracking-[0.14em] text-[#34f0bc]">Betterway ONE · Android APK &amp; iOS</div>
+            <div className="text-[10.5px] font-extrabold uppercase tracking-[0.14em] text-[#64c4a8]">Betterway ONE · Android APK &amp; iOS</div>
             <h3 className="font-display text-xl font-extrabold text-white">Native Capacitor 7 Mobile Builds</h3>
             <ul className="space-y-2 text-slate-300 leading-relaxed">
-              <li>• <strong className="text-white">Android:</strong> Signed release APK built automatically via GitHub Actions (<code className="text-[#fbe8a4]">mobile-android-ios.yml</code>) with shining black house launcher icon.</li>
+              <li>• <strong className="text-white">Android:</strong> Signed release APK built automatically via GitHub Actions (<code className="text-[#dfc285]">mobile-android-ios.yml</code>) with shining black house launcher icon.</li>
               <li>• <strong className="text-white">iOS:</strong> Native Xcode project (`mobile/ios/App`) configured with AppIcon, Safe Area dock &amp; live sync to `betterwayos.vercel.app`.</li>
               <li>• <strong className="text-white">Offline PWA:</strong> Install directly on iPhone Safari or Android Chrome via <em>Add to Home Screen</em>.</li>
             </ul>
@@ -481,7 +481,7 @@ export default function UtilitiesPage() {
             <div className="grid grid-cols-2 gap-2.5">
               {['Oud Metha QR Scan', '1-Tap Field GPS SOS', 'Betterway Inside Chat', 'SIP Softphone Dialer', '12 UAE Calculators', '3-Bank WhatsApp Quote'].map((f) => (
                 <div key={f} className="p-3 rounded-xl bg-[var(--bw-soft)] border border-[var(--bw-line)] font-bold flex items-center gap-2">
-                  <CheckCircle2 size={13} className="text-[#119c78] shrink-0" /> {f}
+                  <CheckCircle2 size={13} className="text-[#0e5a49] shrink-0" /> {f}
                 </div>
               ))}
             </div>
@@ -498,7 +498,7 @@ export default function UtilitiesPage() {
               <p className="text-[11px] text-[var(--bw-muted)]">Switch instant presets below or open the full side studio to adjust every hex color, font family, scale, highlight glow, and pinned bar.</p>
             </div>
             <button type="button" onClick={() => setCustomizerOpen(true)} className="bw-btn bw-btn-obsidian text-xs">
-              <Palette size={14} className="text-[#34f0bc]" /> Open Full Customise UI Drawer
+              <Palette size={14} className="text-[#64c4a8]" /> Open Full Customise UI Drawer
             </button>
           </div>
           <div className="grid sm:grid-cols-3 gap-3">
@@ -511,7 +511,7 @@ export default function UtilitiesPage() {
                   toast(`Applied "${p.name}" theme!`);
                 }}
                 className={`p-4 rounded-2xl border text-start cursor-pointer transition ${
-                  uiConfig.presetId === p.id ? 'border-[#119c78] bg-[#e3fbf3]/50 ring-1 ring-[#22e2ad]' : 'border-[var(--bw-line)] bg-[var(--bw-soft)]/50 hover:border-[#119c78]'
+                  uiConfig.presetId === p.id ? 'border-[#0e5a49] bg-[#eaf4f1]/50 ring-1 ring-[#47a88d]' : 'border-[var(--bw-line)] bg-[var(--bw-soft)]/50 hover:border-[#0e5a49]'
                 }`}
               >
                 <div className="flex items-center gap-1.5 mb-2">

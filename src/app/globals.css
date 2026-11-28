@@ -36,85 +36,85 @@
   --font-sans: 'Instrument Sans', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
   --font-display: 'Plus Jakarta Sans', 'Instrument Sans', system-ui, sans-serif;
 
-  /* Warm Light Beige-Yellow Canvas + Pure White Split Cards + Glossy Shining Black Detail Cards */
-  --bw-bg: #fbf6e6;
-  --bw-canvas-tint: #f5edd4;
+  /* Sovereign Private-Banking Palette: Platinum Alabaster Canvas + Architectural White Cards + Oxford Midnight Navy */
+  --bw-bg: #f3f5f8;
+  --bw-canvas-tint: #eaeff5;
   --bw-card: #ffffff;
-  --bw-soft: #f7f0dc;
-  --bw-hover: #efe5c8;
-  --bw-ink: #090d12;
-  --bw-body: #25303b;
-  --bw-muted: #595547;
-  --bw-line: #e5d8b8;
-  --bw-line-strong: #d1be92;
+  --bw-soft: #eef2f7;
+  --bw-hover: #e2e8f0;
+  --bw-ink: #0b192c;
+  --bw-body: #2a3b52;
+  --bw-muted: #5a6b82;
+  --bw-line: #d6dee8;
+  --bw-line-strong: #bac6d6;
 
-  /* Official Betterway Logo Jewel Accents (extracted from 4K Vector SVG) */
-  --bw-emerald: #119c78;
-  --bw-emerald-luminous: #22e2ad;
-  --bw-emerald-bright: #34f0bc;
-  --bw-fold: #070c12;
-  --bw-obsidian: #080b10;
-  --bw-obsidian-elevated: #111720;
-  --bw-focus: #22e2ad;
-  --bw-signal: #e11d48;
-  --bw-graphite: #0a0f16;
-  --bw-navy: #070e1a;
+  /* Institutional British Pine-Emerald & Sovereign Midnight Navy Accents */
+  --bw-emerald: #0e5a49;
+  --bw-emerald-luminous: #47a88d;
+  --bw-emerald-bright: #64c4a8;
+  --bw-fold: #0b192c;
+  --bw-obsidian: #0b192c;
+  --bw-obsidian-elevated: #122642;
+  --bw-focus: #0e5a49;
+  --bw-signal: #9f243b;
+  --bw-graphite: #10233e;
+  --bw-navy: #071221;
 
-  /* Official Betterway Brushed Gold (from 4K Vector SVG) */
-  --bw-gold: #d9b356;
-  --bw-gold-deep: #9a7123;
-  --bw-gold-soft: #fbe8a4;
-  --bw-gold-bright: #fff0b8;
+  /* Burnished Sovereign Champagne-Bronze Gold */
+  --bw-gold: #c49a45;
+  --bw-gold-deep: #7d5b1c;
+  --bw-gold-soft: #dfc285;
+  --bw-gold-bright: #ebd5a6;
 
-  /* Soft Highlight Tints for White Surfaces */
-  --bw-mint: #e3fbf3;
-  --bw-mint-soft: #f0fdf8;
-  --bw-sand: #fdf7e7;
-  --bw-champagne-tint: #fbf5e6;
-  --bw-sky: #eef5ff;
-  --bw-blush: #fff0f3;
-  --bw-gold-tint: #fdf4dc;
+  /* Refined Architectural Washes for White Surfaces */
+  --bw-mint: #eaf4f1;
+  --bw-mint-soft: #f3f8f6;
+  --bw-sand: #faf6ed;
+  --bw-champagne-tint: #f8f4ea;
+  --bw-sky: #eef3f9;
+  --bw-blush: #fdf2f4;
+  --bw-gold-tint: #faf6ed;
   --bw-reverse-muted: #cbd5e1;
 
-  /* Crisp Gallery White + Deep Floating Glossy Black Elevation */
-  --bw-shadow-raised: 0 10px 30px -16px rgba(7, 14, 26, 0.14), 0 1px 3px rgba(7, 14, 26, 0.04);
-  --bw-shadow-floating: 0 24px 54px -20px rgba(7, 14, 26, 0.24), 0 4px 12px rgba(17, 156, 120, 0.08);
-  --bw-shadow-obsidian: 0 28px 60px -22px rgba(4, 8, 15, 0.78), 0 8px 24px -10px rgba(17, 156, 120, 0.22);
-  --bw-shadow-cash: 0 28px 60px -22px rgba(4, 8, 15, 0.78), 0 0 0 1px rgba(255, 255, 255, 0.08) inset;
-  --bw-focus-ring: 0 0 0 3px rgba(34, 226, 173, 0.25);
+  /* Precision Institutional Elevation (Zero Neon Glow) */
+  --bw-shadow-raised: 0 8px 24px -14px rgba(11, 25, 44, 0.12), 0 1px 3px rgba(11, 25, 44, 0.05);
+  --bw-shadow-floating: 0 22px 46px -18px rgba(11, 25, 44, 0.2), 0 4px 12px rgba(11, 25, 44, 0.06);
+  --bw-shadow-obsidian: 0 24px 52px -20px rgba(7, 17, 32, 0.65), 0 6px 20px -10px rgba(11, 25, 44, 0.25);
+  --bw-shadow-cash: 0 24px 52px -20px rgba(7, 17, 32, 0.68), 0 0 0 1px rgba(255, 255, 255, 0.09) inset;
+  --bw-focus-ring: 0 0 0 3px rgba(14, 90, 73, 0.22);
   --bw-ease: cubic-bezier(0.16, 1, 0.3, 1);
   --bw-motion-fast: 160ms;
 }
 
 .dark {
-  --bw-bg: #05070a;
-  --bw-canvas-tint: #090d13;
-  --bw-card: #0d1219;
-  --bw-soft: #131a24;
-  --bw-hover: #18212e;
-  --bw-ink: #f8fafc;
-  --bw-body: #d3dde7;
-  --bw-muted: #94a3b8;
-  --bw-line: #1e2937;
-  --bw-line-strong: #2d3c4f;
-  --bw-mint: #0d2b24;
-  --bw-mint-soft: #09211b;
-  --bw-sand: #241e12;
-  --bw-champagne-tint: #211c11;
-  --bw-sky: #102136;
-  --bw-blush: #2d121a;
-  --bw-gold-tint: #261f10;
-  --bw-shadow-raised: 0 14px 36px -16px rgba(0, 0, 0, 0.72);
-  --bw-shadow-floating: 0 28px 60px -20px rgba(0, 0, 0, 0.85), 0 0 24px -8px rgba(34, 226, 173, 0.18);
+  --bw-bg: #070e1a;
+  --bw-canvas-tint: #0b1626;
+  --bw-card: #0e1a2b;
+  --bw-soft: #15243a;
+  --bw-hover: #1b2d47;
+  --bw-ink: #f4f7fb;
+  --bw-body: #cfd9e6;
+  --bw-muted: #8fa1b8;
+  --bw-line: #1f3149;
+  --bw-line-strong: #2d4462;
+  --bw-mint: #0e2d29;
+  --bw-mint-soft: #0a2320;
+  --bw-sand: #251f14;
+  --bw-champagne-tint: #211c12;
+  --bw-sky: #11243d;
+  --bw-blush: #2c141c;
+  --bw-gold-tint: #262014;
+  --bw-shadow-raised: 0 14px 34px -16px rgba(2, 6, 14, 0.72);
+  --bw-shadow-floating: 0 26px 56px -18px rgba(2, 6, 14, 0.85), 0 0 22px -10px rgba(196, 154, 69, 0.22);
 }
 
 html,
 body {
   background-color: var(--bw-bg);
   background-image:
-    radial-gradient(1080px 480px at 14% -8%, rgba(247, 224, 152, 0.34), transparent 62%),
-    radial-gradient(900px 440px at 88% 10%, rgba(34, 226, 173, 0.08), transparent 64%),
-    linear-gradient(180deg, #fcf8ec 0%, #f9f2dc 55%, #f6edd2 100%);
+    radial-gradient(1120px 480px at 12% -6%, rgba(214, 226, 240, 0.55), transparent 62%),
+    radial-gradient(880px 420px at 90% 8%, rgba(223, 194, 133, 0.14), transparent 62%),
+    linear-gradient(180deg, #f7f9fb 0%, #f3f5f8 52%, #edf1f6 100%);
   background-attachment: fixed;
   color: var(--bw-ink);
   font-family: var(--font-sans);
@@ -125,10 +125,10 @@ body {
 
 .dark body,
 html.dark {
-  background-color: #05070a;
+  background-color: #070e1a;
   background-image:
-    radial-gradient(960px 420px at 14% -8%, rgba(34, 226, 173, 0.11), transparent 60%),
-    radial-gradient(820px 380px at 88% -6%, rgba(217, 179, 86, 0.09), transparent 60%);
+    radial-gradient(960px 420px at 14% -8%, rgba(71, 168, 141, 0.08), transparent 60%),
+    radial-gradient(820px 380px at 88% -6%, rgba(196, 154, 69, 0.09), transparent 60%);
 }
 
 h1,
@@ -161,12 +161,12 @@ html[dir='rtl'] .font-display {
 }
 
 ::selection {
-  background: rgba(34, 226, 173, 0.28);
-  color: #053b2e;
+  background: rgba(14, 90, 73, 0.18);
+  color: #0b192c;
 }
 
 :focus-visible {
-  outline: 2.5px solid var(--bw-emerald-luminous);
+  outline: 2.5px solid var(--bw-emerald);
   outline-offset: 2px;
 }
 
@@ -205,14 +205,14 @@ html[dir='rtl'] .font-display {
   position: relative;
   overflow: hidden;
   border-radius: 22px;
-  background: linear-gradient(155deg, #171e27 0%, #0b0f15 44%, #05070a 100%);
+  background: linear-gradient(152deg, #162b47 0%, #0d1c31 46%, #071120 100%);
   color: #ffffff;
-  border: 1px solid rgba(255, 255, 255, 0.13);
+  border: 1px solid rgba(223, 194, 133, 0.22);
   box-shadow:
-    0 24px 52px -20px rgba(4, 7, 12, 0.72),
-    0 4px 18px -6px rgba(17, 156, 120, 0.18),
-    inset 0 1px 0 0 rgba(255, 255, 255, 0.22),
-    inset 0 -1px 0 0 rgba(34, 226, 173, 0.14);
+    0 22px 48px -20px rgba(7, 17, 32, 0.68),
+    0 4px 16px -6px rgba(11, 25, 44, 0.24),
+    inset 0 1px 0 0 rgba(255, 255, 255, 0.18),
+    inset 0 -1px 0 0 rgba(196, 154, 69, 0.18);
   transition: transform 240ms var(--bw-ease), box-shadow 240ms var(--bw-ease), border-color 240ms var(--bw-ease);
 }
 
@@ -222,9 +222,9 @@ html[dir='rtl'] .font-display {
   inset: 0;
   pointer-events: none;
   background:
-    linear-gradient(125deg, rgba(255, 255, 255, 0.14) 0%, rgba(255, 255, 255, 0.03) 26%, transparent 52%),
-    radial-gradient(520px circle at var(--mx, 20%) var(--my, 15%), rgba(34, 226, 173, 0.16), transparent 46%),
-    radial-gradient(420px circle at 92% 94%, rgba(217, 179, 86, 0.15), transparent 52%);
+    linear-gradient(125deg, rgba(255, 255, 255, 0.11) 0%, rgba(255, 255, 255, 0.02) 28%, transparent 52%),
+    radial-gradient(520px circle at var(--mx, 20%) var(--my, 15%), rgba(71, 168, 141, 0.12), transparent 48%),
+    radial-gradient(420px circle at 92% 94%, rgba(196, 154, 69, 0.16), transparent 54%);
   z-index: 0;
 }
 
@@ -236,7 +236,7 @@ html[dir='rtl'] .font-display {
   left: 0;
   width: 42%;
   pointer-events: none;
-  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.11), transparent);
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.09), transparent);
   transform: translateX(-160%) skewX(-22deg);
   transition: opacity 250ms ease;
   z-index: 1;
@@ -244,12 +244,12 @@ html[dir='rtl'] .font-display {
 
 .bw-glossy-black:hover {
   transform: translateY(-3px);
-  border-color: rgba(34, 226, 173, 0.42);
+  border-color: rgba(223, 194, 133, 0.45);
   box-shadow:
-    0 32px 64px -18px rgba(3, 6, 10, 0.85),
-    0 0 0 1px rgba(217, 179, 86, 0.22),
-    0 12px 30px -10px rgba(34, 226, 173, 0.25),
-    inset 0 1px 0 0 rgba(255, 255, 255, 0.28);
+    0 28px 58px -18px rgba(7, 17, 32, 0.78),
+    0 0 0 1px rgba(196, 154, 69, 0.24),
+    0 12px 28px -12px rgba(14, 90, 73, 0.22),
+    inset 0 1px 0 0 rgba(255, 255, 255, 0.24);
 }
 
 .bw-glossy-black:hover::after {
@@ -261,19 +261,19 @@ html[dir='rtl'] .font-display {
   z-index: 2;
 }
 
-/* Signature 3D-Tilt Shining Obsidian Account / Loan-Book Wallet Card */
+/* Signature 3D-Tilt Sovereign Navy Account / Loan-Book Wallet Card */
 .bw-cash-card {
   position: relative;
   overflow: hidden;
   padding: 24px;
   border-radius: 22px;
-  background: linear-gradient(138deg, #1a222d 0%, #0a0e14 48%, #040608 100%);
+  background: linear-gradient(138deg, #18304f 0%, #0d1d33 48%, #071120 100%);
   color: #ffffff;
-  border: 1px solid rgba(255, 255, 255, 0.16);
+  border: 1px solid rgba(223, 194, 133, 0.28);
   box-shadow:
-    0 28px 58px -20px rgba(3, 7, 12, 0.84),
-    0 10px 26px -12px rgba(34, 226, 173, 0.3),
-    inset 0 1px 0 rgba(255, 255, 255, 0.25);
+    0 26px 52px -20px rgba(7, 17, 32, 0.76),
+    0 10px 24px -12px rgba(196, 154, 69, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
   transform: rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg));
   transition: transform 220ms var(--bw-ease), box-shadow 220ms var(--bw-ease), border-color 220ms var(--bw-ease);
 }
@@ -283,12 +283,12 @@ html[dir='rtl'] .font-display {
   inset: 0;
   pointer-events: none;
   background:
-    linear-gradient(118deg, rgba(255, 255, 255, 0.17) 0%, rgba(255, 255, 255, 0.02) 32%, transparent 54%),
-    radial-gradient(360px circle at 10% 10%, rgba(34, 226, 173, 0.22), transparent 58%),
-    radial-gradient(340px circle at 92% 90%, rgba(217, 179, 86, 0.22), transparent 58%);
+    linear-gradient(118deg, rgba(255, 255, 255, 0.13) 0%, rgba(255, 255, 255, 0.02) 32%, transparent 54%),
+    radial-gradient(360px circle at 10% 10%, rgba(71, 168, 141, 0.15), transparent 58%),
+    radial-gradient(340px circle at 92% 90%, rgba(196, 154, 69, 0.2), transparent 58%);
 }
 .bw-cash-card:hover {
-  border-color: rgba(34, 226, 173, 0.48);
+  border-color: rgba(223, 194, 133, 0.55);
 }
 
 /* ------- 21st.dev Shine & Spotlight Hover Buttons ------- */
@@ -330,72 +330,72 @@ html[dir='rtl'] .font-display {
   transform: translateY(0px) scale(0.985);
 }
 
-/* Glossy Shining Black Primary CTA with Luminous Betterway Emerald + Gold Aura */
+/* Sovereign Navy Primary CTA with Brushed Gold Edge */
 .bw-btn-obsidian,
 .bw-btn-dark {
-  background: linear-gradient(180deg, #1b222c 0%, #090c11 100%);
+  background: linear-gradient(180deg, #172d4a 0%, #0b192c 100%);
   color: #ffffff;
-  border-color: rgba(255, 255, 255, 0.16);
-  box-shadow: 0 12px 26px -12px rgba(4, 7, 12, 0.8), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  border-color: rgba(223, 194, 133, 0.28);
+  box-shadow: 0 10px 24px -12px rgba(7, 17, 32, 0.72), inset 0 1px 0 rgba(255, 255, 255, 0.18);
 }
 .bw-btn-obsidian:hover:not(:disabled),
 .bw-btn-dark:hover:not(:disabled) {
-  background: linear-gradient(180deg, #212b38 0%, #070a0f 100%);
-  border-color: rgba(34, 226, 173, 0.65);
-  box-shadow: 0 16px 32px -12px rgba(4, 7, 12, 0.85), 0 0 18px -4px rgba(34, 226, 173, 0.38);
+  background: linear-gradient(180deg, #1d385c 0%, #091526 100%);
+  border-color: rgba(223, 194, 133, 0.62);
+  box-shadow: 0 14px 28px -12px rgba(7, 17, 32, 0.8), 0 0 14px -6px rgba(196, 154, 69, 0.35);
 }
 
-/* Official Betterway Logo Luminous Emerald Button */
+/* Institutional Deep British Pine-Emerald Button */
 .bw-btn-primary {
-  background: linear-gradient(135deg, #0b5442 0%, #119c78 65%, #16b88e 100%);
+  background: linear-gradient(135deg, #093d32 0%, #0e5a49 62%, #136e5a 100%);
   color: #ffffff;
-  border-color: rgba(34, 226, 173, 0.38);
-  box-shadow: 0 12px 24px -12px rgba(17, 156, 120, 0.72), inset 0 1px 0 rgba(255, 255, 255, 0.24);
+  border-color: rgba(100, 196, 168, 0.28);
+  box-shadow: 0 10px 22px -12px rgba(14, 90, 73, 0.62), inset 0 1px 0 rgba(255, 255, 255, 0.2);
 }
 .bw-btn-primary:hover:not(:disabled) {
-  filter: brightness(1.06);
-  box-shadow: 0 16px 30px -10px rgba(17, 156, 120, 0.82), 0 0 18px -4px rgba(34, 226, 173, 0.45);
+  filter: brightness(1.07);
+  box-shadow: 0 14px 26px -10px rgba(14, 90, 73, 0.72);
 }
 
-/* Brushed Betterway Gold Highlight Button */
+/* Burnished Sovereign Champagne-Bronze Gold Button */
 .bw-btn-gold {
-  background: linear-gradient(135deg, #cfa547 0%, #f5da84 55%, #d9b356 100%);
-  color: #070e1a;
-  border-color: rgba(255, 240, 184, 0.7);
-  box-shadow: 0 12px 24px -12px rgba(154, 113, 35, 0.58), inset 0 1px 0 rgba(255, 255, 255, 0.65);
+  background: linear-gradient(135deg, #a97e2c 0%, #d4b062 55%, #b98e3a 100%);
+  color: #0b192c;
+  border-color: rgba(235, 213, 166, 0.65);
+  box-shadow: 0 10px 22px -12px rgba(125, 91, 28, 0.48), inset 0 1px 0 rgba(255, 255, 255, 0.52);
 }
 .bw-btn-gold:hover:not(:disabled) {
   filter: brightness(1.04);
-  box-shadow: 0 16px 30px -10px rgba(217, 179, 86, 0.7);
+  box-shadow: 0 14px 26px -10px rgba(196, 154, 69, 0.58);
 }
 
 .bw-btn-outline {
   background: var(--bw-card);
   color: var(--bw-ink);
   border-color: var(--bw-line-strong);
-  box-shadow: 0 4px 12px -8px rgba(7, 14, 26, 0.14);
+  box-shadow: 0 4px 12px -8px rgba(11, 25, 44, 0.12);
 }
 .bw-btn-outline:hover:not(:disabled) {
   background: var(--bw-soft);
   border-color: var(--bw-emerald);
-  color: #053b2e;
+  color: #0a3f34;
 }
 .dark .bw-btn-outline:hover:not(:disabled) {
-  color: #34f0bc;
+  color: #dfc285;
 }
 
 .bw-btn-back {
-  background: #0a0e14;
+  background: #0b192c;
   color: #ffffff;
-  border-color: rgba(34, 226, 173, 0.35);
+  border-color: rgba(223, 194, 133, 0.35);
   min-height: 36px;
   padding: 6px 15px;
   font-size: 12.5px;
-  box-shadow: 0 10px 22px -12px rgba(7, 14, 26, 0.55);
+  box-shadow: 0 10px 20px -12px rgba(7, 17, 32, 0.52);
 }
 .bw-btn-back:hover:not(:disabled) {
-  border-color: #22e2ad;
-  color: #34f0bc;
+  border-color: #c49a45;
+  color: #dfc285;
 }
 
 /* ------- Primary Topbar Capsule Pills & Rail Shortcuts ------- */
@@ -413,20 +413,20 @@ html[dir='rtl'] .font-display {
   font-size: 12.5px;
   font-weight: 700;
   white-space: nowrap;
-  box-shadow: 0 4px 12px -8px rgba(7, 14, 26, 0.12);
+  box-shadow: 0 4px 12px -8px rgba(11, 25, 44, 0.1);
   transition: all 180ms var(--bw-ease);
 }
 .bw-primary-pill:hover {
   background: var(--bw-soft);
   color: var(--bw-ink);
-  border-color: rgba(17, 156, 120, 0.45);
+  border-color: rgba(14, 90, 73, 0.42);
   transform: translateY(-1px);
 }
 .bw-primary-pill.active {
-  background: linear-gradient(145deg, #19212b 0%, #070a0f 100%);
+  background: linear-gradient(145deg, #162b47 0%, #0b192c 100%);
   color: #ffffff;
-  border-color: rgba(34, 226, 173, 0.5);
-  box-shadow: 0 10px 22px -10px rgba(5, 8, 14, 0.72), 0 0 12px -4px rgba(34, 226, 173, 0.35);
+  border-color: rgba(196, 154, 69, 0.48);
+  box-shadow: 0 10px 20px -10px rgba(7, 17, 32, 0.65);
 }
 
 .bw-tb-btn {
@@ -442,14 +442,14 @@ html[dir='rtl'] .font-display {
   font-size: 12.5px;
   font-weight: 650;
   border: 1px solid var(--bw-line);
-  box-shadow: 0 4px 12px -8px rgba(7, 14, 26, 0.12);
+  box-shadow: 0 4px 12px -8px rgba(11, 25, 44, 0.1);
   cursor: pointer;
   transition: all 180ms var(--bw-ease);
 }
 .bw-tb-btn:hover {
-  background: #0b0f15;
+  background: #0b192c;
   color: #ffffff;
-  border-color: rgba(34, 226, 173, 0.45);
+  border-color: rgba(196, 154, 69, 0.45);
   transform: translateY(-1px);
 }
 .bw-tb-btn:active {
@@ -464,12 +464,12 @@ html[dir='rtl'] .font-display {
   align-items: center;
   gap: 8px;
   padding: 14px 8px 24px;
-  background: rgba(255, 252, 244, 0.94);
+  background: rgba(248, 250, 252, 0.96);
   border-inline-end: 1px solid var(--bw-line);
   overflow-y: auto;
 }
 .dark .bw-workspace-rail {
-  background: #080b10;
+  background: #0b1626;
 }
 
 /* Dynamic Sub-Page Tab in Top Header (appears when an App is opened from Sidebar) */
@@ -489,31 +489,31 @@ html[dir='rtl'] .font-display {
   transition: all 170ms var(--bw-ease);
 }
 .dark .bw-subpage-tab {
-  background: #101620;
+  background: #0e1a2b;
   color: #cbd5e1;
-  border-color: #1f2b3a;
+  border-color: #1f3149;
 }
 .bw-subpage-tab:hover {
-  color: #090d12;
-  border-color: #119c78;
-  background: #fffdf6;
+  color: #0b192c;
+  border-color: #0e5a49;
+  background: #f3f7fa;
   transform: translateY(-1px);
 }
 .dark .bw-subpage-tab:hover {
   color: #ffffff;
-  background: #161f2d;
+  background: #15253b;
 }
 .bw-subpage-tab.active {
-  background: linear-gradient(145deg, #1b2430 0%, #06090e 100%);
-  color: #34f0bc;
-  border-color: rgba(34, 226, 173, 0.58);
-  box-shadow: 0 10px 20px -10px rgba(4, 7, 12, 0.72), inset 0 1px 0 rgba(255, 255, 255, 0.16);
+  background: linear-gradient(145deg, #162b47 0%, #0b192c 100%);
+  color: #dfc285;
+  border-color: rgba(196, 154, 69, 0.55);
+  box-shadow: 0 10px 20px -10px rgba(7, 17, 32, 0.65), inset 0 1px 0 rgba(255, 255, 255, 0.14);
 }
 .bw-subpage-tab.active-gold {
-  background: linear-gradient(145deg, #1d1a12 0%, #080705 100%);
-  color: #fbe8a4;
-  border-color: rgba(217, 179, 86, 0.62);
-  box-shadow: 0 10px 20px -10px rgba(4, 7, 12, 0.75), inset 0 1px 0 rgba(255, 240, 184, 0.2);
+  background: linear-gradient(145deg, #1c2839 0%, #0b1624 100%);
+  color: #ebd5a6;
+  border-color: rgba(196, 154, 69, 0.65);
+  box-shadow: 0 10px 20px -10px rgba(7, 17, 32, 0.68), inset 0 1px 0 rgba(235, 213, 166, 0.2);
 }
 
 .bw-rail-shortcut {
@@ -539,19 +539,19 @@ html[dir='rtl'] .font-display {
 }
 .bw-rail-shortcut:hover {
   color: #ffffff;
-  background: linear-gradient(150deg, #182029 0%, #090c11 100%);
-  border-color: rgba(34, 226, 173, 0.5);
+  background: linear-gradient(150deg, #162b47 0%, #0b192c 100%);
+  border-color: rgba(196, 154, 69, 0.45);
   transform: translateY(-1.5px);
-  box-shadow: 0 10px 20px -12px rgba(4, 8, 15, 0.7);
+  box-shadow: 0 10px 20px -12px rgba(7, 17, 32, 0.65);
 }
 .bw-rail-shortcut.active {
-  color: #34f0bc;
-  background: linear-gradient(150deg, #161e28 0%, #06080c 100%);
-  border-color: rgba(34, 226, 173, 0.55);
-  box-shadow: 0 12px 24px -10px rgba(4, 8, 15, 0.78), inset 0 1px 0 rgba(255, 255, 255, 0.18);
+  color: #dfc285;
+  background: linear-gradient(150deg, #162b47 0%, #081322 100%);
+  border-color: rgba(196, 154, 69, 0.55);
+  box-shadow: 0 12px 24px -10px rgba(7, 17, 32, 0.72), inset 0 1px 0 rgba(255, 255, 255, 0.16);
 }
 
-/* ------- Glossy Floating Black + Crisp Highlight Workspace Cards ------- */
+/* ------- Sovereign Navy + Crisp Architectural Workspace Cards ------- */
 .bw-workspace-card {
   position: relative;
   overflow: hidden;
@@ -565,13 +565,13 @@ html[dir='rtl'] .font-display {
 }
 
 .bw-workspace-card.tone-fold {
-  background: linear-gradient(152deg, #18202a 0%, #090d12 48%, #040608 100%);
+  background: linear-gradient(152deg, #162b47 0%, #0d1c31 48%, #071120 100%);
   color: #ffffff;
-  border: 1px solid rgba(34, 226, 173, 0.34);
+  border: 1px solid rgba(223, 194, 133, 0.3);
   box-shadow:
-    0 24px 52px -20px rgba(4, 8, 15, 0.8),
-    0 8px 24px -10px rgba(34, 226, 173, 0.24),
-    inset 0 1px 0 rgba(255, 255, 255, 0.24);
+    0 22px 48px -20px rgba(7, 17, 32, 0.72),
+    0 8px 22px -10px rgba(14, 90, 73, 0.18),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
 }
 .bw-workspace-card.tone-fold::before {
   content: '';
@@ -579,38 +579,38 @@ html[dir='rtl'] .font-display {
   inset: 0;
   pointer-events: none;
   background:
-    linear-gradient(125deg, rgba(255, 255, 255, 0.14) 0%, transparent 40%),
-    radial-gradient(320px circle at 88% 12%, rgba(34, 226, 173, 0.22), transparent 60%),
-    radial-gradient(280px circle at 12% 92%, rgba(217, 179, 86, 0.18), transparent 60%);
+    linear-gradient(125deg, rgba(255, 255, 255, 0.11) 0%, transparent 40%),
+    radial-gradient(320px circle at 88% 12%, rgba(71, 168, 141, 0.16), transparent 60%),
+    radial-gradient(280px circle at 12% 92%, rgba(196, 154, 69, 0.18), transparent 60%);
 }
 .bw-workspace-card.tone-mint {
   background: #ffffff;
   color: var(--bw-ink);
-  border: 1px solid #d2efe4;
+  border: 1px solid #cce0da;
   box-shadow: var(--bw-shadow-raised);
 }
 .bw-workspace-card.tone-sand {
   background: #ffffff;
   color: var(--bw-ink);
-  border: 1px solid #efe1bd;
+  border: 1px solid #e4d4b0;
   box-shadow: var(--bw-shadow-raised);
 }
 .bw-workspace-card.tone-sky {
   background: #ffffff;
   color: var(--bw-ink);
-  border: 1px solid #d9e6f6;
+  border: 1px solid #d1dce9;
   box-shadow: var(--bw-shadow-raised);
 }
 .dark .bw-workspace-card.tone-mint,
 .dark .bw-workspace-card.tone-sand,
 .dark .bw-workspace-card.tone-sky {
-  background: linear-gradient(155deg, #131a22 0%, #0b0f15 100%);
+  background: linear-gradient(155deg, #122238 0%, #0c1726 100%);
   color: #f8fafc;
   border-color: rgba(255, 255, 255, 0.1);
 }
 .bw-workspace-card:hover {
   transform: translateY(-4px);
-  border-color: #22e2ad;
+  border-color: #0e5a49;
   box-shadow: var(--bw-shadow-floating);
 }
 
@@ -629,8 +629,8 @@ html[dir='rtl'] .font-display {
 .bw-feature-card:hover,
 .bw-app-tile:hover {
   transform: translateY(-3px);
-  border-color: rgba(17, 156, 120, 0.55);
-  box-shadow: 0 22px 44px -20px rgba(7, 14, 26, 0.25), 0 0 0 1px rgba(34, 226, 173, 0.18);
+  border-color: rgba(14, 90, 73, 0.5);
+  box-shadow: 0 20px 40px -20px rgba(11, 25, 44, 0.22), 0 0 0 1px rgba(14, 90, 73, 0.14);
 }
 
 /* ------- Calm Disclosure Accordions ------- */
@@ -694,7 +694,7 @@ html[data-bw-custom-bg='solid'] body {
 }
 .bw-glossy-black {
   border-radius: calc(var(--bw-card-radius, 20px) + 2px);
-  background: linear-gradient(155deg, color-mix(in srgb, var(--bw-obsidian-custom, #090d14) 85%, #ffffff 15%) 0%, var(--bw-obsidian-custom, #090d14) 50%, #040608 100%);
+  background: linear-gradient(152deg, color-mix(in srgb, var(--bw-obsidian-custom, #0b192c) 84%, #ffffff 16%) 0%, var(--bw-obsidian-custom, #0b192c) 50%, #071120 100%);
 }
 
 html[data-bw-font-style='bold-clarity'] body {
@@ -728,7 +728,7 @@ html[data-bw-highlight='gold-ring'] .bw-app-card {
 }
 html[data-bw-highlight='spotlight'] .bw-app-card[data-pinned='true'],
 html[data-bw-highlight='spotlight'] .bw-glossy-black {
-  box-shadow: 0 0 0 2px #22e2ad, 0 0 28px -4px rgba(34, 226, 173, 0.45) !important;
+  box-shadow: 0 0 0 2px #c49a45, 0 0 24px -6px rgba(196, 154, 69, 0.4) !important;
 }
 html[data-bw-highlight='high-contrast'] .bw-card,
 html[data-bw-highlight='high-contrast'] .bw-app-card {

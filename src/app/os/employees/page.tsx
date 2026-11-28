@@ -255,7 +255,7 @@ export default function EmployeesPage() {
         subtitle="Full 8-module people & attendance suite for Betterway Mortgages LLC in Al Nasr Plaza, Oud Metha, Dubai."
         actions={
           <Link href="/os/inside" className="bw-btn bw-btn-obsidian text-xs py-2 min-h-[36px]">
-            <MessagesSquare size={13} className="text-[#34f0bc]" /> Open #attendance-checkin
+            <MessagesSquare size={13} className="text-[#64c4a8]" /> Open #attendance-checkin
           </Link>
         }
       />
@@ -287,13 +287,13 @@ export default function EmployeesPage() {
                     <div className="sm:col-span-3 p-5 flex flex-col justify-between space-y-3">
                       <div className="space-y-1.5">
                         <div className="flex items-center justify-between gap-2">
-                          <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider bg-[#d9b356]/20 text-[#fbe8a4] border border-[#d9b356]/40">
+                          <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider bg-[#c49a45]/20 text-[#dfc285] border border-[#c49a45]/40">
                             {m.designation}
                           </span>
-                          <span className="text-xs text-[#fbe8a4] font-medium">{m.name_ar}</span>
+                          <span className="text-xs text-[#dfc285] font-medium">{m.name_ar}</span>
                         </div>
                         <div className="font-display text-xl font-extrabold text-white">{m.name}</div>
-                        <div className="text-xs text-[#34f0bc] font-mono">{m.emp_code} · {ext ? `SIP Ext ${ext.ext}` : 'Co-Owner'}</div>
+                        <div className="text-xs text-[#64c4a8] font-mono">{m.emp_code} · {ext ? `SIP Ext ${ext.ext}` : 'Co-Owner'}</div>
                         <div className="flex flex-wrap gap-1.5 pt-2">
                           {(m.specialties ?? []).slice(0, 3).map((sp) => (
                             <span key={sp} className="px-2 py-0.5 rounded-lg bg-white/10 text-[10.5px] text-slate-200">{sp}</span>
@@ -308,12 +308,12 @@ export default function EmployeesPage() {
                               dialViaSip({ number: `Ext ${ext.ext}`, name: m.name, category: 'Internal Ext', direction: 'INTERNAL' });
                               toast(`Calling ${m.name} on Ext ${ext.ext}`);
                             }}
-                            className="px-3 py-1 rounded-full bg-[#119c78] text-white text-[11px] font-bold inline-flex items-center gap-1 cursor-pointer"
+                            className="px-3 py-1 rounded-full bg-[#0e5a49] text-white text-[11px] font-bold inline-flex items-center gap-1 cursor-pointer"
                           >
                             <PhoneCall size={11} /> Call Ext {ext.ext}
                           </button>
                         )}
-                        <Link href={`/os/inside?dm=${encodeURIComponent(m.id)}`} className="px-3 py-1 rounded-full bg-white/12 text-[#fbe8a4] text-[11px] font-bold inline-flex items-center gap-1">
+                        <Link href={`/os/inside?dm=${encodeURIComponent(m.id)}`} className="px-3 py-1 rounded-full bg-white/12 text-[#dfc285] text-[11px] font-bold inline-flex items-center gap-1">
                           <MessagesSquare size={11} /> Message
                         </Link>
                       </div>
@@ -337,14 +337,14 @@ export default function EmployeesPage() {
                       <img src={m.portrait_url || m.avatar_url} alt={m.name} className="w-full h-full object-cover object-top" />
                       <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/85 via-black/40 to-transparent p-4 text-white">
                         <div className="text-base font-extrabold">{m.name}</div>
-                        <div className="text-xs text-[#fbe8a4] font-semibold">{m.designation}</div>
+                        <div className="text-xs text-[#dfc285] font-semibold">{m.designation}</div>
                       </div>
                       <div className="absolute top-3 left-3"><StatusPill label={m.department} tone="navy" /></div>
                     </div>
                     <div className="p-4 flex-1 flex flex-col justify-between space-y-3 text-xs">
                       <div className="space-y-1">
                         <div className="flex items-center justify-between">
-                          <span className="font-mono font-bold text-[#119c78]">{m.emp_code}</span>
+                          <span className="font-mono font-bold text-[#0e5a49]">{m.emp_code}</span>
                           {ext && <span className="font-mono text-[11px] font-bold text-[var(--bw-muted)]">Ext {ext.ext}</span>}
                         </div>
                         <div className="text-[var(--bw-muted)]">{m.email}</div>
@@ -354,7 +354,7 @@ export default function EmployeesPage() {
                           <button
                             type="button"
                             onClick={() => dialViaSip({ number: `Ext ${ext.ext}`, name: m.name, category: 'Internal Ext', direction: 'INTERNAL' })}
-                            className="flex-1 py-1.5 rounded-full bg-[#090d13] text-[#34f0bc] font-bold inline-flex items-center justify-center gap-1 cursor-pointer"
+                            className="flex-1 py-1.5 rounded-full bg-[#0b192c] text-[#64c4a8] font-bold inline-flex items-center justify-center gap-1 cursor-pointer"
                           >
                             <PhoneCall size={11} /> SIP Ext {ext.ext}
                           </button>
@@ -381,12 +381,12 @@ export default function EmployeesPage() {
               <p className="text-xs text-[var(--bw-muted)]">Joining Date, Labour Contract, NOC, Undertaking, Basic, Home Allowance, Transport, Other, Deduction, Airfare &amp; Leave Salary.</p>
             </div>
             <a href="/api/v1/utilities/master-backup-excel" className="bw-btn bw-btn-obsidian text-xs py-1.5 min-h-[34px]">
-              <Download size={13} className="text-[#34f0bc]" /> Export HR Excel
+              <Download size={13} className="text-[#64c4a8]" /> Export HR Excel
             </a>
           </div>
           <table className="w-full text-[11.5px] min-w-[1060px]">
             <thead>
-              <tr className="bg-[#090d13] text-white text-[10px] uppercase tracking-wider">
+              <tr className="bg-[#0b192c] text-white text-[10px] uppercase tracking-wider">
                 <th className="py-2.5 px-3 text-start">Employee &amp; Designation</th>
                 <th className="py-2.5 px-2.5 text-start">Joining Date</th>
                 <th className="py-2.5 px-2.5 text-center">Labour · NOC · Undertaking</th>
@@ -415,7 +415,7 @@ export default function EmployeesPage() {
                     <td className="py-2.5 px-2.5 text-end font-mono-num">{fmtAed(basic)}</td>
                     <td className="py-2.5 px-2.5 text-end font-mono-num">{fmtAed(home + transport)}</td>
                     <td className="py-2.5 px-2.5 text-end font-mono-num">{fmtAed(other)} / AED 0</td>
-                    <td className="py-2.5 px-2.5 text-end font-mono-num font-extrabold text-[#0b5442]">{fmtAed(total)}</td>
+                    <td className="py-2.5 px-2.5 text-end font-mono-num font-extrabold text-[#0a3f34]">{fmtAed(total)}</td>
                     <td className="py-2.5 px-2.5 text-end font-mono-num text-[var(--bw-muted)]">AED 2,500 / {fmtAed(basic)}</td>
                   </tr>
                 );
@@ -431,10 +431,10 @@ export default function EmployeesPage() {
           <div className="lg:col-span-5 bw-glossy-black p-6 space-y-4">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
-                <QrCode size={16} className="text-[#fbe8a4]" />
+                <QrCode size={16} className="text-[#dfc285]" />
                 <h2 className="font-display text-sm font-extrabold text-white">Oud Metha Reception QR</h2>
               </div>
-              <span className="font-mono text-xs px-2.5 py-0.5 rounded-full bg-[#34f0bc]/15 text-[#34f0bc] border border-[#34f0bc]/35">
+              <span className="font-mono text-xs px-2.5 py-0.5 rounded-full bg-[#64c4a8]/15 text-[#64c4a8] border border-[#64c4a8]/35">
                 Rotates in {countdown}s
               </span>
             </div>
@@ -442,8 +442,8 @@ export default function EmployeesPage() {
               {qr?.qrDataUrl ? <img src={qr.qrDataUrl} alt="Oud Metha Office Rotating QR" className="w-52 h-52" /> : <div className="w-52 h-52 flex items-center justify-center text-slate-400 text-xs">Loading QR…</div>}
             </div>
             <div className="text-[11px] text-slate-300 space-y-1">
-              <div className="flex items-center gap-1.5"><MapPin size={12} className="text-[#fbe8a4]" /> Al Nasr Plaza, Plot 319-310, Oud Metha Road, Dubai</div>
-              <div className="flex items-center gap-1.5"><Wifi size={12} className="text-[#34f0bc]" /> Wi-Fi: {String(qr?.branch?.wifi_ssid || 'Betterway-OudMetha-5G')} · Geofence {String(qr?.branch?.geofence_radius_m || 150)}m</div>
+              <div className="flex items-center gap-1.5"><MapPin size={12} className="text-[#dfc285]" /> Al Nasr Plaza, Plot 319-310, Oud Metha Road, Dubai</div>
+              <div className="flex items-center gap-1.5"><Wifi size={12} className="text-[#64c4a8]" /> Wi-Fi: {String(qr?.branch?.wifi_ssid || 'Betterway-OudMetha-5G')} · Geofence {String(qr?.branch?.geofence_radius_m || 150)}m</div>
             </div>
             <div className="grid grid-cols-2 gap-2">
               <button type="button" disabled={busy} onClick={doQrCheckIn} className="bw-btn bw-btn-primary text-xs py-2.5">Scan QR Check-In</button>
@@ -499,7 +499,7 @@ export default function EmployeesPage() {
 
           <form onSubmit={submitDailyClose} className="lg:col-span-5 bw-card p-5 space-y-3">
             <div className="flex items-center justify-between">
-              <h3 className="text-sm font-extrabold flex items-center gap-1.5"><ClipboardCheck size={15} className="text-[#119c78]" /> Mandatory Daily Close</h3>
+              <h3 className="text-sm font-extrabold flex items-center gap-1.5"><ClipboardCheck size={15} className="text-[#0e5a49]" /> Mandatory Daily Close</h3>
               <StatusPill label="Before Check-Out" tone="gold" />
             </div>
             <div className="grid grid-cols-3 gap-2 text-xs">
@@ -584,7 +584,7 @@ export default function EmployeesPage() {
           </div>
           <table className="w-full min-w-[780px]">
             <thead>
-              <tr className="bg-[#090d13] text-white text-[10px] uppercase">
+              <tr className="bg-[#0b192c] text-white text-[10px] uppercase">
                 <th className="py-2.5 px-3 text-start">Employee</th>
                 <th className="py-2.5 px-3 text-start">Emirates ID</th>
                 <th className="py-2.5 px-3 text-start">Residence Visa No.</th>
@@ -617,14 +617,14 @@ export default function EmployeesPage() {
             </div>
             {hr?.canManageHr && (
               <a href={`/api/v1/hr?wpsPeriod=${new Date().toISOString().slice(0, 7)}`} className="bw-btn bw-btn-obsidian text-xs">
-                <Download size={14} className="text-[#34f0bc]" /> Download MOHRE WPS .SIF ({new Date().toISOString().slice(0, 7)})
+                <Download size={14} className="text-[#64c4a8]" /> Download MOHRE WPS .SIF ({new Date().toISOString().slice(0, 7)})
               </a>
             )}
           </div>
           <div className="grid sm:grid-cols-3 gap-3">
             <div className="p-4 rounded-xl bg-[var(--bw-soft)] border border-[var(--bw-line)]"><div className="text-[10px] uppercase text-[var(--bw-muted)] font-bold">Pay Period</div><div className="font-mono-num text-lg font-extrabold">{new Date().toISOString().slice(0, 7)}</div></div>
             <div className="p-4 rounded-xl bg-[var(--bw-soft)] border border-[var(--bw-line)]"><div className="text-[10px] uppercase text-[var(--bw-muted)] font-bold">Active Payroll Seats</div><div className="font-mono-num text-lg font-extrabold">{hr?.staff.length ?? 9} Staff</div></div>
-            <div className="p-4 rounded-xl bg-[var(--bw-soft)] border border-[var(--bw-line)]"><div className="text-[10px] uppercase text-[var(--bw-muted)] font-bold">WPS Compliance</div><div className="font-mono-num text-lg font-extrabold text-[#119c78]">MOHRE Ready</div></div>
+            <div className="p-4 rounded-xl bg-[var(--bw-soft)] border border-[var(--bw-line)]"><div className="text-[10px] uppercase text-[var(--bw-muted)] font-bold">WPS Compliance</div><div className="font-mono-num text-lg font-extrabold text-[#0e5a49]">MOHRE Ready</div></div>
           </div>
         </div>
       )}
@@ -635,7 +635,7 @@ export default function EmployeesPage() {
           <div className="flex items-center justify-between">
             <div>
               <h2 className="font-display text-sm font-extrabold flex items-center gap-1.5">
-                <Trophy size={15} className="text-[#d9b356]" /> Betterway Mortgage Advisor Leaderboard
+                <Trophy size={15} className="text-[#c49a45]" /> Betterway Mortgage Advisor Leaderboard
               </h2>
               <p className="text-[11px] text-[var(--bw-muted)]">Monthly mortgage volume targets, pre-approval speed &amp; closing performance across Dubai desks.</p>
             </div>
@@ -645,7 +645,7 @@ export default function EmployeesPage() {
             {leaderboard.map((adv, rank) => (
               <div key={adv.id} className="p-4 rounded-2xl border border-[var(--bw-line)] bg-[var(--bw-soft)]/50 flex flex-wrap items-center justify-between gap-3">
                 <div className="flex items-center gap-3">
-                  <span className={`size-8 rounded-full flex items-center justify-center font-mono-num font-extrabold text-xs ${rank === 0 ? 'bg-[#e1b84c] text-[#070e1a]' : 'bg-[#090d13] text-[#34f0bc]'}`}>
+                  <span className={`size-8 rounded-full flex items-center justify-center font-mono-num font-extrabold text-xs ${rank === 0 ? 'bg-[#c49a45] text-[#0b192c]' : 'bg-[#0b192c] text-[#64c4a8]'}`}>
                     #{rank + 1}
                   </span>
                   <StaffAvatar name={adv.name} avatarUrl={adv.avatar_url} initials={adv.initials} size="sm" />
@@ -656,7 +656,7 @@ export default function EmployeesPage() {
                 </div>
                 <div className="text-end font-mono-num">
                   <div className="text-[10px] text-[var(--bw-muted)] uppercase">Monthly Loan Target</div>
-                  <div className="font-extrabold text-sm text-[#119c78]">{fmtAed(adv.monthly_target_aed, true)}</div>
+                  <div className="font-extrabold text-sm text-[#0e5a49]">{fmtAed(adv.monthly_target_aed, true)}</div>
                 </div>
               </div>
             ))}

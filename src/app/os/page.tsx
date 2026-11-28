@@ -81,8 +81,8 @@ export default function OsApplicationsLauncherPage() {
       key: 'place',
       label: placeTitle,
       badge: 'Owner Daily Ops',
-      badgeCls: 'bg-[#fdf4dc] text-[#9a6b0d] border-[#ebd28b]',
-      iconBg: 'bg-[#b88a1e] text-white',
+      badgeCls: 'bg-[#faf6ed] text-[#7d5b1c] border-[#e0cca0]',
+      iconBg: 'bg-[#967028] text-white',
       desc: 'Daily UAE mortgage operations: Team & To-Do, Next Day Plan & Daily Report, GPS Field Meetings, APL Brochures, Word/JPEG Forms, 5-Track Disbursals & DSA',
       href: '/os/place',
       icon: Crown,
@@ -92,8 +92,8 @@ export default function OsApplicationsLauncherPage() {
       key: 'corner',
       label: cornerTitle,
       badge: 'Owner Private HQ',
-      badgeCls: 'bg-[#090d13] text-[#fbe8a4] border-[#d9b356]/50',
-      iconBg: 'bg-[#090d13] text-[#fbe8a4] border border-[#d9b356]/40',
+      badgeCls: 'bg-[#0b192c] text-[#dfc285] border-[#c49a45]/50',
+      iconBg: 'bg-[#0b192c] text-[#dfc285] border border-[#c49a45]/40',
       desc: `${isShabib ? "Shabib's" : "Warda's"} Client — Privacy Fast Track, 1–12 Gold-Rush Kanban, Batch Sheet Upload, Owner Approvals (1-of-2 & 2-of-2) & Consolidated VAT`,
       href: '/os/corner',
       icon: Lock,
@@ -104,7 +104,7 @@ export default function OsApplicationsLauncherPage() {
       label: 'Command Center',
       badge: 'Live War Room',
       badgeCls: 'bg-[#f1f5f9] text-[#334155] border-[#dce3ec]',
-      iconBg: 'bg-[#0e172a] text-white',
+      iconBg: 'bg-[#10233e] text-white',
       desc: 'Live daily enquiry ticker, 12-stage lead counts, critical alerts, office attendance & field GPS radar',
       href: '/os/command-center',
       icon: Radar,
@@ -114,8 +114,8 @@ export default function OsApplicationsLauncherPage() {
       key: 'dashboard',
       label: 'Dashboard',
       badge: 'Daily Pulse',
-      badgeCls: 'bg-[#e3fbf3] text-[#05523d] border-[#9be8ce]',
-      iconBg: 'bg-[#0a6b4b] text-white',
+      badgeCls: 'bg-[#eaf4f1] text-[#0a3f34] border-[#bddcd3]',
+      iconBg: 'bg-[#0e5243] text-white',
       desc: 'Loan book, commissions, 12-stage funnel, My Tasks Today, Team Task Monitor & Assigned Clients',
       href: '/os/dashboard',
       icon: LayoutDashboard,
@@ -125,8 +125,8 @@ export default function OsApplicationsLauncherPage() {
       key: 'master-log',
       label: 'Master Log (CORE)',
       badge: 'Direct Owner Control',
-      badgeCls: 'bg-[#e3fbf3] text-[#05523d] border-[#9be8ce]',
-      iconBg: 'bg-[#0a6b4b] text-white',
+      badgeCls: 'bg-[#eaf4f1] text-[#0a3f34] border-[#bddcd3]',
+      iconBg: 'bg-[#0e5243] text-white',
       desc: '22 headquarters registries: Communities, Developers, Oud Metha Geofence, Departments, COA, VAT, 24 Banks',
       href: '/os/master-log',
       icon: Database,
@@ -136,8 +136,8 @@ export default function OsApplicationsLauncherPage() {
       key: 'pipeline',
       label: '12-Step Pipeline',
       badge: '12 Stages',
-      badgeCls: 'bg-[#e3fbf3] text-[#05523d] border-[#9be8ce]',
-      iconBg: 'bg-[#0a6b4b] text-white',
+      badgeCls: 'bg-[#eaf4f1] text-[#0a3f34] border-[#bddcd3]',
+      iconBg: 'bg-[#0e5243] text-white',
       desc: 'Exact 1–12 mortgage Kanban from Enquiry, Eligibility, Pick Banks & Papers to NOC, Commission & Care',
       href: '/os/pipeline',
       icon: KanbanSquare,
@@ -147,8 +147,8 @@ export default function OsApplicationsLauncherPage() {
       key: 'coordinator',
       label: 'Coordinator & Logins',
       badge: '32-Col Excel Flow',
-      badgeCls: 'bg-[#e3fbf3] text-[#05523d] border-[#9be8ce]',
-      iconBg: 'bg-[#0d4f49] text-[#34f0bc]',
+      badgeCls: 'bg-[#eaf4f1] text-[#0a3f34] border-[#bddcd3]',
+      iconBg: 'bg-[#0d4f49] text-[#64c4a8]',
       desc: 'CRM Excel 32-column Logins (7 tx types, 5 loan types, Banks 1/2/3), Docs Full/Incomplete, Valuation, FOL, Disbursed & Payouts',
       href: '/os/coordinator',
       icon: ClipboardList,
@@ -159,7 +159,7 @@ export default function OsApplicationsLauncherPage() {
       label: 'CRM',
       badge: '100% Daily Log',
       badgeCls: 'bg-[#f1f5f9] text-[#334155] border-[#dce3ec]',
-      iconBg: 'bg-[#0284c7] text-white',
+      iconBg: 'bg-[#1d3d63] text-white',
       desc: '100% exact daily enquiry ledger (Website, Chat, WhatsApp, Bayut, Referrals), Masked Client Vault & calls',
       href: '/os/crm',
       icon: UserPlus,
@@ -169,8 +169,8 @@ export default function OsApplicationsLauncherPage() {
       key: 'mortgage-desk',
       label: 'Mortgage Exclusive Desk',
       badge: '18 Banks + 159 RMs',
-      badgeCls: 'bg-[#fdf4dc] text-[#9a6b0d] border-[#ebd28b]',
-      iconBg: 'bg-[#b88a1e] text-white',
+      badgeCls: 'bg-[#faf6ed] text-[#7d5b1c] border-[#e0cca0]',
+      iconBg: 'bg-[#967028] text-white',
       desc: '3-Bank Auto-Eco Proposal Maker, 60-Sec Matcher & Policy Finder, 2026 18-Bank Matrix, 159 Direct RMs, CBUAE/CC/CTO & Valuations',
       href: '/os/mortgage-desk',
       icon: Calculator,
@@ -180,8 +180,8 @@ export default function OsApplicationsLauncherPage() {
       key: 'calculators',
       label: 'Calculators & Tools',
       badge: '12 UAE Tools',
-      badgeCls: 'bg-[#e3fbf3] text-[#05523d] border-[#9be8ce]',
-      iconBg: 'bg-[#0b5442] text-[#34f0bc]',
+      badgeCls: 'bg-[#eaf4f1] text-[#0a3f34] border-[#bddcd3]',
+      iconBg: 'bg-[#0a3f34] text-[#64c4a8]',
       desc: 'All 12 UAE Mortgage Calculators: EMI, 50% DBR, DLD/ADM Cash-to-Close, Buyout/Equity, Prepayment, Rent vs Buy, Yield/DSCR, EIBOR Shock & Golden Visa',
       href: '/os/calculators',
       icon: Calculator,
@@ -192,7 +192,7 @@ export default function OsApplicationsLauncherPage() {
       label: 'Sales & Services',
       badge: 'Quotes & Partners',
       badgeCls: 'bg-[#f1f5f9] text-[#334155] border-[#dce3ec]',
-      iconBg: 'bg-[#0e172a] text-white',
+      iconBg: 'bg-[#10233e] text-white',
       desc: 'Branded bank comparison proposals, Live Borrower Share Card, Takaful/Wills/Golden Visa cross-sell & RERA Partner Referral Hub',
       href: '/os/sales',
       icon: Briefcase,
@@ -203,7 +203,7 @@ export default function OsApplicationsLauncherPage() {
       label: 'Client Document Vault',
       badge: 'Private Storage',
       badgeCls: 'bg-[#f1f5f9] text-[#334155] border-[#dce3ec]',
-      iconBg: 'bg-[#0e172a] text-white',
+      iconBg: 'bg-[#10233e] text-white',
       desc: 'Per-client encrypted Supabase vault: Passport, EID, Visa, Payslips, Salary Cert, 6m Bank, AECB, Form F, Oqood, Title Deed',
       href: '/os/vault',
       icon: FileLock2,
@@ -213,8 +213,8 @@ export default function OsApplicationsLauncherPage() {
       key: 'accounts',
       label: 'Accounts',
       badge: 'FTA VAT & GL',
-      badgeCls: 'bg-[#fdf4dc] text-[#9a6b0d] border-[#ebd28b]',
-      iconBg: 'bg-[#b88a1e] text-white',
+      badgeCls: 'bg-[#faf6ed] text-[#7d5b1c] border-[#e0cca0]',
+      iconBg: 'bg-[#967028] text-white',
       desc: 'Double-entry GL, Bank DSA Invoices, UAE 5% VAT 201, PINT-AE XML & Corporate-Account-Only payout guard',
       href: '/os/accounts',
       icon: Wallet,
@@ -225,7 +225,7 @@ export default function OsApplicationsLauncherPage() {
       label: 'Compliance',
       badge: 'CBUAE & PDPL',
       badgeCls: 'bg-[#f1f5f9] text-[#334155] border-[#dce3ec]',
-      iconBg: 'bg-[#6d28d9] text-white',
+      iconBg: 'bg-[#243852] text-white',
       desc: 'CBUAE Joint KFS gate, AML sanctions screening, goAML XML, UAE PDPL audit trail & 2-of-2 Owner Delete Bin',
       href: '/os/compliance',
       icon: ShieldCheck,
@@ -235,8 +235,8 @@ export default function OsApplicationsLauncherPage() {
       key: 'website-studio',
       label: 'Website & Social Studio',
       badge: 'Two-Way Live Sync',
-      badgeCls: 'bg-[#e3fbf3] text-[#05523d] border-[#9be8ce]',
-      iconBg: 'bg-[#0a6b4b] text-white',
+      badgeCls: 'bg-[#eaf4f1] text-[#0a3f34] border-[#bddcd3]',
+      iconBg: 'bg-[#0e5243] text-white',
       desc: 'Live two-way control of betterwaymortgages.com (Hot Offers, Bank Rates, Banners, Team) & Social UTM Campaigns',
       href: '/os/website-studio',
       icon: Globe,
@@ -247,7 +247,7 @@ export default function OsApplicationsLauncherPage() {
       label: 'Employees & Attendance',
       badge: 'Oud Metha QR',
       badgeCls: 'bg-[#f1f5f9] text-[#334155] border-[#dce3ec]',
-      iconBg: 'bg-[#0e172a] text-white',
+      iconBg: 'bg-[#10233e] text-white',
       desc: '8-member studio roster, 20s Oud Metha Office QR + Geofence check-in, EID/Visa docs, Leave, Salary & MOHRE WPS .SIF',
       href: '/os/employees',
       icon: Users,
@@ -257,8 +257,8 @@ export default function OsApplicationsLauncherPage() {
       key: 'inside',
       label: 'Betterway Inside',
       badge: 'Channels & DMs',
-      badgeCls: 'bg-[#e3fbf3] text-[#05523d] border-[#9be8ce]',
-      iconBg: 'bg-[#0284c7] text-white',
+      badgeCls: 'bg-[#eaf4f1] text-[#0a3f34] border-[#bddcd3]',
+      iconBg: 'bg-[#1d3d63] text-white',
       desc: 'Dedicated company channels, 1-on-1 staff DMs, live #attendance-checkin Oud Metha QR feed, mortgage case cards & instant SIP dialing',
       href: '/os/inside',
       icon: MessagesSquare,
@@ -268,8 +268,8 @@ export default function OsApplicationsLauncherPage() {
       key: 'sip-calls',
       label: 'Betterway SIP Calls',
       badge: 'Cloud PBX + 159 RMs',
-      badgeCls: 'bg-[#fdf4dc] text-[#9a6b0d] border-[#ebd28b]',
-      iconBg: 'bg-[#090d13] text-[#34f0bc] border border-[#22e2ad]/45',
+      badgeCls: 'bg-[#faf6ed] text-[#7d5b1c] border-[#e0cca0]',
+      iconBg: 'bg-[#0b192c] text-[#64c4a8] border border-[#47a88d]/45',
       desc: 'UAE WebRTC SIP Softphone with DTMF keypad, Mute/Hold/Transfer, Extensions 100–108, 1-click 159 Bank RMs speed-dial & CDR call logs',
       href: '/os/sip-calls',
       icon: PhoneCall,
@@ -279,8 +279,8 @@ export default function OsApplicationsLauncherPage() {
       key: 'field-gps',
       label: 'Field GPS Services',
       badge: 'Live GPS + SOS',
-      badgeCls: 'bg-[#e3fbf3] text-[#05523d] border-[#9be8ce]',
-      iconBg: 'bg-[#0a6b4b] text-white',
+      badgeCls: 'bg-[#eaf4f1] text-[#0a3f34] border-[#bddcd3]',
+      iconBg: 'bg-[#0e5243] text-white',
       desc: 'Track field staff live at Banks, Valuations, Developers & DLD Trustees with GPS pins & 1-Tap SOS alert',
       href: '/os/field-gps',
       icon: MapPin,
@@ -291,7 +291,7 @@ export default function OsApplicationsLauncherPage() {
       label: 'Underwriting Case Playbook',
       badge: 'Credit Desk Library',
       badgeCls: 'bg-[#f1f5f9] text-[#334155] border-[#dce3ec]',
-      iconBg: 'bg-[#0b5442] text-[#fbe8a4]',
+      iconBg: 'bg-[#0a3f34] text-[#dfc285]',
       desc: '15 years of verified Betterway UAE mortgage structuring playbooks, bank exception precedents & credit desk memos — PDPL redacted',
       href: '/os/ai',
       icon: BookOpen,
@@ -301,8 +301,8 @@ export default function OsApplicationsLauncherPage() {
       key: 'utilities',
       label: 'Utilities & Documents',
       badge: '17-Sheet + 2026 Matrix',
-      badgeCls: 'bg-[#fdf4dc] text-[#9a6b0d] border-[#ebd28b]',
-      iconBg: 'bg-[#b88a1e] text-white',
+      badgeCls: 'bg-[#faf6ed] text-[#7d5b1c] border-[#e0cca0]',
+      iconBg: 'bg-[#967028] text-white',
       desc: '17-Sheet Master Excel & Daily Backup, Recreated 2026 Bank Matrix (.xlsx), Word/JPEG Studio, 9-Language Translator & OCR',
       href: '/os/utilities',
       icon: Wrench,
@@ -313,7 +313,7 @@ export default function OsApplicationsLauncherPage() {
       label: 'Settings',
       badge: 'System Config',
       badgeCls: 'bg-[#f1f5f9] text-[#334155] border-[#dce3ec]',
-      iconBg: 'bg-[#0e172a] text-white',
+      iconBg: 'bg-[#10233e] text-white',
       desc: 'Oud Metha Wi-Fi/Geofence calibration, Reception QR rules, Website sync HMAC & Corporate IBAN whitelist',
       href: '/os/settings',
       icon: Settings,
@@ -366,11 +366,11 @@ export default function OsApplicationsLauncherPage() {
           <div className="flex items-center gap-4 min-w-0">
             {user && <StaffAvatar name={user.name} avatarUrl={user.avatarUrl} initials={user.initials} size="lg" />}
             <div className="min-w-0">
-              <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-white/10 border border-white/15 text-[10px] font-extrabold uppercase tracking-[0.12em] text-[#fbe8a4]">
-                <Crown size={11} className="text-[#d9b356]" /> {placeTitle.toUpperCase()} · EQUAL CO-OWNER CONTROL
+              <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-white/10 border border-white/15 text-[10px] font-extrabold uppercase tracking-[0.12em] text-[#dfc285]">
+                <Crown size={11} className="text-[#c49a45]" /> {placeTitle.toUpperCase()} · EQUAL CO-OWNER CONTROL
               </div>
               <h1 className="font-display text-2xl sm:text-[30px] font-extrabold tracking-[-0.03em] text-white mt-1 leading-tight">
-                Welcome back, <span className="text-[#34f0bc]">{user?.name || 'Betterway Team'}</span>
+                Welcome back, <span className="text-[#64c4a8]">{user?.name || 'Betterway Team'}</span>
               </h1>
               <p className="text-xs text-slate-300 mt-0.5">
                 {user?.designation || 'Mortgage Advisory'} · Al Nasr Plaza, Oud Metha, Dubai · Connected live to betterwaymortgages.com
@@ -386,7 +386,7 @@ export default function OsApplicationsLauncherPage() {
                 </Link>
                 <Link
                   href="/os/corner"
-                  className="px-3.5 py-2 rounded-full bg-white/10 hover:bg-white/18 border border-[#d9b356]/45 text-[#fbe8a4] text-xs font-extrabold inline-flex items-center gap-1.5 transition"
+                  className="px-3.5 py-2 rounded-full bg-white/10 hover:bg-white/18 border border-[#c49a45]/45 text-[#dfc285] text-xs font-extrabold inline-flex items-center gap-1.5 transition"
                 >
                   <Lock size={12} /> {cornerTitle}
                 </Link>
@@ -416,19 +416,19 @@ export default function OsApplicationsLauncherPage() {
           </div>
           <div className="rounded-2xl bg-white/[0.05] border border-white/10 px-4 py-3.5">
             <div className="text-[10px] font-bold uppercase tracking-[0.1em] text-slate-400">Expected Bank DSA</div>
-            <div className="font-display text-xl sm:text-2xl font-extrabold font-mono-num text-[#34f0bc] mt-1">
+            <div className="font-display text-xl sm:text-2xl font-extrabold font-mono-num text-[#64c4a8] mt-1">
               {fmtAed(kpis?.expectedDsaAed ?? 0, true)}
             </div>
           </div>
           <div className="rounded-2xl bg-white/[0.05] border border-white/10 px-4 py-3.5">
             <div className="text-[10px] font-bold uppercase tracking-[0.1em] text-slate-400">Today&apos;s Enquiries (GST)</div>
-            <div className="font-display text-xl sm:text-2xl font-extrabold font-mono-num text-[#34f0bc] mt-1">
+            <div className="font-display text-xl sm:text-2xl font-extrabold font-mono-num text-[#64c4a8] mt-1">
               {kpis?.todayEnquiriesCount ?? 0} Logged
             </div>
           </div>
           <div className="rounded-2xl bg-white/[0.05] border border-white/10 px-4 py-3.5">
             <div className="text-[10px] font-bold uppercase tracking-[0.1em] text-slate-400">Pending Owner Approvals</div>
-            <div className="font-display text-xl sm:text-2xl font-extrabold font-mono-num text-[#fbe8a4] mt-1">
+            <div className="font-display text-xl sm:text-2xl font-extrabold font-mono-num text-[#dfc285] mt-1">
               {kpis?.pendingApprovalsCount ?? 0} Waiting
             </div>
           </div>
@@ -441,8 +441,8 @@ export default function OsApplicationsLauncherPage() {
       {/* Highlighted Dedicated Live Communications Zone — Betterway Inside & SIP Voice (Elevated Apart from Standard Apps) */}
       <section aria-label="Betterway Live Communications Suite" className="space-y-2.5">
         <div className="flex flex-wrap items-center justify-between gap-2">
-          <div className="inline-flex items-center gap-2 text-[11px] font-extrabold uppercase tracking-[0.16em] text-[#0b5442] dark:text-[#34f0bc]">
-            <span className="size-2 rounded-full bg-[#22e2ad] animate-pulse" />
+          <div className="inline-flex items-center gap-2 text-[11px] font-extrabold uppercase tracking-[0.16em] text-[#0a3f34] dark:text-[#64c4a8]">
+            <span className="size-2 rounded-full bg-[#47a88d] animate-pulse" />
             Live Desk Communications · Direct Team Messaging &amp; UAE Cloud SIP
           </div>
           <span className="text-[11px] font-mono-num font-bold text-[var(--bw-muted)]">
@@ -454,21 +454,21 @@ export default function OsApplicationsLauncherPage() {
           {/* Highlighted Card 1: Betterway Inside */}
           <Link
             href="/os/inside"
-            className="group bw-glossy-black p-5 sm:p-6 flex flex-col justify-between gap-4 border-[#22e2ad]/45 hover:border-[#34f0bc]"
+            className="group bw-glossy-black p-5 sm:p-6 flex flex-col justify-between gap-4 border-[#47a88d]/45 hover:border-[#64c4a8]"
           >
             <div className="flex items-start justify-between gap-3">
               <div className="flex items-center gap-3.5 min-w-0">
-                <span className="size-13 rounded-2xl bg-gradient-to-br from-[#119c78]/35 to-[#063a2d]/60 border border-[#34f0bc]/50 text-[#34f0bc] flex items-center justify-center shadow-lg shrink-0">
+                <span className="size-13 rounded-2xl bg-gradient-to-br from-[#0e5a49]/35 to-[#0c2838]/60 border border-[#64c4a8]/50 text-[#64c4a8] flex items-center justify-center shadow-lg shrink-0">
                   <AnimatedAppIcon name="inside" size={26} />
                 </span>
                 <div className="min-w-0">
-                  <div className="inline-flex items-center gap-1.5 text-[10px] font-extrabold uppercase tracking-[0.14em] text-[#34f0bc]">
-                    <span className="size-1.5 rounded-full bg-[#34f0bc] animate-pulse" /> Dedicated Messaging Studio
+                  <div className="inline-flex items-center gap-1.5 text-[10px] font-extrabold uppercase tracking-[0.14em] text-[#64c4a8]">
+                    <span className="size-1.5 rounded-full bg-[#64c4a8] animate-pulse" /> Dedicated Messaging Studio
                   </div>
                   <h2 className="font-display text-xl font-extrabold text-white mt-0.5 truncate">Betterway Inside</h2>
                 </div>
               </div>
-              <span className="px-2.5 py-1 rounded-full bg-[#22e2ad]/15 border border-[#22e2ad]/40 text-[#34f0bc] text-[10px] font-extrabold whitespace-nowrap">
+              <span className="px-2.5 py-1 rounded-full bg-[#47a88d]/15 border border-[#47a88d]/40 text-[#64c4a8] text-[10px] font-extrabold whitespace-nowrap">
                 8 Channels · 7 DMs
               </span>
             </div>
@@ -479,11 +479,11 @@ export default function OsApplicationsLauncherPage() {
 
             <div className="flex flex-wrap items-center justify-between gap-2 pt-3 border-t border-white/12">
               <div className="flex flex-wrap gap-1.5 text-[10.5px] font-bold">
-                <span className="px-2.5 py-0.5 rounded-full bg-white/10 text-[#fbe8a4]">#attendance-checkin</span>
+                <span className="px-2.5 py-0.5 rounded-full bg-white/10 text-[#dfc285]">#attendance-checkin</span>
                 <span className="px-2.5 py-0.5 rounded-full bg-white/10 text-slate-200">#bank-rm-updates</span>
-                {isOwner && <span className="px-2.5 py-0.5 rounded-full bg-[#d9b356]/20 text-[#fbe8a4]">#owners-private</span>}
+                {isOwner && <span className="px-2.5 py-0.5 rounded-full bg-[#c49a45]/20 text-[#dfc285]">#owners-private</span>}
               </div>
-              <span className="inline-flex items-center gap-1 text-xs font-extrabold text-[#34f0bc] group-hover:translate-x-0.5 transition">
+              <span className="inline-flex items-center gap-1 text-xs font-extrabold text-[#64c4a8] group-hover:translate-x-0.5 transition">
                 Open Inside <ArrowUpRight size={14} />
               </span>
             </div>
@@ -492,21 +492,21 @@ export default function OsApplicationsLauncherPage() {
           {/* Highlighted Card 2: Betterway SIP Calls */}
           <Link
             href="/os/sip-calls"
-            className="group bw-glossy-black p-5 sm:p-6 flex flex-col justify-between gap-4 border-[#d9b356]/45 hover:border-[#fbe8a4]"
+            className="group bw-glossy-black p-5 sm:p-6 flex flex-col justify-between gap-4 border-[#c49a45]/45 hover:border-[#dfc285]"
           >
             <div className="flex items-start justify-between gap-3">
               <div className="flex items-center gap-3.5 min-w-0">
-                <span className="size-13 rounded-2xl bg-gradient-to-br from-[#d9b356]/30 to-[#4a370f]/60 border border-[#fbe8a4]/50 text-[#fbe8a4] flex items-center justify-center shadow-lg shrink-0">
+                <span className="size-13 rounded-2xl bg-gradient-to-br from-[#c49a45]/30 to-[#3a2d15]/60 border border-[#dfc285]/50 text-[#dfc285] flex items-center justify-center shadow-lg shrink-0">
                   <AnimatedAppIcon name="sip-calls" size={26} />
                 </span>
                 <div className="min-w-0">
-                  <div className="inline-flex items-center gap-1.5 text-[10px] font-extrabold uppercase tracking-[0.14em] text-[#fbe8a4]">
-                    <span className="size-1.5 rounded-full bg-[#34f0bc] animate-pulse" /> UAE Cloud PBX &amp; Softphone
+                  <div className="inline-flex items-center gap-1.5 text-[10px] font-extrabold uppercase tracking-[0.14em] text-[#dfc285]">
+                    <span className="size-1.5 rounded-full bg-[#64c4a8] animate-pulse" /> UAE Cloud PBX &amp; Softphone
                   </div>
                   <h2 className="font-display text-xl font-extrabold text-white mt-0.5 truncate">Betterway SIP Calls</h2>
                 </div>
               </div>
-              <span className="px-2.5 py-1 rounded-full bg-[#d9b356]/20 border border-[#fbe8a4]/40 text-[#fbe8a4] text-[10px] font-extrabold whitespace-nowrap">
+              <span className="px-2.5 py-1 rounded-full bg-[#c49a45]/20 border border-[#dfc285]/40 text-[#dfc285] text-[10px] font-extrabold whitespace-nowrap">
                 Ext {myExt.ext} · 159 Bank RMs
               </span>
             </div>
@@ -517,11 +517,11 @@ export default function OsApplicationsLauncherPage() {
 
             <div className="flex flex-wrap items-center justify-between gap-2 pt-3 border-t border-white/12">
               <div className="flex flex-wrap gap-1.5 text-[10.5px] font-bold">
-                <span className="px-2.5 py-0.5 rounded-full bg-white/10 text-[#34f0bc]">SIP Registered</span>
+                <span className="px-2.5 py-0.5 rounded-full bg-white/10 text-[#64c4a8]">SIP Registered</span>
                 <span className="px-2.5 py-0.5 rounded-full bg-white/10 text-slate-200">PDPL CDR Log</span>
-                <span className="px-2.5 py-0.5 rounded-full bg-white/10 text-[#fbe8a4]">Etisalat / du / 3CX</span>
+                <span className="px-2.5 py-0.5 rounded-full bg-white/10 text-[#dfc285]">Etisalat / du / 3CX</span>
               </div>
-              <span className="inline-flex items-center gap-1 text-xs font-extrabold text-[#fbe8a4] group-hover:translate-x-0.5 transition">
+              <span className="inline-flex items-center gap-1 text-xs font-extrabold text-[#dfc285] group-hover:translate-x-0.5 transition">
                 Open SIP Desk <ArrowUpRight size={14} />
               </span>
             </div>
@@ -532,7 +532,7 @@ export default function OsApplicationsLauncherPage() {
       {/* Pinned Important Options Strip (Instant Access + Customisable) */}
       {pinnedApps.length > 0 && (
         <div className="flex flex-wrap items-center gap-2">
-          <span className="inline-flex items-center gap-1 text-[10.5px] font-extrabold uppercase tracking-[0.12em] text-[#9a7123] dark:text-[#fbe8a4]">
+          <span className="inline-flex items-center gap-1 text-[10.5px] font-extrabold uppercase tracking-[0.12em] text-[#7d5b1c] dark:text-[#dfc285]">
             <Pin size={11} /> Pinned:
           </span>
           {pinnedApps.map((p) => {
@@ -540,9 +540,9 @@ export default function OsApplicationsLauncherPage() {
               <Link
                 key={`pin-${p.key}`}
                 href={p.href}
-                className="group inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white dark:bg-[#0e131b] border border-[#d9b356]/60 hover:bg-[#090d13] hover:text-[#34f0bc] text-[11.5px] font-bold shadow-xs transition"
+                className="group inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white dark:bg-[#0f2036] border border-[#c49a45]/60 hover:bg-[#0b192c] hover:text-[#64c4a8] text-[11.5px] font-bold shadow-xs transition"
               >
-                <AnimatedAppIcon name={p.key} size={14} className="text-[#119c78]" /> {p.label}
+                <AnimatedAppIcon name={p.key} size={14} className="text-[#0e5a49]" /> {p.label}
               </Link>
             );
           })}
@@ -559,11 +559,11 @@ export default function OsApplicationsLauncherPage() {
           <button
             type="button"
             onClick={() => setCustomizerOpen(true)}
-            className="inline-flex items-center gap-1.5 h-9 px-3.5 rounded-full bg-[#090d13] text-[#fbe8a4] border border-[#d9b356]/45 text-xs font-extrabold cursor-pointer hover:brightness-110 transition"
+            className="inline-flex items-center gap-1.5 h-9 px-3.5 rounded-full bg-[#0b192c] text-[#dfc285] border border-[#c49a45]/45 text-xs font-extrabold cursor-pointer hover:brightness-110 transition"
           >
-            <Palette size={13} className="text-[#34f0bc]" /> Customise UI
+            <Palette size={13} className="text-[#64c4a8]" /> Customise UI
           </button>
-          <label className="flex items-center gap-2 px-3.5 h-9 rounded-full bg-white dark:bg-[#0d1219] border border-[var(--bw-line)] focus-within:border-[#119c78] flex-1 sm:flex-none sm:w-60 shadow-xs">
+          <label className="flex items-center gap-2 px-3.5 h-9 rounded-full bg-white dark:bg-[#0e1d33] border border-[var(--bw-line)] focus-within:border-[#0e5a49] flex-1 sm:flex-none sm:w-60 shadow-xs">
             <Search size={13} className="text-[var(--bw-muted)] shrink-0" />
             <input
               value={filter}
@@ -592,7 +592,7 @@ export default function OsApplicationsLauncherPage() {
                 handleDropApp(app.key);
               }}
               className={`bw-app-card group rounded-[var(--bw-card-radius,20px)] bg-[var(--bw-card)] border ${
-                isPinned ? 'border-[#d9b356]' : 'border-[var(--bw-line)]'
+                isPinned ? 'border-[#c49a45]' : 'border-[var(--bw-line)]'
               } hover:border-[var(--bw-emerald)] p-5 shadow-[var(--bw-shadow-raised)] hover:shadow-[var(--bw-shadow-floating)] hover:-translate-y-0.5 transition flex flex-col justify-between min-h-[196px]`}
             >
               <div className="space-y-3.5">
@@ -611,7 +611,7 @@ export default function OsApplicationsLauncherPage() {
                       aria-label={isPinned ? `Unpin ${app.label}` : `Pin ${app.label}`}
                       className={`size-6 rounded-full flex items-center justify-center cursor-pointer transition ${
                         isPinned
-                          ? 'bg-[#090d13] text-[#fbe8a4]'
+                          ? 'bg-[#0b192c] text-[#dfc285]'
                           : 'opacity-50 group-hover:opacity-100 hover:bg-[var(--bw-soft)] text-[var(--bw-muted)]'
                       }`}
                     >

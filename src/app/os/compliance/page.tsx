@@ -198,7 +198,7 @@ export default function CompliancePage() {
         <div className="grid lg:grid-cols-3 gap-5">
           <form onSubmit={importWatchlist} className="bw-card p-5 space-y-3">
             <h2 className="text-sm font-extrabold flex items-center gap-1.5">
-              <Upload size={14} className="text-[#119c78]" /> Import UAE EOCN / UN Watchlist
+              <Upload size={14} className="text-[#0e5a49]" /> Import UAE EOCN / UN Watchlist
             </h2>
             <textarea rows={5} value={rawWatchlist} onChange={(e) => setRawWatchlist(e.target.value)} placeholder="Paste one full name or entity per line..." className="w-full rounded-xl border border-[var(--bw-line-strong)] bg-[var(--bw-soft)] p-3 text-xs" required />
             <button className="bw-btn bw-btn-obsidian w-full text-xs">Import Watchlist ({data?.sanctions.length ?? 0} Loaded)</button>
@@ -222,7 +222,7 @@ export default function CompliancePage() {
                     <td className="py-2.5 pr-3 font-mono text-[11px]">{String(c.check_type)}</td>
                     <td className="py-2.5 pr-3"><StatusPill label={String(c.status)} tone={String(c.status) === 'Flagged' ? 'red' : 'emerald'} /></td>
                     <td className="py-2.5">
-                      <a href={`/api/v1/compliance?goamlId=${String(c.id)}`} className="inline-flex items-center gap-1 text-[11px] font-bold text-[#119c78] hover:underline">
+                      <a href={`/api/v1/compliance?goamlId=${String(c.id)}`} className="inline-flex items-center gap-1 text-[11px] font-bold text-[#0e5a49] hover:underline">
                         <Download size={12} /> Download XML
                       </a>
                     </td>
@@ -263,7 +263,7 @@ export default function CompliancePage() {
             {OFFICIAL_ROSTER.filter((m) => m.id !== 'USR-00').map((m) => (
               <div key={m.id} className="p-4 rounded-2xl border border-[var(--bw-line)] bg-[var(--bw-soft)]/50 space-y-1.5">
                 <div className="flex items-center justify-between">
-                  <span className="font-mono font-bold text-[#119c78]">{m.empCode}</span>
+                  <span className="font-mono font-bold text-[#0e5a49]">{m.empCode}</span>
                   <StatusPill label="Verified" tone="emerald" />
                 </div>
                 <div className="font-extrabold text-sm">{m.name}</div>
@@ -313,7 +313,7 @@ export default function CompliancePage() {
                     <tr key={String(a.id)} className="border-b border-[var(--bw-line)]/60">
                       <td className="py-2 pr-3 font-mono text-[11px]">{String(a.created_at).slice(0, 19).replace('T', ' ')}</td>
                       <td className="py-2 pr-3 font-semibold">{String(a.actor_role || a.actor_id || 'SYSTEM')}</td>
-                      <td className="py-2 pr-3 font-mono text-[#119c78]">{String(a.action)}</td>
+                      <td className="py-2 pr-3 font-mono text-[#0e5a49]">{String(a.action)}</td>
                       <td className="py-2 font-mono">{String(a.entity_table)}</td>
                     </tr>
                   ))}

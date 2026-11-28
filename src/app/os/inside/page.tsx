@@ -403,7 +403,7 @@ function BetterwayInsideInner() {
         actions={
           <div className="flex flex-wrap gap-2">
             <Link href="/os/sip-calls" className="bw-btn bw-btn-obsidian text-xs py-2 min-h-[36px]">
-              <PhoneCall size={13} className="text-[#34f0bc]" /> Open SIP Call Desk
+              <PhoneCall size={13} className="text-[#64c4a8]" /> Open SIP Call Desk
             </Link>
           </div>
         }
@@ -413,7 +413,7 @@ function BetterwayInsideInner() {
       <div className="grid lg:grid-cols-12 gap-4 items-stretch">
         {/* LEFT RAIL: Search, Tabs, Channels & Direct Messages */}
         <aside className="lg:col-span-4 xl:col-span-3 bw-card p-3.5 flex flex-col gap-3 min-h-[600px] max-h-[720px]">
-          <label className="flex items-center gap-2 px-3 h-9 rounded-full bg-[var(--bw-soft)] border border-[var(--bw-line)] focus-within:border-[#119c78]">
+          <label className="flex items-center gap-2 px-3 h-9 rounded-full bg-[var(--bw-soft)] border border-[var(--bw-line)] focus-within:border-[#0e5a49]">
             <Search size={13} className="text-[var(--bw-muted)] shrink-0" />
             <input
               value={searchQ}
@@ -437,7 +437,7 @@ function BetterwayInsideInner() {
                 type="button"
                 onClick={() => setRailTab(id)}
                 className={`py-1.5 rounded-lg cursor-pointer transition ${
-                  railTab === id ? 'bg-[#090d13] text-[#34f0bc] shadow-xs' : 'text-[var(--bw-muted)] hover:text-[var(--bw-ink)]'
+                  railTab === id ? 'bg-[#0b192c] text-[#64c4a8] shadow-xs' : 'text-[var(--bw-muted)] hover:text-[var(--bw-ink)]'
                 }`}
               >
                 {lbl}
@@ -463,24 +463,24 @@ function BetterwayInsideInner() {
                       onClick={() => setActiveThread(c.id)}
                       className={`w-full p-2.5 rounded-xl text-start transition cursor-pointer ${
                         active
-                          ? 'bg-[#090d13] text-white shadow-md'
+                          ? 'bg-[#0b192c] text-white shadow-md'
                           : 'hover:bg-[var(--bw-soft)] text-[var(--bw-ink)]'
                       }`}
                     >
                       <div className="flex items-center justify-between gap-1.5">
                         <span className="font-bold text-xs flex items-center gap-1.5 truncate">
                           {c.ownerOnly ? (
-                            <Lock size={12} className={active ? 'text-[#fbe8a4]' : 'text-[#b88a1e]'} />
+                            <Lock size={12} className={active ? 'text-[#dfc285]' : 'text-[#967028]'} />
                           ) : (
-                            <Hash size={12} className={active ? 'text-[#34f0bc]' : 'text-[#119c78]'} />
+                            <Hash size={12} className={active ? 'text-[#64c4a8]' : 'text-[#0e5a49]'} />
                           )}
                           <span className="truncate">{c.label}</span>
                         </span>
                         <div className="flex items-center gap-1 shrink-0">
-                          {pinned && <Pin size={10} className={active ? 'text-[#fbe8a4]' : 'text-[#b88a1e]'} />}
+                          {pinned && <Pin size={10} className={active ? 'text-[#dfc285]' : 'text-[#967028]'} />}
                           <span
                             className={`px-1.5 py-0.5 rounded-full text-[9px] font-bold ${
-                              active ? 'bg-white/12 text-[#34f0bc]' : 'bg-[var(--bw-soft)] text-[var(--bw-muted)]'
+                              active ? 'bg-white/12 text-[#64c4a8]' : 'bg-[var(--bw-soft)] text-[var(--bw-muted)]'
                             }`}
                           >
                             {c.badge}
@@ -514,19 +514,19 @@ function BetterwayInsideInner() {
                       onClick={() => setActiveThread(dmId)}
                       className={`w-full p-2.5 rounded-xl text-start transition cursor-pointer flex items-center gap-2.5 ${
                         active
-                          ? 'bg-[#090d13] text-white shadow-md'
+                          ? 'bg-[#0b192c] text-white shadow-md'
                           : 'hover:bg-[var(--bw-soft)] text-[var(--bw-ink)]'
                       }`}
                     >
                       <div className="relative shrink-0">
                         <StaffAvatar name={peer.name} avatarUrl={peer.avatarUrl} initials={peer.initials} size="sm" />
-                        <span className="absolute -bottom-0.5 -end-0.5 size-2.5 rounded-full bg-[#22e2ad] ring-2 ring-white dark:ring-[#090d13]" />
+                        <span className="absolute -bottom-0.5 -end-0.5 size-2.5 rounded-full bg-[#47a88d] ring-2 ring-white dark:ring-[#0b192c]" />
                       </div>
                       <div className="min-w-0 flex-1">
                         <div className="flex items-center justify-between gap-1">
                           <span className="font-bold text-xs truncate">{peer.name}</span>
                           {ext && (
-                            <span className={`text-[9.5px] font-mono-num font-bold ${active ? 'text-[#fbe8a4]' : 'text-[var(--bw-muted)]'}`}>
+                            <span className={`text-[9.5px] font-mono-num font-bold ${active ? 'text-[#dfc285]' : 'text-[var(--bw-muted)]'}`}>
                               Ext {ext.ext}
                             </span>
                           )}
@@ -550,7 +550,7 @@ function BetterwayInsideInner() {
           } bw-card flex flex-col overflow-hidden min-h-[600px] max-h-[720px]`}
         >
           {/* Glossy Black Thread Header */}
-          <div className="px-5 py-3.5 bg-[#090d13] text-white border-b border-white/10 flex flex-wrap items-center justify-between gap-3">
+          <div className="px-5 py-3.5 bg-[#0b192c] text-white border-b border-white/10 flex flex-wrap items-center justify-between gap-3">
             <div className="flex items-center gap-3 min-w-0">
               {activeDmPeer ? (
                 <StaffAvatar
@@ -560,15 +560,15 @@ function BetterwayInsideInner() {
                   size="sm"
                 />
               ) : (
-                <span className="size-9 rounded-xl bg-white/10 border border-[#22e2ad]/40 text-[#34f0bc] flex items-center justify-center shrink-0">
-                  {activeChannelDef?.ownerOnly ? <Lock size={16} className="text-[#fbe8a4]" /> : <Hash size={16} />}
+                <span className="size-9 rounded-xl bg-white/10 border border-[#47a88d]/40 text-[#64c4a8] flex items-center justify-center shrink-0">
+                  {activeChannelDef?.ownerOnly ? <Lock size={16} className="text-[#dfc285]" /> : <Hash size={16} />}
                 </span>
               )}
               <div className="min-w-0">
                 <div className="font-display font-extrabold text-sm flex items-center gap-2 truncate">
                   {activeDmPeer ? activeDmPeer.name : `#${activeChannelDef?.label || activeThread}`}
                   {activeDmPeer && (
-                    <span className="px-2 py-0.5 rounded-full bg-[#22e2ad]/15 text-[#34f0bc] text-[9.5px] font-bold">
+                    <span className="px-2 py-0.5 rounded-full bg-[#47a88d]/15 text-[#64c4a8] text-[9.5px] font-bold">
                       Online · {activePeerExt ? `Ext ${activePeerExt.ext}` : 'Dubai'}
                     </span>
                   )}
@@ -594,14 +594,14 @@ function BetterwayInsideInner() {
                     });
                     toast(`Dialing ${activeDmPeer.name} on SIP Ext ${activePeerExt.ext}`);
                   }}
-                  className="px-3 py-1.5 rounded-full bg-[#119c78] hover:bg-[#14b58b] text-white text-[11px] font-extrabold inline-flex items-center gap-1.5 cursor-pointer transition"
+                  className="px-3 py-1.5 rounded-full bg-[#0e5a49] hover:bg-[#14705b] text-white text-[11px] font-extrabold inline-flex items-center gap-1.5 cursor-pointer transition"
                 >
                   <Phone size={12} /> Call Ext {activePeerExt.ext}
                 </button>
               ) : (
                 <Link
                   href="/os/sip-calls"
-                  className="px-3 py-1.5 rounded-full bg-white/10 hover:bg-white/18 text-[#34f0bc] text-[11px] font-bold inline-flex items-center gap-1.5 transition"
+                  className="px-3 py-1.5 rounded-full bg-white/10 hover:bg-white/18 text-[#64c4a8] text-[11px] font-bold inline-flex items-center gap-1.5 transition"
                 >
                   <PhoneCall size={12} /> SIP Desk
                 </Link>
@@ -611,7 +611,7 @@ function BetterwayInsideInner() {
                 type="button"
                 onClick={() => togglePinThread(activeThread)}
                 className={`size-8 rounded-full flex items-center justify-center cursor-pointer transition ${
-                  isPinned ? 'bg-[#fbe8a4] text-[#070e1a]' : 'bg-white/10 hover:bg-white/20 text-slate-200'
+                  isPinned ? 'bg-[#dfc285] text-[#0b192c]' : 'bg-white/10 hover:bg-white/20 text-slate-200'
                 }`}
                 title={isPinned ? 'Unpin thread' : 'Pin thread'}
               >
@@ -621,7 +621,7 @@ function BetterwayInsideInner() {
                 type="button"
                 onClick={() => toggleMuteThread(activeThread)}
                 className={`size-8 rounded-full flex items-center justify-center cursor-pointer transition ${
-                  isMuted ? 'bg-amber-500/30 text-[#fbe8a4]' : 'bg-white/10 hover:bg-white/20 text-slate-200'
+                  isMuted ? 'bg-amber-500/30 text-[#dfc285]' : 'bg-white/10 hover:bg-white/20 text-slate-200'
                 }`}
                 title={isMuted ? 'Unmute notifications' : 'Mute notifications'}
               >
@@ -631,7 +631,7 @@ function BetterwayInsideInner() {
                 type="button"
                 onClick={() => setShowInfo((v) => !v)}
                 className={`size-8 rounded-full flex items-center justify-center cursor-pointer transition ${
-                  showInfo ? 'bg-[#22e2ad] text-[#070e1a]' : 'bg-white/10 hover:bg-white/20 text-slate-200'
+                  showInfo ? 'bg-[#47a88d] text-[#0b192c]' : 'bg-white/10 hover:bg-white/20 text-slate-200'
                 }`}
                 title="Thread details"
               >
@@ -644,7 +644,7 @@ function BetterwayInsideInner() {
           <div className="flex-1 overflow-y-auto p-4 sm:p-5 space-y-5 bg-[var(--bw-soft)]/35">
             {groupedMessages.length === 0 ? (
               <div className="py-16 text-center space-y-2 max-w-md mx-auto">
-                <div className="size-12 rounded-2xl bg-[#090d13] text-[#34f0bc] flex items-center justify-center mx-auto shadow-md">
+                <div className="size-12 rounded-2xl bg-[#0b192c] text-[#64c4a8] flex items-center justify-center mx-auto shadow-md">
                   <MessagesSquare size={20} />
                 </div>
                 <div className="font-display font-extrabold text-sm">
@@ -660,7 +660,7 @@ function BetterwayInsideInner() {
               groupedMessages.map((grp) => (
                 <div key={grp.day} className="space-y-3">
                   <div className="flex items-center justify-center">
-                    <span className="px-3 py-0.5 rounded-full bg-white dark:bg-[#111722] border border-[var(--bw-line)] text-[10px] font-extrabold text-[var(--bw-muted)] shadow-xs">
+                    <span className="px-3 py-0.5 rounded-full bg-white dark:bg-[#122642] border border-[var(--bw-line)] text-[10px] font-extrabold text-[var(--bw-muted)] shadow-xs">
                       {grp.day}
                     </span>
                   </div>
@@ -683,17 +683,17 @@ function BetterwayInsideInner() {
                               m.message_kind === 'SOS'
                                 ? 'bg-rose-50 dark:bg-rose-950/50 border-rose-400 text-rose-950 dark:text-rose-100'
                                 : m.message_kind === 'CHECKIN_CARD'
-                                  ? 'bg-[#e3fbf3] dark:bg-[#0d2b24] border-[#9be8ce] dark:border-[#1c5c4b]'
+                                  ? 'bg-[#eaf4f1] dark:bg-[#0e2d29] border-[#bddcd3] dark:border-[#1c4b43]'
                                   : m.message_kind === 'ALERT'
-                                    ? 'bg-[#fdf4dc] dark:bg-[#2a210f] border-[#d9b356]'
+                                    ? 'bg-[#faf6ed] dark:bg-[#2a210f] border-[#c49a45]'
                                     : isMine
-                                      ? 'bg-[#090d13] text-white border-[#22e2ad]/35'
-                                      : 'bg-white dark:bg-[#111722] border-[var(--bw-line)] text-[var(--bw-ink)]'
+                                      ? 'bg-[#0b192c] text-white border-[#47a88d]/35'
+                                      : 'bg-white dark:bg-[#122642] border-[var(--bw-line)] text-[var(--bw-ink)]'
                             }`}
                           >
                             <div className="flex items-center justify-between gap-3 mb-1">
                               <div className="font-extrabold text-[11px] flex items-center gap-1.5">
-                                <span className={isMine && m.message_kind === 'TEXT' ? 'text-[#34f0bc]' : ''}>
+                                <span className={isMine && m.message_kind === 'TEXT' ? 'text-[#64c4a8]' : ''}>
                                   {m.sender_name}
                                 </span>
                                 {m.message_kind === 'CHECKIN_CARD' && <StatusPill label="Verified QR Check-In" tone="emerald" />}
@@ -706,13 +706,13 @@ function BetterwayInsideInner() {
                                 }`}
                               >
                                 {formatDubaiTime(m.created_at)}
-                                {isMine && <CheckCheck size={12} className="text-[#34f0bc]" />}
+                                {isMine && <CheckCheck size={12} className="text-[#64c4a8]" />}
                               </span>
                             </div>
 
                             {m.metadata?.replyTo && (
                               <div
-                                className={`mb-2 px-2.5 py-1.5 rounded-lg border-s-2 border-[#22e2ad] text-[10.5px] ${
+                                className={`mb-2 px-2.5 py-1.5 rounded-lg border-s-2 border-[#47a88d] text-[10.5px] ${
                                   isMine && m.message_kind === 'TEXT' ? 'bg-white/10 text-slate-300' : 'bg-[var(--bw-soft)] text-[var(--bw-muted)]'
                                 }`}
                               >
@@ -724,10 +724,10 @@ function BetterwayInsideInner() {
                             {m.metadata?.cardType === 'CASE_CARD' && (
                               <div
                                 className={`mb-2 p-2.5 rounded-xl border text-[11px] space-y-1 ${
-                                  isMine ? 'bg-white/8 border-[#fbe8a4]/40' : 'bg-[var(--bw-soft)] border-[var(--bw-line)]'
+                                  isMine ? 'bg-white/8 border-[#dfc285]/40' : 'bg-[var(--bw-soft)] border-[var(--bw-line)]'
                                 }`}
                               >
-                                <div className="font-extrabold flex items-center gap-1.5 text-[#119c78]">
+                                <div className="font-extrabold flex items-center gap-1.5 text-[#0e5a49]">
                                   <Briefcase size={12} /> Mortgage Case · {m.metadata.caseCode}
                                 </div>
                                 <div className="font-mono-num font-bold">
@@ -743,7 +743,7 @@ function BetterwayInsideInner() {
                                 href={m.metadata.mapsLink}
                                 target="_blank"
                                 rel="noreferrer"
-                                className="mt-2 inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#119c78] text-white text-[10.5px] font-bold hover:brightness-110"
+                                className="mt-2 inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#0e5a49] text-white text-[10.5px] font-bold hover:brightness-110"
                               >
                                 <MapPin size={11} /> Open Live Pin in Google Maps <ExternalLink size={10} />
                               </a>
@@ -761,8 +761,8 @@ function BetterwayInsideInner() {
                                   onClick={() => void toggleReaction(m.id, emoji)}
                                   className={`px-2 py-0.5 rounded-full text-[11px] font-bold border cursor-pointer transition ${
                                     reacted
-                                      ? 'bg-[#090d13] text-[#34f0bc] border-[#22e2ad]/50'
-                                      : 'bg-white dark:bg-[#111722] border-[var(--bw-line)]'
+                                      ? 'bg-[#0b192c] text-[#64c4a8] border-[#47a88d]/50'
+                                      : 'bg-white dark:bg-[#122642] border-[var(--bw-line)]'
                                   }`}
                                 >
                                   {emoji} {users.length}
@@ -815,7 +815,7 @@ function BetterwayInsideInner() {
               className="px-4 py-3 bg-[#fdf8e8] dark:bg-[#121822] border-t border-[var(--bw-line)] space-y-2 text-xs"
             >
               <div className="flex items-center justify-between">
-                <span className="font-extrabold flex items-center gap-1.5 text-[#0b5442] dark:text-[#34f0bc]">
+                <span className="font-extrabold flex items-center gap-1.5 text-[#0a3f34] dark:text-[#64c4a8]">
                   <Briefcase size={13} /> Share Mortgage Case Update Card
                 </span>
                 <button type="button" onClick={() => setShowCaseComposer(false)} className="cursor-pointer">
@@ -827,19 +827,19 @@ function BetterwayInsideInner() {
                   value={caseDraft.caseCode}
                   onChange={(e) => setCaseDraft({ ...caseDraft, caseCode: e.target.value })}
                   placeholder="Case Ref"
-                  className="h-8 px-2.5 rounded-lg border border-[var(--bw-line)] bg-white dark:bg-[#0d1219] font-mono-num font-bold"
+                  className="h-8 px-2.5 rounded-lg border border-[var(--bw-line)] bg-white dark:bg-[#0e1d33] font-mono-num font-bold"
                 />
                 <input
                   value={caseDraft.bankName}
                   onChange={(e) => setCaseDraft({ ...caseDraft, bankName: e.target.value })}
                   placeholder="UAE Bank"
-                  className="h-8 px-2.5 rounded-lg border border-[var(--bw-line)] bg-white dark:bg-[#0d1219]"
+                  className="h-8 px-2.5 rounded-lg border border-[var(--bw-line)] bg-white dark:bg-[#0e1d33]"
                 />
                 <input
                   value={caseDraft.loanAmount}
                   onChange={(e) => setCaseDraft({ ...caseDraft, loanAmount: e.target.value })}
                   placeholder="Loan Amount"
-                  className="h-8 px-2.5 rounded-lg border border-[var(--bw-line)] bg-white dark:bg-[#0d1219] font-mono-num"
+                  className="h-8 px-2.5 rounded-lg border border-[var(--bw-line)] bg-white dark:bg-[#0e1d33] font-mono-num"
                 />
               </div>
               <div className="flex gap-2">
@@ -847,9 +847,9 @@ function BetterwayInsideInner() {
                   value={caseDraft.note}
                   onChange={(e) => setCaseDraft({ ...caseDraft, note: e.target.value })}
                   placeholder="Status milestone note..."
-                  className="flex-1 h-8 px-2.5 rounded-lg border border-[var(--bw-line)] bg-white dark:bg-[#0d1219]"
+                  className="flex-1 h-8 px-2.5 rounded-lg border border-[var(--bw-line)] bg-white dark:bg-[#0e1d33]"
                 />
-                <button type="submit" className="px-4 h-8 rounded-lg bg-[#090d13] text-[#34f0bc] font-extrabold cursor-pointer">
+                <button type="submit" className="px-4 h-8 rounded-lg bg-[#0b192c] text-[#64c4a8] font-extrabold cursor-pointer">
                   Post Card
                 </button>
               </div>
@@ -858,7 +858,7 @@ function BetterwayInsideInner() {
 
           {/* Reply Preview Bar */}
           {replyTo && (
-            <div className="px-4 py-2 bg-[#e3fbf3] dark:bg-[#0d2b24] border-t border-[#9be8ce] flex items-center justify-between text-[11px]">
+            <div className="px-4 py-2 bg-[#eaf4f1] dark:bg-[#0e2d29] border-t border-[#bddcd3] flex items-center justify-between text-[11px]">
               <div className="truncate">
                 <strong>Replying to {replyTo.senderName}:</strong> {replyTo.excerpt}
               </div>
@@ -870,7 +870,7 @@ function BetterwayInsideInner() {
 
           {/* Emoji Picker Strip */}
           {showEmojiBar && (
-            <div className="px-4 py-2 bg-white dark:bg-[#0d1219] border-t border-[var(--bw-line)] flex flex-wrap gap-1.5">
+            <div className="px-4 py-2 bg-white dark:bg-[#0e1d33] border-t border-[var(--bw-line)] flex flex-wrap gap-1.5">
               {COMPOSER_EMOJIS.map((em) => (
                 <button
                   key={em}
@@ -885,19 +885,19 @@ function BetterwayInsideInner() {
           )}
 
           {/* Composer Bar */}
-          <form onSubmit={handleSendText} className="p-3.5 bg-white dark:bg-[#0d1219] border-t border-[var(--bw-line)] space-y-2">
+          <form onSubmit={handleSendText} className="p-3.5 bg-white dark:bg-[#0e1d33] border-t border-[var(--bw-line)] space-y-2">
             <div className="flex flex-wrap items-center gap-1.5 text-[11px]">
               <button
                 type="button"
                 onClick={() => setShowCaseComposer((v) => !v)}
-                className="px-2.5 py-1 rounded-full bg-[var(--bw-soft)] hover:bg-[#090d13] hover:text-[#34f0bc] border border-[var(--bw-line)] font-bold inline-flex items-center gap-1 cursor-pointer transition"
+                className="px-2.5 py-1 rounded-full bg-[var(--bw-soft)] hover:bg-[#0b192c] hover:text-[#64c4a8] border border-[var(--bw-line)] font-bold inline-flex items-center gap-1 cursor-pointer transition"
               >
                 <Briefcase size={11} /> Case Card
               </button>
               <button
                 type="button"
                 onClick={handleShareLocation}
-                className="px-2.5 py-1 rounded-full bg-[var(--bw-soft)] hover:bg-[#090d13] hover:text-[#34f0bc] border border-[var(--bw-line)] font-bold inline-flex items-center gap-1 cursor-pointer transition"
+                className="px-2.5 py-1 rounded-full bg-[var(--bw-soft)] hover:bg-[#0b192c] hover:text-[#64c4a8] border border-[var(--bw-line)] font-bold inline-flex items-center gap-1 cursor-pointer transition"
               >
                 <MapPin size={11} /> Live Pin
               </button>
@@ -909,7 +909,7 @@ function BetterwayInsideInner() {
                     messageKind: 'ALERT',
                   })
                 }
-                className="px-2.5 py-1 rounded-full bg-[#fdf4dc] hover:bg-[#090d13] hover:text-[#fbe8a4] text-[#9a6b0d] border border-[#ebd28b] font-bold inline-flex items-center gap-1 cursor-pointer transition"
+                className="px-2.5 py-1 rounded-full bg-[#faf6ed] hover:bg-[#0b192c] hover:text-[#dfc285] text-[#7d5b1c] border border-[#e0cca0] font-bold inline-flex items-center gap-1 cursor-pointer transition"
               >
                 <ShieldAlert size={11} /> SLA Alert
               </button>
@@ -931,14 +931,14 @@ function BetterwayInsideInner() {
                     ? `Direct message ${activeDmPeer.name}...`
                     : `Message #${activeChannelDef?.label || activeThread}...`
                 }
-                className="flex-1 h-10 px-4 rounded-full border border-[var(--bw-line-strong)] bg-[var(--bw-soft)] text-xs outline-none focus:border-[#119c78]"
+                className="flex-1 h-10 px-4 rounded-full border border-[var(--bw-line-strong)] bg-[var(--bw-soft)] text-xs outline-none focus:border-[#0e5a49]"
               />
               <button
                 type="submit"
                 disabled={sending || !body.trim()}
                 className="bw-btn bw-btn-obsidian h-10 px-5 text-xs disabled:opacity-50"
               >
-                <Send size={13} className="text-[#34f0bc]" /> Send
+                <Send size={13} className="text-[#64c4a8]" /> Send
               </button>
             </div>
           </form>
@@ -1019,7 +1019,7 @@ function BetterwayInsideInner() {
                             direction: 'INTERNAL',
                           })
                         }
-                        className="size-7 rounded-full bg-[#090d13] text-[#34f0bc] flex items-center justify-center cursor-pointer shrink-0"
+                        className="size-7 rounded-full bg-[#0b192c] text-[#64c4a8] flex items-center justify-center cursor-pointer shrink-0"
                         title={`Call ${ext.name}`}
                       >
                         <Phone size={11} />
@@ -1030,7 +1030,7 @@ function BetterwayInsideInner() {
                 <div className="pt-2 border-t border-[var(--bw-line)]">
                   <Link
                     href="/os/mortgage-desk?tab=rms"
-                    className="inline-flex items-center gap-1.5 text-[11px] font-extrabold text-[#119c78] hover:underline"
+                    className="inline-flex items-center gap-1.5 text-[11px] font-extrabold text-[#0e5a49] hover:underline"
                   >
                     <Building2 size={12} /> 159 Direct UAE Bank RMs →
                   </Link>

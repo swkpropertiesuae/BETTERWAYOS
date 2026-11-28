@@ -156,10 +156,10 @@ export default function UnderwritingCasePlaybookPage() {
           <GlossyBlackCard className="p-5 sm:p-6 space-y-3.5" accent="dual">
             <form onSubmit={lookupStructuringBrief} className="space-y-3.5">
               <div className="flex flex-wrap items-center justify-between gap-2">
-                <h2 className="font-display text-sm font-extrabold flex items-center gap-2 text-[#fbe8a4]">
-                  <Landmark size={16} className="text-[#34f0bc]" /> Search Betterway Structuring Precedents
+                <h2 className="font-display text-sm font-extrabold flex items-center gap-2 text-[#dfc285]">
+                  <Landmark size={16} className="text-[#64c4a8]" /> Search Betterway Structuring Precedents
                 </h2>
-                <span className="inline-flex items-center gap-1 text-[10.5px] font-bold px-2.5 py-0.5 rounded-full bg-emerald-500/20 text-[#34f0bc] border border-emerald-400/30">
+                <span className="inline-flex items-center gap-1 text-[10.5px] font-bold px-2.5 py-0.5 rounded-full bg-emerald-500/20 text-[#64c4a8] border border-emerald-400/30">
                   <ShieldCheck size={12} /> PDPL PII Redaction On
                 </span>
               </div>
@@ -187,7 +187,7 @@ export default function UnderwritingCasePlaybookPage() {
                 value={prompt}
                 onChange={(e) => setPrompt(e.target.value)}
                 placeholder="Describe borrower profile, salary/CTO, DBR liabilities, community, LTV goal... (Any EID/phone/IBAN pasted is automatically masked)"
-                className="w-full rounded-xl bg-white/10 border border-white/15 p-3 text-xs text-white placeholder:text-slate-400 outline-none focus:border-[#22e2ad]"
+                className="w-full rounded-xl bg-white/10 border border-white/15 p-3 text-xs text-white placeholder:text-slate-400 outline-none focus:border-[#47a88d]"
                 required
               />
               <button

@@ -120,8 +120,8 @@ export default function SalesAndServicesPage() {
           <GlossyBlackCard className="p-5 sm:p-6 space-y-4" accent="dual">
             <div className="flex flex-wrap items-center justify-between gap-3">
               <div>
-                <div className="inline-flex items-center gap-1.5 text-[10.5px] font-extrabold uppercase tracking-[0.14em] text-[#34f0bc]">
-                  <Share2 size={13} className="text-[#fbe8a4]" /> White-Label Borrower &amp; Partner Live Status Share
+                <div className="inline-flex items-center gap-1.5 text-[10.5px] font-extrabold uppercase tracking-[0.14em] text-[#64c4a8]">
+                  <Share2 size={13} className="text-[#dfc285]" /> White-Label Borrower &amp; Partner Live Status Share
                 </div>
                 <h2 className="font-display text-lg font-extrabold text-white mt-0.5">PDPL-Safe Mortgage Progress Card</h2>
                 <p className="text-xs text-slate-300">Send borrowers or referring RERA partners an instant milestone update — zero internal DSA exposed.</p>
@@ -153,11 +153,11 @@ export default function SalesAndServicesPage() {
                 </div>
                 <div className="p-3 rounded-xl bg-white/[0.06]">
                   <div className="text-[10px] text-slate-400 uppercase">Current Stage</div>
-                  <div className="font-bold text-[#34f0bc] mt-0.5">{trackedCase.stage_code}</div>
+                  <div className="font-bold text-[#64c4a8] mt-0.5">{trackedCase.stage_code}</div>
                 </div>
                 <div className="p-3 rounded-xl bg-white/[0.06]">
                   <div className="text-[10px] text-slate-400 uppercase">Loan Facility</div>
-                  <div className="font-mono-num font-bold text-[#fbe8a4] mt-0.5">{fmtAed(trackedCase.requested_loan_aed)}</div>
+                  <div className="font-mono-num font-bold text-[#dfc285] mt-0.5">{fmtAed(trackedCase.requested_loan_aed)}</div>
                 </div>
                 <div className="p-3 rounded-xl bg-white/[0.06]">
                   <div className="text-[10px] text-slate-400 uppercase">Next Step</div>
@@ -170,13 +170,13 @@ export default function SalesAndServicesPage() {
           <div className="bw-card p-5 space-y-3 text-xs">
             <div className="flex items-center justify-between">
               <h3 className="font-display text-sm font-extrabold">Active Mortgage Deal Files ({data.cases.length})</h3>
-              <Link href="/os/pipeline" className="text-xs font-extrabold text-[#119c78] hover:underline">Open 12-Step Pipeline →</Link>
+              <Link href="/os/pipeline" className="text-xs font-extrabold text-[#0e5a49] hover:underline">Open 12-Step Pipeline →</Link>
             </div>
             <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3">
               {data.cases.map((c) => (
                 <div key={c.id} className="p-4 rounded-2xl border border-[var(--bw-line)] bg-[var(--bw-soft)]/50 space-y-1.5">
                   <div className="flex items-center justify-between gap-2">
-                    <span className="font-mono-num font-bold text-[#119c78]">{c.case_code}</span>
+                    <span className="font-mono-num font-bold text-[#0e5a49]">{c.case_code}</span>
                     <StatusPill label={c.stage_code} tone="emerald" />
                   </div>
                   <div className="font-extrabold text-sm">{c.borrower_name}</div>
@@ -207,7 +207,7 @@ export default function SalesAndServicesPage() {
             ].map((doc) => (
               <div key={doc.code} className="p-4 rounded-2xl border border-[var(--bw-line)] bg-[var(--bw-soft)]/50 space-y-2">
                 <div className="flex items-center justify-between">
-                  <span className="font-mono font-bold text-[#119c78]">{doc.code}</span>
+                  <span className="font-mono font-bold text-[#0e5a49]">{doc.code}</span>
                   <StatusPill label={doc.status} tone="emerald" />
                 </div>
                 <div className="font-extrabold text-sm">{doc.title}</div>
@@ -233,7 +233,7 @@ export default function SalesAndServicesPage() {
           <div className="grid sm:grid-cols-3 gap-3">
             {['Client Consultation (Oud Metha / Zoom)', 'Bank RM & FOL Signing Session', 'Panel Valuation Inspection Access'].map((m) => (
               <div key={m} className="p-4 rounded-2xl border border-[var(--bw-line)] bg-[var(--bw-soft)]/50 font-bold flex items-center gap-2">
-                <CheckCircle2 size={14} className="text-[#119c78] shrink-0" /> {m}
+                <CheckCircle2 size={14} className="text-[#0e5a49] shrink-0" /> {m}
               </div>
             ))}
           </div>
@@ -258,7 +258,7 @@ export default function SalesAndServicesPage() {
             ].map((o) => (
               <div key={o.bank} className="p-4 rounded-2xl border border-[var(--bw-line)] bg-[var(--bw-soft)]/50 space-y-1">
                 <div className="font-extrabold text-sm">{o.bank}</div>
-                <div className="font-mono-num text-[#119c78] font-extrabold">{o.rate}</div>
+                <div className="font-mono-num text-[#0e5a49] font-extrabold">{o.rate}</div>
                 <div className="text-[11px] text-[var(--bw-muted)]">{o.tat}</div>
               </div>
             ))}
@@ -274,7 +274,7 @@ export default function SalesAndServicesPage() {
           <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-3 pt-1">
             {['Form F Signed & Expiry Valid (> 45d)', 'Seller Title Deed / Oqood Verified', 'Seller Existing Mortgage Liability Letter', '10% Deposit Cheque Copy Logged'].map((chk) => (
               <div key={chk} className="p-3.5 rounded-xl border border-[var(--bw-line)] bg-[var(--bw-soft)]/60 font-bold flex items-center gap-2">
-                <CheckCircle2 size={14} className="text-[#119c78] shrink-0" /> {chk}
+                <CheckCircle2 size={14} className="text-[#0e5a49] shrink-0" /> {chk}
               </div>
             ))}
           </div>
@@ -320,7 +320,7 @@ export default function SalesAndServicesPage() {
           <div className="grid sm:grid-cols-3 gap-3">
             {['FOL Rate & Revert Margin Audited', 'Life & Property Takaful Assigned', 'Security Cheque & Salary Transfer Verified'].map((f) => (
               <div key={f} className="p-3.5 rounded-xl bg-[var(--bw-soft)] border border-[var(--bw-line)] font-bold flex items-center gap-2">
-                <CheckCircle2 size={14} className="text-[#119c78] shrink-0" /> {f}
+                <CheckCircle2 size={14} className="text-[#0e5a49] shrink-0" /> {f}
               </div>
             ))}
           </div>
@@ -368,7 +368,7 @@ export default function SalesAndServicesPage() {
         <div className="grid lg:grid-cols-12 gap-6">
           <form onSubmit={registerReferral} className="lg:col-span-5 bw-card p-5 space-y-3 text-xs">
             <h3 className="font-display text-sm font-extrabold flex items-center gap-1.5">
-              <Handshake size={15} className="text-[#119c78]" /> 60-Second RERA Broker Referral Lock
+              <Handshake size={15} className="text-[#0e5a49]" /> 60-Second RERA Broker Referral Lock
             </h3>
             <input required value={refForm.contactName} onChange={(e) => setRefForm({ ...refForm, contactName: e.target.value })} placeholder="Referred Borrower Name *" className="w-full h-9 px-3 rounded-xl border border-[var(--bw-line-strong)] bg-[var(--bw-soft)]" />
             <input required value={refForm.contactPhone} onChange={(e) => setRefForm({ ...refForm, contactPhone: e.target.value })} placeholder="Borrower Phone *" className="w-full h-9 px-3 rounded-xl border border-[var(--bw-line-strong)] bg-[var(--bw-soft)]" />
@@ -415,7 +415,7 @@ export default function SalesAndServicesPage() {
 
           <div className="bw-card p-5 space-y-3">
             <h3 className="font-display text-sm font-extrabold flex items-center gap-1.5">
-              <Award size={14} className="text-[#d9b356]" /> Post-Mortgage Value-Add Desk
+              <Award size={14} className="text-[#c49a45]" /> Post-Mortgage Value-Add Desk
             </h3>
             <div className="grid sm:grid-cols-3 gap-2.5">
               <div className="p-3.5 rounded-xl bg-[var(--bw-soft)] border border-[var(--bw-line)]">

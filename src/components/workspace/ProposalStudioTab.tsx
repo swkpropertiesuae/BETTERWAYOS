@@ -185,7 +185,7 @@ export function ProposalStudioTab() {
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div>
           <h2 className="font-display text-lg font-extrabold flex items-center gap-2">
-            <FileSpreadsheet size={17} className="text-[#119c78]" /> 3-Bank Auto-Eco Proposal Maker (Excel · Word · JPEG · WhatsApp)
+            <FileSpreadsheet size={17} className="text-[#0e5a49]" /> 3-Bank Auto-Eco Proposal Maker (Excel · Word · JPEG · WhatsApp)
           </h2>
           <p className="text-xs text-[var(--bw-muted)]">
             Built directly from Betterway&apos;s Proposal Sheet Auto-Eco workbook: compare 3 UAE banks side-by-side with full 300-month amortization, life insurance, optional personal loan top-up, and client document checklist.
@@ -268,7 +268,7 @@ export function ProposalStudioTab() {
         </div>
         <div>
           <label className="font-bold block mb-1">Calculated Loan (AED)</label>
-          <div className="h-9 px-3 rounded-xl bg-[#0a0e14] text-[#34f0bc] font-mono-num font-extrabold flex items-center">
+          <div className="h-9 px-3 rounded-xl bg-[#0b192c] text-[#64c4a8] font-mono-num font-extrabold flex items-center">
             {fmtAed(loanAmountAed)}
           </div>
         </div>
@@ -281,7 +281,7 @@ export function ProposalStudioTab() {
           <input type="number" value={lumpSumMonth12Aed} onChange={(e) => setLumpSumMonth12Aed(Number(e.target.value))} placeholder="0" className="w-full h-9 px-3 rounded-xl border border-[var(--bw-line-strong)] bg-[var(--bw-soft)] font-mono-num" />
         </div>
         <div className="flex items-end">
-          <div className="w-full h-9 px-3 rounded-xl bg-[var(--bw-mint-soft)] border border-[#9be8ce] text-[#053b2e] font-bold flex items-center justify-center">
+          <div className="w-full h-9 px-3 rounded-xl bg-[var(--bw-mint-soft)] border border-[#bddcd3] text-[#0a3f34] font-bold flex items-center justify-center">
             Down Payment: {fmtAed(Math.max(0, propertyValueAed - loanAmountAed), true)}
           </div>
         </div>
@@ -296,11 +296,11 @@ export function ProposalStudioTab() {
           return (
             <GlossyBlackCard key={idx} className="p-5 space-y-4" accent={isBest ? 'emerald' : 'gold'}>
               <div className="flex items-center justify-between gap-2">
-                <span className="text-[11px] font-extrabold uppercase tracking-[0.14em] text-[#fbe8a4]">
+                <span className="text-[11px] font-extrabold uppercase tracking-[0.14em] text-[#dfc285]">
                   Option {String.fromCharCode(65 + idx)}
                 </span>
                 {isBest && (
-                  <span className="px-2.5 py-0.5 rounded-full bg-[#22e2ad] text-[#070e1a] text-[10px] font-extrabold">
+                  <span className="px-2.5 py-0.5 rounded-full bg-[#47a88d] text-[#0b192c] text-[10px] font-extrabold">
                     Lowest Monthly
                   </span>
                 )}
@@ -365,7 +365,7 @@ export function ProposalStudioTab() {
               <div className="pt-3 border-t border-white/12 space-y-2">
                 <div className="flex items-baseline justify-between">
                   <span className="text-xs text-slate-300">Monthly EMI + Life</span>
-                  <span className="font-display text-2xl font-extrabold font-mono-num text-[#34f0bc]">
+                  <span className="font-display text-2xl font-extrabold font-mono-num text-[#64c4a8]">
                     {fmtAed(opt.fixedPeriodTotalMonthlyAed)}
                   </span>
                 </div>
@@ -376,7 +376,7 @@ export function ProposalStudioTab() {
                   </div>
                   <div className="p-2.5 rounded-xl bg-white/[0.06]">
                     <div className="text-slate-400 text-[10px]">Post-Fixed EMI</div>
-                    <div className="font-bold text-[#fbe8a4]">{fmtAed(opt.postFixedEmiAed)}</div>
+                    <div className="font-bold text-[#dfc285]">{fmtAed(opt.postFixedEmiAed)}</div>
                   </div>
                   <div className="p-2.5 rounded-xl bg-white/[0.06]">
                     <div className="text-slate-400 text-[10px]">Cash to Close</div>
@@ -388,7 +388,7 @@ export function ProposalStudioTab() {
                   </div>
                 </div>
                 {personalLoanAed > 0 && (
-                  <div className="p-2.5 rounded-xl bg-[#22e2ad]/15 border border-[#22e2ad]/35 text-[11px] flex justify-between font-bold text-[#34f0bc]">
+                  <div className="p-2.5 rounded-xl bg-[#47a88d]/15 border border-[#47a88d]/35 text-[11px] flex justify-between font-bold text-[#64c4a8]">
                     <span>Combined w/ Personal Loan:</span>
                     <span className="font-mono-num">{fmtAed(opt.combinedMonthlyWithPLoanAed)}/mo</span>
                   </div>
@@ -400,7 +400,7 @@ export function ProposalStudioTab() {
                 onClick={() => setActiveScheduleIdx(idx as 0 | 1 | 2)}
                 className={`w-full py-2 rounded-full text-xs font-extrabold cursor-pointer transition ${
                   activeScheduleIdx === idx
-                    ? 'bg-[#22e2ad] text-[#070e1a]'
+                    ? 'bg-[#47a88d] text-[#0b192c]'
                     : 'bg-white/10 text-white hover:bg-white/20'
                 }`}
               >
@@ -439,7 +439,7 @@ export function ProposalStudioTab() {
                   <td className="py-2 px-3 text-end">{r.ratePct.toFixed(2)}%</td>
                   <td className="py-2 px-3 text-end">{fmtAed(r.emiAed)}</td>
                   <td className="py-2 px-3 text-end text-[var(--bw-muted)]">{fmtAed(r.lifeInsuranceAed)}</td>
-                  <td className="py-2 px-3 text-end font-bold text-[#119c78]">{fmtAed(r.totalMonthlyAed)}</td>
+                  <td className="py-2 px-3 text-end font-bold text-[#0e5a49]">{fmtAed(r.totalMonthlyAed)}</td>
                   <td className="py-2 px-3 text-end">{fmtAed(r.principalAed)}</td>
                   <td className="py-2 px-3 text-end font-semibold">{fmtAed(r.closingBalanceAed)}</td>
                 </tr>
@@ -459,7 +459,7 @@ export function ProposalStudioTab() {
           <ul className="space-y-2 text-xs">
             {checklist.map((item) => (
               <li key={item} className="flex items-start gap-2">
-                <CheckCircle2 size={14} className="text-[#119c78] shrink-0 mt-0.5" />
+                <CheckCircle2 size={14} className="text-[#0e5a49] shrink-0 mt-0.5" />
                 <span className="font-medium text-[var(--bw-body)]">{item}</span>
               </li>
             ))}
@@ -469,7 +469,7 @@ export function ProposalStudioTab() {
             onClick={() => void downloadProposalExcel()}
             className="bw-btn bw-btn-obsidian w-full text-xs mt-2"
           >
-            <Download size={14} className="text-[#34f0bc]" /> Download Complete Proposal Excel
+            <Download size={14} className="text-[#64c4a8]" /> Download Complete Proposal Excel
           </button>
         </div>
       </div>

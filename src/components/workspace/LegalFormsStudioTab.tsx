@@ -96,7 +96,7 @@ export function LegalFormsStudioTab() {
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div>
           <h2 className="text-base font-extrabold flex items-center gap-2">
-            <FileText size={16} className="text-[#007b52]" /> UAE Mortgage Forms &amp; Agreements Studio (Word `.DOC` · `.JPEG` · Fillable)
+            <FileText size={16} className="text-[#0e5243]" /> UAE Mortgage Forms &amp; Agreements Studio (Word `.DOC` · `.JPEG` · Fillable)
           </h2>
           <p className="text-xs text-[var(--bw-muted)]">
             CBUAE KFS Mandate, 24-Bank Pre-Approval Comparison, RERA Partner Referral DSA Agreement, Developer SOA &amp; e-NOC Letter, Buyout Liability Letter Authorization, and FOL &amp; DLD Trustee Disbursal Pack — fill fields, edit template freely, and export to Word, JPEG, or PDF.
@@ -106,14 +106,14 @@ export function LegalFormsStudioTab() {
           <button
             type="button"
             onClick={() => downloadWordDocument(exportPayload)}
-            className="px-3.5 py-2 rounded-full bg-[#025e3d] text-[#FCF1B7] font-extrabold inline-flex items-center gap-1.5 cursor-pointer"
+            className="px-3.5 py-2 rounded-full bg-[#0e5243] text-[#ebd5a6] font-extrabold inline-flex items-center gap-1.5 cursor-pointer"
           >
             <FileText size={13} /> Download Word (.DOC)
           </button>
           <button
             type="button"
             onClick={() => void downloadJpegDocument(exportPayload)}
-            className="px-3.5 py-2 rounded-full bg-[#007b52] text-white font-extrabold inline-flex items-center gap-1.5 cursor-pointer"
+            className="px-3.5 py-2 rounded-full bg-[#0e5243] text-white font-extrabold inline-flex items-center gap-1.5 cursor-pointer"
           >
             <ImageIcon size={13} /> Download .JPEG
           </button>
@@ -136,11 +136,11 @@ export function LegalFormsStudioTab() {
             onClick={() => selectTemplate(tpl)}
             className={`p-3 rounded-2xl border text-start transition cursor-pointer ${
               selectedCode === tpl.code
-                ? 'bg-[#025e3d] text-white border-[#D4AF37]'
-                : 'bg-[var(--bw-card)] border-[var(--bw-line)] hover:border-[#007b52]'
+                ? 'bg-[#0e5243] text-white border-[#c49a45]'
+                : 'bg-[var(--bw-card)] border-[var(--bw-line)] hover:border-[#0e5243]'
             }`}
           >
-            <div className={`font-mono-num text-[10px] font-extrabold ${selectedCode === tpl.code ? 'text-[#FCF1B7]' : 'text-[#007b52]'}`}>
+            <div className={`font-mono-num text-[10px] font-extrabold ${selectedCode === tpl.code ? 'text-[#ebd5a6]' : 'text-[#0e5243]'}`}>
               {tpl.code}
             </div>
             <div className="font-bold mt-1 line-clamp-2 leading-snug">{tpl.title}</div>
@@ -157,7 +157,7 @@ export function LegalFormsStudioTab() {
                 type="button"
                 onClick={() => setMode('form')}
                 className={`px-3 py-1.5 rounded-full font-bold cursor-pointer ${
-                  mode === 'form' ? 'bg-[#007b52] text-white' : 'border border-[var(--bw-line)]'
+                  mode === 'form' ? 'bg-[#0e5243] text-white' : 'border border-[var(--bw-line)]'
                 }`}
               >
                 Fillable Form ({fields.length} Fields)
@@ -166,7 +166,7 @@ export function LegalFormsStudioTab() {
                 type="button"
                 onClick={() => setMode('edit')}
                 className={`px-3 py-1.5 rounded-full font-bold inline-flex items-center gap-1 cursor-pointer ${
-                  mode === 'edit' ? 'bg-[#025e3d] text-[#FCF1B7]' : 'border border-[var(--bw-line)]'
+                  mode === 'edit' ? 'bg-[#0e5243] text-[#ebd5a6]' : 'border border-[var(--bw-line)]'
                 }`}
               >
                 <Edit3 size={12} /> Edit Template
@@ -220,7 +220,7 @@ export function LegalFormsStudioTab() {
             type="button"
             disabled={saving}
             onClick={() => void saveAndSeal()}
-            className="w-full h-10 rounded-full bg-[#025e3d] text-[#FCF1B7] font-extrabold inline-flex items-center justify-center gap-1.5 cursor-pointer disabled:opacity-60"
+            className="w-full h-10 rounded-full bg-[#0e5243] text-[#ebd5a6] font-extrabold inline-flex items-center justify-center gap-1.5 cursor-pointer disabled:opacity-60"
           >
             <Stamp size={14} /> {saving ? 'Saving...' : user?.isOwner ? 'Save & Apply Owner Corporate Seal' : 'Save & Request Corporate Seal'}
           </button>
@@ -229,10 +229,10 @@ export function LegalFormsStudioTab() {
         {/* Right: Live Betterway Letterhead Document Preview */}
         <div className="lg:col-span-7 bw-card p-6 space-y-4">
           <div className="rounded-2xl border border-slate-200 bg-white text-[#161d1a] overflow-hidden shadow-sm">
-            <div className="bg-[#025e3d] text-white px-6 py-4 border-b-4 border-[#D4AF37] flex items-center justify-between gap-3">
+            <div className="bg-[#0e5243] text-white px-6 py-4 border-b-4 border-[#c49a45] flex items-center justify-between gap-3">
               <div>
                 <img src="/brand/logo-horizontal-dark.png" alt="Betterway Mortgages" className="h-7 mb-1.5" />
-                <div className="text-[10px] font-bold uppercase tracking-[0.16em] text-[#FCF1B7]">{selectedCode} · {category}</div>
+                <div className="text-[10px] font-bold uppercase tracking-[0.16em] text-[#ebd5a6]">{selectedCode} · {category}</div>
               </div>
               <div className="text-end text-[10.5px] text-slate-300">
                 <div>Betterway Mortgages LLC</div>
@@ -243,8 +243,8 @@ export function LegalFormsStudioTab() {
               <h3 className="text-base font-extrabold text-[#161d1a] border-b border-slate-200 pb-2">{title}</h3>
               <pre className="whitespace-pre-wrap font-serif text-xs leading-relaxed text-slate-800">{renderedBody}</pre>
               {user?.isOwner && (
-                <div className="inline-flex items-center gap-2 px-4 py-2 rounded-xl border-2 border-[#D4AF37] bg-[#FFFDF4] text-[11px] font-bold text-[#025e3d]">
-                  <CheckCircle2 size={14} className="text-[#007b52]" /> Owner Corporate Seal Ready ({user.name})
+                <div className="inline-flex items-center gap-2 px-4 py-2 rounded-xl border-2 border-[#c49a45] bg-[#FFFDF4] text-[11px] font-bold text-[#0e5243]">
+                  <CheckCircle2 size={14} className="text-[#0e5243]" /> Owner Corporate Seal Ready ({user.name})
                 </div>
               )}
             </div>
@@ -257,7 +257,7 @@ export function LegalFormsStudioTab() {
                 {savedDocs.slice(0, 6).map((d) => (
                   <div key={d.id} className="p-2.5 rounded-xl border border-[var(--bw-line)] bg-[var(--bw-bg)]/60 flex items-center justify-between gap-2 text-xs">
                     <div className="min-w-0">
-                      <div className="font-mono-num text-[10px] font-bold text-[#007b52]">{d.doc_code}</div>
+                      <div className="font-mono-num text-[10px] font-bold text-[#0e5243]">{d.doc_code}</div>
                       <div className="font-bold truncate">{d.title}</div>
                     </div>
                     <StatusPill label={d.seal_status} tone={d.seal_status === 'Sealed' ? 'emerald' : 'gold'} />

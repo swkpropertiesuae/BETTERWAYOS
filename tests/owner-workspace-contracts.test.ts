@@ -594,5 +594,33 @@ describe('Warda & Shabib UAE Mortgage Command Suite — Offline Domain, Schema &
     for (const forbidden of ['Viewings', 'Leases & Ejari', 'Rent Schedules', 'Rent Cheques', 'Landlord Hub']) {
       expect(salesSrcCheck).not.toContain(forbidden);
     }
+
+    // Sovereign Private-Banking Corporate Palette guard — zero neon mint/cyan, loud yellow, or generic SaaS rainbow hexes
+    const { DEFAULT_UI_CONFIG } = await import('@/lib/ui-customizer');
+    expect(DEFAULT_UI_CONFIG.presetId).toBe('sovereign-corporate');
+    expect(DEFAULT_UI_CONFIG.bgColor).toBe('#f3f5f8');
+    expect(DEFAULT_UI_CONFIG.heroBgColor).toBe('#0b192c');
+    expect(DEFAULT_UI_CONFIG.highlightColor).toBe('#0e5a49');
+    expect(DEFAULT_UI_CONFIG.goldColor).toBe('#c49a45');
+
+    const paletteGuardFiles = [
+      'src/app/globals.css',
+      'src/lib/ui-customizer.ts',
+      'src/app/login/page.tsx',
+      'src/app/os/page.tsx',
+      'src/components/os/OsShell.tsx',
+      'src/components/os/LiveBankMarquee.tsx',
+      'src/components/os/UiKit.tsx',
+      'src/components/os/AnimatedIcons.tsx',
+      'src/app/os/vault/page.tsx',
+      'src/app/os/website-studio/page.tsx',
+    ];
+    const forbiddenNeonHexes = ['#34f0bc', '#22e2ad', '#34dfac', '#e1b84c', '#fbf6e6', '#fbe8a4', '#0284c7', '#6d28d9'];
+    for (const rel of paletteGuardFiles) {
+      const lower = fs.readFileSync(path.join(process.cwd(), rel), 'utf8').toLowerCase();
+      for (const hex of forbiddenNeonHexes) {
+        expect(lower, `Generic/neon hex ${hex} found in ${rel}`).not.toContain(hex);
+      }
+    }
   });
 });

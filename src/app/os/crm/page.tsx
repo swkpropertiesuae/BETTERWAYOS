@@ -209,7 +209,7 @@ export default function CrmPage() {
         <div className="grid lg:grid-cols-12 gap-6">
           <form onSubmit={logEnquiry} className="lg:col-span-4 bw-card p-5 space-y-3 text-xs">
             <h3 className="text-sm font-extrabold flex items-center gap-1.5">
-              <Plus size={15} className="text-[#119c78]" /> Log Daily Enquiry (100% Capture)
+              <Plus size={15} className="text-[#0e5a49]" /> Log Daily Enquiry (100% Capture)
             </h3>
             <div>
               <label className="font-bold block mb-1">Borrower Full Name *</label>
@@ -253,7 +253,7 @@ export default function CrmPage() {
               <div className="flex items-center gap-2 text-xs">
                 <input type="date" value={dateFilter} onChange={(e) => setDateFilter(e.target.value)} className="h-8 px-2.5 rounded-lg border border-[var(--bw-line)] bg-[var(--bw-soft)]" />
                 {dateFilter && (
-                  <button type="button" onClick={() => setDateFilter('')} className="text-[#119c78] font-bold cursor-pointer">All Dates</button>
+                  <button type="button" onClick={() => setDateFilter('')} className="text-[#0e5a49] font-bold cursor-pointer">All Dates</button>
                 )}
               </div>
             </div>
@@ -266,7 +266,7 @@ export default function CrmPage() {
                   <div key={l.id} className="p-3.5 rounded-2xl border border-[var(--bw-line)] bg-[var(--bw-soft)]/50 flex flex-wrap items-center justify-between gap-3 text-xs">
                     <div className="space-y-0.5">
                       <div className="flex flex-wrap items-center gap-2">
-                        <span className="font-mono-num font-bold text-[#119c78]">{l.reference_code}</span>
+                        <span className="font-mono-num font-bold text-[#0e5a49]">{l.reference_code}</span>
                         <span className="font-extrabold text-sm">{l.contact_name}</span>
                         <StatusPill label={l.source_channel} tone="blue" />
                         <StatusPill label={l.status} tone={l.status === 'Converted' ? 'emerald' : 'gold'} />
@@ -277,14 +277,14 @@ export default function CrmPage() {
                       </div>
                     </div>
                     <div className="flex items-center gap-1.5">
-                      <button type="button" onClick={() => void outreach('lead', l.id, 'Call', l.contact_name)} className="px-3 py-1.5 rounded-full bg-[#090d13] text-[#34f0bc] font-bold inline-flex items-center gap-1 cursor-pointer">
+                      <button type="button" onClick={() => void outreach('lead', l.id, 'Call', l.contact_name)} className="px-3 py-1.5 rounded-full bg-[#0b192c] text-[#64c4a8] font-bold inline-flex items-center gap-1 cursor-pointer">
                         <PhoneCall size={12} /> SIP Call
                       </button>
                       <button type="button" onClick={() => void outreach('lead', l.id, 'WhatsApp', l.contact_name)} className="px-3 py-1.5 rounded-full bg-emerald-600 text-white font-bold inline-flex items-center gap-1 cursor-pointer">
                         <MessageCircle size={12} /> WhatsApp
                       </button>
                       {l.status !== 'Converted' && (
-                        <button type="button" onClick={() => void convertToPipeline(l)} className="px-3 py-1.5 rounded-full bg-[#119c78] text-white font-bold inline-flex items-center gap-1 cursor-pointer">
+                        <button type="button" onClick={() => void convertToPipeline(l)} className="px-3 py-1.5 rounded-full bg-[#0e5a49] text-white font-bold inline-flex items-center gap-1 cursor-pointer">
                           Start 12-Step <ArrowRight size={12} />
                         </button>
                       )}
@@ -322,9 +322,9 @@ export default function CrmPage() {
                 <div className="text-[11px] text-[var(--bw-muted)]">
                   {c.community || 'Dubai'} · Est. Asset <strong className="font-mono-num text-[var(--bw-ink)]">{fmtAed(c.property_price_aed, true)}</strong>
                 </div>
-                <div className="font-mono-num text-[11px] text-[#119c78]">{c.contact_phone_masked}</div>
+                <div className="font-mono-num text-[11px] text-[#0e5a49]">{c.contact_phone_masked}</div>
                 <div className="flex gap-1.5 pt-1">
-                  <button type="button" onClick={() => void outreach('lead', c.id, 'Call', c.contact_name)} className="px-3 py-1 rounded-full bg-[#090d13] text-[#34f0bc] font-bold inline-flex items-center gap-1 cursor-pointer">
+                  <button type="button" onClick={() => void outreach('lead', c.id, 'Call', c.contact_name)} className="px-3 py-1 rounded-full bg-[#0b192c] text-[#64c4a8] font-bold inline-flex items-center gap-1 cursor-pointer">
                     <PhoneCall size={11} /> SIP Dial
                   </button>
                   <button type="button" onClick={() => void outreach('lead', c.id, 'WhatsApp', c.contact_name)} className="px-3 py-1 rounded-full border border-[var(--bw-line)] bg-white font-bold inline-flex items-center gap-1 cursor-pointer">
@@ -352,13 +352,13 @@ export default function CrmPage() {
           ) : (
             <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3">
               {data.vaultLeads.map((v) => (
-                <div key={v.id} className="p-4 rounded-2xl border border-[#d9b356]/45 bg-[var(--bw-soft)]/50 space-y-2">
+                <div key={v.id} className="p-4 rounded-2xl border border-[#c49a45]/45 bg-[var(--bw-soft)]/50 space-y-2">
                   <div className="flex items-center justify-between">
                     <span className="font-extrabold text-sm">{v.contact_name}</span>
                     <StatusPill label="PDPL Masked" tone="navy" />
                   </div>
                   <div className="text-[11px] text-[var(--bw-muted)]">{v.community || 'UAE'} · {fmtAed(v.property_price_aed, true)}</div>
-                  <button type="button" onClick={() => void outreach('vault_lead', v.id, 'Call', v.contact_name)} className="px-3 py-1.5 rounded-full bg-[#090d13] text-[#34f0bc] font-bold inline-flex items-center gap-1 cursor-pointer">
+                  <button type="button" onClick={() => void outreach('vault_lead', v.id, 'Call', v.contact_name)} className="px-3 py-1.5 rounded-full bg-[#0b192c] text-[#64c4a8] font-bold inline-flex items-center gap-1 cursor-pointer">
                     <PhoneCall size={11} /> Audited SIP Call
                   </button>
                 </div>
@@ -373,7 +373,7 @@ export default function CrmPage() {
         <div className="bw-card p-5 space-y-4 text-xs">
           <div className="flex items-center justify-between">
             <h2 className="font-display text-sm font-extrabold">My Assigned Mortgage Deals ({myDeals.length})</h2>
-            <Link href="/os/pipeline" className="text-xs font-extrabold text-[#119c78] hover:underline">Open 12-Step Pipeline →</Link>
+            <Link href="/os/pipeline" className="text-xs font-extrabold text-[#0e5a49] hover:underline">Open 12-Step Pipeline →</Link>
           </div>
           {myDeals.length === 0 ? (
             <div className="py-8 text-center text-[var(--bw-muted)]">No deals currently assigned in the 12-Step Pipeline.</div>
@@ -382,7 +382,7 @@ export default function CrmPage() {
               {myDeals.map((c) => (
                 <div key={c.id} className="p-4 rounded-2xl border border-[var(--bw-line)] bg-[var(--bw-soft)]/50 space-y-1.5">
                   <div className="flex items-center justify-between gap-2">
-                    <span className="font-mono-num font-bold text-[#119c78]">{c.case_code}</span>
+                    <span className="font-mono-num font-bold text-[#0e5a49]">{c.case_code}</span>
                     <StatusPill label={c.stage_code || '01'} tone="emerald" />
                   </div>
                   <div className="font-extrabold text-sm">{c.borrower_name}</div>
@@ -398,10 +398,10 @@ export default function CrmPage() {
       {subTab === 'whatsapp' && (
         <div className="grid lg:grid-cols-12 gap-5 text-xs">
           <GlossyBlackCard className="lg:col-span-5 p-5 space-y-3" accent="emerald">
-            <div className="text-[10.5px] font-extrabold uppercase tracking-[0.14em] text-[#34f0bc]">WhatsApp Business Mortgage Intake</div>
+            <div className="text-[10.5px] font-extrabold uppercase tracking-[0.14em] text-[#64c4a8]">WhatsApp Business Mortgage Intake</div>
             <h3 className="font-display text-lg font-extrabold text-white">Live Webhook Connected</h3>
-            <p className="text-slate-300 leading-relaxed">Inbound WhatsApp mortgage messages route straight to Step 01 Leads via <code className="text-[#fbe8a4]">/api/v1/intake/whatsapp</code> with 5-minute SLA alerts.</p>
-            <div className="p-3 rounded-xl bg-white/8 border border-white/12 font-mono text-[11px] text-[#34f0bc]">
+            <p className="text-slate-300 leading-relaxed">Inbound WhatsApp mortgage messages route straight to Step 01 Leads via <code className="text-[#dfc285]">/api/v1/intake/whatsapp</code> with 5-minute SLA alerts.</p>
+            <div className="p-3 rounded-xl bg-white/8 border border-white/12 font-mono text-[11px] text-[#64c4a8]">
               Endpoint: POST /api/v1/intake/whatsapp (HMAC Verified)
             </div>
           </GlossyBlackCard>
@@ -476,10 +476,10 @@ export default function CrmPage() {
             {data.leads.slice(0, 10).map((l) => (
               <div key={l.id} className="p-3.5 rounded-2xl border border-[var(--bw-line)] bg-[var(--bw-soft)]/50 flex flex-wrap items-center justify-between gap-2">
                 <div>
-                  <div className="font-extrabold">{l.contact_name} · <span className="font-mono-num text-[#119c78]">{l.reference_code}</span></div>
+                  <div className="font-extrabold">{l.contact_name} · <span className="font-mono-num text-[#0e5a49]">{l.reference_code}</span></div>
                   <div className="text-[11px] text-[var(--bw-muted)]">{l.community || 'Dubai'} · SLA 5-min callback · {l.contact_phone_masked}</div>
                 </div>
-                <button type="button" onClick={() => void outreach('lead', l.id, 'Call', l.contact_name)} className="px-3.5 py-1.5 rounded-full bg-[#090d13] text-[#34f0bc] font-bold inline-flex items-center gap-1 cursor-pointer">
+                <button type="button" onClick={() => void outreach('lead', l.id, 'Call', l.contact_name)} className="px-3.5 py-1.5 rounded-full bg-[#0b192c] text-[#64c4a8] font-bold inline-flex items-center gap-1 cursor-pointer">
                   <PhoneCall size={12} /> Call via SIP
                 </button>
               </div>
@@ -510,7 +510,7 @@ export default function CrmPage() {
                     </div>
                     <div className="p-2 rounded-xl bg-white border border-[var(--bw-line)]">
                       <div className="text-[9.5px] text-[var(--bw-muted)]">Est. Bank DSA</div>
-                      <div className="font-extrabold text-[#119c78]">{fmtAed(estDsa, true)}</div>
+                      <div className="font-extrabold text-[#0e5a49]">{fmtAed(estDsa, true)}</div>
                     </div>
                   </div>
                 </div>
@@ -543,7 +543,7 @@ export default function CrmPage() {
                     setRoutingRules((prev) => prev.map((r) => (r.id === rule.id ? { ...r, active: !r.active } : r)));
                     toast(`Updated routing rule ${rule.id}`);
                   }}
-                  className={`px-3.5 py-1.5 rounded-full font-extrabold cursor-pointer ${rule.active ? 'bg-[#090d13] text-[#34f0bc]' : 'bg-slate-200 text-slate-600'}`}
+                  className={`px-3.5 py-1.5 rounded-full font-extrabold cursor-pointer ${rule.active ? 'bg-[#0b192c] text-[#64c4a8]' : 'bg-slate-200 text-slate-600'}`}
                 >
                   {rule.active ? 'Active' : 'Paused'}
                 </button>

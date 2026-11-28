@@ -71,9 +71,9 @@ export default function CommandCenterPage() {
           <div className="bw-card p-5 space-y-4">
             <div className="flex items-center justify-between">
               <h2 className="text-sm font-extrabold flex items-center gap-2">
-                <Radar size={15} className="text-[#119c78]" /> Live Lead &amp; Deal Distribution Across All 12 Pipeline Stages
+                <Radar size={15} className="text-[#0e5a49]" /> Live Lead &amp; Deal Distribution Across All 12 Pipeline Stages
               </h2>
-              <Link href="/os/pipeline" className="text-xs font-bold text-[#119c78] hover:underline">
+              <Link href="/os/pipeline" className="text-xs font-bold text-[#0e5a49] hover:underline">
                 Open 12-Step Kanban →
               </Link>
             </div>
@@ -82,7 +82,7 @@ export default function CommandCenterPage() {
                 <div key={s.code} className="p-3 rounded-xl border border-[var(--bw-line)] bg-[var(--bw-soft)]/60">
                   <div className="flex items-center justify-between">
                     <span className="text-[10px] font-bold uppercase text-[var(--bw-muted)]">Step {s.order}</span>
-                    <span className="text-sm font-extrabold font-mono-num text-[#119c78]">{s.count}</span>
+                    <span className="text-sm font-extrabold font-mono-num text-[#0e5a49]">{s.count}</span>
                   </div>
                   <div className="text-xs font-bold mt-1 truncate">{s.label}</div>
                   <div className="text-[10.5px] font-mono-num text-[var(--bw-muted)]">{fmtAed(s.loanVolumeAed, true)}</div>
@@ -94,7 +94,7 @@ export default function CommandCenterPage() {
           <div className="grid lg:grid-cols-12 gap-5">
             <div className="lg:col-span-6 bw-card p-5 space-y-3">
               <h3 className="text-sm font-extrabold flex items-center gap-2">
-                <Users size={15} className="text-[#119c78]" /> Team Presence &amp; Live Workload
+                <Users size={15} className="text-[#0e5a49]" /> Team Presence &amp; Live Workload
               </h3>
               <div className="divide-y divide-[var(--bw-line)]">
                 {data.teamTaskSummary.map((m: any) => (
@@ -119,9 +119,9 @@ export default function CommandCenterPage() {
               <div className="bw-card p-5 space-y-3">
                 <div className="flex items-center justify-between">
                   <h3 className="text-sm font-extrabold flex items-center gap-2">
-                    <MapPin size={15} className="text-[#119c78]" /> Live Field Staff GPS Radar
+                    <MapPin size={15} className="text-[#0e5a49]" /> Live Field Staff GPS Radar
                   </h3>
-                  <Link href="/os/field-gps" className="text-xs font-bold text-[#119c78] hover:underline">
+                  <Link href="/os/field-gps" className="text-xs font-bold text-[#0e5a49] hover:underline">
                     Open Map →
                   </Link>
                 </div>
@@ -148,11 +148,11 @@ export default function CommandCenterPage() {
                 </h3>
                 {data.criticalAlerts.length === 0 ? (
                   <div className="text-xs text-[var(--bw-muted)] py-3 flex items-center gap-2">
-                    <CheckCircle2 size={14} className="text-[#119c78]" /> All critical alerts clear.
+                    <CheckCircle2 size={14} className="text-[#0e5a49]" /> All critical alerts clear.
                   </div>
                 ) : (
                   data.criticalAlerts.slice(0, 6).map((al: any) => (
-                    <Link key={al.id} href={al.href || '/os'} className="block p-3 rounded-xl border border-[var(--bw-line)] hover:border-[#119c78] text-xs">
+                    <Link key={al.id} href={al.href || '/os'} className="block p-3 rounded-xl border border-[var(--bw-line)] hover:border-[#0e5a49] text-xs">
                       <div className="flex items-center justify-between">
                         <span className="font-bold">{al.title}</span>
                         <StatusPill label={al.severity} tone={al.severity === 'critical' ? 'red' : 'gold'} />
@@ -189,7 +189,7 @@ export default function CommandCenterPage() {
           <div className="lg:col-span-2 bw-card p-5 space-y-3">
             <div className="flex items-center justify-between">
               <h3 className="font-display text-sm font-extrabold">Live Operational Links &amp; Escalation Controls</h3>
-              <Link href="/os/coordinator" className="text-xs font-extrabold text-[#119c78] hover:underline">Open 32-Col Coordinator →</Link>
+              <Link href="/os/coordinator" className="text-xs font-extrabold text-[#0e5a49] hover:underline">Open 32-Col Coordinator →</Link>
             </div>
             <div className="grid sm:grid-cols-2 gap-3">
               {[
@@ -198,7 +198,7 @@ export default function CommandCenterPage() {
                 { title: '24-Bank Advisory Desk', desc: '18-Bank 2026 Policy Matrix, 159 Direct Bank RMs & Valuations', href: '/os/mortgage-desk' },
                 { title: 'Daily Master Excel Backup', desc: '17-sheet live OS snapshot & midnight Dubai GST automated archives', href: '/os/utilities' },
               ].map((op) => (
-                <Link key={op.title} href={op.href} className="p-4 rounded-2xl border border-[var(--bw-line)] bg-[var(--bw-soft)]/40 hover:border-[#119c78] transition block">
+                <Link key={op.title} href={op.href} className="p-4 rounded-2xl border border-[var(--bw-line)] bg-[var(--bw-soft)]/40 hover:border-[#0e5a49] transition block">
                   <div className="font-extrabold text-sm">{op.title}</div>
                   <div className="text-[11px] text-[var(--bw-muted)] mt-1">{op.desc}</div>
                 </Link>
@@ -274,7 +274,7 @@ export default function CommandCenterPage() {
           <div className="bw-card p-5 space-y-3">
             <div className="flex items-center justify-between">
               <h3 className="font-display text-sm font-extrabold">Scheduled Bank Valuations ({deskData?.valuations?.length ?? 0})</h3>
-              <Link href="/os/mortgage-desk?tab=schedule" className="text-xs font-bold text-[#119c78] hover:underline">Book Valuation →</Link>
+              <Link href="/os/mortgage-desk?tab=schedule" className="text-xs font-bold text-[#0e5a49] hover:underline">Book Valuation →</Link>
             </div>
             {(deskData?.valuations ?? []).length === 0 ? (
               <div className="py-8 text-center text-[var(--bw-muted)]">No property valuations booked yet.</div>

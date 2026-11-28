@@ -249,8 +249,8 @@ export function OwnerSectionView({ mode }: { mode: 'place' | 'corner' }) {
           <div className="flex items-center gap-4 min-w-0">
             <StaffAvatar name={user.name} avatarUrl={user.avatarUrl} initials={user.initials} size="lg" />
             <div className="min-w-0">
-              <div className="inline-flex items-center gap-1.5 px-3 py-0.5 rounded-full bg-white/10 border border-[#d9b356]/35 text-[#fbe8a4] text-[10px] font-extrabold uppercase tracking-[0.14em]">
-                <Crown size={11} className="text-[#d9b356]" /> 100% EQUAL CO-OWNER AUTHORITY · STRICTLY PRIVATE TO WARDA &amp; SHABIB
+              <div className="inline-flex items-center gap-1.5 px-3 py-0.5 rounded-full bg-white/10 border border-[#c49a45]/35 text-[#dfc285] text-[10px] font-extrabold uppercase tracking-[0.14em]">
+                <Crown size={11} className="text-[#c49a45]" /> 100% EQUAL CO-OWNER AUTHORITY · STRICTLY PRIVATE TO WARDA &amp; SHABIB
               </div>
               <h1 className="font-display text-2xl sm:text-[30px] font-extrabold mt-1 tracking-[-0.03em] text-white leading-tight">
                 {sectionName}{' '}
@@ -265,7 +265,7 @@ export function OwnerSectionView({ mode }: { mode: 'place' | 'corner' }) {
           <div className="flex flex-wrap items-center gap-2">
             <Link
               href={mode === 'place' ? '/os/corner' : '/os/place'}
-              className="px-3.5 py-2 rounded-full bg-white/10 hover:bg-white/18 border border-[#d9b356]/45 text-[#fbe8a4] text-xs font-extrabold inline-flex items-center gap-1.5 transition"
+              className="px-3.5 py-2 rounded-full bg-white/10 hover:bg-white/18 border border-[#c49a45]/45 text-[#dfc285] text-xs font-extrabold inline-flex items-center gap-1.5 transition"
             >
               {mode === 'place' ? (
                 <>
@@ -273,7 +273,7 @@ export function OwnerSectionView({ mode }: { mode: 'place' | 'corner' }) {
                 </>
               ) : (
                 <>
-                  <Briefcase size={13} className="text-[#34f0bc]" /> Open {isShabib ? "Shabib's Place" : "Warda's Place"}
+                  <Briefcase size={13} className="text-[#64c4a8]" /> Open {isShabib ? "Shabib's Place" : "Warda's Place"}
                 </>
               )}
             </Link>
@@ -300,7 +300,7 @@ export function OwnerSectionView({ mode }: { mode: 'place' | 'corner' }) {
                 href={targetHref}
                 className={`px-4 py-2 rounded-full text-xs font-extrabold transition ${
                   active
-                    ? 'bg-[#e1b84c] text-[#070e1a] shadow-md'
+                    ? 'bg-[#c49a45] text-[#0b192c] shadow-md'
                     : 'bg-white/[0.08] text-slate-200 hover:bg-white/[0.16] border border-white/12'
                 }`}
               >
@@ -363,7 +363,7 @@ export function OwnerSectionView({ mode }: { mode: 'place' | 'corner' }) {
                   Track every stage from 01 Enquiry to 12 Client Care alongside Privacy Fast Track cash deals.
                 </p>
               </div>
-              <Link href="/os/pipeline" className="text-xs font-bold text-[#119c78] hover:underline">
+              <Link href="/os/pipeline" className="text-xs font-bold text-[#0e5a49] hover:underline">
                 Open Full Pipeline →
               </Link>
             </div>
@@ -373,12 +373,12 @@ export function OwnerSectionView({ mode }: { mode: 'place' | 'corner' }) {
                 <div key={st.code} className="rounded-xl border border-[var(--bw-line)] p-3 bg-[var(--bw-soft)]/70">
                   <div className="flex items-center justify-between">
                     <span className="text-[10px] font-extrabold uppercase text-[var(--bw-muted)]">Step {st.order}</span>
-                    <span className="px-2 py-0.5 rounded-full bg-[#090d13] text-[#34f0bc] text-[11px] font-mono-num font-extrabold">
+                    <span className="px-2 py-0.5 rounded-full bg-[#0b192c] text-[#64c4a8] text-[11px] font-mono-num font-extrabold">
                       {st.totalCount}
                     </span>
                   </div>
                   <div className="text-xs font-bold mt-1 truncate">{st.label}</div>
-                  <div className="text-[10.5px] font-mono-num text-[#0b5442] font-semibold mt-0.5">
+                  <div className="text-[10.5px] font-mono-num text-[#0a3f34] font-semibold mt-0.5">
                     {fmtAed(st.totalLoanAed, true)}
                   </div>
                   {st.fastTrackCount > 0 && (
@@ -397,7 +397,7 @@ export function OwnerSectionView({ mode }: { mode: 'place' | 'corner' }) {
             <div className="flex items-center justify-between">
               <div>
                 <h2 className="text-base font-extrabold flex items-center gap-1.5">
-                  <Lock size={15} className="text-[#d9b356]" /> New {privacyTitle}
+                  <Lock size={15} className="text-[#c49a45]" /> New {privacyTitle}
                 </h2>
                 <p className="text-[11px] text-[var(--bw-muted)]">
                   Bypasses Master Log completely. Zero visibility for Admin, Managers, or Staff.
@@ -525,10 +525,10 @@ export function OwnerSectionView({ mode }: { mode: 'place' | 'corner' }) {
                 </div>
               ) : (
                 data.fastTrackJobs.map((j: any) => (
-                  <div key={j.id} className="p-4 rounded-2xl border border-[#d9b356]/40 bg-[var(--bw-soft)]/70 space-y-2 text-xs">
+                  <div key={j.id} className="p-4 rounded-2xl border border-[#c49a45]/40 bg-[var(--bw-soft)]/70 space-y-2 text-xs">
                     <div className="flex flex-wrap items-center justify-between gap-2">
                       <div>
-                        <span className="font-mono-num font-bold text-[#0b5442]">{j.job_code}</span> ·{' '}
+                        <span className="font-mono-num font-bold text-[#0a3f34]">{j.job_code}</span> ·{' '}
                         <span className="font-extrabold text-sm">{j.client_name}</span>
                         {j.private_to_owner_id && <span className="ms-2 text-[10px] font-bold text-amber-700">🔒 Single-Owner Lock</span>}
                       </div>
@@ -540,7 +540,7 @@ export function OwnerSectionView({ mode }: { mode: 'place' | 'corner' }) {
                     <div className="text-[var(--bw-muted)]">
                       {j.community_freeform || 'Confidential Asset'} · Loan:{' '}
                       <strong className="font-mono-num text-[var(--bw-ink)]">{fmtAed(j.loan_amount_aed)}</strong> · Expected Cash:{' '}
-                      <strong className="font-mono-num text-[#0b5442]">{fmtAed(j.expected_fee_aed)}</strong>
+                      <strong className="font-mono-num text-[#0a3f34]">{fmtAed(j.expected_fee_aed)}</strong>
                     </div>
                     <div className="flex flex-wrap gap-2 pt-2 border-t border-[var(--bw-line)]">
                       <button
@@ -569,7 +569,7 @@ export function OwnerSectionView({ mode }: { mode: 'place' | 'corner' }) {
                       <div className="text-[var(--bw-muted)]">{inv.description}</div>
                     </div>
                     <div className="flex items-center gap-2">
-                      <span className="font-mono-num font-extrabold text-[#0b5442]">{fmtAed(inv.total_aed)}</span>
+                      <span className="font-mono-num font-extrabold text-[#0a3f34]">{fmtAed(inv.total_aed)}</span>
                       <button
                         type="button"
                         onClick={() => setPrintInvoice(inv)}
@@ -591,7 +591,7 @@ export function OwnerSectionView({ mode }: { mode: 'place' | 'corner' }) {
           <form onSubmit={runBulkUpload} className="lg:col-span-7 bw-card p-5 space-y-4">
             <div>
               <h2 className="text-base font-extrabold flex items-center gap-2">
-                <Upload size={16} className="text-[#119c78]" /> Batch Client &amp; Lead Sheet Importer
+                <Upload size={16} className="text-[#0e5a49]" /> Batch Client &amp; Lead Sheet Importer
               </h2>
               <p className="text-xs text-[var(--bw-muted)]">
                 Paste messy WhatsApp lists, CSV exports, or buyer sheets to extract names, UAE phones, emails, communities, AED prices &amp; skip duplicates.
@@ -608,7 +608,7 @@ export function OwnerSectionView({ mode }: { mode: 'place' | 'corner' }) {
                   type="button"
                   onClick={() => setBulkTarget(t.id as any)}
                   className={`px-3.5 py-2 rounded-full font-bold border cursor-pointer ${
-                    bulkTarget === t.id ? 'bg-[#090d13] text-[#34f0bc] border-[#22e2ad]' : 'border-[var(--bw-line)] bg-[var(--bw-soft)]'
+                    bulkTarget === t.id ? 'bg-[#0b192c] text-[#64c4a8] border-[#47a88d]' : 'border-[var(--bw-line)] bg-[var(--bw-soft)]'
                   }`}
                 >
                   {t.label}
@@ -666,7 +666,7 @@ export function OwnerSectionView({ mode }: { mode: 'place' | 'corner' }) {
               data.pendingMasterRequests.map((req: any) => (
                 <div key={req.id} className="p-4 rounded-2xl border border-[var(--bw-line)] bg-[var(--bw-soft)]/70 space-y-2 text-xs">
                   <div className="flex items-center justify-between">
-                    <span className="font-extrabold uppercase text-[#0b5442]">
+                    <span className="font-extrabold uppercase text-[#0a3f34]">
                       {req.action} · {req.registry_key}
                     </span>
                     <StatusPill label="1-of-2 Sign-Off" tone="blue" />
@@ -763,7 +763,7 @@ export function OwnerSectionView({ mode }: { mode: 'place' | 'corner' }) {
               </div>
               <div className="text-end">
                 <div className="text-lg font-extrabold">TAX INVOICE</div>
-                <div className="text-xs font-mono-num font-bold text-[#119c78]">{printInvoice.invoice_no}</div>
+                <div className="text-xs font-mono-num font-bold text-[#0e5a49]">{printInvoice.invoice_no}</div>
               </div>
             </div>
             <div className="grid grid-cols-2 gap-4 text-xs">
@@ -787,7 +787,7 @@ export function OwnerSectionView({ mode }: { mode: 'place' | 'corner' }) {
               </div>
               <div className="flex justify-between text-base font-extrabold pt-2 border-t border-slate-200">
                 <span>Total Due (AED)</span>
-                <span className="font-mono-num text-[#119c78]">{fmtAed(printInvoice.total_aed)}</span>
+                <span className="font-mono-num text-[#0e5a49]">{fmtAed(printInvoice.total_aed)}</span>
               </div>
             </div>
             <div className="flex justify-end gap-2 no-print">

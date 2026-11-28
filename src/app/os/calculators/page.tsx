@@ -23,7 +23,7 @@ export default function CalculatorsAndToolsPage() {
               <Download size={13} /> 2026 Bank Matrix (.xlsx)
             </a>
             <Link href="/os/mortgage-desk?tab=proposal" className="bw-btn bw-btn-obsidian text-xs py-2 min-h-[36px]">
-              <FileSpreadsheet size={13} className="text-[#34f0bc]" /> 3-Bank Proposal Maker
+              <FileSpreadsheet size={13} className="text-[#64c4a8]" /> 3-Bank Proposal Maker
             </Link>
           </div>
         }

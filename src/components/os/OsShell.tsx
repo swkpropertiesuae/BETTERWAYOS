@@ -203,7 +203,7 @@ export function OsShell({ children }: { children: React.ReactNode }) {
   return (
     <div className="h-[100dvh] flex flex-col overflow-hidden bg-[var(--bw-bg)] text-[var(--bw-ink)]">
       {/* Crisp Prominent Header Bar (Large Clear Betterway Mortgages Logo + Live Dubai Clock + 3M EIBOR | Highlighted Inside & SIP Capsule + Customise UI + Search + Profile) */}
-      <header className="flex-none h-[68px] px-4 lg:px-6 bg-white/95 dark:bg-[#080b10]/95 backdrop-blur-xl border-b border-[var(--bw-line)] flex items-center justify-between gap-3 no-print z-40">
+      <header className="flex-none h-[68px] px-4 lg:px-6 bg-white/95 dark:bg-[#0a1627]/95 backdrop-blur-xl border-b border-[var(--bw-line)] flex items-center justify-between gap-3 no-print z-40">
         {/* Left Prominent Brand Logo & Live Dubai Telemetry Pills */}
         <div className="flex items-center gap-3 min-w-0">
           <Link href="/os" className="flex items-center shrink-0 group py-1" aria-label="Betterway Mortgages OS Home">
@@ -214,22 +214,22 @@ export function OsShell({ children }: { children: React.ReactNode }) {
             />
           </Link>
           <span className="hidden xl:inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[var(--bw-soft)] border border-[var(--bw-line)] text-[11px] font-mono-num font-bold text-[var(--bw-ink)] shrink-0">
-            <span className="size-1.5 rounded-full bg-[#119c78] animate-pulse" />
+            <span className="size-1.5 rounded-full bg-[#0e5a49] animate-pulse" />
             <DubaiClock compact />
           </span>
-          <span className="hidden xl:inline-flex items-center px-3 py-1 rounded-full bg-[#e3fbf3] dark:bg-[#0d2b24] border border-[#9be8ce] dark:border-[#1c5c4b] text-[11px] font-mono-num font-extrabold text-[#053b2e] dark:text-[#34f0bc] shrink-0">
+          <span className="hidden xl:inline-flex items-center px-3 py-1 rounded-full bg-[#eaf4f1] dark:bg-[#0e2d29] border border-[#bddcd3] dark:border-[#1c4b43] text-[11px] font-mono-num font-extrabold text-[#0a3f34] dark:text-[#64c4a8] shrink-0">
             3M EIBOR {EIBOR_SNAPSHOT.latest.threeMonth.toFixed(3)}%
           </span>
         </div>
 
         {/* Right Highlighted Live Comms Capsule (Betterway Inside & SIP), Customise UI, Search, Alerts & Profile */}
         <div className="flex items-center gap-2 shrink-0">
-          <div className="hidden lg:inline-flex items-center p-1 rounded-full bg-[#090d13] border border-[#d9b356]/55 shadow-md gap-1">
+          <div className="hidden lg:inline-flex items-center p-1 rounded-full bg-[#0b192c] border border-[#c49a45]/55 shadow-md gap-1">
             <Link
               href="/os/inside"
               className={`group inline-flex items-center gap-1.5 h-7 px-3 rounded-full text-[11px] font-extrabold transition ${
                 pathname.startsWith('/os/inside')
-                  ? 'bg-[#22e2ad] text-[#070e1a] shadow-xs'
+                  ? 'bg-[#47a88d] text-[#0b192c] shadow-xs'
                   : 'text-white hover:bg-white/12'
               }`}
               title="Betterway Inside — Team Channels & Direct Messages"
@@ -241,8 +241,8 @@ export function OsShell({ children }: { children: React.ReactNode }) {
               href="/os/sip-calls"
               className={`group inline-flex items-center gap-1.5 h-7 px-3 rounded-full text-[11px] font-extrabold transition ${
                 pathname.startsWith('/os/sip-calls')
-                  ? 'bg-[#e1b84c] text-[#070e1a] shadow-xs'
-                  : 'text-[#fbe8a4] hover:bg-white/12'
+                  ? 'bg-[#c49a45] text-[#0b192c] shadow-xs'
+                  : 'text-[#dfc285] hover:bg-white/12'
               }`}
               title="Betterway SIP Calls — Cloud PBX & 159 Direct Bank RMs"
             >
@@ -254,10 +254,10 @@ export function OsShell({ children }: { children: React.ReactNode }) {
           <button
             type="button"
             onClick={() => setCustomizerOpen(true)}
-            className="inline-flex items-center gap-1.5 h-8 px-3 rounded-full bg-[var(--bw-soft)] hover:bg-[#090d13] hover:text-[#fbe8a4] text-[var(--bw-ink)] border border-[var(--bw-line-strong)] text-[11px] font-extrabold cursor-pointer transition shadow-xs"
+            className="inline-flex items-center gap-1.5 h-8 px-3 rounded-full bg-[var(--bw-soft)] hover:bg-[#0b192c] hover:text-[#dfc285] text-[var(--bw-ink)] border border-[var(--bw-line-strong)] text-[11px] font-extrabold cursor-pointer transition shadow-xs"
             title="Customise UI colors, fonts, sizes, highlights & pinned drag layout"
           >
-            <Palette size={13} className="text-[#119c78]" />
+            <Palette size={13} className="text-[#0e5a49]" />
             <span className="hidden sm:inline">Customise UI</span>
           </button>
 
@@ -283,20 +283,20 @@ export function OsShell({ children }: { children: React.ReactNode }) {
             >
               <Bell size={16} />
               {unreadCount > 0 && (
-                <span className="absolute -top-0.5 -end-0.5 min-w-[16px] h-4 px-1 rounded-full bg-[#e11d48] text-white text-[9.5px] font-extrabold flex items-center justify-center">
+                <span className="absolute -top-0.5 -end-0.5 min-w-[16px] h-4 px-1 rounded-full bg-[#9f243b] text-white text-[9.5px] font-extrabold flex items-center justify-center">
                   {unreadCount > 9 ? '9+' : unreadCount}
                 </span>
               )}
             </button>
             {notifOpen && (
               <div className="absolute end-0 mt-2 w-[340px] max-w-[90vw] bw-card shadow-2xl overflow-hidden z-50">
-                <div className="flex items-center justify-between px-4 py-3 border-b border-white/10 bg-[#0a0e14] text-white">
+                <div className="flex items-center justify-between px-4 py-3 border-b border-white/10 bg-[#0b192c] text-white">
                   <span className="font-display font-bold text-xs">Alerts ({unreadCount} unread)</span>
                   {unreadCount > 0 && (
                     <button
                       type="button"
                       onClick={() => void markAllRead()}
-                      className="inline-flex items-center gap-1 text-[11px] font-bold text-[#34f0bc] hover:underline cursor-pointer"
+                      className="inline-flex items-center gap-1 text-[11px] font-bold text-[#64c4a8] hover:underline cursor-pointer"
                     >
                       <Check size={12} /> Mark all read
                     </button>
@@ -319,7 +319,7 @@ export function OsShell({ children }: { children: React.ReactNode }) {
                         }`}
                       >
                         <div className="flex items-start gap-2">
-                          {!n.is_read && <span className="size-2 rounded-full bg-[#119c78] mt-1.5 shrink-0" />}
+                          {!n.is_read && <span className="size-2 rounded-full bg-[#0e5a49] mt-1.5 shrink-0" />}
                           <div className="min-w-0">
                             <div className="text-xs font-bold text-[var(--bw-ink)]">{n.title}</div>
                             {n.body && <div className="text-[11px] text-[var(--bw-muted)] mt-0.5 line-clamp-2">{n.body}</div>}
@@ -359,14 +359,14 @@ export function OsShell({ children }: { children: React.ReactNode }) {
               <div className="hidden md:block leading-tight">
                 <div className="text-[11.5px] font-extrabold text-[var(--bw-ink)] flex items-center gap-1">
                   {user.name}
-                  {isOwner && <Crown size={11} className="text-[#d9b356]" />}
+                  {isOwner && <Crown size={11} className="text-[#c49a45]" />}
                 </div>
                 <div className="text-[10px] text-[var(--bw-muted)] max-w-[140px] truncate">{user.designation}</div>
               </div>
               <button
                 type="button"
                 onClick={() => void logout()}
-                className="size-7 rounded-full hover:bg-[#fff0f3] hover:text-[#e11d48] text-[var(--bw-muted)] flex items-center justify-center cursor-pointer transition"
+                className="size-7 rounded-full hover:bg-[#fdf2f4] hover:text-[#9f243b] text-[var(--bw-muted)] flex items-center justify-center cursor-pointer transition"
                 title="Sign Out"
                 aria-label="Sign Out"
               >
@@ -380,7 +380,7 @@ export function OsShell({ children }: { children: React.ReactNode }) {
       {/* Exact Horizontal All-Apps Top Strip (Visible Inside Any App, Hidden on /os Home — Matches Screenshot 2 Pixel-for-Pixel!) */}
       {pathname !== '/os' && (
         <nav
-          className="flex-none bg-white/90 dark:bg-[#0a0e14]/95 border-b border-[var(--bw-line)] px-4 lg:px-6 py-2 flex items-center gap-1.5 overflow-x-auto no-print [&::-webkit-scrollbar]:hidden [scrollbar-width:none]"
+          className="flex-none bg-white/90 dark:bg-[#0b192c]/95 border-b border-[var(--bw-line)] px-4 lg:px-6 py-2 flex items-center gap-1.5 overflow-x-auto no-print [&::-webkit-scrollbar]:hidden [scrollbar-width:none]"
           aria-label="Betterway OS Applications"
         >
           {navApps.map((app) => {
@@ -395,11 +395,11 @@ export function OsShell({ children }: { children: React.ReactNode }) {
                 }}
                 className={`group inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[11.5px] font-bold whitespace-nowrap transition shrink-0 ${
                   active
-                    ? 'bg-[#090d13] text-white shadow-md'
+                    ? 'bg-[#0b192c] text-white shadow-md'
                     : 'text-[var(--bw-body)] hover:bg-[var(--bw-soft)] hover:text-[var(--bw-ink)]'
                 }`}
               >
-                <AnimatedAppIcon name={app.key} size={15} className={active ? 'text-[#34f0bc]' : 'text-[var(--bw-muted)] group-hover:text-[#119c78]'} />
+                <AnimatedAppIcon name={app.key} size={15} className={active ? 'text-[#64c4a8]' : 'text-[var(--bw-muted)] group-hover:text-[#0e5a49]'} />
                 <span>{app.label}</span>
               </Link>
             );
@@ -414,7 +414,7 @@ export function OsShell({ children }: { children: React.ReactNode }) {
 
       {/* Native Android & iOS Mobile Bottom Dock */}
       <nav
-        className="bw-mobile-dock fixed bottom-0 inset-x-0 z-40 bg-[#070a0f]/95 backdrop-blur-xl border-t border-white/12 px-2 pt-2 items-center justify-around text-[10px] font-bold text-slate-300 no-print"
+        className="bw-mobile-dock fixed bottom-0 inset-x-0 z-40 bg-[#081322]/95 backdrop-blur-xl border-t border-white/12 px-2 pt-2 items-center justify-around text-[10px] font-bold text-slate-300 no-print"
         aria-label="Mobile quick navigation"
       >
         {[
@@ -431,7 +431,7 @@ export function OsShell({ children }: { children: React.ReactNode }) {
               key={m.href}
               href={m.href}
               className={`flex flex-col items-center gap-1 px-2.5 py-1 rounded-xl transition ${
-                active ? 'text-[#34f0bc] bg-white/10' : 'text-slate-400 hover:text-white'
+                active ? 'text-[#64c4a8] bg-white/10' : 'text-slate-400 hover:text-white'
               }`}
             >
               <Icon size={18} />
@@ -449,7 +449,7 @@ export function OsShell({ children }: { children: React.ReactNode }) {
         >
           <div className="w-full max-w-xl bw-card overflow-hidden" onClick={(e) => e.stopPropagation()}>
             <div className="flex items-center gap-2.5 px-4 py-3.5 border-b border-[var(--bw-line)]">
-              <Search size={17} className="text-[#119c78]" />
+              <Search size={17} className="text-[#0e5a49]" />
               <input
                 autoFocus
                 value={searchQ}
@@ -478,7 +478,7 @@ export function OsShell({ children }: { children: React.ReactNode }) {
                       <div className="font-bold text-[var(--bw-ink)]">{r.title}</div>
                       <div className="text-[var(--bw-muted)]">{r.subtitle}</div>
                     </div>
-                    <span className="px-2.5 py-0.5 rounded-full bg-[#0a0e14] text-[#34f0bc] text-[10px] font-bold uppercase">
+                    <span className="px-2.5 py-0.5 rounded-full bg-[#0b192c] text-[#64c4a8] text-[10px] font-bold uppercase">
                       {r.type}
                     </span>
                   </Link>

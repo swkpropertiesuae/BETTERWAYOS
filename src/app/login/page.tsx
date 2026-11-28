@@ -134,14 +134,14 @@ export default function LoginPage() {
   return (
     <div className="min-h-screen bg-[var(--bw-bg)] flex flex-col">
       {/* Live Scrolling Dubai UAE Mortgage Rate Ribbon (Calm Luxury Pace) */}
-      <div className="w-full bg-[#070b11] border-b border-[#22e2ad]/25 text-white overflow-hidden py-2">
+      <div className="w-full bg-[#091526] border-b border-[#47a88d]/25 text-white overflow-hidden py-2">
         <div className="bw-ticker-track items-center gap-6 px-4" style={{ animationDuration: '76s' }}>
           {[...LIVE_DUBAI_TICKER, ...LIVE_DUBAI_TICKER].map((item, i) => (
             <div key={`${item.label}-${i}`} className="inline-flex items-center gap-2 text-[11px] whitespace-nowrap">
-              <span className="size-1.5 rounded-full bg-[#22e2ad] shadow-[0_0_8px_#22e2ad]" />
+              <span className="size-1.5 rounded-full bg-[#47a88d]" />
               <span className="font-bold text-slate-300">{item.label}</span>
-              <span className="font-mono-num font-extrabold text-[#34f0bc]">{item.value}</span>
-              <span className="px-1.5 py-0.5 rounded bg-white/10 text-[9px] font-extrabold text-[#fbe8a4] tracking-wider">
+              <span className="font-mono-num font-extrabold text-[#64c4a8]">{item.value}</span>
+              <span className="px-1.5 py-0.5 rounded bg-white/10 text-[9px] font-extrabold text-[#dfc285] tracking-wider">
                 {item.tag}
               </span>
             </div>
@@ -161,9 +161,9 @@ export default function LoginPage() {
           >
             <defs>
               <linearGradient id="dxb-sky" x1="0%" y1="0%" x2="100%" y2="0%">
-                <stop offset="0%" stopColor="#22E2AD" />
-                <stop offset="50%" stopColor="#FBE8A4" />
-                <stop offset="100%" stopColor="#22E2AD" />
+                <stop offset="0%" stopColor="#47a88d" />
+                <stop offset="50%" stopColor="#dfc285" />
+                <stop offset="100%" stopColor="#47a88d" />
               </linearGradient>
             </defs>
             <path
@@ -179,19 +179,19 @@ export default function LoginPage() {
                 alt="Betterway Mortgages LLC"
                 className="h-12 w-auto object-contain"
               />
-              <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/8 border border-[#22e2ad]/40 text-[11px] font-mono-num font-bold text-[#34f0bc]">
-                <span className="size-2 rounded-full bg-[#22e2ad] animate-pulse" />
+              <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/8 border border-[#47a88d]/40 text-[11px] font-mono-num font-bold text-[#64c4a8]">
+                <span className="size-2 rounded-full bg-[#47a88d] animate-pulse" />
                 {dubaiClock}
               </div>
             </div>
 
             <div className="space-y-2.5">
-              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#22e2ad]/12 border border-[#22e2ad]/35 text-[#fbe8a4] text-[10.5px] font-extrabold uppercase tracking-[0.14em]">
-                <Activity size={13} className="text-[#34f0bc]" /> Live Dubai Mortgage Desk · 18 UAE Banks · 159 Direct RMs
+              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#47a88d]/12 border border-[#47a88d]/35 text-[#dfc285] text-[10.5px] font-extrabold uppercase tracking-[0.14em]">
+                <Activity size={13} className="text-[#64c4a8]" /> Live Dubai Mortgage Desk · 18 UAE Banks · 159 Direct RMs
               </div>
               <h1 className="font-display text-white text-3xl xl:text-[40px] font-extrabold leading-[1.08] tracking-[-0.035em]">
                 Dubai&apos;s live mortgage pulse,{' '}
-                <span className="bg-gradient-to-r from-[#34f0bc] via-[#a7f3d0] to-[#fbe8a4] bg-clip-text text-transparent">
+                <span className="bg-gradient-to-r from-[#64c4a8] via-[#a7f3d0] to-[#dfc285] bg-clip-text text-transparent">
                   updated every second.
                 </span>
               </h1>
@@ -201,7 +201,7 @@ export default function LoginPage() {
             <div className="rounded-2xl bg-white/[0.06] backdrop-blur-md border border-white/15 p-5 space-y-4 shadow-xl bw-float-slow">
               <div className="flex flex-wrap items-center justify-between gap-2">
                 <div className="flex items-center gap-2 text-xs font-extrabold text-white">
-                  <Calculator size={15} className="text-[#34f0bc]" /> Live Dubai Mortgage EMI Pulse (2026 Rates)
+                  <Calculator size={15} className="text-[#64c4a8]" /> Live Dubai Mortgage EMI Pulse (2026 Rates)
                 </div>
                 <div className="flex gap-1.5">
                   {DUBAI_PRESETS.map((p) => (
@@ -211,7 +211,7 @@ export default function LoginPage() {
                       onClick={() => setPropPrice(p.price)}
                       className={`px-2.5 py-1 rounded-full text-[10px] font-bold cursor-pointer transition ${
                         propPrice === p.price
-                          ? 'bg-[#22e2ad] text-[#070e1a]'
+                          ? 'bg-[#47a88d] text-[#0b192c]'
                           : 'bg-white/10 text-slate-200 hover:bg-white/20'
                       }`}
                     >
@@ -224,9 +224,9 @@ export default function LoginPage() {
               <div className="space-y-2">
                 <div className="flex items-center justify-between text-xs">
                   <span className="text-slate-300 font-semibold flex items-center gap-1.5">
-                    <Building2 size={13} className="text-[#fbe8a4]" /> Dubai Property Value
+                    <Building2 size={13} className="text-[#dfc285]" /> Dubai Property Value
                   </span>
-                  <span className="font-mono-num font-extrabold text-base text-[#fbe8a4]">{fmtAed(propPrice)}</span>
+                  <span className="font-mono-num font-extrabold text-base text-[#dfc285]">{fmtAed(propPrice)}</span>
                 </div>
                 <input
                   type="range"
@@ -236,7 +236,7 @@ export default function LoginPage() {
                   value={propPrice}
                   onChange={(e) => setPropPrice(Number(e.target.value))}
                   aria-label="Dubai Property Value"
-                  className="w-full accent-[#22e2ad] cursor-pointer"
+                  className="w-full accent-[#47a88d] cursor-pointer"
                 />
                 <div className="flex flex-wrap gap-1.5 pt-1">
                   {[
@@ -250,7 +250,7 @@ export default function LoginPage() {
                       onClick={() => setResidency(r.id as any)}
                       className={`px-3 py-1 rounded-full text-[10.5px] font-bold cursor-pointer transition ${
                         residency === r.id
-                          ? 'bg-[#fbe8a4] text-[#070e1a]'
+                          ? 'bg-[#dfc285] text-[#0b192c]'
                           : 'bg-white/8 text-slate-300 hover:bg-white/16 border border-white/10'
                       }`}
                     >
@@ -261,9 +261,9 @@ export default function LoginPage() {
               </div>
 
               <div className="grid grid-cols-2 xl:grid-cols-4 gap-2.5 pt-2 border-t border-white/12">
-                <div className="p-2.5 rounded-xl bg-black/40 border border-[#22e2ad]/30">
+                <div className="p-2.5 rounded-xl bg-black/40 border border-[#47a88d]/30">
                   <div className="text-[9.5px] uppercase font-bold text-slate-400">Est. Monthly EMI</div>
-                  <div className="font-mono-num text-base font-extrabold text-[#34f0bc] mt-0.5">{fmtAed(liveCalc.emi)}</div>
+                  <div className="font-mono-num text-base font-extrabold text-[#64c4a8] mt-0.5">{fmtAed(liveCalc.emi)}</div>
                   <div className="text-[9.5px] text-slate-400">@ {bestRate}% · 25 yrs</div>
                 </div>
                 <div className="p-2.5 rounded-xl bg-black/40 border border-white/10">
@@ -273,13 +273,13 @@ export default function LoginPage() {
                 </div>
                 <div className="p-2.5 rounded-xl bg-black/40 border border-white/10">
                   <div className="text-[9.5px] uppercase font-bold text-slate-400">Down Payment</div>
-                  <div className="font-mono-num text-base font-extrabold text-[#fbe8a4] mt-0.5">{fmtAed(liveCalc.downPayment, true)}</div>
+                  <div className="font-mono-num text-base font-extrabold text-[#dfc285] mt-0.5">{fmtAed(liveCalc.downPayment, true)}</div>
                   <div className="text-[9.5px] text-slate-400">{100 - liveCalc.ltvPct}% equity</div>
                 </div>
                 <div className="p-2.5 rounded-xl bg-black/40 border border-white/10">
                   <div className="text-[9.5px] uppercase font-bold text-slate-400">4% DLD + Trustee</div>
                   <div className="font-mono-num text-base font-extrabold text-white mt-0.5">{fmtAed(liveCalc.dldFee, true)}</div>
-                  <div className="text-[9.5px] text-[#34f0bc]">AED 0 Broker Fee</div>
+                  <div className="text-[9.5px] text-[#64c4a8]">AED 0 Broker Fee</div>
                 </div>
               </div>
             </div>
@@ -288,38 +288,38 @@ export default function LoginPage() {
           {/* Bottom Leadership & Live CBUAE Highlights */}
           <div className="space-y-3.5 pt-5 relative z-10">
             <div className="grid sm:grid-cols-2 gap-3">
-              <div className="p-3.5 rounded-2xl bg-white/[0.06] backdrop-blur-md border border-white/12 hover:border-[#22e2ad]/45 transition flex items-center gap-3">
+              <div className="p-3.5 rounded-2xl bg-white/[0.06] backdrop-blur-md border border-white/12 hover:border-[#47a88d]/45 transition flex items-center gap-3">
                 <img
                   src="/staff/warda-kapadia.jpg"
                   alt="Warda Kapadia"
-                  className="size-12 rounded-xl object-cover object-top border-2 border-[#d9b356]/70 shrink-0"
+                  className="size-12 rounded-xl object-cover object-top border-2 border-[#c49a45]/70 shrink-0"
                 />
                 <div className="min-w-0">
-                  <div className="inline-flex items-center gap-1 text-[9.5px] font-extrabold uppercase tracking-wider text-[#fbe8a4]">
+                  <div className="inline-flex items-center gap-1 text-[9.5px] font-extrabold uppercase tracking-wider text-[#dfc285]">
                     <Crown size={10} /> Warda&apos;s Place &amp; Corner
                   </div>
                   <div className="font-display font-extrabold text-sm text-white truncate">Warda Kapadia</div>
-                  <div className="text-[11px] text-[#34f0bc] truncate">Owner, Founder &amp; MD</div>
+                  <div className="text-[11px] text-[#64c4a8] truncate">Owner, Founder &amp; MD</div>
                 </div>
               </div>
-              <div className="p-3.5 rounded-2xl bg-white/[0.06] backdrop-blur-md border border-white/12 hover:border-[#22e2ad]/45 transition flex items-center gap-3">
+              <div className="p-3.5 rounded-2xl bg-white/[0.06] backdrop-blur-md border border-white/12 hover:border-[#47a88d]/45 transition flex items-center gap-3">
                 <img
                   src="/staff/shabib-siraj.jpg"
                   alt="Shabib Siraj"
-                  className="size-12 rounded-xl object-cover object-top border-2 border-[#d9b356]/70 shrink-0"
+                  className="size-12 rounded-xl object-cover object-top border-2 border-[#c49a45]/70 shrink-0"
                 />
                 <div className="min-w-0">
-                  <div className="inline-flex items-center gap-1 text-[9.5px] font-extrabold uppercase tracking-wider text-[#fbe8a4]">
+                  <div className="inline-flex items-center gap-1 text-[9.5px] font-extrabold uppercase tracking-wider text-[#dfc285]">
                     <Crown size={10} /> Shabib&apos;s Place &amp; Corner
                   </div>
                   <div className="font-display font-extrabold text-sm text-white truncate">Shabib Siraj</div>
-                  <div className="text-[11px] text-[#34f0bc] truncate">Executive Director</div>
+                  <div className="text-[11px] text-[#64c4a8] truncate">Executive Director</div>
                 </div>
               </div>
             </div>
             <div className="flex items-center justify-between text-[11px] text-slate-400">
               <span>© {new Date().getFullYear()} Betterway Mortgages LLC · Al Nasr Plaza, Oud Metha, Dubai</span>
-              <span className="inline-flex items-center gap-1 text-[#34f0bc] font-bold">
+              <span className="inline-flex items-center gap-1 text-[#64c4a8] font-bold">
                 <TrendingDown size={12} /> 3M EIBOR {EIBOR_SNAPSHOT.latest.threeMonth.toFixed(3)}%
               </span>
             </div>
@@ -328,7 +328,7 @@ export default function LoginPage() {
 
         {/* Right Crisp White Sign-In & Sign-Up / Access Request Card */}
         <section className="flex items-center justify-center">
-          <div className="w-full max-w-[475px] rounded-[24px] bg-white dark:bg-[#0d1219] p-7 sm:p-9 shadow-[var(--bw-shadow-floating)] border border-[var(--bw-line)] space-y-5">
+          <div className="w-full max-w-[475px] rounded-[24px] bg-white dark:bg-[#0e1d33] p-7 sm:p-9 shadow-[var(--bw-shadow-floating)] border border-[var(--bw-line)] space-y-5">
             <div className="space-y-3">
               <div className="flex items-center justify-between gap-2">
                 <img
@@ -336,17 +336,17 @@ export default function LoginPage() {
                   alt="Betterway Mortgages"
                   className="h-11 w-auto object-contain"
                 />
-                <span className="px-2.5 py-1 rounded-full bg-[#0a0e14] text-[#34f0bc] text-[10px] font-extrabold uppercase tracking-[0.12em] inline-flex items-center gap-1">
-                  <Landmark size={11} className="text-[#fbe8a4]" /> Dubai Advisory Desk
+                <span className="px-2.5 py-1 rounded-full bg-[#0b192c] text-[#64c4a8] text-[10px] font-extrabold uppercase tracking-[0.12em] inline-flex items-center gap-1">
+                  <Landmark size={11} className="text-[#dfc285]" /> Dubai Advisory Desk
                 </span>
               </div>
 
               {/* Mobile Compact Live Dubai Rate Strip */}
-              <div className="lg:hidden p-3 rounded-xl bg-[#090d13] text-white flex items-center justify-between text-[11px]">
-                <span className="inline-flex items-center gap-1.5 font-bold text-[#34f0bc]">
+              <div className="lg:hidden p-3 rounded-xl bg-[#0b192c] text-white flex items-center justify-between text-[11px]">
+                <span className="inline-flex items-center gap-1.5 font-bold text-[#64c4a8]">
                   <Landmark size={13} /> Best 2026: 3.89%
                 </span>
-                <span className="font-mono-num text-[#fbe8a4]">3M EIBOR {EIBOR_SNAPSHOT.latest.threeMonth.toFixed(3)}%</span>
+                <span className="font-mono-num text-[#dfc285]">3M EIBOR {EIBOR_SNAPSHOT.latest.threeMonth.toFixed(3)}%</span>
               </div>
 
               {/* Sign In / Sign Up Switcher */}
@@ -358,7 +358,7 @@ export default function LoginPage() {
                     setReqDone(false);
                   }}
                   className={`py-2 rounded-full text-xs font-extrabold cursor-pointer transition ${
-                    authTab === 'signin' ? 'bg-[#090d13] text-[#34f0bc] shadow-sm' : 'text-[var(--bw-muted)] hover:text-[var(--bw-ink)]'
+                    authTab === 'signin' ? 'bg-[#0b192c] text-[#64c4a8] shadow-sm' : 'text-[var(--bw-muted)] hover:text-[var(--bw-ink)]'
                   }`}
                 >
                   Staff Sign In
@@ -367,7 +367,7 @@ export default function LoginPage() {
                   type="button"
                   onClick={() => setAuthTab('signup')}
                   className={`py-2 rounded-full text-xs font-extrabold cursor-pointer transition ${
-                    authTab === 'signup' ? 'bg-[#090d13] text-[#fbe8a4] shadow-sm' : 'text-[var(--bw-muted)] hover:text-[var(--bw-ink)]'
+                    authTab === 'signup' ? 'bg-[#0b192c] text-[#dfc285] shadow-sm' : 'text-[var(--bw-muted)] hover:text-[var(--bw-ink)]'
                   }`}
                 >
                   Sign Up / Request Seat
@@ -387,7 +387,7 @@ export default function LoginPage() {
                 </div>
 
                 {error && (
-                  <div role="alert" className="px-3.5 py-2.5 rounded-xl bg-[#fff0f3] border border-[#fecdd6] text-[#be123c] text-xs font-bold">
+                  <div role="alert" className="px-3.5 py-2.5 rounded-xl bg-[#fdf2f4] border border-[#fecdd6] text-[#881b30] text-xs font-bold">
                     {error}
                   </div>
                 )}
@@ -404,7 +404,7 @@ export default function LoginPage() {
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     placeholder="name@betterwaymortgages.com"
-                    className="w-full min-h-[44px] px-4 rounded-xl bg-[var(--bw-soft)] border border-[var(--bw-line-strong)] text-sm text-[var(--bw-ink)] outline-none focus:border-[#119c78] focus:shadow-[var(--bw-focus-ring)]"
+                    className="w-full min-h-[44px] px-4 rounded-xl bg-[var(--bw-soft)] border border-[var(--bw-line-strong)] text-sm text-[var(--bw-ink)] outline-none focus:border-[#0e5a49] focus:shadow-[var(--bw-focus-ring)]"
                   />
                 </div>
 
@@ -420,7 +420,7 @@ export default function LoginPage() {
                       autoComplete="current-password"
                       value={password}
                       onChange={(e) => setPassword(e.target.value)}
-                      className="w-full min-h-[44px] ps-4 pe-11 rounded-xl bg-[var(--bw-soft)] border border-[var(--bw-line-strong)] text-sm text-[var(--bw-ink)] outline-none focus:border-[#119c78] focus:shadow-[var(--bw-focus-ring)]"
+                      className="w-full min-h-[44px] ps-4 pe-11 rounded-xl bg-[var(--bw-soft)] border border-[var(--bw-line-strong)] text-sm text-[var(--bw-ink)] outline-none focus:border-[#0e5a49] focus:shadow-[var(--bw-focus-ring)]"
                     />
                     <button
                       type="button"
@@ -434,7 +434,7 @@ export default function LoginPage() {
                 </div>
 
                 <button type="submit" disabled={busy} className="bw-btn bw-btn-obsidian w-full min-h-[46px] text-[14px] font-extrabold">
-                  <LogIn size={16} className="text-[#34f0bc]" /> {busy ? 'Opening OS…' : 'Open Betterway OS'}
+                  <LogIn size={16} className="text-[#64c4a8]" /> {busy ? 'Opening OS…' : 'Open Betterway OS'}
                 </button>
               </form>
             ) : (
@@ -449,7 +449,7 @@ export default function LoginPage() {
                 </div>
 
                 {reqDone ? (
-                  <div className="p-4 rounded-2xl bg-[#e3fbf3] border border-[#9be8ce] text-[#053b2e] text-xs space-y-1.5">
+                  <div className="p-4 rounded-2xl bg-[#eaf4f1] border border-[#bddcd3] text-[#0a3f34] text-xs space-y-1.5">
                     <div className="font-extrabold flex items-center gap-1.5">
                       <CheckCircle2 size={15} /> Onboarding Request Logged!
                     </div>
@@ -502,7 +502,7 @@ export default function LoginPage() {
 
             {demoMode && demoAccounts.length > 0 && (
               <div className="pt-4 border-t border-[var(--bw-line)] space-y-2">
-                <div className="text-[10.5px] font-extrabold uppercase tracking-[0.14em] text-[#119c78] flex items-center justify-between">
+                <div className="text-[10.5px] font-extrabold uppercase tracking-[0.14em] text-[#0e5a49] flex items-center justify-between">
                   <span>1-Click Staff Access (Local Mode)</span>
                   <ShieldCheck size={13} />
                 </div>
@@ -512,12 +512,12 @@ export default function LoginPage() {
                       key={acc.id}
                       type="button"
                       onClick={() => void switchDemoAccount(acc.email)}
-                      className="p-2 rounded-xl bg-[var(--bw-soft)] hover:bg-[#0a0e14] hover:text-white border border-[var(--bw-line)] hover:border-[#22e2ad]/60 flex items-center gap-2 text-start transition cursor-pointer group"
+                      className="p-2 rounded-xl bg-[var(--bw-soft)] hover:bg-[#0b192c] hover:text-white border border-[var(--bw-line)] hover:border-[#47a88d]/60 flex items-center gap-2 text-start transition cursor-pointer group"
                     >
                       <StaffAvatar name={acc.name} avatarUrl={acc.avatarUrl} initials={acc.initials} size="sm" />
                       <div className="min-w-0">
                         <div className="text-[11.5px] font-extrabold truncate">{acc.name}</div>
-                        <div className="text-[9.5px] text-[var(--bw-muted)] group-hover:text-[#34f0bc] truncate">{acc.designation}</div>
+                        <div className="text-[9.5px] text-[var(--bw-muted)] group-hover:text-[#64c4a8] truncate">{acc.designation}</div>
                       </div>
                     </button>
                   ))}

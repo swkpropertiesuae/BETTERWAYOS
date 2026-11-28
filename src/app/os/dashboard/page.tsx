@@ -87,8 +87,8 @@ export default function DashboardPage() {
       {/* Simple English Control Header + 21st.dev Shine Buttons */}
       <header className="flex flex-wrap items-center justify-between gap-4 pb-2">
         <div>
-          <div className="inline-flex items-center gap-2 text-[11px] font-extrabold uppercase tracking-[0.14em] text-[#119c78] dark:text-[#34f0bc] mb-1">
-            <span className="size-1.5 rounded-full bg-[#22e2ad]" /> Live Dubai Control Desk
+          <div className="inline-flex items-center gap-2 text-[11px] font-extrabold uppercase tracking-[0.14em] text-[#0e5a49] dark:text-[#64c4a8] mb-1">
+            <span className="size-1.5 rounded-full bg-[#47a88d]" /> Live Dubai Control Desk
           </div>
           <h1 className="font-display text-2xl sm:text-[34px] font-extrabold tracking-[-0.03em] text-[var(--bw-ink)]">
             Your Daily Mortgage Desk
@@ -99,7 +99,7 @@ export default function DashboardPage() {
         </div>
         <div className="flex flex-wrap gap-2 no-print">
           <a href="/api/v1/utilities/master-backup-excel" className="bw-btn bw-btn-outline text-xs">
-            <Download size={14} className="text-[#119c78]" /> Export Excel
+            <Download size={14} className="text-[#0e5a49]" /> Export Excel
           </a>
           <ShineLink href="/os/mortgage-desk" variant="obsidian">
             24-Bank &amp; Proposals
@@ -144,14 +144,14 @@ export default function DashboardPage() {
         <details className="bw-disclosure" open>
           <summary>
             <span>Needs Attention Right Now</span>
-            <span className="ms-auto px-2.5 py-0.5 rounded-full bg-[#fff0f3] text-[#be123c] border border-[#fecdd6] text-xs font-extrabold">
+            <span className="ms-auto px-2.5 py-0.5 rounded-full bg-[#fdf2f4] text-[#881b30] border border-[#fecdd6] text-xs font-extrabold">
               {data.criticalAlerts.length}
             </span>
           </summary>
           <div className="grid md:grid-cols-2 border-t border-[var(--bw-line)] divide-y md:divide-y-0 md:divide-x divide-[var(--bw-line)]">
             {data.criticalAlerts.slice(0, 6).map((a: any) => (
               <div key={a.id} className="flex items-start gap-3 px-5 py-3.5 hover:bg-[var(--bw-hover)] text-xs">
-                <AlertTriangle size={16} className="text-[#e11d48] shrink-0 mt-0.5" />
+                <AlertTriangle size={16} className="text-[#9f243b] shrink-0 mt-0.5" />
                 <div className="min-w-0 flex-1">
                   <div className="font-bold text-[var(--bw-ink)]">{a.title}</div>
                   <div className="text-[var(--bw-muted)] mt-0.5">{a.body}</div>
@@ -178,7 +178,7 @@ export default function DashboardPage() {
             </div>
             <div className="py-3 flex items-center justify-between gap-2 text-xs">
               <dt className="text-slate-300">Expected Bank DSA</dt>
-              <dd className="font-display text-base font-extrabold font-mono-num text-[#34f0bc]">
+              <dd className="font-display text-base font-extrabold font-mono-num text-[#64c4a8]">
                 {fmtAed(data.kpis.expectedDsaAed, true)}
               </dd>
             </div>
@@ -188,7 +188,7 @@ export default function DashboardPage() {
             </div>
             <div className="pt-3 flex items-center justify-between gap-2 text-xs">
               <dt className="text-slate-300">Team Checked In Today</dt>
-              <dd className="font-display text-base font-extrabold font-mono-num text-[#fbe8a4]">
+              <dd className="font-display text-base font-extrabold font-mono-num text-[#dfc285]">
                 {data.kpis.checkedInCount ?? 0} / {data.kpis.totalStaffCount ?? 9}
               </dd>
             </div>
@@ -201,7 +201,7 @@ export default function DashboardPage() {
               <h2 className="font-display text-sm font-extrabold text-[var(--bw-ink)]">12-Step Mortgage Pipeline</h2>
               <p className="text-[11px] text-[var(--bw-muted)]">From 01 Enquiry to 12 Client Care</p>
             </div>
-            <Link href="/os/pipeline" className="text-xs font-extrabold text-[#119c78] hover:underline inline-flex items-center gap-1">
+            <Link href="/os/pipeline" className="text-xs font-extrabold text-[#0e5a49] hover:underline inline-flex items-center gap-1">
               Open <ArrowRight size={13} />
             </Link>
           </div>
@@ -210,11 +210,11 @@ export default function DashboardPage() {
               <Link
                 key={s.code}
                 href="/os/pipeline"
-                className="p-3 rounded-xl bg-[var(--bw-soft)] hover:bg-[#0a0e14] hover:text-white border border-[var(--bw-line)] hover:border-[#22e2ad]/50 transition group"
+                className="p-3 rounded-xl bg-[var(--bw-soft)] hover:bg-[#0b192c] hover:text-white border border-[var(--bw-line)] hover:border-[#47a88d]/50 transition group"
               >
                 <div className="flex items-center justify-between text-[11px]">
                   <span className="font-bold text-[var(--bw-muted)] group-hover:text-slate-300">Step {s.order}</span>
-                  <span className="px-2 py-0.5 rounded-full bg-[#0a0e14] group-hover:bg-[#22e2ad] text-[#34f0bc] group-hover:text-[#070e1a] font-mono-num font-extrabold">
+                  <span className="px-2 py-0.5 rounded-full bg-[#0b192c] group-hover:bg-[#47a88d] text-[#64c4a8] group-hover:text-[#0b192c] font-mono-num font-extrabold">
                     {s.count}
                   </span>
                 </div>
@@ -249,7 +249,7 @@ export default function DashboardPage() {
                   <Link
                     key={s.href}
                     href={s.href}
-                    className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-full bg-[var(--bw-soft)] hover:bg-[#0a0e14] text-[var(--bw-ink)] hover:text-[#34f0bc] border border-[var(--bw-line)] hover:border-[#22e2ad]/50 text-xs font-bold transition"
+                    className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-full bg-[var(--bw-soft)] hover:bg-[#0b192c] text-[var(--bw-ink)] hover:text-[#64c4a8] border border-[var(--bw-line)] hover:border-[#47a88d]/50 text-xs font-bold transition"
                   >
                     <Icon size={13} /> {s.label}
                   </Link>
@@ -273,7 +273,7 @@ export default function DashboardPage() {
               value={taskTitle}
               onChange={(e) => setTaskTitle(e.target.value)}
               placeholder="Write a quick follow-up or bank RM task..."
-              className="flex-1 min-w-[180px] h-10 px-3.5 rounded-xl border border-[var(--bw-line-strong)] bg-[var(--bw-soft)] text-xs outline-none focus:border-[#119c78]"
+              className="flex-1 min-w-[180px] h-10 px-3.5 rounded-xl border border-[var(--bw-line-strong)] bg-[var(--bw-soft)] text-xs outline-none focus:border-[#0e5a49]"
             />
             <select
               value={taskPriority}
@@ -309,7 +309,7 @@ export default function DashboardPage() {
               data.myTasks.map((t: any) => (
                 <div key={t.id} className="p-3 rounded-xl border border-[var(--bw-line)] bg-[var(--bw-soft)]/70 flex items-center justify-between gap-2 text-xs">
                   <button type="button" onClick={() => void toggleDone(t)} className="flex items-center gap-2.5 text-start cursor-pointer">
-                    <CheckCircle2 size={17} className={t.status === 'Done' ? 'text-[#119c78]' : 'text-[var(--bw-muted)]'} />
+                    <CheckCircle2 size={17} className={t.status === 'Done' ? 'text-[#0e5a49]' : 'text-[var(--bw-muted)]'} />
                     <span className={t.status === 'Done' ? 'line-through text-[var(--bw-muted)]' : 'font-bold text-[var(--bw-ink)]'}>
                       {t.title}
                     </span>
@@ -348,9 +348,9 @@ export default function DashboardPage() {
       <section className="bw-card overflow-hidden">
         <div className="px-5 py-4 border-b border-[var(--bw-line)] flex items-center justify-between">
           <h3 className="font-display text-sm font-extrabold flex items-center gap-2">
-            <UserCheck size={16} className="text-[#119c78]" /> Assigned Clients &amp; Referrals
+            <UserCheck size={16} className="text-[#0e5a49]" /> Assigned Clients &amp; Referrals
           </h3>
-          <Link href="/os/crm" className="text-xs font-extrabold text-[#119c78] hover:underline">
+          <Link href="/os/crm" className="text-xs font-extrabold text-[#0e5a49] hover:underline">
             Open All Leads →
           </Link>
         </div>
@@ -375,7 +375,7 @@ export default function DashboardPage() {
               ) : (
                 data.assignedClients.map((c: any) => (
                   <tr key={c.id} className="hover:bg-[var(--bw-hover)]">
-                    <td className="py-3.5 px-4 font-mono-num font-extrabold text-[#119c78]">{c.referenceCode}</td>
+                    <td className="py-3.5 px-4 font-mono-num font-extrabold text-[#0e5a49]">{c.referenceCode}</td>
                     <td className="py-3.5 px-4 font-bold text-[var(--bw-ink)]">{c.contactName}</td>
                     <td className="py-3.5 px-4 font-mono-num text-[var(--bw-body)]">{c.phoneDisplay}</td>
                     <td className="py-3.5 px-4 text-[var(--bw-body)]">{c.sourceChannel} · {c.referrerName}</td>

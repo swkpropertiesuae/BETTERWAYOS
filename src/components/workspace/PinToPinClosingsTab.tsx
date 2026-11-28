@@ -214,7 +214,7 @@ export function PinToPinClosingsTab() {
         <button
           type="button"
           onClick={() => setShowNew((v) => !v)}
-          className="px-4 py-2 rounded-full bg-[#007b52] text-white text-xs font-extrabold inline-flex items-center gap-1.5 cursor-pointer"
+          className="px-4 py-2 rounded-full bg-[#0e5243] text-white text-xs font-extrabold inline-flex items-center gap-1.5 cursor-pointer"
         >
           <Plus size={14} /> {showNew ? 'Hide New Dossier' : 'New Mortgage Closing Dossier'}
         </button>
@@ -228,7 +228,7 @@ export function PinToPinClosingsTab() {
             type="button"
             onClick={() => setTrackFilter(t)}
             className={`px-3.5 py-1.5 rounded-full font-bold cursor-pointer ${
-              trackFilter === t ? 'bg-[#025e3d] text-[#FCF1B7]' : 'border border-[var(--bw-line)] bg-[var(--bw-card)]'
+              trackFilter === t ? 'bg-[#0e5243] text-[#ebd5a6]' : 'border border-[var(--bw-line)] bg-[var(--bw-card)]'
             }`}
           >
             {t === 'ALL' ? `All 5 Mortgage Tracks (${dossiers.length})` : t}
@@ -238,7 +238,7 @@ export function PinToPinClosingsTab() {
 
       {/* New Mortgage Closing Dossier Form */}
       {showNew && (
-        <form onSubmit={createDossier} className="bw-card p-5 space-y-3 text-xs border-[#007b52]/40">
+        <form onSubmit={createDossier} className="bw-card p-5 space-y-3 text-xs border-[#0e5243]/40">
           <div className="flex flex-wrap items-center justify-between gap-2">
             <h3 className="text-sm font-extrabold">Create Pin-to-Pin Mortgage Closing Dossier</h3>
             {(data?.activeCases ?? []).length > 0 && (
@@ -319,7 +319,7 @@ export function PinToPinClosingsTab() {
             </div>
           </div>
 
-          <button type="submit" className="px-6 py-2 rounded-full bg-[#025e3d] text-[#FCF1B7] font-extrabold cursor-pointer">
+          <button type="submit" className="px-6 py-2 rounded-full bg-[#0e5243] text-[#ebd5a6] font-extrabold cursor-pointer">
             Create Pin-to-Pin Mortgage Dossier
           </button>
         </form>
@@ -342,18 +342,18 @@ export function PinToPinClosingsTab() {
                   type="button"
                   onClick={() => setSelectedId(d.id)}
                   className={`w-full text-start bw-card p-4 space-y-1.5 text-xs cursor-pointer transition ${
-                    selected?.id === d.id ? 'border-[#007b52] ring-1 ring-[#007b52]' : ''
+                    selected?.id === d.id ? 'border-[#0e5243] ring-1 ring-[#0e5243]' : ''
                   }`}
                 >
                   <div className="flex items-center justify-between gap-2">
-                    <span className="font-mono-num font-bold text-[#007b52]">{d.dossier_no}</span>
+                    <span className="font-mono-num font-bold text-[#0e5243]">{d.dossier_no}</span>
                     <StatusPill label={d.track} tone="navy" />
                   </div>
                   <div className="font-extrabold">{d.client_name}</div>
                   <div className="text-[11px] text-[var(--bw-muted)]">{d.community} · {d.project_name} {d.unit_no ? `#${d.unit_no}` : ''}</div>
                   <div className="flex items-center justify-between pt-1 text-[11px] font-mono-num">
                     <span>{done}/{st.length} Steps Done</span>
-                    <span className="text-[#007b52] font-bold">{d.cheques?.length ?? 0} Cheques</span>
+                    <span className="text-[#0e5243] font-bold">{d.cheques?.length ?? 0} Cheques</span>
                   </div>
                 </button>
               );
@@ -369,7 +369,7 @@ export function PinToPinClosingsTab() {
               <div className="flex flex-wrap items-start justify-between gap-3 pb-3 border-b border-[var(--bw-line)]">
                 <div>
                   <div className="flex items-center gap-2">
-                    <span className="font-mono-num font-bold text-[#007b52]">{selected.dossier_no}</span>
+                    <span className="font-mono-num font-bold text-[#0e5243]">{selected.dossier_no}</span>
                     <StatusPill label={selected.track} tone="navy" />
                     <StatusPill label={selected.status} tone="emerald" />
                   </div>
@@ -379,10 +379,10 @@ export function PinToPinClosingsTab() {
                   </div>
                 </div>
                 <div className="flex flex-wrap gap-1.5">
-                  <button type="button" onClick={() => downloadWordDocument(buildClosingExport(selected))} className="px-3 py-1.5 rounded-lg bg-[#025e3d] text-[#FCF1B7] font-bold inline-flex items-center gap-1 cursor-pointer">
+                  <button type="button" onClick={() => downloadWordDocument(buildClosingExport(selected))} className="px-3 py-1.5 rounded-lg bg-[#0e5243] text-[#ebd5a6] font-bold inline-flex items-center gap-1 cursor-pointer">
                     <FileText size={12} /> .DOC
                   </button>
-                  <button type="button" onClick={() => void downloadJpegDocument(buildClosingExport(selected))} className="px-3 py-1.5 rounded-lg bg-[#007b52] text-white font-bold inline-flex items-center gap-1 cursor-pointer">
+                  <button type="button" onClick={() => void downloadJpegDocument(buildClosingExport(selected))} className="px-3 py-1.5 rounded-lg bg-[#0e5243] text-white font-bold inline-flex items-center gap-1 cursor-pointer">
                     <ImageIcon size={12} /> .JPEG
                   </button>
                   <button type="button" onClick={() => printBrandedDocument(buildClosingExport(selected))} className="px-3 py-1.5 rounded-lg border border-[var(--bw-line)] font-bold inline-flex items-center gap-1 cursor-pointer">
@@ -409,7 +409,7 @@ export function PinToPinClosingsTab() {
                       }`}
                     >
                       {st.status === 'Done' ? (
-                        <CheckCircle2 size={16} className="text-[#007b52] shrink-0 mt-0.5" />
+                        <CheckCircle2 size={16} className="text-[#0e5243] shrink-0 mt-0.5" />
                       ) : st.status === 'In Progress' ? (
                         <Clock size={16} className="text-amber-600 shrink-0 mt-0.5" />
                       ) : (
@@ -459,7 +459,7 @@ export function PinToPinClosingsTab() {
                     <option>Botim</option>
                   </select>
                   <input type="number" required value={chq.amountAed} onChange={(e) => setChq({ ...chq, amountAed: Number(e.target.value) })} placeholder="AED Amount" className="h-8 px-2 rounded-lg border border-[var(--bw-line)] bg-[var(--bw-card)] font-mono-num" />
-                  <button type="submit" className="h-8 rounded-lg bg-[#007b52] text-white font-bold cursor-pointer">+ Add Payment</button>
+                  <button type="submit" className="h-8 rounded-lg bg-[#0e5243] text-white font-bold cursor-pointer">+ Add Payment</button>
                 </form>
 
                 <div className="overflow-x-auto">
@@ -487,7 +487,7 @@ export function PinToPinClosingsTab() {
                           </td>
                           <td className="py-2.5 text-end space-x-1">
                             {c.status !== 'Cleared' && (
-                              <button type="button" onClick={() => void updateChequeStatus(c.id, 'Cleared')} className="px-2 py-1 rounded bg-[#007b52] text-white text-[10px] font-bold cursor-pointer">
+                              <button type="button" onClick={() => void updateChequeStatus(c.id, 'Cleared')} className="px-2 py-1 rounded bg-[#0e5243] text-white text-[10px] font-bold cursor-pointer">
                                 Clear
                               </button>
                             )}

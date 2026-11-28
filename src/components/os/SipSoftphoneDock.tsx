@@ -70,13 +70,13 @@ export function SipSoftphoneDock({ user }: { user: SessionUser | null }) {
         <button
           type="button"
           onClick={() => setSipDockExpanded(true)}
-          className="h-10 px-3.5 rounded-full bg-[#090d13]/95 hover:bg-[#111822] text-white border border-[#22e2ad]/45 shadow-2xl backdrop-blur-xl inline-flex items-center gap-2 text-[11.5px] font-extrabold cursor-pointer transition"
+          className="h-10 px-3.5 rounded-full bg-[#0b192c]/95 hover:bg-[#142946] text-white border border-[#47a88d]/45 shadow-2xl backdrop-blur-xl inline-flex items-center gap-2 text-[11.5px] font-extrabold cursor-pointer transition"
           title="Open Betterway SIP Softphone"
         >
-          <span className="size-2 rounded-full bg-[#34f0bc] shadow-[0_0_8px_#34f0bc]" />
-          <Phone size={13} className="text-[#34f0bc]" />
+          <span className="size-2 rounded-full bg-[#64c4a8]" />
+          <Phone size={13} className="text-[#64c4a8]" />
           <span>SIP Ext {myExt.ext}</span>
-          <span className="text-[10px] font-semibold text-[#fbe8a4] hidden sm:inline">· Ready</span>
+          <span className="text-[10px] font-semibold text-[#dfc285] hidden sm:inline">· Ready</span>
         </button>
       </div>
     );
@@ -85,14 +85,14 @@ export function SipSoftphoneDock({ user }: { user: SessionUser | null }) {
   return (
     <aside
       aria-label="Betterway SIP Softphone Dock"
-      className="fixed bottom-20 sm:bottom-5 end-5 z-[75] w-[328px] max-w-[calc(100vw-2rem)] rounded-[22px] bg-[#080c12]/97 text-white border border-[#22e2ad]/40 shadow-[0_28px_60px_-16px_rgba(3,7,14,0.9)] backdrop-blur-xl overflow-hidden no-print"
+      className="fixed bottom-20 sm:bottom-5 end-5 z-[75] w-[328px] max-w-[calc(100vw-2rem)] rounded-[22px] bg-[#0a1627]/97 text-white border border-[#47a88d]/40 shadow-[0_28px_60px_-16px_rgba(3,7,14,0.9)] backdrop-blur-xl overflow-hidden no-print"
     >
       {/* Top Glossy Bar */}
-      <div className="px-4 py-3 bg-gradient-to-r from-[#0e1520] to-[#080c12] border-b border-white/10 flex items-center justify-between gap-2">
+      <div className="px-4 py-3 bg-gradient-to-r from-[#112540] to-[#0a1627] border-b border-white/10 flex items-center justify-between gap-2">
         <div className="flex items-center gap-2 min-w-0">
           <span
             className={`size-2.5 rounded-full shrink-0 ${
-              activeCall ? 'bg-[#34f0bc] animate-pulse shadow-[0_0_10px_#34f0bc]' : config.registered ? 'bg-[#22e2ad]' : 'bg-amber-400'
+              activeCall ? 'bg-[#64c4a8] animate-pulse' : config.registered ? 'bg-[#47a88d]' : 'bg-amber-400'
             }`}
           />
           <div className="min-w-0">
@@ -107,7 +107,7 @@ export function SipSoftphoneDock({ user }: { user: SessionUser | null }) {
         <div className="flex items-center gap-1 shrink-0">
           <Link
             href="/os/sip-calls"
-            className="size-7 rounded-full bg-white/8 hover:bg-white/18 text-[#fbe8a4] flex items-center justify-center transition"
+            className="size-7 rounded-full bg-white/8 hover:bg-white/18 text-[#dfc285] flex items-center justify-center transition"
             title="Open Full SIP Call Desk"
           >
             <ArrowUpRight size={13} />
@@ -129,7 +129,7 @@ export function SipSoftphoneDock({ user }: { user: SessionUser | null }) {
         <div className="p-4 space-y-3.5">
           {/* Active Call Banner */}
           <div className="p-3.5 rounded-2xl bg-white/[0.06] border border-white/12 text-center space-y-1">
-            <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-[#22e2ad]/15 text-[#34f0bc] text-[10px] font-extrabold uppercase tracking-wider">
+            <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-[#47a88d]/15 text-[#64c4a8] text-[10px] font-extrabold uppercase tracking-wider">
               {activeCall.direction === 'INBOUND' ? <PhoneIncoming size={11} /> : <PhoneCall size={11} />}
               {activeCall.state === 'RINGING'
                 ? 'Incoming Call'
@@ -140,7 +140,7 @@ export function SipSoftphoneDock({ user }: { user: SessionUser | null }) {
                     : `Connected · ${formatCallDuration(elapsedSec)}`}
             </div>
             <div className="font-display text-base font-extrabold text-white truncate pt-0.5">{activeCall.remoteName}</div>
-            <div className="font-mono-num text-xs text-[#fbe8a4]">{activeCall.remoteNumber}</div>
+            <div className="font-mono-num text-xs text-[#dfc285]">{activeCall.remoteNumber}</div>
             {activeCall.recording && activeCall.state === 'CONNECTED' && (
               <div className="inline-flex items-center gap-1 text-[10px] font-bold text-rose-400">
                 <CircleDot size={10} className="animate-pulse" /> Recording Call (CBUAE Audit)
@@ -156,7 +156,7 @@ export function SipSoftphoneDock({ user }: { user: SessionUser | null }) {
               <button
                 type="button"
                 onClick={answerIncomingSipCall}
-                className="py-2.5 rounded-full bg-[#119c78] hover:bg-[#14b58b] text-white text-xs font-extrabold inline-flex items-center justify-center gap-1.5 cursor-pointer"
+                className="py-2.5 rounded-full bg-[#0e5a49] hover:bg-[#14705b] text-white text-xs font-extrabold inline-flex items-center justify-center gap-1.5 cursor-pointer"
               >
                 <Phone size={14} /> Answer
               </button>
@@ -186,7 +186,7 @@ export function SipSoftphoneDock({ user }: { user: SessionUser | null }) {
                   type="button"
                   onClick={toggleSipHold}
                   className={`py-2 rounded-xl flex flex-col items-center gap-1 cursor-pointer transition ${
-                    activeCall.onHold ? 'bg-[#fbe8a4] text-black' : 'bg-white/10 hover:bg-white/18 text-white'
+                    activeCall.onHold ? 'bg-[#dfc285] text-black' : 'bg-white/10 hover:bg-white/18 text-white'
                   }`}
                 >
                   {activeCall.onHold ? <Play size={14} /> : <Pause size={14} />}
@@ -199,7 +199,7 @@ export function SipSoftphoneDock({ user }: { user: SessionUser | null }) {
                     setShowTransfer(false);
                   }}
                   className={`py-2 rounded-xl flex flex-col items-center gap-1 cursor-pointer transition ${
-                    showDtmf ? 'bg-[#22e2ad] text-black' : 'bg-white/10 hover:bg-white/18 text-white'
+                    showDtmf ? 'bg-[#47a88d] text-black' : 'bg-white/10 hover:bg-white/18 text-white'
                   }`}
                 >
                   <Grid3X3 size={14} />
@@ -212,7 +212,7 @@ export function SipSoftphoneDock({ user }: { user: SessionUser | null }) {
                     setShowDtmf(false);
                   }}
                   className={`py-2 rounded-xl flex flex-col items-center gap-1 cursor-pointer transition ${
-                    showTransfer ? 'bg-[#22e2ad] text-black' : 'bg-white/10 hover:bg-white/18 text-white'
+                    showTransfer ? 'bg-[#47a88d] text-black' : 'bg-white/10 hover:bg-white/18 text-white'
                   }`}
                 >
                   <PhoneForwarded size={14} />
@@ -227,7 +227,7 @@ export function SipSoftphoneDock({ user }: { user: SessionUser | null }) {
                       key={k}
                       type="button"
                       onClick={() => sendSipDtmf(k)}
-                      className="h-9 rounded-xl bg-white/10 hover:bg-[#22e2ad] hover:text-black font-mono font-extrabold text-sm cursor-pointer transition"
+                      className="h-9 rounded-xl bg-white/10 hover:bg-[#47a88d] hover:text-black font-mono font-extrabold text-sm cursor-pointer transition"
                     >
                       {k}
                     </button>
@@ -237,12 +237,12 @@ export function SipSoftphoneDock({ user }: { user: SessionUser | null }) {
 
               {showTransfer && (
                 <div className="p-2.5 rounded-xl bg-white/[0.06] border border-white/12 space-y-2 text-[11px]">
-                  <div className="font-bold text-[#fbe8a4]">Blind Transfer to Extension</div>
+                  <div className="font-bold text-[#dfc285]">Blind Transfer to Extension</div>
                   <div className="flex gap-1.5">
                     <select
                       value={transferExt}
                       onChange={(e) => setTransferExt(e.target.value)}
-                      className="flex-1 h-8 px-2 rounded-lg bg-[#0d131d] border border-white/15 text-xs text-white"
+                      className="flex-1 h-8 px-2 rounded-lg bg-[#0e1d33] border border-white/15 text-xs text-white"
                     >
                       {BETTERWAY_EXTENSIONS.map((ext) => (
                         <option key={ext.ext} value={`Ext ${ext.ext} (${ext.name})`}>
@@ -253,7 +253,7 @@ export function SipSoftphoneDock({ user }: { user: SessionUser | null }) {
                     <button
                       type="button"
                       onClick={() => transferSipCall(transferExt)}
-                      className="px-3 h-8 rounded-lg bg-[#22e2ad] text-black font-extrabold cursor-pointer"
+                      className="px-3 h-8 rounded-lg bg-[#47a88d] text-black font-extrabold cursor-pointer"
                     >
                       Send
                     </button>
@@ -267,7 +267,7 @@ export function SipSoftphoneDock({ user }: { user: SessionUser | null }) {
                   value={activeCall.caseRef}
                   onChange={(e) => updateActiveSipMeta({ caseRef: e.target.value })}
                   placeholder="Case Ref (e.g. BW-2026-041)"
-                  className="flex-1 h-8 px-2.5 rounded-lg bg-white/8 border border-white/12 text-[11px] text-white placeholder:text-slate-400 outline-none focus:border-[#22e2ad]"
+                  className="flex-1 h-8 px-2.5 rounded-lg bg-white/8 border border-white/12 text-[11px] text-white placeholder:text-slate-400 outline-none focus:border-[#47a88d]"
                 />
                 <button
                   type="button"
@@ -305,7 +305,7 @@ export function SipSoftphoneDock({ user }: { user: SessionUser | null }) {
                 }
               }}
               placeholder="+971 50 ... or Ext 104"
-              className="flex-1 h-9 px-3 rounded-xl bg-white/10 border border-white/15 font-mono-num text-xs text-white placeholder:text-slate-400 outline-none focus:border-[#22e2ad]"
+              className="flex-1 h-9 px-3 rounded-xl bg-white/10 border border-white/15 font-mono-num text-xs text-white placeholder:text-slate-400 outline-none focus:border-[#47a88d]"
             />
             <button
               type="button"
@@ -314,7 +314,7 @@ export function SipSoftphoneDock({ user }: { user: SessionUser | null }) {
                 dialViaSip({ number: dialInput, category: 'Borrower' });
                 setDialInput('');
               }}
-              className="h-9 px-3.5 rounded-xl bg-[#119c78] hover:bg-[#14b58b] text-white text-xs font-extrabold inline-flex items-center gap-1 cursor-pointer"
+              className="h-9 px-3.5 rounded-xl bg-[#0e5a49] hover:bg-[#14705b] text-white text-xs font-extrabold inline-flex items-center gap-1 cursor-pointer"
             >
               <Phone size={13} /> Call
             </button>
@@ -337,7 +337,7 @@ export function SipSoftphoneDock({ user }: { user: SessionUser | null }) {
           </div>
 
           <div className="flex items-center justify-between pt-2 border-t border-white/10 text-[10.5px]">
-            <Link href="/os/sip-calls" className="text-[#34f0bc] font-bold hover:underline">
+            <Link href="/os/sip-calls" className="text-[#64c4a8] font-bold hover:underline">
               159 Bank RMs &amp; CDR Log →
             </Link>
             <button

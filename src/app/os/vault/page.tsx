@@ -90,7 +90,7 @@ export default function ClientDocumentVaultPage() {
         {/* Client Case Selector */}
         <div className="lg:col-span-4 bw-card p-5 space-y-3">
           <h3 className="text-sm font-extrabold flex items-center gap-1.5">
-            <FileLock2 size={15} className="text-[#007b52]" /> Client Cases ({cases.length})
+            <FileLock2 size={15} className="text-[#0e5243]" /> Client Cases ({cases.length})
           </h3>
           {cases.length === 0 ? (
             <div className="text-xs text-[var(--bw-muted)] py-8 text-center">
@@ -105,11 +105,11 @@ export default function ClientDocumentVaultPage() {
                   onClick={() => void load(c.id)}
                   className={`w-full p-3 rounded-xl border text-start text-xs transition cursor-pointer ${
                     selectedCaseId === c.id
-                      ? 'bg-[#025e3d] text-white border-[#D4AF37]'
-                      : 'border-[var(--bw-line)] hover:border-[#007b52]'
+                      ? 'bg-[#0e5243] text-white border-[#c49a45]'
+                      : 'border-[var(--bw-line)] hover:border-[#0e5243]'
                   }`}
                 >
-                  <div className="font-mono-num font-bold text-[#34DFAC]">{c.case_code}</div>
+                  <div className={`font-mono-num font-bold ${selectedCaseId === c.id ? 'text-[#dfc285]' : 'text-[#0e5a49]'}`}>{c.case_code}</div>
                   <div className="font-extrabold text-sm">{c.borrower_name}</div>
                   <div className="text-[11px] opacity-75">{c.community} · {c.borrower_profile}</div>
                 </button>
@@ -135,7 +135,7 @@ export default function ClientDocumentVaultPage() {
               <div key={d.id} className="p-3.5 rounded-2xl border border-[var(--bw-line)] bg-[var(--bw-bg)]/60 flex flex-wrap items-center justify-between gap-3 text-xs">
                 <div className="space-y-0.5 max-w-md">
                   <div className="flex items-center gap-2">
-                    <span className="text-[10px] font-extrabold uppercase px-2 py-0.5 rounded bg-[var(--bw-soft)] text-[#007b52]">
+                    <span className="text-[10px] font-extrabold uppercase px-2 py-0.5 rounded bg-[var(--bw-soft)] text-[#0e5243]">
                       {d.doc_category}
                     </span>
                     <span className="font-bold">{d.doc_name}</span>
@@ -149,7 +149,7 @@ export default function ClientDocumentVaultPage() {
                     label={d.status}
                     tone={d.status === 'Verified' ? 'emerald' : d.status === 'Uploaded' ? 'blue' : 'gold'}
                   />
-                  <label className="px-3 py-1.5 rounded-full bg-[#007b52] text-white font-bold inline-flex items-center gap-1 cursor-pointer">
+                  <label className="px-3 py-1.5 rounded-full bg-[#0e5243] text-white font-bold inline-flex items-center gap-1 cursor-pointer">
                     <Upload size={12} /> Upload
                     <input
                       type="file"
@@ -166,7 +166,7 @@ export default function ClientDocumentVaultPage() {
                         <Download size={12} /> View
                       </button>
                       {d.status !== 'Verified' && (
-                        <button type="button" onClick={() => void verifyDoc(d.id)} className="px-2.5 py-1.5 rounded-full bg-[#025e3d] text-[#FCF1B7] font-bold inline-flex items-center gap-1 cursor-pointer">
+                        <button type="button" onClick={() => void verifyDoc(d.id)} className="px-2.5 py-1.5 rounded-full bg-[#0e5243] text-[#ebd5a6] font-bold inline-flex items-center gap-1 cursor-pointer">
                           <CheckCircle2 size={12} /> Verify
                         </button>
                       )}
