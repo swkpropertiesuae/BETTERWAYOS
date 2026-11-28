@@ -12,6 +12,7 @@ import {
   type UiCustomConfig,
 } from '@/lib/ui-customizer';
 import { CustomiseUiDrawer, FloatingPinnedDock } from './CustomiseUiDrawer';
+import { SipSoftphoneDock } from './SipSoftphoneDock';
 
 interface ToastItem {
   id: string;
@@ -190,6 +191,7 @@ export function OsProvider({ children }: { children: React.ReactNode }) {
       }}
     >
       {children}
+      <SipSoftphoneDock user={user} />
       <FloatingPinnedDock
         config={uiConfig}
         onChange={setUiConfig}

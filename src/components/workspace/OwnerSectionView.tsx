@@ -4,6 +4,7 @@ import React, { useCallback, useEffect, useState } from 'react';
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
 import {
+  BookOpen,
   Briefcase,
   CheckCircle2,
   Crown,
@@ -13,7 +14,6 @@ import {
   Printer,
   Receipt,
   ShieldCheck,
-  Sparkles,
   Upload,
   XCircle,
 } from 'lucide-react';
@@ -45,7 +45,7 @@ const TAB_META: Record<OwnerTab, { title: string; desc: string }> = {
   fasttrack: { title: 'Privacy Fast Track', desc: 'Private VIP client mandates & confidential 5% VAT invoices isolated from staff.' },
   approvals: { title: 'Owner Approvals (1-of-2 & 2-of-2)', desc: 'Master Log change proposals, corporate seals, payouts & delete bin releases.' },
   vat: { title: 'Consolidated P&L & UAE VAT 201', desc: 'Private Owner view combining standard company ledger + private fast-track revenue.' },
-  bulkai: { title: 'Bulk AI Upload & OCR Ingestion', desc: 'Paste WhatsApp lists or buyer sheets for automatic parsing & deduplication.' },
+  bulkai: { title: 'Batch Client Sheet Importer', desc: 'Paste WhatsApp enquiries or spreadsheet rows for structured parsing & duplicate checks.' },
   goldrush: { title: 'Gold-Rush 12-Stage Kanban & Audit', desc: 'Executive 12-stage live deal flow combining standard pipeline & private VIP cases.' },
 };
 
@@ -182,7 +182,7 @@ export function OwnerSectionView({ mode }: { mode: 'place' | 'corner' }) {
       return;
     }
     setBulkResult(out);
-    toast(`Bulk AI parsed & saved ${out.inserted} clients (${out.duplicatesSkipped} duplicates skipped)!`);
+    toast(`Imported & saved ${out.inserted} clients (${out.duplicatesSkipped} duplicates skipped)!`);
     await load();
   };
 
@@ -233,7 +233,7 @@ export function OwnerSectionView({ mode }: { mode: 'place' | 'corner' }) {
   const cornerTabItems: Array<{ id: CornerTab; label: string }> = [
     { id: 'goldrush', label: '1–12 Gold-Rush Playbook & Kanban' },
     { id: 'fasttrack', label: `${privacyTitle} (${data?.fastTrackJobs?.length ?? 0})` },
-    { id: 'bulkai', label: 'Bulk AI Uploading' },
+    { id: 'bulkai', label: 'Batch Sheet Importer' },
     {
       id: 'approvals',
       label: `All Owner Approvals (${(data?.pendingApprovals?.length ?? 0) + (data?.pendingMasterRequests?.length ?? 0)})`,
@@ -284,7 +284,7 @@ export function OwnerSectionView({ mode }: { mode: 'place' | 'corner' }) {
               Open Master Log (CORE)
             </Link>
             <Link href="/os/ai" className="bw-btn bw-btn-primary text-xs py-2 min-h-[36px] px-4">
-              <Sparkles size={13} /> AI Case-Study Copilot
+              <BookOpen size={13} /> Case Playbook
             </Link>
           </div>
         </div>
@@ -320,7 +320,7 @@ export function OwnerSectionView({ mode }: { mode: 'place' | 'corner' }) {
       {activeTab === 'closings' && <PinToPinClosingsTab />}
       {activeTab === 'commissions' && <CommissionsExpensesTab />}
 
-      {/* CORNER MODULES (Private Fast Track, Approvals, Consolidated VAT, Bulk AI, Gold Rush) */}
+      {/* CORNER MODULES (Private Fast Track, Approvals, Consolidated VAT, Batch Importer, Gold Rush) */}
       {mode === 'corner' && loading && !data ? (
         <div className="bw-card p-10 text-center text-xs text-[var(--bw-muted)]">Loading Private Executive Ledger...</div>
       ) : null}
@@ -591,7 +591,7 @@ export function OwnerSectionView({ mode }: { mode: 'place' | 'corner' }) {
           <form onSubmit={runBulkUpload} className="lg:col-span-7 bw-card p-5 space-y-4">
             <div>
               <h2 className="text-base font-extrabold flex items-center gap-2">
-                <Upload size={16} className="text-[#119c78]" /> Bulk AI Client &amp; Lead Importer
+                <Upload size={16} className="text-[#119c78]" /> Batch Client &amp; Lead Sheet Importer
               </h2>
               <p className="text-xs text-[var(--bw-muted)]">
                 Paste messy WhatsApp lists, CSV exports, or buyer sheets to extract names, UAE phones, emails, communities, AED prices &amp; skip duplicates.
@@ -623,15 +623,15 @@ export function OwnerSectionView({ mode }: { mode: 'place' | 'corner' }) {
               className="w-full p-3.5 rounded-2xl border border-[var(--bw-line-strong)] bg-[var(--bw-soft)] font-mono text-xs"
             />
             <button type="submit" className="bw-btn bw-btn-primary text-xs">
-              <Sparkles size={14} /> Run AI Parse &amp; Save
+              <Upload size={14} /> Parse &amp; Import Sheet
             </button>
           </form>
 
           <div className="lg:col-span-5 bw-card p-5 space-y-3">
-            <h3 className="text-sm font-extrabold">Last Bulk AI Run</h3>
+            <h3 className="text-sm font-extrabold">Last Batch Import</h3>
             {!bulkResult ? (
               <div className="text-xs text-[var(--bw-muted)] py-8 text-center">
-                Paste rows and click <strong>Run AI Parse &amp; Save</strong> to ingest leads with automatic deduplication.
+                Paste rows and click <strong>Parse &amp; Import Sheet</strong> to save leads with automatic duplicate detection.
               </div>
             ) : (
               <div className="space-y-3 text-xs">

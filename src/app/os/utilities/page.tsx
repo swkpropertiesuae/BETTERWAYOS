@@ -366,7 +366,7 @@ export default function UtilitiesPage() {
           <div className="bw-card p-5 space-y-3">
             <h2 className="text-sm font-extrabold">PII-Shielded Document OCR Extractor</h2>
             <p className="text-xs text-[var(--bw-muted)]">
-              Extracts Emirates ID presence, salary figures, and expiry dates while shielding raw PII before downstream AI use.
+              Extracts Emirates ID presence, salary figures, and expiry dates while masking sensitive personal fields for UAE PDPL compliance.
             </p>
             <textarea
               rows={5}

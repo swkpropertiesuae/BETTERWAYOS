@@ -9,7 +9,6 @@ import {
   FileText,
   Image as ImageIcon,
   Printer,
-  Sparkles,
 } from 'lucide-react';
 import { useOs } from '@/components/os/OsProvider';
 import { fmtAed, GlossyBlackCard, StatusPill } from '@/components/os/UiKit';
@@ -186,7 +185,7 @@ export function ProposalStudioTab() {
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div>
           <h2 className="font-display text-lg font-extrabold flex items-center gap-2">
-            <Sparkles size={17} className="text-[#119c78]" /> 3-Bank Auto-Eco Proposal Maker (Excel · Word · JPEG · WhatsApp)
+            <FileSpreadsheet size={17} className="text-[#119c78]" /> 3-Bank Auto-Eco Proposal Maker (Excel · Word · JPEG · WhatsApp)
           </h2>
           <p className="text-xs text-[var(--bw-muted)]">
             Built directly from Betterway&apos;s Proposal Sheet Auto-Eco workbook: compare 3 UAE banks side-by-side with full 300-month amortization, life insurance, optional personal loan top-up, and client document checklist.

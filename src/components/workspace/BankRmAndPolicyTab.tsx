@@ -2,15 +2,17 @@
 
 import React, { useMemo, useState } from 'react';
 import {
+  BookOpen,
   Building2,
   CheckCircle2,
   Mail,
   Phone,
+  PhoneCall,
   Search,
-  Sparkles,
   Zap,
 } from 'lucide-react';
 import { fmtAed, GlossyBlackCard, StatusPill } from '@/components/os/UiKit';
+import { dialViaSip } from '@/lib/sip-store';
 import {
   answerBankPolicyQuery,
   evaluateAllBanksEligibility,
@@ -29,7 +31,7 @@ export function BankRmAndPolicyTab({ mode }: { mode: 'matcher' | 'matrix' | 'rms
   const [pref, setPref] = useState<'all' | 'islamic' | 'conventional'>('all');
   const [tenorY, setTenorY] = useState(25);
 
-  // Instant AI Bank Policy Finder
+  // Credit Desk Bank Policy Quick Lookup
   const [policyQ, setPolicyQ] = useState('Non-Resident 60% LTV');
 
   // 18-Bank Matrix filters
@@ -87,7 +89,7 @@ export function BankRmAndPolicyTab({ mode }: { mode: 'matcher' | 'matrix' | 'rms
 
     return (
       <div className="space-y-6">
-        {/* Top Row: Instant 60-Second Eligibility Matcher + AI Policy Finder */}
+        {/* Top Row: Instant 60-Second Eligibility Matcher + Credit Desk Policy Lookup */}
         <div className="grid lg:grid-cols-12 gap-5">
           <div className="lg:col-span-7 bw-card p-5 space-y-4">
             <div className="flex flex-wrap items-center justify-between gap-2">
@@ -194,11 +196,11 @@ export function BankRmAndPolicyTab({ mode }: { mode: 'matcher' | 'matrix' | 'rms
             </div>
           </div>
 
-          {/* Right: Glossy Black Instant AI Bank Policy Finder */}
+          {/* Right: Glossy Black Credit Desk Bank Policy Quick Lookup */}
           <GlossyBlackCard className="lg:col-span-5 p-5 space-y-4" accent="dual">
             <div>
               <div className="inline-flex items-center gap-1.5 text-[10.5px] font-extrabold uppercase tracking-[0.14em] text-[#34f0bc]">
-                <Sparkles size={13} className="text-[#fbe8a4]" /> Instant AI Bank Policy Finder
+                <BookOpen size={13} className="text-[#fbe8a4]" /> Credit Desk Bank Policy Lookup
               </div>
               <h3 className="font-display text-lg font-extrabold text-white mt-1">
                 Ask any UAE bank policy rule
@@ -416,12 +418,29 @@ export function BankRmAndPolicyTab({ mode }: { mode: 'matcher' | 'matrix' | 'rms
 
             <div className="flex flex-wrap gap-2 pt-1">
               {rm.phone && (
-                <a
-                  href={`tel:${rm.phone.replace(/\s+/g, '')}`}
-                  className="px-3 py-1.5 rounded-full bg-[#0a0e14] text-[#34f0bc] font-mono-num font-bold inline-flex items-center gap-1 hover:brightness-110"
-                >
-                  <Phone size={11} /> {rm.phone}
-                </a>
+                <>
+                  <button
+                    type="button"
+                    onClick={() =>
+                      dialViaSip({
+                        number: rm.phone,
+                        name: `${rm.rmName} (${rm.bank})`,
+                        category: 'Bank RM',
+                      })
+                    }
+                    className="px-3 py-1.5 rounded-full bg-[#0a0e14] hover:bg-[#119c78] text-[#34f0bc] hover:text-white font-mono-num font-bold inline-flex items-center gap-1 cursor-pointer transition"
+                    title={`Dial ${rm.rmName} via Betterway SIP`}
+                  >
+                    <PhoneCall size={11} /> SIP {rm.phone}
+                  </button>
+                  <a
+                    href={`tel:${rm.phone.replace(/\s+/g, '')}`}
+                    className="px-2.5 py-1.5 rounded-full bg-[var(--bw-soft)] border border-[var(--bw-line)] text-[var(--bw-ink)] font-semibold inline-flex items-center gap-1 hover:border-[#119c78]"
+                    title="Call via device dialer"
+                  >
+                    <Phone size={11} className="text-[#119c78]" /> Tel
+                  </a>
+                </>
               )}
               {rm.email && (
                 <a

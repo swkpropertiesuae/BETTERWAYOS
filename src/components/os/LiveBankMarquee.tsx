@@ -2,7 +2,7 @@
 
 import React from 'react';
 import Link from 'next/link';
-import { Activity, ShieldCheck, Sparkles, TrendingDown } from 'lucide-react';
+import { Activity, Calculator, ShieldCheck, TrendingDown } from 'lucide-react';
 import { EIBOR_SNAPSHOT, UAE_BANKS } from '@/lib/domain/banks';
 import { UAE_BANK_POLICIES } from '@/lib/domain/bank-intelligence';
 
@@ -21,15 +21,44 @@ const MARKET_FACTS = [
   { label: 'UAE GOLDEN VISA MIN', value: 'AED 2,000,000', tone: 'gold' },
 ];
 
+const EXACT_LOGO_KEY_BY_POLICY_CODE: Record<string, string> = {
+  ENBD: 'emirates-nbd',
+  FAB: 'fab',
+  DIB: 'dib',
+  ADCB: 'adcb',
+  ADIB: 'adib',
+  EIB: 'emirates-islamic',
+  EI: 'emirates-islamic',
+  HSBC: 'hsbc',
+  MASHREQ: 'mashreq',
+  CBD: 'cbd',
+  RAK: 'rakbank',
+  RAKBANK: 'rakbank',
+  SCB: 'standard-chartered',
+  SC: 'standard-chartered',
+  SIB: 'sib',
+  NBF: 'nbf',
+  UAB: 'uab',
+  AJMAN: 'ajman-bank',
+  ALHILAL: 'al-hilal',
+  BOB: 'bank-of-baroda',
+  NBQ: 'nbq',
+  CBI: 'cbi',
+  BOS: 'bank-of-sharjah',
+  UNB: 'unb',
+};
+
 export function LiveBankMarquee({ compact = false }: { compact?: boolean }) {
-  // Merge bank logos from UAE_BANKS with live 2026 rates from UAE_BANK_POLICIES
+  // Exact logo matching by bank code / short name (prevents "Arab Bank" from colliding with "United Arab Bank")
   const bankSlides = UAE_BANK_POLICIES.map((p) => {
-    const logoHit = UAE_BANKS.find(
-      (b) =>
-        b.short.toLowerCase() === p.short.toLowerCase() ||
-        b.name.toLowerCase().includes(p.short.toLowerCase()) ||
-        p.name.toLowerCase().includes(b.short.toLowerCase()),
-    );
+    const mappedKey = EXACT_LOGO_KEY_BY_POLICY_CODE[p.code.toUpperCase()];
+    const logoHit =
+      (mappedKey ? UAE_BANKS.find((b) => b.key === mappedKey) : undefined) ||
+      UAE_BANKS.find(
+        (b) =>
+          b.short.toLowerCase() === p.short.toLowerCase() ||
+          b.name.toLowerCase() === p.name.toLowerCase(),
+      );
     return {
       code: p.code,
       name: p.name,
@@ -48,7 +77,7 @@ export function LiveBankMarquee({ compact = false }: { compact?: boolean }) {
       className="w-full rounded-[20px] overflow-hidden border border-[#22e2ad]/25 bg-[#070b11] text-white shadow-lg no-print"
       aria-label="Live UAE Banks & CBUAE Mortgage Marquee"
     >
-      {/* Row 1: Live UAE 18-Bank Logo & 2026 Rate Marquee */}
+      {/* Row 1: Calm Luxury Pace Live UAE 18-Bank Logo & 2026 Rate Marquee */}
       <div className="flex items-center border-b border-white/10">
         <div className="shrink-0 px-3.5 py-2.5 bg-gradient-to-r from-[#053b2e] to-[#0b5442] text-[10.5px] font-extrabold uppercase tracking-[0.12em] text-[#fbe8a4] flex items-center gap-1.5 border-e border-[#22e2ad]/30 z-10">
           <span className="size-2 rounded-full bg-[#34f0bc] animate-pulse" />
@@ -56,7 +85,7 @@ export function LiveBankMarquee({ compact = false }: { compact?: boolean }) {
           <span className="sm:hidden">Banks</span>
         </div>
         <div className="flex-1 overflow-hidden py-2">
-          <div className="bw-ticker-track items-center gap-3 px-3">
+          <div className="bw-ticker-track items-center gap-3 px-3" style={{ animationDuration: '92s' }}>
             {[...bankSlides, ...bankSlides].map((b, i) => (
               <Link
                 key={`${b.code}-${i}`}
@@ -86,7 +115,7 @@ export function LiveBankMarquee({ compact = false }: { compact?: boolean }) {
         </div>
       </div>
 
-      {/* Row 2: Live CBUAE Benchmarks, DLD Fees & UAE Mortgage Rules Marquee */}
+      {/* Row 2: Calm Pace CBUAE Benchmarks, DLD Fees & UAE Mortgage Rules */}
       {!compact && (
         <div className="flex items-center bg-[#0b1019]">
           <div className="shrink-0 px-3.5 py-1.5 bg-[#121926] text-[10px] font-extrabold uppercase tracking-[0.12em] text-[#34f0bc] flex items-center gap-1.5 border-e border-white/10 z-10">
@@ -94,7 +123,7 @@ export function LiveBankMarquee({ compact = false }: { compact?: boolean }) {
             <span className="hidden sm:inline">Dubai Pulse</span>
           </div>
           <div className="flex-1 overflow-hidden py-1.5">
-            <div className="bw-ticker-track items-center gap-5 px-3" style={{ animationDuration: '38s' }}>
+            <div className="bw-ticker-track items-center gap-5 px-3" style={{ animationDuration: '104s' }}>
               {[...MARKET_FACTS, ...MARKET_FACTS].map((m, i) => (
                 <div key={`${m.label}-${i}`} className="inline-flex items-center gap-1.5 text-[10.5px] whitespace-nowrap">
                   {m.tone === 'emerald' ? (
@@ -112,9 +141,9 @@ export function LiveBankMarquee({ compact = false }: { compact?: boolean }) {
           </div>
           <Link
             href="/os/calculators"
-            className="hidden md:inline-flex items-center gap-1 px-3 py-1.5 bg-[#053b2e] hover:bg-[#119c78] text-[#fbe8a4] hover:text-white text-[10px] font-extrabold whitespace-nowrap border-s border-[#22e2ad]/30 transition shrink-0"
+            className="hidden md:inline-flex items-center gap-1.5 px-3 py-1.5 bg-[#053b2e] hover:bg-[#119c78] text-[#fbe8a4] hover:text-white text-[10px] font-extrabold whitespace-nowrap border-s border-[#22e2ad]/30 transition shrink-0"
           >
-            <Sparkles size={11} /> 12 Calculators →
+            <Calculator size={11} /> 12 Calculators →
           </Link>
         </div>
       )}

@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import {
   Bell,
+  BookOpen,
   Briefcase,
   Calculator,
   Check,
@@ -22,11 +23,11 @@ import {
   MessagesSquare,
   Moon,
   Palette,
+  PhoneCall,
   Radar,
   Search,
   Settings,
   ShieldCheck,
-  Sparkles,
   Sun,
   UserPlus,
   Users,
@@ -179,9 +180,10 @@ export function OsShell({ children }: { children: React.ReactNode }) {
         { key: 'compliance', label: 'Compliance', href: '/os/compliance', matchPrefix: '/os/compliance', icon: ShieldCheck, visible: isOwnerOrAdmin },
         { key: 'website', label: 'Website', href: '/os/website-studio', matchPrefix: '/os/website-studio', icon: Globe, visible: hasWebsiteAccess },
         { key: 'employees', label: 'Team & QR', href: '/os/employees', matchPrefix: '/os/employees', icon: Users, visible: true },
-        { key: 'inside', label: 'Group', href: '/os/inside', matchPrefix: '/os/inside', icon: MessagesSquare, visible: true },
+        { key: 'inside', label: 'Betterway Inside', href: '/os/inside', matchPrefix: '/os/inside', icon: MessagesSquare, visible: true },
+        { key: 'sip-calls', label: 'SIP Calls', href: '/os/sip-calls', matchPrefix: '/os/sip-calls', icon: PhoneCall, visible: true },
         { key: 'gps', label: 'Field GPS', href: '/os/field-gps', matchPrefix: '/os/field-gps', icon: MapPin, visible: true },
-        { key: 'ai', label: 'AI Desk', href: '/os/ai', matchPrefix: '/os/ai', icon: Sparkles, visible: true },
+        { key: 'ai', label: 'Case Playbook', href: '/os/ai', matchPrefix: '/os/ai', icon: BookOpen, visible: true },
         { key: 'utilities', label: 'Utilities', href: '/os/utilities', matchPrefix: '/os/utilities', icon: Wrench, visible: true },
         { key: 'sales', label: 'Sales', href: '/os/sales', matchPrefix: '/os/sales', icon: Briefcase, visible: hasPipelineAccess },
         { key: 'settings', label: 'Settings', href: '/os/settings', matchPrefix: '/os/settings', icon: Settings, visible: isOwnerOrAdmin },
@@ -224,8 +226,24 @@ export function OsShell({ children }: { children: React.ReactNode }) {
           </span>
         </div>
 
-        {/* Right Customise UI, Search, Alerts, Language, Theme & Profile */}
+        {/* Right SIP Phone, Betterway Inside, Customise UI, Search, Alerts, Language, Theme & Profile */}
         <div className="flex items-center gap-2 shrink-0">
+          <Link
+            href="/os/inside"
+            className="hidden xl:inline-flex items-center gap-1.5 h-8 px-3 rounded-full bg-[var(--bw-soft)] hover:bg-[#090d13] hover:text-[#34f0bc] border border-[var(--bw-line)] text-[11px] font-bold transition"
+            title="Open Betterway Inside Messaging"
+          >
+            <MessagesSquare size={13} className="text-[#119c78]" />
+            <span>Inside</span>
+          </Link>
+          <Link
+            href="/os/sip-calls"
+            className="hidden xl:inline-flex items-center gap-1.5 h-8 px-3 rounded-full bg-[var(--bw-soft)] hover:bg-[#090d13] hover:text-[#34f0bc] border border-[var(--bw-line)] text-[11px] font-bold transition"
+            title="Open Betterway SIP Call Desk"
+          >
+            <PhoneCall size={13} className="text-[#119c78]" />
+            <span>SIP</span>
+          </Link>
           <button
             type="button"
             onClick={() => setCustomizerOpen(true)}

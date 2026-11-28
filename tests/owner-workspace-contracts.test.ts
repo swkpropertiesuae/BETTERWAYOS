@@ -405,8 +405,10 @@ describe('Warda & Shabib UAE Mortgage Command Suite — Offline Domain, Schema &
 
     const { UI_PRESETS, DEFAULT_APP_ORDER, ALL_QUICK_SHORTCUTS } = await import('@/lib/ui-customizer');
     expect(UI_PRESETS.length).toBeGreaterThanOrEqual(6);
-    expect(DEFAULT_APP_ORDER.length).toBe(21);
-    expect(ALL_QUICK_SHORTCUTS.length).toBeGreaterThanOrEqual(10);
+    expect(DEFAULT_APP_ORDER.length).toBe(22);
+    expect(DEFAULT_APP_ORDER).toContain('inside');
+    expect(DEFAULT_APP_ORDER).toContain('sip-calls');
+    expect(ALL_QUICK_SHORTCUTS.length).toBeGreaterThanOrEqual(12);
 
     // 12-in-1 UAE Mortgage Calculators & Live Bank Marquee verification
     const calcs = await import('@/lib/domain/uae-calculators');
@@ -490,5 +492,68 @@ describe('Warda & Shabib UAE Mortgage Command Suite — Offline Domain, Schema &
     expect(fs.existsSync(path.join(process.cwd(), 'src/components/os/LiveBankMarquee.tsx'))).toBe(true);
     expect(fs.existsSync(path.join(process.cwd(), 'src/components/workspace/AllMortgageCalculatorsSuite.tsx'))).toBe(true);
     expect(fs.existsSync(path.join(process.cwd(), 'src/app/os/calculators/page.tsx'))).toBe(true);
+    expect(fs.existsSync(path.join(process.cwd(), 'src/app/os/inside/page.tsx'))).toBe(true);
+    expect(fs.existsSync(path.join(process.cwd(), 'src/app/os/sip-calls/page.tsx'))).toBe(true);
+    expect(fs.existsSync(path.join(process.cwd(), 'src/components/os/SipSoftphoneDock.tsx'))).toBe(true);
+    expect(fs.existsSync(path.join(process.cwd(), 'src/lib/sip-store.ts'))).toBe(true);
+  });
+
+  it('verifies Betterway Inside, SIP Softphone, calmer marquee speed & Zero Generic-AI UI craftsmanship', async () => {
+    const sip = await import('@/lib/sip-store');
+    expect(sip.BETTERWAY_EXTENSIONS.length).toBeGreaterThanOrEqual(9);
+    expect(sip.SIP_TRUNK_PRESETS.length).toBeGreaterThanOrEqual(4);
+    expect(sip.formatCallDuration(125)).toBe('02:05');
+    expect(sip.formatPhoneForDisplay('+971551554680', true)).toContain('•••');
+
+    const insideSrc = fs.readFileSync(path.join(process.cwd(), 'src/app/os/inside/page.tsx'), 'utf8');
+    expect(insideSrc).toContain('Betterway');
+    expect(insideSrc).toContain('Inside');
+    expect(insideSrc).toContain('dialViaSip');
+
+    // Calm luxury marquee speeds (>= 75s)
+    const cssSrc = fs.readFileSync(path.join(process.cwd(), 'src/app/globals.css'), 'utf8');
+    const marqueeSrc = fs.readFileSync(path.join(process.cwd(), 'src/components/os/LiveBankMarquee.tsx'), 'utf8');
+    const loginSrc = fs.readFileSync(path.join(process.cwd(), 'src/app/login/page.tsx'), 'utf8');
+    expect(cssSrc).toContain('82s linear infinite');
+    expect(marqueeSrc).toContain("animationDuration: '92s'");
+    expect(marqueeSrc).toContain("animationDuration: '104s'");
+    expect(loginSrc).toContain("animationDuration: '76s'");
+
+    // Human-agency craftsmanship guard — zero generic AI clichés or Sparkles icon in UI
+    const humanCraftFiles = [
+      'src/app/login/page.tsx',
+      'src/app/os/page.tsx',
+      'src/app/os/ai/page.tsx',
+      'src/app/os/inside/page.tsx',
+      'src/app/os/sip-calls/page.tsx',
+      'src/app/os/mortgage-desk/page.tsx',
+      'src/app/os/calculators/page.tsx',
+      'src/app/os/master-log/page.tsx',
+      'src/app/os/sales/page.tsx',
+      'src/app/os/utilities/page.tsx',
+      'src/components/os/OsShell.tsx',
+      'src/components/os/LiveBankMarquee.tsx',
+      'src/components/os/CustomiseUiDrawer.tsx',
+      'src/components/workspace/BankRmAndPolicyTab.tsx',
+      'src/components/workspace/OwnerSectionView.tsx',
+      'src/components/workspace/ProposalStudioTab.tsx',
+    ];
+    const bannedGenericAiPatterns = [
+      /\bSparkles\b/,
+      /\bBrainCircuit\b/,
+      /Super-Hub/i,
+      /\bAI Case-Study\b/i,
+      /\bAI Underwriting Copilot\b/i,
+      /\bAI Desk\b/i,
+      /\bBulk AI\b/i,
+      /\bInstant AI\b/i,
+      /\bOS v3 Live\b/i,
+    ];
+    for (const rel of humanCraftFiles) {
+      const text = fs.readFileSync(path.join(process.cwd(), rel), 'utf8');
+      for (const pat of bannedGenericAiPatterns) {
+        expect(text, `Generic AI cliché ${pat} found in ${rel}`).not.toMatch(pat);
+      }
+    }
   });
 });

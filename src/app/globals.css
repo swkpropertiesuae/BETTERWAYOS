@@ -759,7 +759,7 @@ html[data-bw-highlight='high-contrast'] .bw-app-card {
 .bw-ticker-track {
   display: flex;
   width: max-content;
-  animation: bwTickerScroll 30s linear infinite;
+  animation: bwTickerScroll 82s linear infinite;
 }
 .bw-ticker-track:hover {
   animation-play-state: paused;

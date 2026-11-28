@@ -44,7 +44,7 @@ export default function MasterLogPage() {
         eyebrow="CORE · The Headquarters · Master Data Registries"
         title="Master Log"
         accent="(22 CORE Registries)"
-        subtitle="Single source of truth for Dubai Communities, Developers, Oud Metha Office Geofence & Wi-Fi, 12 Company Departments, FX/VAT/Chart of Accounts, 24 Banks, Staff Directory & AI Case Studies."
+        subtitle="Single source of truth for Dubai Communities, Developers, Oud Metha Office Geofence & Wi-Fi, 12 Company Departments, FX/VAT/Chart of Accounts, 24 Banks, Staff Directory & Underwriting Case Archive."
         actions={
           <>
             {user?.isOwner ? (

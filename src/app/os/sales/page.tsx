@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import { Copy, Handshake, Printer, Share2, Sparkles } from 'lucide-react';
+import { Award, Copy, Handshake, Printer, Share2 } from 'lucide-react';
 import { useOs } from '@/components/os/OsProvider';
 import { fmtAed, GlossyBlackCard, PageHeader, StatusPill } from '@/components/os/UiKit';
 import { useInstantApi } from '@/lib/client-cache';
@@ -159,7 +159,7 @@ export default function SalesAndServicesPage() {
 
           <div className="bw-card p-5 space-y-3 text-xs">
             <h3 className="font-display text-sm font-extrabold flex items-center gap-1.5">
-              <Sparkles size={14} className="text-[#d9b356]" /> Post-Mortgage Value-Add Desk
+              <Award size={14} className="text-[#d9b356]" /> Post-Mortgage Value-Add Desk
             </h3>
             <div className="grid sm:grid-cols-3 gap-2.5">
               <div className="p-3.5 rounded-xl bg-[var(--bw-soft)] border border-[var(--bw-line)]">

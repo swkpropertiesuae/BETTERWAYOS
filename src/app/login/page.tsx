@@ -12,7 +12,6 @@ import {
   Landmark,
   LogIn,
   ShieldCheck,
-  Sparkles,
   TrendingDown,
   UserPlus,
 } from 'lucide-react';
@@ -134,9 +133,9 @@ export default function LoginPage() {
 
   return (
     <div className="min-h-screen bg-[var(--bw-bg)] flex flex-col">
-      {/* Live Scrolling Dubai UAE Mortgage Rate Ribbon */}
+      {/* Live Scrolling Dubai UAE Mortgage Rate Ribbon (Calm Luxury Pace) */}
       <div className="w-full bg-[#070b11] border-b border-[#22e2ad]/25 text-white overflow-hidden py-2">
-        <div className="bw-ticker-track items-center gap-6 px-4">
+        <div className="bw-ticker-track items-center gap-6 px-4" style={{ animationDuration: '76s' }}>
           {[...LIVE_DUBAI_TICKER, ...LIVE_DUBAI_TICKER].map((item, i) => (
             <div key={`${item.label}-${i}`} className="inline-flex items-center gap-2 text-[11px] whitespace-nowrap">
               <span className="size-1.5 rounded-full bg-[#22e2ad] shadow-[0_0_8px_#22e2ad]" />
@@ -338,7 +337,7 @@ export default function LoginPage() {
                   className="h-9 w-auto object-contain"
                 />
                 <span className="px-2.5 py-1 rounded-full bg-[#0a0e14] text-[#34f0bc] text-[10px] font-extrabold uppercase tracking-[0.12em] inline-flex items-center gap-1">
-                  <Sparkles size={11} className="text-[#fbe8a4]" /> OS v3 Live
+                  <Landmark size={11} className="text-[#fbe8a4]" /> Dubai Advisory Desk
                 </span>
               </div>
 

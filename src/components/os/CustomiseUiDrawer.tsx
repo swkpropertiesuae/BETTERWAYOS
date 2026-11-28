@@ -13,7 +13,7 @@ import {
   PinOff,
   RotateCcw,
   Sliders,
-  Sparkles,
+  Sun,
   Type,
   X,
 } from 'lucide-react';
@@ -46,9 +46,10 @@ const APP_LABEL_MAP: Record<string, string> = {
   compliance: 'Compliance',
   'website-studio': 'Website & Social Studio',
   employees: 'Employees & Attendance',
-  inside: 'Team Group (Inside)',
+  inside: 'Betterway Inside',
+  'sip-calls': 'Betterway SIP Calls',
   'field-gps': 'Field GPS Services',
-  ai: 'AI Case-Study Copilot',
+  ai: 'Underwriting Case Playbook',
   utilities: 'Utilities & Documents',
   settings: 'Settings',
 };
@@ -166,7 +167,7 @@ export function CustomiseUiDrawer({
           {[
             { id: 'colors', label: 'Colors', icon: Palette },
             { id: 'fonts', label: 'Fonts', icon: Type },
-            { id: 'highlight', label: 'Highlight', icon: Sparkles },
+            { id: 'highlight', label: 'Highlight', icon: Sun },
             { id: 'pins', label: 'Pin & Drag', icon: Pin },
           ].map((t) => {
             const Icon = t.icon;
@@ -413,7 +414,7 @@ export function CustomiseUiDrawer({
                 <div className="flex items-center justify-between gap-3">
                   <div>
                     <div className="font-display font-extrabold text-sm flex items-center gap-1.5 text-[#34f0bc]">
-                      <Sparkles size={15} className="text-[#fbe8a4]" /> Highlight Feature Mode
+                      <Sun size={15} className="text-[#fbe8a4]" /> Highlight Feature Mode
                     </div>
                     <p className="text-[11px] text-slate-300 mt-0.5">
                       Luminous border &amp; spotlight emphasis on pinned apps, live numbers, and key actions across the entire OS.

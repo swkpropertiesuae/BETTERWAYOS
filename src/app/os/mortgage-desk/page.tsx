@@ -10,8 +10,8 @@ import {
   CreditCard,
   Download,
   FileSpreadsheet,
+  FileText,
   PhoneCall,
-  Sparkles,
   Zap,
 } from 'lucide-react';
 import { useOs } from '@/components/os/OsProvider';
@@ -135,8 +135,8 @@ function MortgageDeskInner() {
       <PageHeader
         eyebrow="18-Bank 2026 Policy Matrix · 159 Direct Bank RMs · 3-Bank Auto-Eco Proposal Maker"
         title="24-Bank Mortgage"
-        accent="Super-Hub"
-        subtitle="Use the top bar sub-pages to switch instantly between 3-Bank Proposals, 60-Sec Matcher & AI Policy, Updated 2026 18-Bank Matrix, 159 Direct Bank RMs, CBUAE/CTO/Avg Balance & Bank Valuations."
+        accent="Advisory Desk"
+        subtitle="Switch smoothly between 3-Bank Proposals, 60-Sec Eligibility Matcher & Policy Lookup, 2026 18-Bank Matrix, 159 Direct Bank RMs, CBUAE/CTO/Avg Balance & Bank Valuations."
         actions={
           <div className="flex flex-wrap gap-2">
             <Link href="/os/calculators" className="bw-btn bw-btn-obsidian text-xs py-2 min-h-[38px]">
@@ -152,8 +152,8 @@ function MortgageDeskInner() {
       {/* Glossy Shining Black Pill Switcher */}
       <div className="flex flex-wrap gap-2 no-print">
         {[
-          { id: 'proposal', label: '3-Bank Proposal Maker', icon: Sparkles },
-          { id: 'matcher', label: '60-Sec Matcher & AI Policy', icon: Zap },
+          { id: 'proposal', label: '3-Bank Proposal Maker', icon: FileText },
+          { id: 'matcher', label: '60-Sec Matcher & Policy Lookup', icon: Zap },
           { id: 'matrix', label: '18-Bank Policy & Rates', icon: Building2 },
           { id: 'rms', label: '140+ Direct Bank RMs', icon: PhoneCall },
           { id: 'statement', label: 'CBUAE, CC Reducer & Statements', icon: FileSpreadsheet },

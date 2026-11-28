@@ -58,6 +58,8 @@ export const ALL_QUICK_SHORTCUTS: PinnedShortcutItem[] = [
   { id: 'sc-excel', label: 'Full 17-Sheet Excel', href: '/api/v1/utilities/master-backup-excel', accent: 'gold' },
   { id: 'sc-matrix-dl', label: '2026 Matrix (.xlsx)', href: '/api/v1/utilities/bank-matrix-excel', accent: 'emerald' },
   { id: 'sc-qr', label: 'Oud Metha QR Check-In', href: '/os/employees', accent: 'navy' },
+  { id: 'sc-inside', label: 'Betterway Inside', href: '/os/inside', accent: 'emerald' },
+  { id: 'sc-sip', label: 'SIP Call Desk', href: '/os/sip-calls', accent: 'gold' },
   { id: 'sc-gps', label: 'Field GPS + SOS', href: '/os/field-gps', accent: 'emerald' },
   { id: 'sc-crm', label: 'Daily Leads (CRM)', href: '/os/crm', accent: 'navy' },
 ];
@@ -80,6 +82,7 @@ export const DEFAULT_APP_ORDER: string[] = [
   'website-studio',
   'employees',
   'inside',
+  'sip-calls',
   'field-gps',
   'ai',
   'utilities',

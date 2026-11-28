@@ -2,7 +2,7 @@
 
 import React from 'react';
 import Link from 'next/link';
-import { Download, Sparkles } from 'lucide-react';
+import { Download, FileSpreadsheet } from 'lucide-react';
 import { PageHeader } from '@/components/os/UiKit';
 import { LiveBankMarquee } from '@/components/os/LiveBankMarquee';
 import { AllMortgageCalculatorsSuite } from '@/components/workspace/AllMortgageCalculatorsSuite';
@@ -23,7 +23,7 @@ export default function CalculatorsAndToolsPage() {
               <Download size={13} /> 2026 Bank Matrix (.xlsx)
             </a>
             <Link href="/os/mortgage-desk?tab=proposal" className="bw-btn bw-btn-obsidian text-xs py-2 min-h-[36px]">
-              <Sparkles size={13} className="text-[#34f0bc]" /> 3-Bank Proposal Maker
+              <FileSpreadsheet size={13} className="text-[#34f0bc]" /> 3-Bank Proposal Maker
             </Link>
           </div>
         }
