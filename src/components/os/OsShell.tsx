@@ -227,21 +227,21 @@ export function OsShell({ children }: { children: React.ReactNode }) {
         </div>
 
         {/* Right SIP Phone, Betterway Inside, Customise UI, Search, Alerts, Language, Theme & Profile */}
-        <div className="flex items-center gap-2 shrink-0">
+        <div className="flex items-center gap-1.5 shrink-0">
           <Link
             href="/os/inside"
-            className="hidden xl:inline-flex items-center gap-1.5 h-8 px-3 rounded-full bg-[var(--bw-soft)] hover:bg-[#090d13] hover:text-[#34f0bc] border border-[var(--bw-line)] text-[11px] font-bold transition"
+            className="hidden 2xl:inline-flex items-center gap-1.5 h-8 px-2.5 rounded-full bg-[var(--bw-soft)] hover:bg-[#090d13] hover:text-[#34f0bc] border border-[var(--bw-line)] text-[11px] font-bold transition"
             title="Open Betterway Inside Messaging"
           >
-            <MessagesSquare size={13} className="text-[#119c78]" />
+            <MessagesSquare size={12} className="text-[#119c78]" />
             <span>Inside</span>
           </Link>
           <Link
             href="/os/sip-calls"
-            className="hidden xl:inline-flex items-center gap-1.5 h-8 px-3 rounded-full bg-[var(--bw-soft)] hover:bg-[#090d13] hover:text-[#34f0bc] border border-[var(--bw-line)] text-[11px] font-bold transition"
+            className="hidden 2xl:inline-flex items-center gap-1.5 h-8 px-2.5 rounded-full bg-[var(--bw-soft)] hover:bg-[#090d13] hover:text-[#34f0bc] border border-[var(--bw-line)] text-[11px] font-bold transition"
             title="Open Betterway SIP Call Desk"
           >
-            <PhoneCall size={13} className="text-[#119c78]" />
+            <PhoneCall size={12} className="text-[#119c78]" />
             <span>SIP</span>
           </Link>
           <button
@@ -257,11 +257,11 @@ export function OsShell({ children }: { children: React.ReactNode }) {
           <button
             type="button"
             onClick={() => setSearchOpen(true)}
-            className="hidden sm:inline-flex items-center gap-2 h-8 px-3.5 rounded-full bg-[var(--bw-soft)] hover:bg-[var(--bw-hover)] border border-[var(--bw-line)] text-[11.5px] font-semibold text-[var(--bw-muted)] cursor-pointer transition"
+            className="hidden sm:inline-flex items-center gap-1.5 h-8 px-3 rounded-full bg-[var(--bw-soft)] hover:bg-[var(--bw-hover)] border border-[var(--bw-line)] text-[11px] font-semibold text-[var(--bw-muted)] cursor-pointer transition"
             aria-label="Search OS"
           >
             <Search size={13} />
-            <span>Search OS...</span>
+            <span className="hidden xl:inline">Search</span>
             <kbd className="text-[10px] px-1.5 py-0.5 rounded bg-white dark:bg-white/10 text-[var(--bw-muted)] border border-[var(--bw-line)]">
               ⌘K
             </kbd>

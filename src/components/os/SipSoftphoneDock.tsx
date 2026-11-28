@@ -63,10 +63,10 @@ export function SipSoftphoneDock({ user }: { user: SessionUser | null }) {
 
   if (!user || pathname === '/login') return null;
 
-  // Compact docked pill when minimized & idle
+  // Compact docked pill when minimized & idle (anchored bottom-right so left rails & lists stay 100% unobstructed)
   if (!dockExpanded && !activeCall) {
     return (
-      <div className="fixed bottom-20 sm:bottom-5 start-4 z-[70] no-print flex items-center gap-1.5">
+      <div className="fixed bottom-20 sm:bottom-5 end-5 z-[70] no-print flex items-center gap-1.5">
         <button
           type="button"
           onClick={() => setSipDockExpanded(true)}
@@ -85,7 +85,7 @@ export function SipSoftphoneDock({ user }: { user: SessionUser | null }) {
   return (
     <aside
       aria-label="Betterway SIP Softphone Dock"
-      className="fixed bottom-20 sm:bottom-5 start-4 z-[75] w-[328px] max-w-[calc(100vw-2rem)] rounded-[22px] bg-[#080c12]/97 text-white border border-[#22e2ad]/40 shadow-[0_28px_60px_-16px_rgba(3,7,14,0.9)] backdrop-blur-xl overflow-hidden no-print"
+      className="fixed bottom-20 sm:bottom-5 end-5 z-[75] w-[328px] max-w-[calc(100vw-2rem)] rounded-[22px] bg-[#080c12]/97 text-white border border-[#22e2ad]/40 shadow-[0_28px_60px_-16px_rgba(3,7,14,0.9)] backdrop-blur-xl overflow-hidden no-print"
     >
       {/* Top Glossy Bar */}
       <div className="px-4 py-3 bg-gradient-to-r from-[#0e1520] to-[#080c12] border-b border-white/10 flex items-center justify-between gap-2">

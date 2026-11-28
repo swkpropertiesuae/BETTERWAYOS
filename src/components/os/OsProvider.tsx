@@ -207,7 +207,7 @@ export function OsProvider({ children }: { children: React.ReactNode }) {
           toast('UI theme & layout reset to Betterway default');
         }}
       />
-      <div className="fixed bottom-20 sm:bottom-5 end-4 z-[90] flex flex-col gap-2 max-w-sm no-print">
+      <div className="fixed bottom-32 sm:bottom-16 end-5 z-[90] flex flex-col gap-2 max-w-sm no-print">
         {toasts.map((t) => (
           <div
             key={t.id}
