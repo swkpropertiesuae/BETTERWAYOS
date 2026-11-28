@@ -16,6 +16,8 @@ import {
 } from 'lucide-react';
 import { useOs } from '@/components/os/OsProvider';
 import { fmtAed, GlossyBlackCard, MetricTile, PageHeader, StatusPill } from '@/components/os/UiKit';
+import { LiveBankMarquee } from '@/components/os/LiveBankMarquee';
+import Link from 'next/link';
 import { calculateBuyoutSavings, calculateCbuaeEligibility, calculateCtoAndAvgBalance } from '@/lib/domain/cbuae-math';
 import { UAE_BANKS } from '@/lib/domain/banks';
 import { computeCreditCardDbrImpact, CREDIT_ANALYST_STATEMENT_CHECKLIST } from '@/lib/domain/bank-intelligence';
@@ -129,15 +131,21 @@ function MortgageDeskInner() {
 
   return (
     <div className="space-y-6">
+      <LiveBankMarquee />
       <PageHeader
         eyebrow="18-Bank 2026 Policy Matrix · 159 Direct Bank RMs · 3-Bank Auto-Eco Proposal Maker"
         title="24-Bank Mortgage"
         accent="Super-Hub"
         subtitle="Use the top bar sub-pages to switch instantly between 3-Bank Proposals, 60-Sec Matcher & AI Policy, Updated 2026 18-Bank Matrix, 159 Direct Bank RMs, CBUAE/CTO/Avg Balance & Bank Valuations."
         actions={
-          <a href="/api/v1/utilities/bank-matrix-excel" className="bw-btn bw-btn-gold text-xs py-2 min-h-[38px]">
-            <Download size={14} /> Download 2026 Matrix (.xlsx)
-          </a>
+          <div className="flex flex-wrap gap-2">
+            <Link href="/os/calculators" className="bw-btn bw-btn-obsidian text-xs py-2 min-h-[38px]">
+              <Calculator size={14} className="text-[#34f0bc]" /> All 12 UAE Calculators
+            </Link>
+            <a href="/api/v1/utilities/bank-matrix-excel" className="bw-btn bw-btn-gold text-xs py-2 min-h-[38px]">
+              <Download size={14} /> Download 2026 Matrix (.xlsx)
+            </a>
+          </div>
         }
       />
 

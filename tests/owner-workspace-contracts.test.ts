@@ -405,7 +405,90 @@ describe('Warda & Shabib UAE Mortgage Command Suite — Offline Domain, Schema &
 
     const { UI_PRESETS, DEFAULT_APP_ORDER, ALL_QUICK_SHORTCUTS } = await import('@/lib/ui-customizer');
     expect(UI_PRESETS.length).toBeGreaterThanOrEqual(6);
-    expect(DEFAULT_APP_ORDER.length).toBe(20);
+    expect(DEFAULT_APP_ORDER.length).toBe(21);
     expect(ALL_QUICK_SHORTCUTS.length).toBeGreaterThanOrEqual(10);
+
+    // 12-in-1 UAE Mortgage Calculators & Live Bank Marquee verification
+    const calcs = await import('@/lib/domain/uae-calculators');
+    const amort = calcs.calcAmortizationSummary({
+      propertyPriceAed: 3_000_000,
+      ltvPct: 80,
+      fixedRatePct: 3.89,
+      fixedYears: 3,
+      reversionRatePct: 5.95,
+      tenureYears: 25,
+      lifeInsAnnualPct: 0.2,
+      propInsAnnualPct: 0.04,
+    });
+    expect(amort.loanAed).toBe(2_400_000);
+    expect(amort.fixedEmiAed).toBeGreaterThan(12_000);
+    expect(amort.yearlySchedule.length).toBe(25);
+
+    const cash = calcs.calcUpfrontCashToClose({
+      emirate: 'Dubai (DLD)',
+      propertyPriceAed: 3_000_000,
+      ltvPct: 80,
+      processingFeePct: 0.5,
+      valuationFeeAed: 3150,
+      agencyFeePct: 2,
+      feeFinancePct: 0,
+    });
+    expect(cash.landDeptTransferFeeAed).toBe(120_580);
+    expect(cash.netUpfrontCashAed).toBeGreaterThan(750_000);
+
+    const buyout = calcs.calcBuyoutAndEquityRelease({
+      currentBalanceAed: 2_000_000,
+      currentRatePct: 6.15,
+      remainingYears: 20,
+      newRatePct: 3.89,
+      newTenureYears: 20,
+      equityReleaseAed: 0,
+      valuationFeeAed: 2625,
+      newProcessingFeePct: 0,
+    });
+    expect(buyout.earlySettlementFeeAed).toBe(10_500); // CBUAE cap 10k + 5% VAT
+    expect(buyout.monthlyPureSavingAed).toBeGreaterThan(2_000);
+
+    const prepay = calcs.calcPrepaymentSavings({
+      loanAed: 2_500_000,
+      annualRatePct: 4.19,
+      tenureYears: 25,
+      annualExtraPaymentAed: 100_000,
+      oneTimeLumpSumAed: 200_000,
+      lumpSumYear: 2,
+    });
+    expect(prepay.interestSavedAed).toBeGreaterThan(300_000);
+    expect(prepay.monthsSaved).toBeGreaterThan(60);
+
+    const yieldRes = calcs.calcBuyToLetYieldAndDscr({
+      propertyPriceAed: 2_200_000,
+      annualRentAed: 176_000,
+      sizeSqft: 1200,
+      serviceChargePerSqftAed: 18,
+      vacancyAndMaintPct: 5,
+      ltvPct: 75,
+      interestRatePct: 3.99,
+      tenureYears: 25,
+    });
+    expect(yieldRes.grossYieldPct).toBe(8);
+    expect(yieldRes.dscr).toBeGreaterThan(1.2);
+
+    const adv = calcs.calcAdvisorTools({
+      propertyPriceAed: 2_500_000,
+      loanAmountAed: 2_000_000,
+      ageYears: 42,
+      employment: 'Salaried',
+      isUaeNational: false,
+      bankDsaPct: 0.85,
+      advisorSplitPct: 40,
+      thirdPartySplitPct: 20,
+    });
+    expect(adv.goldenVisaEligible).toBe(true);
+    expect(adv.maxTenureByAge).toBe(23);
+    expect(adv.grossBankDsaAed).toBe(17_000);
+
+    expect(fs.existsSync(path.join(process.cwd(), 'src/components/os/LiveBankMarquee.tsx'))).toBe(true);
+    expect(fs.existsSync(path.join(process.cwd(), 'src/components/workspace/AllMortgageCalculatorsSuite.tsx'))).toBe(true);
+    expect(fs.existsSync(path.join(process.cwd(), 'src/app/os/calculators/page.tsx'))).toBe(true);
   });
 });

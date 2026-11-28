@@ -173,6 +173,7 @@ export function OsShell({ children }: { children: React.ReactNode }) {
         { key: 'coordinator', label: 'Coordinator', href: '/os/coordinator', matchPrefix: '/os/coordinator', icon: ClipboardList, visible: hasPipelineAccess },
         { key: 'crm', label: 'CRM', href: '/os/crm', matchPrefix: '/os/crm', icon: UserPlus, visible: hasPipelineAccess },
         { key: 'desk', label: 'Mortgage Desk', href: '/os/mortgage-desk', matchPrefix: '/os/mortgage-desk', icon: Calculator, visible: hasPipelineAccess, prefetchUrl: '/api/v1/mortgage-desk' },
+        { key: 'calculators', label: 'Calculators', href: '/os/calculators', matchPrefix: '/os/calculators', icon: Calculator, visible: true },
         { key: 'vault', label: 'Vault', href: '/os/vault', matchPrefix: '/os/vault', icon: FileLock2, visible: hasPipelineAccess },
         { key: 'accounts', label: 'Accounts', href: '/os/accounts', matchPrefix: '/os/accounts', icon: Wallet, visible: isOwnerOrAdmin },
         { key: 'compliance', label: 'Compliance', href: '/os/compliance', matchPrefix: '/os/compliance', icon: ShieldCheck, visible: isOwnerOrAdmin },

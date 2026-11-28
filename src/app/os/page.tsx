@@ -33,6 +33,7 @@ import {
 } from 'lucide-react';
 import { useOs } from '@/components/os/OsProvider';
 import { fmtAed, GlossyBlackCard, StaffAvatar } from '@/components/os/UiKit';
+import { LiveBankMarquee } from '@/components/os/LiveBankMarquee';
 import { useInstantApi } from '@/lib/client-cache';
 
 interface OsAppTile {
@@ -171,6 +172,17 @@ export default function OsApplicationsLauncherPage() {
       href: '/os/mortgage-desk',
       icon: Calculator,
       visible: hasPipelineAccess,
+    },
+    {
+      key: 'calculators',
+      label: 'Calculators & Tools',
+      badge: '12 UAE Tools',
+      badgeCls: 'bg-[#e3fbf3] text-[#05523d] border-[#9be8ce]',
+      iconBg: 'bg-[#0b5442] text-[#34f0bc]',
+      desc: 'All 12 UAE Mortgage Calculators: EMI, 50% DBR, DLD/ADM Cash-to-Close, Buyout/Equity, Prepayment, Rent vs Buy, Yield/DSCR, EIBOR Shock & Golden Visa',
+      href: '/os/calculators',
+      icon: Calculator,
+      visible: true,
     },
     {
       key: 'sales',
@@ -404,6 +416,9 @@ export default function OsApplicationsLauncherPage() {
           </div>
         </div>
       </GlossyBlackCard>
+
+      {/* Live Dual-Band 18 UAE Bank Logos + CBUAE EIBOR / DLD / LTV Marquee */}
+      <LiveBankMarquee />
 
       {/* Pinned Important Options Strip (Instant Access + Customisable) */}
       {pinnedApps.length > 0 && (

@@ -39,6 +39,7 @@ const APP_LABEL_MAP: Record<string, string> = {
   coordinator: 'Coordinator & Logins',
   crm: 'CRM',
   'mortgage-desk': 'Mortgage Exclusive Desk',
+  calculators: 'Calculators & Tools (12)',
   sales: 'Sales & Services',
   vault: 'Client Document Vault',
   accounts: 'Accounts',
