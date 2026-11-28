@@ -55,7 +55,7 @@ export function OwnerSectionView({ mode }: { mode: 'place' | 'corner' }) {
   const qp = searchParams?.get('tab') as OwnerTab | null;
 
   const allowed: readonly OwnerTab[] = mode === 'place' ? PLACE_TABS : CORNER_TABS;
-  const activeTab: OwnerTab = qp && (allowed as readonly string[]).includes(qp) ? qp : mode === 'place' ? 'team' : 'fasttrack';
+  const activeTab: OwnerTab = qp && (allowed as readonly string[]).includes(qp) ? qp : mode === 'place' ? 'team' : 'goldrush';
 
   const [data, setData] = useState<any>(null);
   const [loading, setLoading] = useState(mode === 'corner');
@@ -220,46 +220,96 @@ export function OwnerSectionView({ mode }: { mode: 'place' | 'corner' }) {
     await load();
   };
 
+  const placeTabItems: Array<{ id: PlaceTab; label: string }> = [
+    { id: 'team', label: 'Team & Daily To-Do' },
+    { id: 'daily-plan', label: 'Next Day Plan & Daily Report' },
+    { id: 'visits', label: 'Mortgage Field Meetings' },
+    { id: 'catalog', label: 'APL Brochures & Catalog' },
+    { id: 'legal', label: 'Mortgage Forms (Word/JPEG)' },
+    { id: 'closings', label: '5-Track Disbursals' },
+    { id: 'commissions', label: 'Advisor DSA & Expenses' },
+  ];
+
+  const cornerTabItems: Array<{ id: CornerTab; label: string }> = [
+    { id: 'goldrush', label: '1–12 Gold-Rush Playbook & Kanban' },
+    { id: 'fasttrack', label: `${privacyTitle} (${data?.fastTrackJobs?.length ?? 0})` },
+    { id: 'bulkai', label: 'Bulk AI Uploading' },
+    {
+      id: 'approvals',
+      label: `All Owner Approvals (${(data?.pendingApprovals?.length ?? 0) + (data?.pendingMasterRequests?.length ?? 0)})`,
+    },
+    { id: 'vat', label: 'Owner Consolidated P&L & VAT 201' },
+  ];
+
   return (
     <div className="space-y-6">
-      {/* Clean Split Section Banner (Zero Duplicate Tab Bars — Sub-Pages Live Cleanly in Top Header!) */}
-      <header className="flex flex-wrap items-center justify-between gap-4 border-b border-[var(--bw-line-strong)] pb-4 no-print">
-        <div className="flex items-center gap-3.5">
-          <StaffAvatar name={user.name} avatarUrl={user.avatarUrl} initials={user.initials} size="md" />
-          <div>
-            <div className="inline-flex items-center gap-1.5 text-[11px] font-extrabold uppercase tracking-[0.14em]">
-              {mode === 'place' ? (
-                <span className="text-[#0b5442] dark:text-[#34f0bc] inline-flex items-center gap-1.5">
-                  <Briefcase size={12} /> {sectionName} · Daily UAE Mortgage Operations
+      {/* Exact Glossy Floating Shining Black Owner Executive Hero Matching Uploaded Screenshot 2 */}
+      <section className="bw-glossy-black p-6 sm:p-7 space-y-5 no-print">
+        <div className="flex flex-wrap items-center justify-between gap-4">
+          <div className="flex items-center gap-4 min-w-0">
+            <StaffAvatar name={user.name} avatarUrl={user.avatarUrl} initials={user.initials} size="lg" />
+            <div className="min-w-0">
+              <div className="inline-flex items-center gap-1.5 px-3 py-0.5 rounded-full bg-white/10 border border-[#d9b356]/35 text-[#fbe8a4] text-[10px] font-extrabold uppercase tracking-[0.14em]">
+                <Crown size={11} className="text-[#d9b356]" /> 100% EQUAL CO-OWNER AUTHORITY · STRICTLY PRIVATE TO WARDA &amp; SHABIB
+              </div>
+              <h1 className="font-display text-2xl sm:text-[30px] font-extrabold mt-1 tracking-[-0.03em] text-white leading-tight">
+                {sectionName}{' '}
+                <span className="text-slate-300 font-bold">
+                  · {mode === 'place' ? 'Daily Mortgage Operations' : 'Executive Command'}
                 </span>
-              ) : (
-                <span className="text-[#9a7123] dark:text-[#fbe8a4] inline-flex items-center gap-1.5">
-                  <Crown size={12} /> {sectionName} · Private Fast Track &amp; Governance
-                </span>
-              )}
+              </h1>
+              <p className="text-xs text-slate-300 mt-1 max-w-3xl">{meta.desc}</p>
             </div>
-            <h1 className="font-display text-2xl sm:text-[30px] font-extrabold tracking-[-0.03em] text-[var(--bw-ink)] leading-tight mt-0.5">
-              {meta.title}
-            </h1>
-            <p className="text-xs sm:text-[13px] text-[var(--bw-muted)] mt-0.5">{meta.desc}</p>
+          </div>
+
+          <div className="flex flex-wrap items-center gap-2">
+            <Link
+              href={mode === 'place' ? '/os/corner' : '/os/place'}
+              className="px-3.5 py-2 rounded-full bg-white/10 hover:bg-white/18 border border-[#d9b356]/45 text-[#fbe8a4] text-xs font-extrabold inline-flex items-center gap-1.5 transition"
+            >
+              {mode === 'place' ? (
+                <>
+                  <Crown size={13} /> Open {isShabib ? "Shabib's Corner" : "Warda's Corner"}
+                </>
+              ) : (
+                <>
+                  <Briefcase size={13} className="text-[#34f0bc]" /> Open {isShabib ? "Shabib's Place" : "Warda's Place"}
+                </>
+              )}
+            </Link>
+            <Link
+              href="/os/master-log"
+              className="px-3.5 py-2 rounded-full bg-white/10 hover:bg-white/18 border border-white/15 text-white text-xs font-bold inline-flex items-center gap-1.5 transition"
+            >
+              Open Master Log (CORE)
+            </Link>
+            <Link href="/os/ai" className="bw-btn bw-btn-primary text-xs py-2 min-h-[36px] px-4">
+              <Sparkles size={13} /> AI Case-Study Copilot
+            </Link>
           </div>
         </div>
 
-        <Link
-          href={mode === 'place' ? '/os/corner?tab=fasttrack' : '/os/place?tab=team'}
-          className={mode === 'place' ? 'bw-btn bw-btn-gold text-xs py-2 min-h-[36px]' : 'bw-btn bw-btn-obsidian text-xs py-2 min-h-[36px]'}
-        >
-          {mode === 'place' ? (
-            <>
-              <Crown size={13} /> Switch to {isShabib ? "Shabib's Corner" : "Warda's Corner"}
-            </>
-          ) : (
-            <>
-              <Briefcase size={13} className="text-[#34f0bc]" /> Switch to {isShabib ? "Shabib's Place" : "Warda's Place"}
-            </>
-          )}
-        </Link>
-      </header>
+        {/* Exact Horizontal Pill Sub-Tabs Inside Dark Hero (Gold Active Pill Matching Screenshot 2) */}
+        <div className="flex flex-wrap items-center gap-2 pt-3 border-t border-white/12">
+          {(mode === 'place' ? placeTabItems : cornerTabItems).map((t) => {
+            const active = activeTab === t.id;
+            const targetHref = mode === 'place' ? `/os/place?tab=${t.id}` : `/os/corner?tab=${t.id}`;
+            return (
+              <Link
+                key={t.id}
+                href={targetHref}
+                className={`px-4 py-2 rounded-full text-xs font-extrabold transition ${
+                  active
+                    ? 'bg-[#e1b84c] text-[#070e1a] shadow-md'
+                    : 'bg-white/[0.08] text-slate-200 hover:bg-white/[0.16] border border-white/12'
+                }`}
+              >
+                {t.label}
+              </Link>
+            );
+          })}
+        </div>
+      </section>
 
       {/* PLACE MODULES (Daily UAE Mortgage Operations) */}
       {activeTab === 'team' && <TeamDailyWorkspaceTab />}

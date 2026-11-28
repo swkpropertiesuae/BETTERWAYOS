@@ -682,6 +682,93 @@ html[dir='rtl'] .font-display {
   animation: bwWorkspaceOpen 220ms var(--bw-ease) both;
 }
 
+/* ------- Dynamic Customise UI Overrides (Background, Card Radius, Font Styles, Density & Highlight Mode) ------- */
+html[data-bw-custom-bg='solid'],
+html[data-bw-custom-bg='solid'] body {
+  background-image: none !important;
+  background-color: var(--bw-bg) !important;
+}
+
+.bw-card {
+  border-radius: var(--bw-card-radius, 20px);
+}
+.bw-glossy-black {
+  border-radius: calc(var(--bw-card-radius, 20px) + 2px);
+  background: linear-gradient(155deg, color-mix(in srgb, var(--bw-obsidian-custom, #090d14) 85%, #ffffff 15%) 0%, var(--bw-obsidian-custom, #090d14) 50%, #040608 100%);
+}
+
+html[data-bw-font-style='bold-clarity'] body {
+  font-weight: 500;
+}
+html[data-bw-font-style='italic-headings'] h1,
+html[data-bw-font-style='italic-headings'] h2,
+html[data-bw-font-style='italic-headings'] h3 {
+  font-style: italic;
+}
+
+body {
+  letter-spacing: var(--bw-letter-spacing, 0em);
+}
+
+html[data-bw-density='compact'] main {
+  padding-top: 14px;
+}
+html[data-bw-density='spacious'] main {
+  padding-top: 32px;
+}
+
+/* Highlight Feature Modes */
+html[data-bw-highlight='emerald-glow'] .bw-card,
+html[data-bw-highlight='emerald-glow'] .bw-app-card {
+  box-shadow: 0 0 0 1.5px color-mix(in srgb, var(--bw-emerald) 55%, transparent), 0 14px 32px -14px color-mix(in srgb, var(--bw-emerald) 35%, transparent) !important;
+}
+html[data-bw-highlight='gold-ring'] .bw-card,
+html[data-bw-highlight='gold-ring'] .bw-app-card {
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--bw-gold) 72%, transparent), 0 14px 30px -14px color-mix(in srgb, var(--bw-gold) 36%, transparent) !important;
+}
+html[data-bw-highlight='spotlight'] .bw-app-card[data-pinned='true'],
+html[data-bw-highlight='spotlight'] .bw-glossy-black {
+  box-shadow: 0 0 0 2px #22e2ad, 0 0 28px -4px rgba(34, 226, 173, 0.45) !important;
+}
+html[data-bw-highlight='high-contrast'] .bw-card,
+html[data-bw-highlight='high-contrast'] .bw-app-card {
+  border-width: 2px !important;
+  border-color: var(--bw-ink) !important;
+}
+
+/* ------- Lively Dubai Mortgage Login Ticker & Ambient Float Animations ------- */
+@keyframes bwTickerScroll {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+@keyframes bwFloatSlow {
+  0%,
+  100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-6px);
+  }
+}
+
+.bw-ticker-track {
+  display: flex;
+  width: max-content;
+  animation: bwTickerScroll 30s linear infinite;
+}
+.bw-ticker-track:hover {
+  animation-play-state: paused;
+}
+
+.bw-float-slow {
+  animation: bwFloatSlow 6s ease-in-out infinite;
+}
+
 /* Mobile App Native Dock & Safe Area Insets (Android & iOS) */
 .bw-mobile-dock {
   display: none;

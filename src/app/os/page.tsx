@@ -6,34 +6,51 @@ import {
   ArrowUpRight,
   Briefcase,
   Calculator,
-  CalendarClock,
-  CheckSquare,
   ClipboardList,
   Crown,
   Database,
-  FileSpreadsheet,
-  FileText,
-  Flame,
+  FileLock2,
+  Globe,
+  GripVertical,
   KanbanSquare,
+  LayoutDashboard,
   Lock,
   MapPin,
+  MessagesSquare,
   Palette,
-  PhoneCall,
-  Receipt,
+  Pin,
+  PinOff,
+  Radar,
   Search,
+  Settings,
   ShieldCheck,
   Sparkles,
-  Upload,
+  UserPlus,
   Users,
   Wallet,
+  Wrench,
+  type LucideIcon,
 } from 'lucide-react';
 import { useOs } from '@/components/os/OsProvider';
-import { fmtAed, GlossyBlackCard } from '@/components/os/UiKit';
+import { fmtAed, GlossyBlackCard, StaffAvatar } from '@/components/os/UiKit';
 import { useInstantApi } from '@/lib/client-cache';
 
-export default function OsHomePage() {
-  const { user } = useOs();
+interface OsAppTile {
+  key: string;
+  label: string;
+  badge: string;
+  badgeCls: string;
+  iconBg: string;
+  desc: string;
+  href: string;
+  icon: LucideIcon;
+  visible: boolean;
+}
+
+export default function OsApplicationsLauncherPage() {
+  const { user, uiConfig, setUiConfig, setCustomizerOpen, toast } = useOs();
   const [filter, setFilter] = useState('');
+  const [draggedKey, setDraggedKey] = useState<string | null>(null);
   const { data: overview } = useInstantApi<{
     kpis?: {
       loanBookAed: number;
@@ -42,280 +59,464 @@ export default function OsHomePage() {
       checkedInCount: number;
       totalStaffCount: number;
       pendingApprovalsCount: number;
-      activeCasesCount: number;
     };
   }>('/api/v1/dashboard/overview');
 
-  const kpis = overview?.kpis ?? null;
+  const kpis = overview?.kpis;
   const isOwner = Boolean(user?.isOwner);
+  const isOwnerOrAdmin = user?.role === 'OWNER' || user?.role === 'OFFICE_ADMIN';
+  const hasPipelineAccess = user?.role !== 'HR_MANAGER' && user?.role !== 'IT_MARKETING';
+  const hasWebsiteAccess = isOwnerOrAdmin || user?.role === 'IT_MARKETING';
   const isShabib = Boolean(user?.email?.toLowerCase().includes('shabib'));
-  const firstName = user?.name?.split(' ')[0] || 'Team';
   const placeTitle = isShabib ? "Shabib's Place" : "Warda's Place";
   const cornerTitle = isShabib ? "Shabib's Corner" : "Warda's Corner";
 
-  const placeModules = [
-    { label: 'Team & Daily To-Do', desc: 'Staff job roles, tasks & verifiers', href: '/os/place?tab=team', icon: CheckSquare },
-    { label: 'Next Day Plan & Daily Report', desc: 'Calls, visits, tie-ups, socials & logins', href: '/os/place?tab=daily-plan', icon: CalendarClock },
-    { label: 'Mortgage Field Meetings', desc: 'GPS pin, proof photo & authority sign-off', href: '/os/place?tab=visits', icon: MapPin },
-    { label: 'APL Brochures & Catalog', desc: 'Custom colors, materials & bank sheets', href: '/os/place?tab=catalog', icon: Palette },
-    { label: 'Mortgage Forms (Word / JPEG)', desc: 'Fillable agreements, NOCs & templates', href: '/os/place?tab=legal', icon: FileText },
-    { label: '5-Track Disbursal Closings', desc: 'Scratch to handover & cheque ledger', href: '/os/place?tab=closings', icon: ClipboardList },
-    { label: 'Advisor DSA & Expenses', desc: 'Paid / pending · Cash, BT & Botim', href: '/os/place?tab=commissions', icon: Receipt },
-  ];
-
-  const cornerModules = [
-    { label: 'Privacy Fast Track', desc: 'Private VIP cases & direct owner invoices', href: '/os/corner?tab=fasttrack', icon: Lock },
-    { label: 'Owner Approvals', desc: '1-of-2 & 2-of-2 high-value release sign-offs', href: '/os/corner?tab=approvals', icon: ShieldCheck },
-    { label: 'Consolidated P&L & VAT 201', desc: 'Corporate + Private UAE 5% VAT view', href: '/os/corner?tab=vat', icon: Wallet },
-    { label: 'Bulk AI Upload & Audit', desc: 'Batch OCR ingestion & executive logs', href: '/os/corner?tab=bulkai', icon: Upload },
-  ];
-
-  const deskModules = [
-    { label: '3-Bank Auto-Eco Proposal', desc: 'Side-by-side EMI, 300m schedule & PDF/Excel', href: '/os/mortgage-desk?tab=proposal', icon: Calculator, dark: true },
-    { label: '18-Bank 2026 Rate Matrix', desc: 'Salaried, Self-Employed, Commercial & NR', href: '/os/mortgage-desk?tab=matrix', icon: Database, dark: false },
-    { label: '159 Direct Bank RMs', desc: 'Direct bank RM phones, emails & escalations', href: '/os/mortgage-desk?tab=rms', icon: PhoneCall, dark: false },
-    { label: 'Coordinator & Logins Tracker', desc: '32-col Excel logins, valuation, FOL & disbursal', href: '/os/coordinator', icon: ClipboardList, dark: true },
-    { label: '12-Step Mortgage Pipeline', desc: 'Enquiry to DLD Trustee & bank payout', href: '/os/pipeline', icon: KanbanSquare, dark: false },
-    { label: 'Employees, Leave & Salary', desc: 'EID/Visa, QR check-in, leave & WPS payroll', href: '/os/employees', icon: Users, dark: false },
-    { label: 'All-Data Excel & 2026 Matrix', desc: '17-sheet full OS backup + recreated bank matrix', href: '/os/utilities', icon: FileSpreadsheet, dark: true },
-    { label: 'CBUAE, CC Reducer & CTO', desc: 'DBR 50%, 6-month CTO & USD/AED avg balance', href: '/os/mortgage-desk?tab=cbuae', icon: Flame, dark: false },
-  ];
+  // Exact App Icon Colors, Badges & Placement Matching Uploaded Reference Screenshots 1 & 3
+  const apps: OsAppTile[] = [
+    {
+      key: 'place',
+      label: placeTitle,
+      badge: 'Owner Daily Ops',
+      badgeCls: 'bg-[#fdf4dc] text-[#9a6b0d] border-[#ebd28b]',
+      iconBg: 'bg-[#b88a1e] text-white',
+      desc: 'Daily UAE mortgage operations: Team & To-Do, Next Day Plan & Daily Report, GPS Field Meetings, APL Brochures, Word/JPEG Forms, 5-Track Disbursals & DSA',
+      href: '/os/place',
+      icon: Crown,
+      visible: isOwner,
+    },
+    {
+      key: 'corner',
+      label: cornerTitle,
+      badge: 'Owner Private HQ',
+      badgeCls: 'bg-[#090d13] text-[#fbe8a4] border-[#d9b356]/50',
+      iconBg: 'bg-[#090d13] text-[#fbe8a4] border border-[#d9b356]/40',
+      desc: `${isShabib ? "Shabib's" : "Warda's"} Client — Privacy Fast Track, 1–12 Gold-Rush Kanban, Bulk AI Upload, Owner Approvals (1-of-2 & 2-of-2) & Consolidated VAT`,
+      href: '/os/corner',
+      icon: Lock,
+      visible: isOwner,
+    },
+    {
+      key: 'command-center',
+      label: 'Command Center',
+      badge: 'Live War Room',
+      badgeCls: 'bg-[#f1f5f9] text-[#334155] border-[#dce3ec]',
+      iconBg: 'bg-[#0e172a] text-white',
+      desc: 'Live daily enquiry ticker, 12-stage lead counts, critical alerts, office attendance & field GPS radar',
+      href: '/os/command-center',
+      icon: Radar,
+      visible: hasPipelineAccess,
+    },
+    {
+      key: 'dashboard',
+      label: 'Dashboard',
+      badge: 'Daily Pulse',
+      badgeCls: 'bg-[#e3fbf3] text-[#05523d] border-[#9be8ce]',
+      iconBg: 'bg-[#0a6b4b] text-white',
+      desc: 'Loan book, commissions, 12-stage funnel, My Tasks Today, Team Task Monitor & Assigned Clients',
+      href: '/os/dashboard',
+      icon: LayoutDashboard,
+      visible: true,
+    },
+    {
+      key: 'master-log',
+      label: 'Master Log (CORE)',
+      badge: 'Direct Owner Control',
+      badgeCls: 'bg-[#e3fbf3] text-[#05523d] border-[#9be8ce]',
+      iconBg: 'bg-[#0a6b4b] text-white',
+      desc: '22 headquarters registries: Communities, Developers, Oud Metha Geofence, Departments, COA, VAT, 24 Banks',
+      href: '/os/master-log',
+      icon: Database,
+      visible: isOwnerOrAdmin,
+    },
+    {
+      key: 'pipeline',
+      label: '12-Step Pipeline',
+      badge: '12 Stages',
+      badgeCls: 'bg-[#e3fbf3] text-[#05523d] border-[#9be8ce]',
+      iconBg: 'bg-[#0a6b4b] text-white',
+      desc: 'Exact 1–12 mortgage Kanban from Enquiry, Eligibility, Pick Banks & Papers to NOC, Commission & Care',
+      href: '/os/pipeline',
+      icon: KanbanSquare,
+      visible: hasPipelineAccess,
+    },
+    {
+      key: 'coordinator',
+      label: 'Coordinator & Logins',
+      badge: '32-Col Excel Flow',
+      badgeCls: 'bg-[#e3fbf3] text-[#05523d] border-[#9be8ce]',
+      iconBg: 'bg-[#0d4f49] text-[#34f0bc]',
+      desc: 'CRM Excel 32-column Logins (7 tx types, 5 loan types, Banks 1/2/3), Docs Full/Incomplete, Valuation, FOL, Disbursed & Payouts',
+      href: '/os/coordinator',
+      icon: ClipboardList,
+      visible: hasPipelineAccess,
+    },
+    {
+      key: 'crm',
+      label: 'CRM',
+      badge: '100% Daily Log',
+      badgeCls: 'bg-[#f1f5f9] text-[#334155] border-[#dce3ec]',
+      iconBg: 'bg-[#0284c7] text-white',
+      desc: '100% exact daily enquiry ledger (Website, Chat, WhatsApp, Bayut, Referrals), Masked Client Vault & calls',
+      href: '/os/crm',
+      icon: UserPlus,
+      visible: hasPipelineAccess,
+    },
+    {
+      key: 'mortgage-desk',
+      label: 'Mortgage Exclusive Desk',
+      badge: '18 Banks + 159 RMs',
+      badgeCls: 'bg-[#fdf4dc] text-[#9a6b0d] border-[#ebd28b]',
+      iconBg: 'bg-[#b88a1e] text-white',
+      desc: '3-Bank Auto-Eco Proposal Maker, 60-Sec Matcher & AI Policy, 2026 18-Bank Matrix, 159 Direct RMs, CBUAE/CC/CTO & Valuations',
+      href: '/os/mortgage-desk',
+      icon: Calculator,
+      visible: hasPipelineAccess,
+    },
+    {
+      key: 'sales',
+      label: 'Sales & Services',
+      badge: 'Quotes & Partners',
+      badgeCls: 'bg-[#f1f5f9] text-[#334155] border-[#dce3ec]',
+      iconBg: 'bg-[#0e172a] text-white',
+      desc: 'Branded bank comparison proposals, Live Borrower Share Card, Takaful/Wills/Golden Visa cross-sell & RERA Partner Referral Hub',
+      href: '/os/sales',
+      icon: Briefcase,
+      visible: hasPipelineAccess,
+    },
+    {
+      key: 'vault',
+      label: 'Client Document Vault',
+      badge: 'Private Storage',
+      badgeCls: 'bg-[#f1f5f9] text-[#334155] border-[#dce3ec]',
+      iconBg: 'bg-[#0e172a] text-white',
+      desc: 'Per-client encrypted Supabase vault: Passport, EID, Visa, Payslips, Salary Cert, 6m Bank, AECB, Form F, Oqood, Title Deed',
+      href: '/os/vault',
+      icon: FileLock2,
+      visible: hasPipelineAccess,
+    },
+    {
+      key: 'accounts',
+      label: 'Accounts',
+      badge: 'FTA VAT & GL',
+      badgeCls: 'bg-[#fdf4dc] text-[#9a6b0d] border-[#ebd28b]',
+      iconBg: 'bg-[#b88a1e] text-white',
+      desc: 'Double-entry GL, Bank DSA Invoices, UAE 5% VAT 201, PINT-AE XML & Corporate-Account-Only payout guard',
+      href: '/os/accounts',
+      icon: Wallet,
+      visible: isOwnerOrAdmin,
+    },
+    {
+      key: 'compliance',
+      label: 'Compliance',
+      badge: 'CBUAE & PDPL',
+      badgeCls: 'bg-[#f1f5f9] text-[#334155] border-[#dce3ec]',
+      iconBg: 'bg-[#6d28d9] text-white',
+      desc: 'CBUAE Joint KFS gate, AML sanctions screening, goAML XML, UAE PDPL audit trail & 2-of-2 Owner Delete Bin',
+      href: '/os/compliance',
+      icon: ShieldCheck,
+      visible: isOwnerOrAdmin,
+    },
+    {
+      key: 'website-studio',
+      label: 'Website & Social Studio',
+      badge: 'Two-Way Live Sync',
+      badgeCls: 'bg-[#e3fbf3] text-[#05523d] border-[#9be8ce]',
+      iconBg: 'bg-[#0a6b4b] text-white',
+      desc: 'Live two-way control of betterwaymortgages.com (Hot Offers, Bank Rates, Banners, Team) & Social UTM Campaigns',
+      href: '/os/website-studio',
+      icon: Globe,
+      visible: hasWebsiteAccess,
+    },
+    {
+      key: 'employees',
+      label: 'Employees & Attendance',
+      badge: 'Oud Metha QR',
+      badgeCls: 'bg-[#f1f5f9] text-[#334155] border-[#dce3ec]',
+      iconBg: 'bg-[#0e172a] text-white',
+      desc: '8-member studio roster, 20s Oud Metha Office QR + Geofence check-in, EID/Visa docs, Leave, Salary & MOHRE WPS .SIF',
+      href: '/os/employees',
+      icon: Users,
+      visible: true,
+    },
+    {
+      key: 'inside',
+      label: 'Team Group (Inside)',
+      badge: 'Auto Check-In Feed',
+      badgeCls: 'bg-[#f1f5f9] text-[#334155] border-[#dce3ec]',
+      iconBg: 'bg-[#0284c7] text-white',
+      desc: 'Company channels & live #attendance-checkin feed automatically updated when staff scan Oud Metha QR',
+      href: '/os/inside',
+      icon: MessagesSquare,
+      visible: true,
+    },
+    {
+      key: 'field-gps',
+      label: 'Field GPS Services',
+      badge: 'Live GPS + SOS',
+      badgeCls: 'bg-[#e3fbf3] text-[#05523d] border-[#9be8ce]',
+      iconBg: 'bg-[#0a6b4b] text-white',
+      desc: 'Track field staff live at Banks, Valuations, Developers & DLD Trustees with GPS pins & 1-Tap SOS alert',
+      href: '/os/field-gps',
+      icon: MapPin,
+      visible: true,
+    },
+    {
+      key: 'ai',
+      label: 'AI Case-Study Copilot',
+      badge: 'Case-Study AI',
+      badgeCls: 'bg-[#f1f5f9] text-[#334155] border-[#dce3ec]',
+      iconBg: 'bg-[#6d28d9] text-white',
+      desc: 'PII-shielded UAE mortgage AI grounded in Betterway case studies + Train New Scenario knowledge studio',
+      href: '/os/ai',
+      icon: Sparkles,
+      visible: true,
+    },
+    {
+      key: 'utilities',
+      label: 'Utilities & Documents',
+      badge: '17-Sheet + 2026 Matrix',
+      badgeCls: 'bg-[#fdf4dc] text-[#9a6b0d] border-[#ebd28b]',
+      iconBg: 'bg-[#b88a1e] text-white',
+      desc: '17-Sheet Master Excel & Daily Backup, Recreated 2026 Bank Matrix (.xlsx), Word/JPEG Studio, 9-Language Translator & OCR',
+      href: '/os/utilities',
+      icon: Wrench,
+      visible: true,
+    },
+    {
+      key: 'settings',
+      label: 'Settings',
+      badge: 'System Config',
+      badgeCls: 'bg-[#f1f5f9] text-[#334155] border-[#dce3ec]',
+      iconBg: 'bg-[#0e172a] text-white',
+      desc: 'Oud Metha Wi-Fi/Geofence calibration, Reception QR rules, Website sync HMAC & Corporate IBAN whitelist',
+      href: '/os/settings',
+      icon: Settings,
+      visible: isOwnerOrAdmin,
+    },
+  ].filter((a) => a.visible);
 
   const q = filter.trim().toLowerCase();
-  const match = (item: { label: string; desc: string }) =>
-    !q || item.label.toLowerCase().includes(q) || item.desc.toLowerCase().includes(q);
+  const orderIndex = (k: string) => {
+    const idx = uiConfig.appOrder.indexOf(k);
+    return idx === -1 ? 999 : idx;
+  };
+  const orderedApps = [...apps].sort((a, b) => orderIndex(a.key) - orderIndex(b.key));
+  const visibleApps = orderedApps.filter(
+    (a) => !q || a.label.toLowerCase().includes(q) || a.desc.toLowerCase().includes(q) || a.badge.toLowerCase().includes(q),
+  );
+  const pinnedApps = orderedApps.filter((a) => uiConfig.pinnedAppKeys.includes(a.key));
+
+  const togglePin = (e: React.MouseEvent, key: string, label: string) => {
+    e.preventDefault();
+    e.stopPropagation();
+    const exists = uiConfig.pinnedAppKeys.includes(key);
+    const next = exists ? uiConfig.pinnedAppKeys.filter((k) => k !== key) : [key, ...uiConfig.pinnedAppKeys];
+    setUiConfig({ ...uiConfig, pinnedAppKeys: next });
+    toast(exists ? `Unpinned ${label}` : `Pinned ${label} to your top bar!`);
+  };
+
+  const handleDropApp = (targetKey: string) => {
+    if (!draggedKey || draggedKey === targetKey) return;
+    const keys = orderedApps.map((a) => a.key);
+    const from = keys.indexOf(draggedKey);
+    const to = keys.indexOf(targetKey);
+    if (from < 0 || to < 0) return;
+    const [moved] = keys.splice(from, 1);
+    keys.splice(to, 0, moved);
+    setDraggedKey(null);
+    setUiConfig({ ...uiConfig, appOrder: keys });
+    toast('App order updated & saved!');
+  };
 
   return (
-    <div className="space-y-8">
-      {/* Clean Typographic Greeting Header — Zero Clutter Buttons */}
-      <section className="flex flex-wrap items-end justify-between gap-4">
-        <div className="space-y-1.5">
-          <div className="inline-flex items-center gap-2 text-[11px] font-extrabold uppercase tracking-[0.14em] text-[#0b5442] dark:text-[#34f0bc]">
-            <img src="/brand/betterway-icon.svg" alt="" aria-hidden className="size-5" />
-            Betterway Mortgages LLC · Dubai OS
-          </div>
-          <h1 className="font-display text-3xl sm:text-[38px] font-extrabold tracking-[-0.035em] leading-[1.08] text-[var(--bw-ink)]">
-            Welcome back, {firstName}.
-          </h1>
-          <p className="text-[13.5px] text-[var(--bw-muted)] max-w-[66ch]">
-            Select any app from the left sidebar to open it — its sub-pages automatically appear along the top bar.
-          </p>
-        </div>
-
-        {/* Quiet Inline Filter */}
-        <label className="flex items-center gap-2 px-4 h-10 rounded-full bg-white dark:bg-[#0d1219] border border-[var(--bw-line-strong)] focus-within:border-[#119c78] w-full sm:w-80 shadow-xs">
-          <Search size={14} className="text-[#119c78] shrink-0" />
-          <input
-            value={filter}
-            onChange={(e) => setFilter(e.target.value)}
-            placeholder="Quick filter modules..."
-            className="flex-1 bg-transparent outline-none text-xs text-[var(--bw-ink)] placeholder:text-[var(--bw-muted)]"
-          />
-        </label>
-      </section>
-
-      {/* Split Individual Glossy Floating Shining Black KPI Tiles (1 Metric Per Card — Never Crammed Together) */}
-      <section className="grid grid-cols-2 lg:grid-cols-4 gap-4" aria-label="Live mortgage metrics">
-        <GlossyBlackCard className="p-5 space-y-1.5" accent="emerald">
-          <div className="text-[10.5px] font-bold uppercase tracking-[0.1em] text-slate-400">Active Loan Book</div>
-          <div className="font-display text-2xl sm:text-[28px] font-extrabold font-mono-num text-white">
-            {fmtAed(kpis?.loanBookAed ?? 0, true)}
-          </div>
-          <div className="text-[11px] font-semibold text-[#34f0bc]">{kpis?.activeCasesCount ?? 0} active cases</div>
-        </GlossyBlackCard>
-
-        <GlossyBlackCard className="p-5 space-y-1.5" accent="dual">
-          <div className="text-[10.5px] font-bold uppercase tracking-[0.1em] text-slate-400">Expected Bank DSA</div>
-          <div className="font-display text-2xl sm:text-[28px] font-extrabold font-mono-num text-[#34f0bc]">
-            {fmtAed(kpis?.expectedDsaAed ?? 0, true)}
-          </div>
-          <div className="text-[11px] text-slate-300">Corporate bank payouts</div>
-        </GlossyBlackCard>
-
-        <GlossyBlackCard className="p-5 space-y-1.5" accent="gold">
-          <div className="text-[10.5px] font-bold uppercase tracking-[0.1em] text-slate-400">Team Checked In</div>
-          <div className="font-display text-2xl sm:text-[28px] font-extrabold font-mono-num text-[#fbe8a4]">
-            {kpis ? `${kpis.checkedInCount} / ${kpis.totalStaffCount}` : '0 / 9'}
-          </div>
-          <div className="text-[11px] text-slate-300">Oud Metha QR attendance</div>
-        </GlossyBlackCard>
-
-        <GlossyBlackCard className="p-5 space-y-1.5" accent="emerald">
-          <div className="text-[10.5px] font-bold uppercase tracking-[0.1em] text-slate-400">Live UAE Bank Matrix</div>
-          <div className="font-display text-2xl sm:text-[28px] font-extrabold text-white">
-            18 Banks <span className="text-sm font-bold text-[#34f0bc]">· 159 RMs</span>
-          </div>
-          <div className="text-[11px] text-slate-300">Updated 2026 rates &amp; policies</div>
-        </GlossyBlackCard>
-      </section>
-
-      {/* OWNER SECTION 1: Warda's Place / Shabib's Place (Daily UAE Mortgage Operations — Split Modular Cards) */}
-      {isOwner && (
-        <section className="space-y-3" aria-label={placeTitle}>
-          <div className="flex items-center justify-between border-b border-[var(--bw-line-strong)] pb-2">
-            <div className="flex items-center gap-2">
-              <span className="size-7 rounded-lg bg-[#090d13] text-[#34f0bc] flex items-center justify-center">
-                <Briefcase size={15} />
-              </span>
-              <div>
-                <h2 className="font-display text-base font-extrabold text-[var(--bw-ink)]">{placeTitle}</h2>
-                <p className="text-[11.5px] text-[var(--bw-muted)]">Daily UAE Mortgage Operations · Team, Plans, Field GPS, Brochures, Forms &amp; Disbursals</p>
+    <div className="space-y-6">
+      {/* Exact Glossy Floating Shining Black Welcome Hero Banner (Matches Uploaded Screenshot 1) */}
+      <GlossyBlackCard className="p-6 sm:p-7 space-y-5" accent="dual">
+        <div className="flex flex-wrap items-center justify-between gap-4">
+          <div className="flex items-center gap-4 min-w-0">
+            {user && <StaffAvatar name={user.name} avatarUrl={user.avatarUrl} initials={user.initials} size="lg" />}
+            <div className="min-w-0">
+              <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-white/10 border border-white/15 text-[10px] font-extrabold uppercase tracking-[0.12em] text-[#fbe8a4]">
+                <Crown size={11} className="text-[#d9b356]" /> {placeTitle.toUpperCase()} · EQUAL CO-OWNER CONTROL
               </div>
+              <h1 className="font-display text-2xl sm:text-[30px] font-extrabold tracking-[-0.03em] text-white mt-1 leading-tight">
+                Welcome back, <span className="text-[#34f0bc]">{user?.name || 'Betterway Team'}</span>
+              </h1>
+              <p className="text-xs text-slate-300 mt-0.5">
+                {user?.designation || 'Mortgage Advisory'} · Al Nasr Plaza, Oud Metha, Dubai · Connected live to betterwaymortgages.com
+              </p>
             </div>
-            <Link href="/os/place?tab=team" className="text-xs font-extrabold text-[#0b5442] dark:text-[#34f0bc] hover:underline inline-flex items-center gap-1">
-              Open {placeTitle} <ArrowUpRight size={13} />
-            </Link>
           </div>
 
-          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-3.5">
-            {placeModules.filter(match).map((m) => {
-              const Icon = m.icon;
-              return (
+          <div className="flex flex-wrap items-center gap-2">
+            {isOwner && (
+              <>
+                <Link href="/os/place" className="bw-btn bw-btn-gold text-xs py-2 min-h-[36px] px-4">
+                  <Crown size={13} /> Open {placeTitle}
+                </Link>
                 <Link
-                  key={m.href}
-                  href={m.href}
-                  className="group bg-white dark:bg-[#0e131b] rounded-[18px] border border-[var(--bw-line)] hover:border-[#119c78] p-4 shadow-[var(--bw-shadow-raised)] hover:-translate-y-0.5 transition flex flex-col justify-between gap-3"
+                  href="/os/corner"
+                  className="px-3.5 py-2 rounded-full bg-white/10 hover:bg-white/18 border border-[#d9b356]/45 text-[#fbe8a4] text-xs font-extrabold inline-flex items-center gap-1.5 transition"
                 >
-                  <div className="flex items-center justify-between">
-                    <span className="size-9 rounded-xl bg-[#090d13] text-[#34f0bc] flex items-center justify-center shadow-sm">
-                      <Icon size={17} />
-                    </span>
-                    <ArrowUpRight size={15} className="text-[var(--bw-muted)] group-hover:text-[#119c78] transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
-                  </div>
-                  <div>
-                    <div className="font-display text-sm font-extrabold text-[var(--bw-ink)] group-hover:text-[#0b5442] dark:group-hover:text-[#34f0bc]">
-                      {m.label}
-                    </div>
-                    <div className="text-[11.5px] text-[var(--bw-muted)] mt-0.5 leading-snug">{m.desc}</div>
-                  </div>
+                  <Lock size={12} /> {cornerTitle}
                 </Link>
-              );
-            })}
-          </div>
-        </section>
-      )}
-
-      {/* OWNER SECTION 2: Warda's Corner / Shabib's Corner (Private Fast Track & Governance — Split Glossy Black Cards) */}
-      {isOwner && (
-        <section className="space-y-3" aria-label={cornerTitle}>
-          <div className="flex items-center justify-between border-b border-[var(--bw-line-strong)] pb-2">
-            <div className="flex items-center gap-2">
-              <span className="size-7 rounded-lg bg-[#090d13] text-[#fbe8a4] border border-[#d9b356]/40 flex items-center justify-center">
-                <Crown size={15} />
-              </span>
-              <div>
-                <h2 className="font-display text-base font-extrabold text-[var(--bw-ink)]">{cornerTitle}</h2>
-                <p className="text-[11.5px] text-[var(--bw-muted)]">Private Fast Track, Confidential VIP Invoices, Dual Approvals &amp; Consolidated VAT</p>
-              </div>
-            </div>
-            <Link href="/os/corner?tab=fasttrack" className="text-xs font-extrabold text-[#9a7123] dark:text-[#fbe8a4] hover:underline inline-flex items-center gap-1">
-              Open {cornerTitle} <ArrowUpRight size={13} />
+              </>
+            )}
+            {hasPipelineAccess && (
+              <Link href="/os/pipeline" className="bw-btn bw-btn-primary text-xs py-2 min-h-[36px] px-4">
+                <KanbanSquare size={13} /> 12-Step Pipeline
+              </Link>
+            )}
+            <Link
+              href="/os/employees"
+              className="px-3.5 py-2 rounded-full bg-white/10 hover:bg-white/18 border border-white/15 text-slate-200 text-xs font-bold inline-flex items-center gap-1.5 transition"
+            >
+              <Users size={13} /> Check-In ({kpis ? `${kpis.checkedInCount}/${kpis.totalStaffCount}` : '0/9'})
             </Link>
-          </div>
-
-          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-3.5">
-            {cornerModules.filter(match).map((m) => {
-              const Icon = m.icon;
-              return (
-                <Link key={m.href} href={m.href} className="block group">
-                  <GlossyBlackCard className="p-4 h-full flex flex-col justify-between gap-3" accent="gold">
-                    <div className="flex items-center justify-between">
-                      <span className="size-9 rounded-xl bg-white/10 border border-[#d9b356]/40 text-[#fbe8a4] flex items-center justify-center">
-                        <Icon size={17} />
-                      </span>
-                      <ArrowUpRight size={15} className="text-[#fbe8a4]/80 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
-                    </div>
-                    <div>
-                      <div className="font-display text-sm font-extrabold text-white group-hover:text-[#fbe8a4]">{m.label}</div>
-                      <div className="text-[11.5px] text-slate-300 mt-0.5 leading-snug">{m.desc}</div>
-                    </div>
-                  </GlossyBlackCard>
-                </Link>
-              );
-            })}
-          </div>
-        </section>
-      )}
-
-      {/* CORE UAE MORTGAGE WORKFLOWS (Split White & Glossy Black Tiles) */}
-      <section className="space-y-3" aria-label="Core mortgage operations">
-        <div className="flex items-center justify-between border-b border-[var(--bw-line-strong)] pb-2">
-          <div className="flex items-center gap-2">
-            <span className="size-7 rounded-lg bg-[#090d13] text-[#34f0bc] flex items-center justify-center">
-              <Sparkles size={15} />
-            </span>
-            <div>
-              <h2 className="font-display text-base font-extrabold text-[var(--bw-ink)]">UAE Mortgage Operations &amp; Excel Tools</h2>
-              <p className="text-[11.5px] text-[var(--bw-muted)]">18-Bank Rates, 159 Direct Bank RMs, Coordinator Logins, HR/Salary &amp; Daily Excel Backups</p>
-            </div>
           </div>
         </div>
 
-        <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-3.5">
-          {deskModules.filter(match).map((m) => {
-            const Icon = m.icon;
-            if (m.dark) {
-              return (
-                <Link key={m.href} href={m.href} className="block group">
-                  <GlossyBlackCard className="p-4 h-full flex flex-col justify-between gap-3" accent="emerald">
-                    <div className="flex items-center justify-between">
-                      <span className="size-9 rounded-xl bg-white/10 border border-[#22e2ad]/35 text-[#34f0bc] flex items-center justify-center">
-                        <Icon size={17} />
-                      </span>
-                      <ArrowUpRight size={15} className="text-[#34f0bc] group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
-                    </div>
-                    <div>
-                      <div className="font-display text-sm font-extrabold text-white">{m.label}</div>
-                      <div className="text-[11.5px] text-slate-300 mt-0.5 leading-snug">{m.desc}</div>
-                    </div>
-                  </GlossyBlackCard>
-                </Link>
-              );
-            }
+        {/* 4 Clean Inner KPI Boxes Matching Screenshot 1 */}
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 pt-1">
+          <div className="rounded-2xl bg-white/[0.05] border border-white/10 px-4 py-3.5">
+            <div className="text-[10px] font-bold uppercase tracking-[0.1em] text-slate-400">Active Loan Book</div>
+            <div className="font-display text-xl sm:text-2xl font-extrabold font-mono-num text-white mt-1">
+              {fmtAed(kpis?.loanBookAed ?? 0, true)}
+            </div>
+          </div>
+          <div className="rounded-2xl bg-white/[0.05] border border-white/10 px-4 py-3.5">
+            <div className="text-[10px] font-bold uppercase tracking-[0.1em] text-slate-400">Expected Bank DSA</div>
+            <div className="font-display text-xl sm:text-2xl font-extrabold font-mono-num text-[#34f0bc] mt-1">
+              {fmtAed(kpis?.expectedDsaAed ?? 0, true)}
+            </div>
+          </div>
+          <div className="rounded-2xl bg-white/[0.05] border border-white/10 px-4 py-3.5">
+            <div className="text-[10px] font-bold uppercase tracking-[0.1em] text-slate-400">Today&apos;s Enquiries (GST)</div>
+            <div className="font-display text-xl sm:text-2xl font-extrabold font-mono-num text-[#34f0bc] mt-1">
+              {kpis?.todayEnquiriesCount ?? 0} Logged
+            </div>
+          </div>
+          <div className="rounded-2xl bg-white/[0.05] border border-white/10 px-4 py-3.5">
+            <div className="text-[10px] font-bold uppercase tracking-[0.1em] text-slate-400">Pending Owner Approvals</div>
+            <div className="font-display text-xl sm:text-2xl font-extrabold font-mono-num text-[#fbe8a4] mt-1">
+              {kpis?.pendingApprovalsCount ?? 0} Waiting
+            </div>
+          </div>
+        </div>
+      </GlossyBlackCard>
+
+      {/* Pinned Important Options Strip (Instant Access + Customisable) */}
+      {pinnedApps.length > 0 && (
+        <div className="flex flex-wrap items-center gap-2">
+          <span className="inline-flex items-center gap-1 text-[10.5px] font-extrabold uppercase tracking-[0.12em] text-[#9a7123] dark:text-[#fbe8a4]">
+            <Pin size={11} /> Pinned:
+          </span>
+          {pinnedApps.map((p) => {
+            const Icon = p.icon;
             return (
               <Link
-                key={m.href}
-                href={m.href}
-                className="group bg-white dark:bg-[#0e131b] rounded-[18px] border border-[var(--bw-line)] hover:border-[#119c78] p-4 shadow-[var(--bw-shadow-raised)] hover:-translate-y-0.5 transition flex flex-col justify-between gap-3"
+                key={`pin-${p.key}`}
+                href={p.href}
+                className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white dark:bg-[#0e131b] border border-[#d9b356]/60 hover:bg-[#090d13] hover:text-[#34f0bc] text-[11.5px] font-bold shadow-xs transition"
               >
-                <div className="flex items-center justify-between">
-                  <span className="size-9 rounded-xl bg-[#090d13] text-[#34f0bc] flex items-center justify-center shadow-sm">
-                    <Icon size={17} />
-                  </span>
-                  <ArrowUpRight size={15} className="text-[var(--bw-muted)] group-hover:text-[#119c78] transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
-                </div>
-                <div>
-                  <div className="font-display text-sm font-extrabold text-[var(--bw-ink)] group-hover:text-[#0b5442] dark:group-hover:text-[#34f0bc]">
-                    {m.label}
-                  </div>
-                  <div className="text-[11.5px] text-[var(--bw-muted)] mt-0.5 leading-snug">{m.desc}</div>
-                </div>
+                <Icon size={12} className="text-[#119c78]" /> {p.label}
               </Link>
             );
           })}
         </div>
-      </section>
+      )}
 
-      {/* Open 6-Step UAE Mortgage Flow Strip */}
-      <section className="pt-2 border-t border-[var(--bw-line-strong)] flex flex-wrap items-center justify-between gap-3 text-xs">
-        <span className="font-display font-extrabold text-[#9a7123] dark:text-[#fbe8a4] uppercase tracking-[0.12em] text-[10.5px]">
-          UAE Mortgage Flow
-        </span>
-        <div className="flex flex-wrap items-center gap-4 font-bold text-[var(--bw-body)]">
-          {[
-            { n: '01', t: 'Lead & Docs', h: '/os/crm' },
-            { n: '02', t: '18-Bank Proposal', h: '/os/mortgage-desk?tab=proposal' },
-            { n: '03', t: 'Coordinator Login', h: '/os/coordinator' },
-            { n: '04', t: 'Valuation & FOL', h: '/os/pipeline' },
-            { n: '05', t: 'DLD Disbursal', h: '/os/place?tab=closings' },
-            { n: '06', t: 'Bank Payout', h: '/os/accounts' },
-          ].map((s) => (
-            <Link key={s.n} href={s.h} className="inline-flex items-center gap-1.5 hover:text-[#119c78] transition">
-              <span className="font-mono-num text-[#119c78] font-extrabold">{s.n}</span>
-              <span>{s.t}</span>
-            </Link>
-          ))}
+      {/* Section Header + Customise UI + Right Filter Pill (Exact Match to Screenshot 1) */}
+      <div className="flex flex-wrap items-center justify-between gap-3 pt-1">
+        <div>
+          <h2 className="font-display text-lg font-extrabold text-[var(--bw-ink)]">Betterway OS Applications</h2>
+          <p className="text-xs text-[var(--bw-muted)]">Select any app icon to launch · Drag cards to reorder or click the pin icon</p>
         </div>
+        <div className="flex flex-wrap items-center gap-2 w-full sm:w-auto">
+          <button
+            type="button"
+            onClick={() => setCustomizerOpen(true)}
+            className="inline-flex items-center gap-1.5 h-9 px-3.5 rounded-full bg-[#090d13] text-[#fbe8a4] border border-[#d9b356]/45 text-xs font-extrabold cursor-pointer hover:brightness-110 transition"
+          >
+            <Palette size={13} className="text-[#34f0bc]" /> Customise UI
+          </button>
+          <label className="flex items-center gap-2 px-3.5 h-9 rounded-full bg-white dark:bg-[#0d1219] border border-[var(--bw-line)] focus-within:border-[#119c78] flex-1 sm:flex-none sm:w-60 shadow-xs">
+            <Search size={13} className="text-[var(--bw-muted)] shrink-0" />
+            <input
+              value={filter}
+              onChange={(e) => setFilter(e.target.value)}
+              placeholder="Filter apps..."
+              className="flex-1 bg-transparent outline-none text-xs text-[var(--bw-ink)] placeholder:text-[var(--bw-muted)]"
+            />
+          </label>
+        </div>
+      </div>
+
+      {/* Exact 4-Column White Application Grid (Now Fully Draggable & Pinnable!) */}
+      <section className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4" aria-label="Betterway OS Applications">
+        {visibleApps.map((app) => {
+          const Icon = app.icon;
+          const isPinned = uiConfig.pinnedAppKeys.includes(app.key);
+          return (
+            <Link
+              key={app.key}
+              href={app.href}
+              draggable
+              data-pinned={isPinned ? 'true' : 'false'}
+              onDragStart={() => setDraggedKey(app.key)}
+              onDragOver={(e) => e.preventDefault()}
+              onDrop={(e) => {
+                e.preventDefault();
+                handleDropApp(app.key);
+              }}
+              className={`bw-app-card group rounded-[var(--bw-card-radius,20px)] bg-[var(--bw-card)] border ${
+                isPinned ? 'border-[#d9b356]' : 'border-[var(--bw-line)]'
+              } hover:border-[var(--bw-emerald)] p-5 shadow-[var(--bw-shadow-raised)] hover:shadow-[var(--bw-shadow-floating)] hover:-translate-y-0.5 transition flex flex-col justify-between min-h-[196px]`}
+            >
+              <div className="space-y-3.5">
+                <div className="flex items-start justify-between gap-2">
+                  <span className={`size-11 rounded-[14px] flex items-center justify-center shadow-sm shrink-0 ${app.iconBg}`}>
+                    <Icon size={20} />
+                  </span>
+                  <div className="flex items-center gap-1">
+                    <span className={`px-2.5 py-0.5 rounded-full text-[10px] font-bold border whitespace-nowrap ${app.badgeCls}`}>
+                      {app.badge}
+                    </span>
+                    <button
+                      type="button"
+                      onClick={(e) => togglePin(e, app.key, app.label)}
+                      title={isPinned ? 'Unpin app' : 'Pin important app'}
+                      aria-label={isPinned ? `Unpin ${app.label}` : `Pin ${app.label}`}
+                      className={`size-6 rounded-full flex items-center justify-center cursor-pointer transition ${
+                        isPinned
+                          ? 'bg-[#090d13] text-[#fbe8a4]'
+                          : 'opacity-50 group-hover:opacity-100 hover:bg-[var(--bw-soft)] text-[var(--bw-muted)]'
+                      }`}
+                    >
+                      {isPinned ? <PinOff size={11} /> : <Pin size={11} />}
+                    </button>
+                  </div>
+                </div>
+                <div>
+                  <h3 className="font-display text-[15px] font-extrabold text-[var(--bw-ink)] group-hover:text-[var(--bw-emerald)] transition flex items-center gap-1">
+                    <span className="truncate">{app.label}</span>
+                  </h3>
+                  <p className="text-[11.5px] text-[var(--bw-muted)] mt-1 leading-relaxed line-clamp-3">{app.desc}</p>
+                </div>
+              </div>
+
+              <div className="flex items-center justify-between pt-3 mt-3 border-t border-[var(--bw-line)]/70 text-[11.5px] font-extrabold text-[var(--bw-emerald)]">
+                <span className="inline-flex items-center gap-1">
+                  Open App
+                </span>
+                <span className="inline-flex items-center gap-1.5">
+                  <GripVertical size={12} className="text-[var(--bw-muted)] opacity-45 group-hover:opacity-100" />
+                  <ArrowUpRight size={14} className="transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+                </span>
+              </div>
+            </Link>
+          );
+        })}
       </section>
     </div>
   );

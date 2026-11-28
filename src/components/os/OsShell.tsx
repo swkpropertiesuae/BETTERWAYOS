@@ -8,46 +8,46 @@ import {
   Briefcase,
   Calculator,
   Check,
+  ClipboardList,
   Crown,
+  Database,
+  FileLock2,
+  Globe,
   KanbanSquare,
   Languages,
   LayoutDashboard,
   LayoutGrid,
-  Lock,
   LogOut,
   MapPin,
+  MessagesSquare,
   Moon,
+  Palette,
+  Radar,
   Search,
+  Settings,
+  ShieldCheck,
   Sparkles,
   Sun,
+  UserPlus,
   Users,
   Wallet,
+  Wrench,
   X,
   type LucideIcon,
 } from 'lucide-react';
 import { useOs } from './OsProvider';
 import { StaffAvatar } from './UiKit';
+import { EIBOR_SNAPSHOT } from '@/lib/domain/banks';
 import { prefetchApi } from '@/lib/client-cache';
 
-interface SubPageDef {
+interface TopNavApp {
+  key: string;
   label: string;
   href: string;
-  matchPath?: string;
-  matchTab?: string;
-  gold?: boolean;
-}
-
-interface SidebarAppDef {
-  id: string;
-  label: string;
-  shortLabel: string;
+  matchPrefix: string;
   icon: LucideIcon;
-  primaryHref: string;
-  matchPrefixes: string[];
-  matchSection?: 'place' | 'corner';
-  goldAccent?: boolean;
+  visible: boolean;
   prefetchUrl?: string;
-  subPages: SubPageDef[];
 }
 
 function DubaiClock({ compact = false }: { compact?: boolean }) {
@@ -71,11 +71,11 @@ function DubaiClock({ compact = false }: { compact?: boolean }) {
     const id = setInterval(update, 15_000);
     return () => clearInterval(id);
   }, [compact]);
-  return <span>{text || 'Asia/Dubai GST'}</span>;
+  return <span>{text || 'Dubai Live GST'}</span>;
 }
 
 export function OsShell({ children }: { children: React.ReactNode }) {
-  const { user, dark, toggleDark, toggleRtl, logout } = useOs();
+  const { user, dark, toggleDark, toggleRtl, logout, setCustomizerOpen } = useOs();
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const router = useRouter();
@@ -86,26 +86,12 @@ export function OsShell({ children }: { children: React.ReactNode }) {
   const [notifications, setNotifications] = useState<Array<{ id: string; title: string; body?: string; href?: string; is_read: boolean; created_at?: string }>>([]);
   const [notifOpen, setNotifOpen] = useState(false);
 
-  const currentTab = searchParams?.get('tab') || '';
   const currentSection = searchParams?.get('section') || '';
+  const currentTab = searchParams?.get('tab') || '';
 
-  // Instant route prefetching for zero-loading sidebar clicks
   useEffect(() => {
-    const warmRoutes = [
-      '/os',
-      '/os/place',
-      '/os/corner',
-      '/os/dashboard',
-      '/os/pipeline',
-      '/os/coordinator',
-      '/os/mortgage-desk',
-      '/os/accounts',
-      '/os/employees',
-      '/os/utilities',
-    ];
-    for (const r of warmRoutes) {
-      router.prefetch(r);
-    }
+    const warmRoutes = ['/os', '/os/place', '/os/corner', '/os/dashboard', '/os/pipeline', '/os/coordinator', '/os/mortgage-desk', '/os/utilities'];
+    for (const r of warmRoutes) router.prefetch(r);
   }, [router]);
 
   useEffect(() => {
@@ -170,257 +156,107 @@ export function OsShell({ children }: { children: React.ReactNode }) {
   const hasPipelineAccess = user?.role !== 'HR_MANAGER' && user?.role !== 'IT_MARKETING';
   const hasWebsiteAccess = isOwnerOrAdmin || user?.role === 'IT_MARKETING';
   const isShabib = Boolean(user?.email?.toLowerCase().includes('shabib'));
-  const placeName = isShabib ? "Shabib's Place" : "Warda's Place";
-  const cornerName = isShabib ? "Shabib's Corner" : "Warda's Corner";
+  const placeLabel = isShabib ? "Shabib's Place" : "Warda's Place";
+  const cornerLabel = isShabib ? "Shabib's Corner" : "Warda's Corner";
 
-  // Direct Sidebar App Registry: clicking an icon opens the App immediately; its sub-pages appear cleanly in the Top Header
-  const sidebarApps: SidebarAppDef[] = useMemo(
-    () => [
-      {
-        id: 'home',
-        label: 'Home',
-        shortLabel: 'Home',
-        icon: LayoutGrid,
-        primaryHref: '/os',
-        matchPrefixes: ['/os'],
-        prefetchUrl: '/api/v1/dashboard/overview',
-        subPages: [],
-      },
-      ...(isOwner
-        ? [
-            {
-              id: 'place',
-              label: `${placeName} (Daily Operations)`,
-              shortLabel: isShabib ? "Shabib's\nPlace" : "Warda's\nPlace",
-              icon: Briefcase,
-              primaryHref: '/os/place?tab=team',
-              matchPrefixes: ['/os/place', '/os/executive'],
-              matchSection: 'place' as const,
-              prefetchUrl: '/api/v1/executive/overview',
-              subPages: [
-                { label: 'Team & To-Do', href: '/os/place?tab=team', matchPath: '/os/place', matchTab: 'team' },
-                { label: 'Next Day & Daily Report', href: '/os/place?tab=daily-plan', matchPath: '/os/place', matchTab: 'daily-plan' },
-                { label: 'Field Meetings (GPS)', href: '/os/place?tab=visits', matchPath: '/os/place', matchTab: 'visits' },
-                { label: 'APL Brochures', href: '/os/place?tab=catalog', matchPath: '/os/place', matchTab: 'catalog' },
-                { label: 'Forms (Word/JPEG)', href: '/os/place?tab=legal', matchPath: '/os/place', matchTab: 'legal' },
-                { label: '5-Track Disbursals', href: '/os/place?tab=closings', matchPath: '/os/place', matchTab: 'closings' },
-                { label: 'DSA & Expenses', href: '/os/place?tab=commissions', matchPath: '/os/place', matchTab: 'commissions' },
-              ],
-            },
-            {
-              id: 'corner',
-              label: `${cornerName} (Private Fast Track)`,
-              shortLabel: isShabib ? "Shabib's\nCorner" : "Warda's\nCorner",
-              icon: Crown,
-              primaryHref: '/os/corner?tab=fasttrack',
-              matchPrefixes: ['/os/corner', '/os/executive'],
-              matchSection: 'corner' as const,
-              goldAccent: true,
-              prefetchUrl: '/api/v1/executive/overview',
-              subPages: [
-                { label: 'Privacy Fast Track', href: '/os/corner?tab=fasttrack', matchPath: '/os/corner', matchTab: 'fasttrack', gold: true },
-                { label: 'Owner Approvals', href: '/os/corner?tab=approvals', matchPath: '/os/corner', matchTab: 'approvals', gold: true },
-                { label: 'Consolidated P&L & VAT', href: '/os/corner?tab=vat', matchPath: '/os/corner', matchTab: 'vat', gold: true },
-                { label: 'Bulk AI Upload', href: '/os/corner?tab=bulkai', matchPath: '/os/corner', matchTab: 'bulkai', gold: true },
-                { label: 'Gold-Rush & Audit', href: '/os/corner?tab=goldrush', matchPath: '/os/corner', matchTab: 'goldrush', gold: true },
-              ],
-            },
-          ]
-        : []),
-      {
-        id: 'dashboard',
-        label: 'Dashboard',
-        shortLabel: 'Dashboard',
-        icon: LayoutDashboard,
-        primaryHref: '/os/dashboard',
-        matchPrefixes: ['/os/dashboard', '/os/command-center'],
-        prefetchUrl: '/api/v1/dashboard/overview',
-        subPages: [
-          { label: 'Daily Control Desk', href: '/os/dashboard', matchPath: '/os/dashboard' },
-          { label: 'Command Center', href: '/os/command-center', matchPath: '/os/command-center' },
-        ],
-      },
-      ...(hasPipelineAccess
-        ? [
-            {
-              id: 'pipeline',
-              label: 'Pipeline, Logins & Coordinator',
-              shortLabel: 'Pipeline',
-              icon: KanbanSquare,
-              primaryHref: '/os/pipeline',
-              matchPrefixes: ['/os/pipeline', '/os/coordinator', '/os/crm', '/os/sales'],
-              subPages: [
-                { label: '12-Step Pipeline', href: '/os/pipeline', matchPath: '/os/pipeline' },
-                { label: 'Coordinator & Logins', href: '/os/coordinator', matchPath: '/os/coordinator' },
-                { label: 'Daily Leads (PDPL)', href: '/os/crm', matchPath: '/os/crm' },
-                { label: 'Quotes & Partners', href: '/os/sales', matchPath: '/os/sales' },
-              ],
-            },
-            {
-              id: 'banks',
-              label: '18-Bank Hub, RMs & Proposals',
-              shortLabel: '24 Banks',
-              icon: Calculator,
-              primaryHref: '/os/mortgage-desk?tab=proposal',
-              matchPrefixes: ['/os/mortgage-desk'],
-              prefetchUrl: '/api/v1/mortgage-desk',
-              subPages: [
-                { label: '3-Bank Proposal', href: '/os/mortgage-desk?tab=proposal', matchPath: '/os/mortgage-desk', matchTab: 'proposal' },
-                { label: '60-Sec Matcher & AI', href: '/os/mortgage-desk?tab=matcher', matchPath: '/os/mortgage-desk', matchTab: 'matcher' },
-                { label: '18-Bank 2026 Matrix', href: '/os/mortgage-desk?tab=matrix', matchPath: '/os/mortgage-desk', matchTab: 'matrix' },
-                { label: '159 Direct RMs', href: '/os/mortgage-desk?tab=rms', matchPath: '/os/mortgage-desk', matchTab: 'rms' },
-                { label: 'CBUAE, CC & CTO', href: '/os/mortgage-desk?tab=cbuae', matchPath: '/os/mortgage-desk', matchTab: 'cbuae' },
-                { label: 'Valuations & Logos', href: '/os/mortgage-desk?tab=valuations', matchPath: '/os/mortgage-desk', matchTab: 'valuations' },
-              ],
-            },
-          ]
-        : []),
-      ...(isOwnerOrAdmin
-        ? [
-            {
-              id: 'finance',
-              label: 'Accounts, Payouts & Master Log',
-              shortLabel: 'Accounts',
-              icon: Wallet,
-              primaryHref: '/os/accounts',
-              matchPrefixes: ['/os/accounts', '/os/master-log', '/os/compliance'],
-              subPages: [
-                { label: 'Accounts & VAT 201', href: '/os/accounts', matchPath: '/os/accounts' },
-                { label: 'Master Log (22)', href: '/os/master-log', matchPath: '/os/master-log' },
-                { label: 'CBUAE Rules', href: '/os/compliance', matchPath: '/os/compliance' },
-              ],
-            },
-          ]
-        : []),
-      {
-        id: 'team',
-        label: 'Employees, Attendance, Salary & GPS',
-        shortLabel: 'Team & HR',
-        icon: Users,
-        primaryHref: '/os/employees',
-        matchPrefixes: ['/os/employees', '/os/field-gps', '/os/inside'],
-        subPages: [
-          { label: 'Employees, Leave & Salary', href: '/os/employees', matchPath: '/os/employees' },
-          { label: 'Field GPS & SOS', href: '/os/field-gps', matchPath: '/os/field-gps' },
-          { label: 'Team Chat (Inside)', href: '/os/inside', matchPath: '/os/inside' },
-        ],
-      },
-      {
-        id: 'utilities',
-        label: 'Excel, Daily Backups, Vault & AI',
-        shortLabel: 'Excel & AI',
-        icon: Sparkles,
-        primaryHref: '/os/utilities',
-        matchPrefixes: ['/os/utilities', '/os/vault', '/os/ai', '/os/website-studio', '/os/settings'],
-        subPages: [
-          { label: 'Excel & Daily Backup', href: '/os/utilities', matchPath: '/os/utilities' },
-          { label: 'Client Vault', href: '/os/vault', matchPath: '/os/vault' },
-          { label: 'AI Copilot', href: '/os/ai', matchPath: '/os/ai' },
-          ...(hasWebsiteAccess ? [{ label: 'Website Studio', href: '/os/website-studio', matchPath: '/os/website-studio' }] : []),
-          ...(isOwnerOrAdmin ? [{ label: 'Settings', href: '/os/settings', matchPath: '/os/settings' }] : []),
-        ],
-      },
-    ],
-    [hasPipelineAccess, hasWebsiteAccess, isOwner, isOwnerOrAdmin, isShabib, placeName, cornerName],
+  // Exact Horizontal Full-Width App Strip matching the uploaded reference screenshot (shown on inner pages, hidden on /os)
+  const navApps: TopNavApp[] = useMemo(
+    () =>
+      [
+        { key: 'apps', label: 'Apps', href: '/os', matchPrefix: '/os', icon: LayoutGrid, visible: true, prefetchUrl: '/api/v1/dashboard/overview' },
+        { key: 'place', label: placeLabel, href: '/os/place', matchPrefix: '/os/place', icon: Crown, visible: isOwner, prefetchUrl: '/api/v1/executive/overview' },
+        { key: 'corner', label: cornerLabel, href: '/os/corner', matchPrefix: '/os/corner', icon: ShieldCheck, visible: isOwner, prefetchUrl: '/api/v1/executive/overview' },
+        { key: 'command', label: 'Command', href: '/os/command-center', matchPrefix: '/os/command-center', icon: Radar, visible: hasPipelineAccess },
+        { key: 'dashboard', label: 'Dashboard', href: '/os/dashboard', matchPrefix: '/os/dashboard', icon: LayoutDashboard, visible: true, prefetchUrl: '/api/v1/dashboard/overview' },
+        { key: 'master', label: 'Master Log', href: '/os/master-log', matchPrefix: '/os/master-log', icon: Database, visible: isOwnerOrAdmin },
+        { key: 'pipeline', label: '12-Step', href: '/os/pipeline', matchPrefix: '/os/pipeline', icon: KanbanSquare, visible: hasPipelineAccess },
+        { key: 'coordinator', label: 'Coordinator', href: '/os/coordinator', matchPrefix: '/os/coordinator', icon: ClipboardList, visible: hasPipelineAccess },
+        { key: 'crm', label: 'CRM', href: '/os/crm', matchPrefix: '/os/crm', icon: UserPlus, visible: hasPipelineAccess },
+        { key: 'desk', label: 'Mortgage Desk', href: '/os/mortgage-desk', matchPrefix: '/os/mortgage-desk', icon: Calculator, visible: hasPipelineAccess, prefetchUrl: '/api/v1/mortgage-desk' },
+        { key: 'vault', label: 'Vault', href: '/os/vault', matchPrefix: '/os/vault', icon: FileLock2, visible: hasPipelineAccess },
+        { key: 'accounts', label: 'Accounts', href: '/os/accounts', matchPrefix: '/os/accounts', icon: Wallet, visible: isOwnerOrAdmin },
+        { key: 'compliance', label: 'Compliance', href: '/os/compliance', matchPrefix: '/os/compliance', icon: ShieldCheck, visible: isOwnerOrAdmin },
+        { key: 'website', label: 'Website', href: '/os/website-studio', matchPrefix: '/os/website-studio', icon: Globe, visible: hasWebsiteAccess },
+        { key: 'employees', label: 'Team & QR', href: '/os/employees', matchPrefix: '/os/employees', icon: Users, visible: true },
+        { key: 'inside', label: 'Group', href: '/os/inside', matchPrefix: '/os/inside', icon: MessagesSquare, visible: true },
+        { key: 'gps', label: 'Field GPS', href: '/os/field-gps', matchPrefix: '/os/field-gps', icon: MapPin, visible: true },
+        { key: 'ai', label: 'AI Desk', href: '/os/ai', matchPrefix: '/os/ai', icon: Sparkles, visible: true },
+        { key: 'utilities', label: 'Utilities', href: '/os/utilities', matchPrefix: '/os/utilities', icon: Wrench, visible: true },
+        { key: 'sales', label: 'Sales', href: '/os/sales', matchPrefix: '/os/sales', icon: Briefcase, visible: hasPipelineAccess },
+        { key: 'settings', label: 'Settings', href: '/os/settings', matchPrefix: '/os/settings', icon: Settings, visible: isOwnerOrAdmin },
+      ].filter((a) => a.visible),
+    [placeLabel, cornerLabel, isOwner, hasPipelineAccess, isOwnerOrAdmin, hasWebsiteAccess],
   );
 
-  // Determine active sidebar app
-  const activeApp = useMemo(() => {
-    if (pathname === '/os') return sidebarApps[0];
-    if (pathname === '/os/place') return sidebarApps.find((a) => a.id === 'place') || sidebarApps[0];
-    if (pathname === '/os/corner') return sidebarApps.find((a) => a.id === 'corner') || sidebarApps[0];
+  const isNavAppActive = (app: TopNavApp) => {
+    if (app.key === 'apps') return pathname === '/os';
     if (pathname === '/os/executive') {
       const cornerTabs = new Set(['fasttrack', 'approvals', 'vat', 'bulkai', 'goldrush']);
-      if (currentSection === 'corner' || cornerTabs.has(currentTab)) {
-        return sidebarApps.find((a) => a.id === 'corner') || sidebarApps[0];
-      }
-      return sidebarApps.find((a) => a.id === 'place') || sidebarApps[0];
+      if (currentSection === 'corner' || cornerTabs.has(currentTab)) return app.key === 'corner';
+      return app.key === 'place';
     }
-    return (
-      sidebarApps.find(
-        (a) => a.id !== 'home' && a.matchPrefixes.some((p) => pathname === p || pathname.startsWith(p + '/')),
-      ) || sidebarApps[0]
-    );
-  }, [pathname, currentSection, currentTab, sidebarApps]);
-
-  const isSubPageActive = (sp: SubPageDef, idx: number): boolean => {
-    if (sp.matchTab) {
-      if (pathname === sp.matchPath || (pathname === '/os/executive' && (sp.matchPath === '/os/place' || sp.matchPath === '/os/corner'))) {
-        if (currentTab) return currentTab === sp.matchTab;
-        return idx === 0;
-      }
-      return false;
-    }
-    if (sp.matchPath) {
-      return pathname === sp.matchPath || pathname.startsWith(sp.matchPath + '/');
-    }
-    return false;
+    return pathname === app.matchPrefix || pathname.startsWith(app.matchPrefix + '/');
   };
 
   return (
     <div className="h-[100dvh] flex flex-col overflow-hidden bg-[var(--bw-bg)] text-[var(--bw-ink)]">
-      {/* Subtle Betterway Logo Jewel Top Accent Line */}
-      <div
-        className="h-[3px] w-full flex-none no-print"
-        style={{ background: 'linear-gradient(90deg, #05080d 0%, #119c78 36%, #22e2ad 60%, #d9b356 86%, #fbe8a4 100%)' }}
-      />
+      {/* Exact Top Header Bar Matching Reference Screenshots (Logo + OS V3 + Live Dubai Clock + 3M EIBOR | Search + Bell + AR/EN + Theme + Profile + Sign Out) */}
+      <header className="flex-none h-[60px] px-4 lg:px-6 bg-white/95 dark:bg-[#080b10]/95 backdrop-blur-xl border-b border-[var(--bw-line)] flex items-center justify-between gap-3 no-print z-40">
+        {/* Left Brand & Live Dubai Telemetry Pills */}
+        <div className="flex items-center gap-2.5 min-w-0">
+          <Link href="/os" className="flex items-center shrink-0 group" aria-label="Betterway Mortgages OS Home">
+            <img
+              src={dark ? '/brand/betterway-logo-horizontal-dark-transparent.svg' : '/brand/betterway-logo-horizontal-light-transparent.svg'}
+              alt="Betterway Mortgages"
+              className="h-8 w-auto object-contain transition-transform duration-200 group-hover:scale-[1.02]"
+            />
+          </Link>
+          <span className="hidden sm:inline-flex items-center px-2.5 py-0.5 rounded-full bg-[#090d13] text-white text-[10px] font-extrabold tracking-wider shrink-0">
+            OS V3
+          </span>
+          <span className="hidden md:inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[var(--bw-soft)] border border-[var(--bw-line)] text-[11px] font-mono-num font-bold text-[var(--bw-ink)] shrink-0">
+            <span className="size-1.5 rounded-full bg-[#119c78] animate-pulse" />
+            <DubaiClock compact />
+          </span>
+          <span className="hidden lg:inline-flex items-center px-3 py-1 rounded-full bg-[#e3fbf3] dark:bg-[#0d2b24] border border-[#9be8ce] dark:border-[#1c5c4b] text-[11px] font-mono-num font-extrabold text-[#053b2e] dark:text-[#34f0bc] shrink-0">
+            3M EIBOR {EIBOR_SNAPSHOT.latest.threeMonth.toFixed(3)}%
+          </span>
+        </div>
 
-      {/* Clean Minimal Topbar: Betterway Logo (Shining Black Home Icon) + Dynamic App Sub-Pages ONLY (Zero Static Header Buttons!) */}
-      <header className="flex-none min-h-[64px] px-3 sm:px-5 py-2 bg-[#fffcf4]/95 dark:bg-[#080b10]/95 backdrop-blur-xl border-b border-[var(--bw-line)] flex flex-wrap lg:flex-nowrap items-center gap-3 no-print z-40">
-        <Link href="/os" className="flex items-center shrink-0 group" aria-label="Betterway Mortgages OS Home">
-          <img
-            src={dark ? '/brand/betterway-logo-horizontal-dark-transparent.svg' : '/brand/betterway-logo-horizontal-light-transparent.svg'}
-            alt="Betterway Mortgages"
-            className="h-9 w-auto object-contain transition-transform duration-200 group-hover:scale-[1.02]"
-          />
-        </Link>
-
-        {/* Dynamic Sub-Pages Bar: ONLY shown when an App is opened from the Left Sidebar */}
-        {activeApp && activeApp.subPages.length > 0 ? (
-          <nav
-            className="flex items-center gap-1.5 overflow-x-auto max-w-full flex-1 min-w-0 order-5 lg:order-none pt-1 lg:pt-0 ps-0 lg:ps-3 lg:border-s lg:border-[var(--bw-line)] [&::-webkit-scrollbar]:hidden [scrollbar-width:none]"
-            aria-label={`${activeApp.label} sub-pages`}
+        {/* Right Customise UI, Search, Alerts, Language, Theme & Profile */}
+        <div className="flex items-center gap-2 shrink-0">
+          <button
+            type="button"
+            onClick={() => setCustomizerOpen(true)}
+            className="inline-flex items-center gap-1.5 h-8 px-3 rounded-full bg-[#090d13] hover:bg-[#141d29] text-[#fbe8a4] border border-[#d9b356]/50 text-[11px] font-extrabold cursor-pointer transition shadow-sm"
+            title="Customise UI colors, fonts, sizes, highlights & pinned drag layout"
           >
-            {activeApp.subPages.map((sp, idx) => {
-              const active = isSubPageActive(sp, idx);
-              return (
-                <Link
-                  key={sp.href}
-                  href={sp.href}
-                  className={`bw-subpage-tab ${active ? (sp.gold ? 'active-gold' : 'active') : ''}`}
-                >
-                  {sp.gold && <Lock size={11} className={active ? 'text-[#fbe8a4]' : 'text-[#9a7123]'} />}
-                  {sp.label}
-                </Link>
-              );
-            })}
-          </nav>
-        ) : (
-          <div className="flex-1 hidden lg:block" />
-        )}
+            <Palette size={13} className="text-[#34f0bc]" />
+            <span className="hidden sm:inline">Customise UI</span>
+          </button>
 
-        {/* Quiet Minimal Utility Icons (No Bulky Header Buttons) */}
-        <div className="flex items-center gap-1.5 shrink-0 ms-auto lg:ms-0">
           <button
             type="button"
             onClick={() => setSearchOpen(true)}
-            className="size-9 rounded-full bg-white dark:bg-[#101620] border border-[var(--bw-line)] hover:bg-[#090d13] hover:text-[#34f0bc] flex items-center justify-center cursor-pointer transition"
-            title="Search OS (Ctrl + K)"
+            className="hidden sm:inline-flex items-center gap-2 h-8 px-3.5 rounded-full bg-[var(--bw-soft)] hover:bg-[var(--bw-hover)] border border-[var(--bw-line)] text-[11.5px] font-semibold text-[var(--bw-muted)] cursor-pointer transition"
             aria-label="Search OS"
           >
-            <Search size={15} />
+            <Search size={13} />
+            <span>Search OS...</span>
+            <kbd className="text-[10px] px-1.5 py-0.5 rounded bg-white dark:bg-white/10 text-[var(--bw-muted)] border border-[var(--bw-line)]">
+              ⌘K
+            </kbd>
           </button>
 
-          {/* Notification Bell Popover */}
+          {/* Notification Bell */}
           <div className="relative">
             <button
               type="button"
               onClick={() => setNotifOpen((v) => !v)}
-              className="relative size-9 rounded-full bg-white dark:bg-[#101620] border border-[var(--bw-line)] hover:bg-[#090d13] hover:text-[#34f0bc] flex items-center justify-center cursor-pointer transition"
-              title={`Alerts (${unreadCount} unread)`}
+              className="relative size-8 rounded-full hover:bg-[var(--bw-soft)] text-[var(--bw-body)] flex items-center justify-center cursor-pointer transition"
               aria-label={`Notifications, ${unreadCount} unread`}
             >
-              <Bell size={15} />
+              <Bell size={16} />
               {unreadCount > 0 && (
                 <span className="absolute -top-0.5 -end-0.5 min-w-[16px] h-4 px-1 rounded-full bg-[#e11d48] text-white text-[9.5px] font-extrabold flex items-center justify-center">
                   {unreadCount > 9 ? '9+' : unreadCount}
@@ -475,7 +311,7 @@ export function OsShell({ children }: { children: React.ReactNode }) {
           <button
             type="button"
             onClick={toggleRtl}
-            className="size-9 rounded-full bg-white dark:bg-[#101620] border border-[var(--bw-line)] hover:bg-[#090d13] hover:text-[#34f0bc] flex items-center justify-center cursor-pointer transition"
+            className="size-8 rounded-full hover:bg-[var(--bw-soft)] text-[var(--bw-body)] flex items-center justify-center cursor-pointer transition"
             title="Switch English / Arabic"
             aria-label="Switch language"
           >
@@ -485,7 +321,7 @@ export function OsShell({ children }: { children: React.ReactNode }) {
           <button
             type="button"
             onClick={toggleDark}
-            className="size-9 rounded-full bg-white dark:bg-[#101620] border border-[var(--bw-line)] hover:bg-[#090d13] hover:text-[#34f0bc] flex items-center justify-center cursor-pointer transition"
+            className="size-8 rounded-full hover:bg-[var(--bw-soft)] text-[var(--bw-body)] flex items-center justify-center cursor-pointer transition"
             title="Switch Light / Dark"
             aria-label="Toggle theme"
           >
@@ -493,114 +329,95 @@ export function OsShell({ children }: { children: React.ReactNode }) {
           </button>
 
           {user && (
-            <div className="inline-flex items-center gap-2 ps-1 pe-1.5 h-9 rounded-full bg-[#0a0e14] text-white border border-white/12 shadow-md">
+            <div className="flex items-center gap-2 ps-2 border-s border-[var(--bw-line)]">
               <StaffAvatar name={user.name} avatarUrl={user.avatarUrl} initials={user.initials} size="sm" />
-              <div className="hidden xl:block leading-tight pe-0.5">
-                <div className="text-[11px] font-bold flex items-center gap-1 text-white">
-                  {user.name.split(' ')[0]}
-                  {isOwner && <Crown size={10} className="text-[#fbe8a4]" />}
+              <div className="hidden md:block leading-tight">
+                <div className="text-[11.5px] font-extrabold text-[var(--bw-ink)] flex items-center gap-1">
+                  {user.name}
+                  {isOwner && <Crown size={11} className="text-[#d9b356]" />}
                 </div>
+                <div className="text-[10px] text-[var(--bw-muted)] max-w-[140px] truncate">{user.designation}</div>
               </div>
               <button
                 type="button"
                 onClick={() => void logout()}
-                className="size-7 rounded-full hover:bg-[#e11d48]/25 hover:text-[#fda4af] text-slate-300 flex items-center justify-center cursor-pointer transition"
+                className="size-7 rounded-full hover:bg-[#fff0f3] hover:text-[#e11d48] text-[var(--bw-muted)] flex items-center justify-center cursor-pointer transition"
                 title="Sign Out"
                 aria-label="Sign Out"
               >
-                <LogOut size={13} />
+                <LogOut size={14} />
               </button>
             </div>
           )}
         </div>
       </header>
 
-      {/* Main Body: Direct-Open Left Sidebar + Warm Beige-Yellow Canvas */}
-      <div className="flex flex-1 min-h-0">
-        <nav className="bw-workspace-rail no-print" aria-label="Apps sidebar">
-          {sidebarApps.map((app) => {
+      {/* Exact Horizontal All-Apps Top Strip (Visible Inside Any App, Hidden on /os Home — Matches Screenshot 2 Pixel-for-Pixel!) */}
+      {pathname !== '/os' && (
+        <nav
+          className="flex-none bg-white/90 dark:bg-[#0a0e14]/95 border-b border-[var(--bw-line)] px-4 lg:px-6 py-2 flex items-center gap-1.5 overflow-x-auto no-print [&::-webkit-scrollbar]:hidden [scrollbar-width:none]"
+          aria-label="Betterway OS Applications"
+        >
+          {navApps.map((app) => {
             const Icon = app.icon;
-            const active = activeApp?.id === app.id;
+            const active = isNavAppActive(app);
             return (
               <Link
-                key={app.id}
-                href={app.primaryHref}
+                key={app.key}
+                href={app.href}
                 onMouseEnter={() => {
-                  router.prefetch(app.primaryHref.split('?')[0]);
+                  router.prefetch(app.href);
                   if (app.prefetchUrl) prefetchApi(app.prefetchUrl);
                 }}
-                className={`bw-rail-shortcut ${active ? 'active' : ''}`}
-                title={app.label}
+                className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[11.5px] font-bold whitespace-nowrap transition shrink-0 ${
+                  active
+                    ? 'bg-[#090d13] text-white shadow-md'
+                    : 'text-[var(--bw-body)] hover:bg-[var(--bw-soft)] hover:text-[var(--bw-ink)]'
+                }`}
               >
-                <Icon
-                  size={18}
-                  className={
-                    active
-                      ? app.goldAccent
-                        ? 'text-[#fbe8a4]'
-                        : 'text-[#34f0bc]'
-                      : app.goldAccent
-                        ? 'text-[#9a7123]'
-                        : ''
-                  }
-                />
-                <span className="whitespace-pre-line leading-tight">{app.shortLabel}</span>
+                <Icon size={13} className={active ? 'text-[#34f0bc]' : 'text-[var(--bw-muted)]'} />
+                <span>{app.label}</span>
               </Link>
             );
           })}
         </nav>
+      )}
 
-        <div className="flex-1 min-w-0 flex flex-col">
-          <main className="flex-1 overflow-y-auto px-4 sm:px-6 lg:px-8 pt-5 pb-24 sm:pb-10 scroll-smooth">
-            <div className="w-full max-w-[1480px] mx-auto">{children}</div>
-          </main>
+      {/* Full-Width Centered Canvas (No Left Sidebar Rail — Exact Match to Uploaded Screenshots!) */}
+      <main className="flex-1 overflow-y-auto px-4 sm:px-6 lg:px-8 pt-6 pb-24 sm:pb-12 scroll-smooth">
+        <div className="w-full max-w-[1220px] mx-auto">{children}</div>
+      </main>
 
-          {/* Quiet Status Footer (Desktop) */}
-          <footer className="hidden sm:flex flex-none px-5 py-2 bg-[#fffcf4]/95 dark:bg-[#080b10] border-t border-[var(--bw-line)] text-[11px] text-[var(--bw-muted)] flex-wrap items-center justify-between gap-3 no-print">
-            <span>
-              Signed in: <strong className="text-[var(--bw-ink)]">{user?.email || 'Betterway Staff'}</strong>
-            </span>
-            <span className="font-mono-num">
-              <DubaiClock />
-            </span>
-            <span className="font-bold text-[#0b5442] dark:text-[#34f0bc]">
-              Betterway Mortgages LLC · Al Nasr Plaza, Oud Metha, Dubai
-            </span>
-          </footer>
+      {/* Native Android & iOS Mobile Bottom Dock */}
+      <nav
+        className="bw-mobile-dock fixed bottom-0 inset-x-0 z-40 bg-[#070a0f]/95 backdrop-blur-xl border-t border-white/12 px-2 pt-2 items-center justify-around text-[10px] font-bold text-slate-300 no-print"
+        aria-label="Mobile quick navigation"
+      >
+        {[
+          { label: 'Apps', href: '/os', icon: LayoutGrid },
+          { label: isOwner ? 'Place' : 'Dashboard', href: isOwner ? '/os/place' : '/os/dashboard', icon: isOwner ? Crown : LayoutDashboard },
+          { label: '24 Banks', href: '/os/mortgage-desk', icon: Calculator },
+          { label: 'Field GPS', href: '/os/field-gps', icon: MapPin },
+          { label: isOwner ? 'Corner' : 'Excel', href: isOwner ? '/os/corner' : '/os/utilities', icon: isOwner ? ShieldCheck : Wrench },
+        ].map((m) => {
+          const Icon = m.icon;
+          const active = pathname === m.href;
+          return (
+            <Link
+              key={m.href}
+              href={m.href}
+              className={`flex flex-col items-center gap-1 px-2.5 py-1 rounded-xl transition ${
+                active ? 'text-[#34f0bc] bg-white/10' : 'text-slate-400 hover:text-white'
+              }`}
+            >
+              <Icon size={18} />
+              <span>{m.label}</span>
+            </Link>
+          );
+        })}
+      </nav>
 
-          {/* Native Android & iOS Mobile Bottom Dock */}
-          <nav
-            className="bw-mobile-dock fixed bottom-0 inset-x-0 z-40 bg-[#070a0f]/95 backdrop-blur-xl border-t border-white/12 px-2 pt-2 items-center justify-around text-[10px] font-bold text-slate-300 no-print"
-            aria-label="Mobile quick navigation"
-          >
-            {[
-              { label: 'Home', href: '/os', icon: LayoutGrid },
-              { label: isOwner ? 'Place' : 'Dashboard', href: isOwner ? '/os/place?tab=team' : '/os/dashboard', icon: isOwner ? Briefcase : LayoutDashboard },
-              { label: '24 Banks', href: '/os/mortgage-desk?tab=proposal', icon: Calculator },
-              { label: 'Field GPS', href: '/os/field-gps', icon: MapPin },
-              { label: isOwner ? 'Corner' : 'Excel', href: isOwner ? '/os/corner?tab=fasttrack' : '/os/utilities', icon: isOwner ? Crown : Sparkles },
-            ].map((m) => {
-              const Icon = m.icon;
-              const base = m.href.split('?')[0];
-              const active = pathname === base;
-              return (
-                <Link
-                  key={m.href}
-                  href={m.href}
-                  className={`flex flex-col items-center gap-1 px-2.5 py-1 rounded-xl transition ${
-                    active ? 'text-[#34f0bc] bg-white/10' : 'text-slate-400 hover:text-white'
-                  }`}
-                >
-                  <Icon size={18} />
-                  <span>{m.label}</span>
-                </Link>
-              );
-            })}
-          </nav>
-        </div>
-      </div>
-
-      {/* Command Palette Search (Ctrl+K) */}
+      {/* Command Palette Search (Ctrl+K / Cmd+K) */}
       {searchOpen && (
         <div
           className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-start justify-center pt-20 px-4 no-print"
@@ -613,7 +430,7 @@ export function OsShell({ children }: { children: React.ReactNode }) {
                 autoFocus
                 value={searchQ}
                 onChange={(e) => void runSearch(e.target.value)}
-                placeholder="Search clients, case codes, 18-bank rates, 159 RMs, coordinators..."
+                placeholder="Search clients, case codes, 18-bank rates, 159 RMs, developers..."
                 className="flex-1 bg-transparent outline-none text-sm text-[var(--bw-ink)]"
               />
               <button type="button" onClick={() => setSearchOpen(false)} className="size-8 rounded-full hover:bg-[var(--bw-soft)] flex items-center justify-center cursor-pointer">

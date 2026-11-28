@@ -4,6 +4,14 @@ import React, { createContext, useCallback, useContext, useEffect, useState } fr
 import type { SessionUser } from '@/lib/domain/types';
 import type { RoleCapabilities } from '@/lib/auth/rbac';
 import { invalidateApiCache, markClientHydrated, prefetchApi, readCachedJson, writeCachedJson } from '@/lib/client-cache';
+import {
+  applyUiCustomConfigToDom,
+  DEFAULT_UI_CONFIG,
+  loadUiCustomConfig,
+  saveUiCustomConfig,
+  type UiCustomConfig,
+} from '@/lib/ui-customizer';
+import { CustomiseUiDrawer, FloatingPinnedDock } from './CustomiseUiDrawer';
 
 interface ToastItem {
   id: string;
@@ -44,6 +52,11 @@ interface OsContextValue {
   logout: () => Promise<void>;
   switchDemoAccount: (email: string) => Promise<void>;
   toast: (text: string, tone?: 'ok' | 'err' | 'info') => void;
+  uiConfig: UiCustomConfig;
+  setUiConfig: (next: UiCustomConfig) => void;
+  resetUiConfig: () => void;
+  customizerOpen: boolean;
+  setCustomizerOpen: (open: boolean) => void;
 }
 
 const OsContext = createContext<OsContextValue | null>(null);
@@ -57,6 +70,20 @@ export function OsProvider({ children }: { children: React.ReactNode }) {
   const [dark, setDark] = useState(false);
   const [rtl, setRtl] = useState(false);
   const [toasts, setToasts] = useState<ToastItem[]>([]);
+  const [uiConfig, setUiConfigState] = useState<UiCustomConfig>(DEFAULT_UI_CONFIG);
+  const [customizerOpen, setCustomizerOpen] = useState(false);
+
+  const setUiConfig = useCallback((next: UiCustomConfig) => {
+    setUiConfigState(next);
+    saveUiCustomConfig(next);
+    applyUiCustomConfigToDom(next);
+  }, []);
+
+  const resetUiConfig = useCallback(() => {
+    setUiConfigState(DEFAULT_UI_CONFIG);
+    saveUiCustomConfig(DEFAULT_UI_CONFIG);
+    applyUiCustomConfigToDom(DEFAULT_UI_CONFIG);
+  }, []);
 
   const toast = useCallback((text: string, tone: 'ok' | 'err' | 'info' = 'ok') => {
     const id = `${Date.now()}-${Math.random().toString(36).slice(2, 6)}`;
@@ -90,6 +117,9 @@ export function OsProvider({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     markClientHydrated();
+    const savedUi = loadUiCustomConfig();
+    setUiConfigState(savedUi);
+    applyUiCustomConfigToDom(savedUi);
     const cached = readCachedJson<AuthMePayload>('/api/v1/auth/me', 300_000);
     if (cached?.user) {
       setUser(cached.user);
@@ -152,9 +182,29 @@ export function OsProvider({ children }: { children: React.ReactNode }) {
         logout,
         switchDemoAccount,
         toast,
+        uiConfig,
+        setUiConfig,
+        resetUiConfig,
+        customizerOpen,
+        setCustomizerOpen,
       }}
     >
       {children}
+      <FloatingPinnedDock
+        config={uiConfig}
+        onChange={setUiConfig}
+        onOpenCustomizer={() => setCustomizerOpen(true)}
+      />
+      <CustomiseUiDrawer
+        open={customizerOpen}
+        onClose={() => setCustomizerOpen(false)}
+        config={uiConfig}
+        onChange={setUiConfig}
+        onReset={() => {
+          resetUiConfig();
+          toast('UI theme & layout reset to Betterway default');
+        }}
+      />
       <div className="fixed bottom-20 sm:bottom-5 end-4 z-[90] flex flex-col gap-2 max-w-sm no-print">
         {toasts.map((t) => (
           <div

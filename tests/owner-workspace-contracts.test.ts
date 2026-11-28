@@ -397,8 +397,15 @@ describe('Warda & Shabib UAE Mortgage Command Suite — Offline Domain, Schema &
       'src/components/workspace/OwnerSectionView.tsx',
       'src/components/workspace/DailyPlanAndReportTab.tsx',
       'src/app/api/v1/utilities/bank-matrix-excel/route.ts',
+      'src/lib/ui-customizer.ts',
+      'src/components/os/CustomiseUiDrawer.tsx',
     ]) {
       expect(fs.existsSync(path.join(process.cwd(), rel)), `Missing ${rel}`).toBe(true);
     }
+
+    const { UI_PRESETS, DEFAULT_APP_ORDER, ALL_QUICK_SHORTCUTS } = await import('@/lib/ui-customizer');
+    expect(UI_PRESETS.length).toBeGreaterThanOrEqual(6);
+    expect(DEFAULT_APP_ORDER.length).toBe(20);
+    expect(ALL_QUICK_SHORTCUTS.length).toBeGreaterThanOrEqual(10);
   });
 });
