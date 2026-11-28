@@ -3,18 +3,35 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import Link from 'next/link';
 import {
+  Banknote,
   Building2,
   CheckCircle2,
   Download,
   FileSpreadsheet,
+  HandCoins,
   Lock,
+  Percent,
   Plus,
   Receipt,
+  Scale,
   ShieldAlert,
   Wallet,
 } from 'lucide-react';
 import { useOs } from '@/components/os/OsProvider';
 import { fmtAed, MetricTile, PageHeader, StatusPill } from '@/components/os/UiKit';
+import { SubFeatureTabs, type SubFeatureItem } from '@/components/os/SubFeatureTabs';
+
+type AccountsSubTab = 'invoices' | 'receipts' | 'commissions' | 'bills' | 'payments' | 'matching' | 'reports';
+
+const ACCOUNTS_SUB_TABS: ReadonlyArray<SubFeatureItem<AccountsSubTab>> = [
+  { id: 'invoices', num: '01', label: 'Tax Invoices', icon: Receipt },
+  { id: 'receipts', num: '02', label: 'Receipts', icon: HandCoins },
+  { id: 'commissions', num: '03', label: 'Commissions (50/50)', icon: Percent },
+  { id: 'bills', num: '04', label: 'Supplier Bills', icon: Wallet },
+  { id: 'payments', num: '05', label: 'Payments', icon: Banknote },
+  { id: 'matching', num: '06', label: 'Bank Matching', icon: Scale },
+  { id: 'reports', num: '07', label: 'Profit, Balance & VAT', icon: FileSpreadsheet },
+];
 
 interface AccountsPayload {
   summary: {
@@ -34,8 +51,8 @@ interface AccountsPayload {
 }
 
 export default function AccountsPage() {
-  const { user } = useOs();
-  const [tab, setTab] = useState<'invoices' | 'expenses' | 'payouts' | 'coa'>('invoices');
+  const { user, toast } = useOs();
+  const [tab, setTab] = useState<AccountsSubTab>('invoices');
   const [data, setData] = useState<AccountsPayload | null>(null);
   const [error, setError] = useState('');
   const [notice, setNotice] = useState('');
@@ -47,7 +64,7 @@ export default function AccountsPage() {
   const [invSubtotal, setInvSubtotal] = useState('18500');
   const [invIban, setInvIban] = useState('AE460260001015889900101');
 
-  // Expense form
+  // Expense / Supplier Bill form
   const [expVendor, setExpVendor] = useState('Etisalat Business Fiber — Oud Metha');
   const [expDesc, setExpDesc] = useState('Monthly Office Fiber + Static IP');
   const [expAmount, setExpAmount] = useState('1499');
@@ -55,13 +72,21 @@ export default function AccountsPage() {
 
   // Corporate Payout form (2-of-2 Owner sign-off)
   const [payBrokerId, setPayBrokerId] = useState('');
-  const [payName, setPayName] = useState('SWK Properties LLC');
+  const [payName, setPayName] = useState('Emirates Premier Realty LLC');
   const [payAccountType, setPayAccountType] = useState('CORPORATE');
   const [payIban, setPayIban] = useState('AE460260001015889900202');
   const [payBank, setPayBank] = useState('Wio Business UAE');
   const [payAmount, setPayAmount] = useState('6500');
   const [payOrnOk, setPayOrnOk] = useState(true);
   const [payLetterOk, setPayLetterOk] = useState(true);
+
+  // 50/50 Commission Split Estimator
+  const [commLoan, setCommLoan] = useState(3_000_000);
+  const [commDsaPct, setCommDsaPct] = useState(0.85);
+  const [commSplitPct, setCommSplitPct] = useState(50);
+
+  // Bank Matching state
+  const [matchedIds, setMatchedIds] = useState<Record<string, boolean>>({});
 
   const load = useCallback(async () => {
     setError('');
@@ -81,7 +106,7 @@ export default function AccountsPage() {
   }, []);
 
   useEffect(() => {
-    load();
+    void load();
   }, [load]);
 
   async function submitInvoice(e: React.FormEvent) {
@@ -131,7 +156,7 @@ export default function AccountsPage() {
       });
       const j = await r.json();
       if (!r.ok) throw new Error(j.error || 'Expense failed');
-      setNotice(`Recorded expense for ${expVendor} via Betterway Corporate Bank Account.`);
+      setNotice(`Recorded supplier bill for ${expVendor} via Betterway Corporate Bank Account.`);
       await load();
     } catch (err: unknown) {
       setError(err instanceof Error ? err.message : 'Error');
@@ -163,9 +188,7 @@ export default function AccountsPage() {
       });
       const j = await r.json();
       if (!r.ok) throw new Error(j.error || 'Payout rejected');
-      setNotice(
-        `Payout ${j.payout.payout_code} queued for 2-of-2 Owner Dual Sign-Off (Warda Kapadia + Shabib Siraj).`,
-      );
+      setNotice(`Payout ${j.payout.payout_code} queued for 2-of-2 Owner Dual Sign-Off (Warda Kapadia + Shabib Siraj).`);
       await load();
     } catch (err: unknown) {
       setError(err instanceof Error ? err.message : 'Corporate Guard blocked payout');
@@ -175,21 +198,21 @@ export default function AccountsPage() {
   }
 
   const canAccess = user?.role === 'OWNER' || user?.role === 'OFFICE_ADMIN';
+  const grossDsa = Math.round((commLoan * commDsaPct) / 100);
+  const advisorShare = Math.round((grossDsa * commSplitPct) / 100);
+  const houseShare = grossDsa - advisorShare;
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-5">
       <PageHeader
         eyebrow="Finance · UAE FTA VAT 5% · Corporate-Account-Only Guard"
         title="Accounts &"
         accent="UAE VAT Ledger"
-        subtitle="Standard company General Ledger, Bank DSA Invoices (PINT-AE XML), Expenses, and Corporate-Account-Only RERA Broker Payouts (2-of-2 Owner sign-off)."
+        subtitle="Tax Invoices (PINT-AE XML), Receipts, 50/50 Advisor DSA Commissions, Supplier Bills, Corporate Payouts, Bank Matching & Profit/Balance/VAT 201."
         actions={
           user?.isOwner ? (
-            <Link
-              href="/os/executive"
-              className="inline-flex items-center gap-1.5 rounded-xl bg-[#025e3d] text-[#FCF1B7] border border-[#D4AF37]/40 px-3.5 py-2 text-xs font-bold hover:brightness-110"
-            >
-              <Lock size={13} /> Open Consolidated VAT &amp; Privacy Fast Track
+            <Link href="/os/corner?tab=vat" className="bw-btn bw-btn-obsidian text-xs py-2 min-h-[36px]">
+              <Lock size={13} className="text-[#fbe8a4]" /> Owner Consolidated VAT 201
             </Link>
           ) : null
         }
@@ -204,27 +227,11 @@ export default function AccountsPage() {
         </div>
       ) : (
         <>
-          {user?.isOwner && (
-            <div className="rounded-2xl bg-[#025e3d] text-white border border-[#D4AF37]/35 p-4 flex flex-wrap items-center justify-between gap-3">
-              <div className="flex items-center gap-3">
-                <Lock className="text-[#D4AF37] shrink-0" size={18} />
-                <div className="text-xs sm:text-sm">
-                  <strong className="text-[#FCF1B7]">Segregated Option A Architecture Active:</strong> This screen displays strictly the Standard Company Ledger (visible to Office Admin). Owner Privacy Fast Track revenue &amp; Consolidated UAE VAT 201 live exclusively inside <strong>{user.executiveAppTitle || "Executive Place"}</strong>.
-                </div>
-              </div>
-              <Link href="/os/executive" className="text-xs font-bold text-[#34DFAC] hover:underline">
-                View Consolidated P&amp;L →
-              </Link>
-            </div>
-          )}
+          <SubFeatureTabs sectionTitle="Accounts" items={ACCOUNTS_SUB_TABS} activeId={tab} onSelect={setTab} />
 
-          {error && (
-            <div className="rounded-xl border border-red-400/40 bg-red-50 dark:bg-red-950/30 p-3 text-xs font-semibold text-red-700 dark:text-red-300">
-              {error}
-            </div>
-          )}
+          {error && <div className="rounded-xl border border-red-400/40 bg-red-50 p-3 text-xs font-semibold text-red-700">{error}</div>}
           {notice && (
-            <div className="rounded-xl border border-emerald-500/35 bg-emerald-50 dark:bg-emerald-950/30 p-3 text-xs font-semibold text-emerald-800 dark:text-emerald-300 flex items-center gap-2">
+            <div className="rounded-xl border border-emerald-500/35 bg-emerald-50 p-3 text-xs font-semibold text-emerald-800 flex items-center gap-2">
               <CheckCircle2 size={14} /> {notice}
             </div>
           )}
@@ -238,76 +245,24 @@ export default function AccountsPage() {
             <MetricTile label="Net VAT Payable" value={fmtAed(data?.summary.netVatPayableAed)} tone="gold" />
           </div>
 
-          <div className="flex flex-wrap gap-2">
-            {(
-              [
-                ['invoices', 'Bank DSA Invoices & PINT-AE', Receipt],
-                ['expenses', 'Corporate Expenses', Wallet],
-                ['payouts', 'RERA Payouts (2-of-2 Guard)', Building2],
-                ['coa', `Chart of Accounts (${data?.coa.length ?? 50})`, FileSpreadsheet],
-              ] as const
-            ).map(([key, label, Icon]) => (
-              <button
-                key={key}
-                type="button"
-                onClick={() => setTab(key)}
-                className={`inline-flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-bold border transition ${
-                  tab === key
-                    ? 'bg-[#025e3d] text-white border-[#025e3d]'
-                    : 'bg-[var(--bw-card)] border-[var(--bw-line)] text-[var(--bw-ink)] hover:border-[#007b52]'
-                }`}
-              >
-                <Icon size={14} /> {label}
-              </button>
-            ))}
-          </div>
-
+          {/* 01 TAX INVOICES */}
           {tab === 'invoices' && (
             <div className="grid lg:grid-cols-3 gap-5">
-              <form onSubmit={submitInvoice} className="rounded-2xl bg-[var(--bw-card)] border border-[var(--bw-line)] p-5 space-y-3">
+              <form onSubmit={submitInvoice} className="bw-card p-5 space-y-3">
                 <h2 className="text-sm font-extrabold flex items-center gap-1.5">
-                  <Plus size={15} className="text-[var(--bw-emerald)]" /> Issue Bank DSA / Advisory Tax Invoice
+                  <Plus size={15} className="text-[#119c78]" /> Issue Bank DSA Tax Invoice
                 </h2>
-                <p className="text-[11px] text-[var(--bw-muted)]">
-                  Auto-applies 5% UAE FTA VAT, posts double-entry GL journal (`1100` Dr / `4000` Cr), and locks to Betterway Corporate IBAN.
-                </p>
-                <input
-                  value={invCounterparty}
-                  onChange={(e) => setInvCounterparty(e.target.value)}
-                  placeholder="Bank / Counterparty Legal Name"
-                  className="w-full rounded-xl border border-[var(--bw-line)] bg-transparent px-3 py-2 text-xs"
-                  required
-                />
-                <input
-                  value={invTrn}
-                  onChange={(e) => setInvTrn(e.target.value)}
-                  placeholder="Counterparty UAE TRN (15 digits)"
-                  className="w-full rounded-xl border border-[var(--bw-line)] bg-transparent px-3 py-2 text-xs"
-                />
-                <input
-                  type="number"
-                  value={invSubtotal}
-                  onChange={(e) => setInvSubtotal(e.target.value)}
-                  placeholder="Subtotal AED (excl. VAT)"
-                  className="w-full rounded-xl border border-[var(--bw-line)] bg-transparent px-3 py-2 text-xs"
-                  required
-                />
-                <input
-                  value={invIban}
-                  onChange={(e) => setInvIban(e.target.value)}
-                  placeholder="Betterway Corporate Receiving IBAN (AE...)"
-                  className="w-full rounded-xl border border-[var(--bw-line)] bg-transparent px-3 py-2 text-xs font-mono"
-                  required
-                />
-                <button
-                  disabled={busy}
-                  className="w-full rounded-xl bg-[#025e3d] text-white py-2.5 text-xs font-bold hover:brightness-110 disabled:opacity-50"
-                >
+                <p className="text-[11px] text-[var(--bw-muted)]">Auto-applies 5% UAE FTA VAT, posts double-entry GL (`1100` Dr / `4000` Cr), and locks to Betterway Corporate IBAN.</p>
+                <input value={invCounterparty} onChange={(e) => setInvCounterparty(e.target.value)} placeholder="Bank / Counterparty Legal Name" className="w-full rounded-xl border border-[var(--bw-line-strong)] bg-[var(--bw-soft)] px-3 py-2 text-xs" required />
+                <input value={invTrn} onChange={(e) => setInvTrn(e.target.value)} placeholder="Counterparty UAE TRN (15 digits)" className="w-full rounded-xl border border-[var(--bw-line-strong)] bg-[var(--bw-soft)] px-3 py-2 text-xs" />
+                <input type="number" value={invSubtotal} onChange={(e) => setInvSubtotal(e.target.value)} placeholder="Subtotal AED (excl. VAT)" className="w-full rounded-xl border border-[var(--bw-line-strong)] bg-[var(--bw-soft)] px-3 py-2 text-xs" required />
+                <input value={invIban} onChange={(e) => setInvIban(e.target.value)} placeholder="Betterway Corporate Receiving IBAN (AE...)" className="w-full rounded-xl border border-[var(--bw-line-strong)] bg-[var(--bw-soft)] px-3 py-2 text-xs font-mono" required />
+                <button disabled={busy} className="bw-btn bw-btn-obsidian w-full text-xs">
                   {busy ? 'Issuing…' : 'Issue UAE Tax Invoice (5% VAT)'}
                 </button>
               </form>
 
-              <div className="lg:col-span-2 rounded-2xl bg-[var(--bw-card)] border border-[var(--bw-line)] p-5 space-y-3 overflow-x-auto">
+              <div className="lg:col-span-2 bw-card p-5 space-y-3 overflow-x-auto">
                 <h3 className="text-sm font-extrabold">Standard Tax Invoices ({data?.invoices.length ?? 0})</h3>
                 <table className="w-full text-xs">
                   <thead>
@@ -329,69 +284,113 @@ export default function AccountsPage() {
                         <td className="py-2.5 pr-3 font-mono-num">{fmtAed(Number(inv.vat_amount_aed))}</td>
                         <td className="py-2.5 pr-3 font-mono-num font-bold">{fmtAed(Number(inv.total_aed))}</td>
                         <td className="py-2.5">
-                          <a
-                            href={`/api/v1/accounts?pintInvoiceId=${String(inv.id)}`}
-                            className="inline-flex items-center gap-1 text-[11px] font-bold text-[var(--bw-emerald)] hover:underline"
-                          >
+                          <a href={`/api/v1/accounts?pintInvoiceId=${String(inv.id)}`} className="inline-flex items-center gap-1 text-[11px] font-bold text-[#119c78] hover:underline">
                             <Download size={12} /> XML
                           </a>
                         </td>
                       </tr>
                     ))}
-                    {(data?.invoices.length ?? 0) === 0 && (
-                      <tr>
-                        <td colSpan={6} className="py-6 text-center text-[var(--bw-muted)]">
-                          No standard invoices yet. Issue your first Bank DSA Tax Invoice on the left.
-                        </td>
-                      </tr>
-                    )}
                   </tbody>
                 </table>
               </div>
             </div>
           )}
 
-          {tab === 'expenses' && (
-            <div className="grid lg:grid-cols-3 gap-5">
-              <form onSubmit={submitExpense} className="rounded-2xl bg-[var(--bw-card)] border border-[var(--bw-line)] p-5 space-y-3">
-                <h2 className="text-sm font-extrabold">Record Corporate Expense</h2>
-                <input
-                  value={expVendor}
-                  onChange={(e) => setExpVendor(e.target.value)}
-                  placeholder="Vendor Legal Name"
-                  className="w-full rounded-xl border border-[var(--bw-line)] bg-transparent px-3 py-2 text-xs"
-                  required
-                />
-                <input
-                  value={expDesc}
-                  onChange={(e) => setExpDesc(e.target.value)}
-                  placeholder="Description"
-                  className="w-full rounded-xl border border-[var(--bw-line)] bg-transparent px-3 py-2 text-xs"
-                  required
-                />
-                <div className="grid grid-cols-2 gap-2">
-                  <input
-                    type="number"
-                    value={expAmount}
-                    onChange={(e) => setExpAmount(e.target.value)}
-                    placeholder="Amount AED"
-                    className="rounded-xl border border-[var(--bw-line)] bg-transparent px-3 py-2 text-xs"
-                    required
-                  />
-                  <input
-                    value={expAccount}
-                    onChange={(e) => setExpAccount(e.target.value)}
-                    placeholder="COA Code (e.g. 5200)"
-                    className="rounded-xl border border-[var(--bw-line)] bg-transparent px-3 py-2 text-xs font-mono"
-                    required
-                  />
+          {/* 02 RECEIPTS */}
+          {tab === 'receipts' && (
+            <div className="bw-card p-5 space-y-4 text-xs">
+              <div className="flex items-center justify-between">
+                <div>
+                  <h2 className="font-display text-sm font-extrabold">Bank DSA &amp; Advisory Payment Receipts ({data?.invoices.length ?? 0})</h2>
+                  <p className="text-[11px] text-[var(--bw-muted)]">Official receipt vouchers tied to Betterway corporate receiving IBANs.</p>
                 </div>
-                <button disabled={busy} className="w-full rounded-xl bg-[#025e3d] text-white py-2.5 text-xs font-bold">
-                  Post Expense
-                </button>
+                <StatusPill label="Corporate IBAN Verified" tone="emerald" />
+              </div>
+              <div className="space-y-2">
+                {(data?.invoices ?? []).map((inv) => (
+                  <div key={String(inv.id)} className="p-3.5 rounded-xl border border-[var(--bw-line)] bg-[var(--bw-soft)]/50 flex flex-wrap items-center justify-between gap-2">
+                    <div>
+                      <div className="font-extrabold">RCT-{String(inv.invoice_no)} · {String(inv.counterparty_name)}</div>
+                      <div className="text-[11px] text-[var(--bw-muted)]">IBAN: {String(inv.receiving_corporate_iban || invIban)}</div>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <span className="font-mono-num font-extrabold text-[#119c78]">{fmtAed(Number(inv.total_aed))}</span>
+                      <StatusPill label={String(inv.status || 'ISSUED')} tone="emerald" />
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* 03 COMMISSIONS (50/50) */}
+          {tab === 'commissions' && (
+            <div className="grid lg:grid-cols-12 gap-5 text-xs">
+              <div className="lg:col-span-5 bw-card p-5 space-y-3">
+                <h2 className="font-display text-sm font-extrabold">50/50 Advisor DSA Commission Split Modeller</h2>
+                <div className="grid grid-cols-2 gap-2.5">
+                  <div className="col-span-2">
+                    <label className="font-bold block mb-1">Disbursed Mortgage Loan (AED)</label>
+                    <input type="number" value={commLoan} onChange={(e) => setCommLoan(Number(e.target.value))} className="w-full h-9 px-3 rounded-xl border border-[var(--bw-line-strong)] bg-[var(--bw-soft)] font-mono-num font-bold" />
+                  </div>
+                  <div>
+                    <label className="font-bold block mb-1">Bank DSA Rate (%)</label>
+                    <input type="number" step="0.05" value={commDsaPct} onChange={(e) => setCommDsaPct(Number(e.target.value))} className="w-full h-9 px-3 rounded-xl border border-[var(--bw-line-strong)] bg-[var(--bw-soft)] font-mono-num" />
+                  </div>
+                  <div>
+                    <label className="font-bold block mb-1">Advisor Split (%)</label>
+                    <input type="number" value={commSplitPct} onChange={(e) => setCommSplitPct(Number(e.target.value))} className="w-full h-9 px-3 rounded-xl border border-[var(--bw-line-strong)] bg-[var(--bw-soft)] font-mono-num" />
+                  </div>
+                </div>
+                <div className="grid grid-cols-3 gap-2 pt-2">
+                  <MetricTile label="Gross Bank DSA" value={fmtAed(grossDsa)} tone="navy" />
+                  <MetricTile label={`Advisor (${commSplitPct}%)`} value={fmtAed(advisorShare)} tone="emerald" />
+                  <MetricTile label={`Betterway (${100 - commSplitPct}%)`} value={fmtAed(houseShare)} tone="gold" />
+                </div>
+              </div>
+              <div className="lg:col-span-7 bw-card p-5 space-y-3">
+                <div className="flex items-center justify-between">
+                  <h3 className="font-display text-sm font-extrabold">Advisor DSA &amp; RERA Referral Payout Ledger</h3>
+                  {user?.isOwner && (
+                    <Link href="/os/place?tab=commissions" className="text-xs font-extrabold text-[#119c78] hover:underline">
+                      Open Full Cash / BT / Botim Settlement →
+                    </Link>
+                  )}
+                </div>
+                <p className="text-[11px] text-[var(--bw-muted)]">All external RERA partner splits require verified corporate IBAN + 2-of-2 Owner release.</p>
+                <div className="space-y-2">
+                  {(data?.payouts ?? []).map((p) => (
+                    <div key={String(p.id)} className="p-3 rounded-xl border border-[var(--bw-line)] flex items-center justify-between">
+                      <div>
+                        <div className="font-bold">{String(p.payout_code)} · {String(p.payee_name)}</div>
+                        <div className="text-[11px] text-[var(--bw-muted)] font-mono">{String(p.destination_iban)}</div>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <span className="font-mono-num font-bold">{fmtAed(Number(p.amount_aed))}</span>
+                        <StatusPill label={String(p.status)} tone="gold" />
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* 04 SUPPLIER BILLS */}
+          {tab === 'bills' && (
+            <div className="grid lg:grid-cols-3 gap-5">
+              <form onSubmit={submitExpense} className="bw-card p-5 space-y-3">
+                <h2 className="text-sm font-extrabold">Record Supplier Bill / Corporate Expense</h2>
+                <input value={expVendor} onChange={(e) => setExpVendor(e.target.value)} placeholder="Vendor Legal Name" className="w-full rounded-xl border border-[var(--bw-line-strong)] bg-[var(--bw-soft)] px-3 py-2 text-xs" required />
+                <input value={expDesc} onChange={(e) => setExpDesc(e.target.value)} placeholder="Description" className="w-full rounded-xl border border-[var(--bw-line-strong)] bg-[var(--bw-soft)] px-3 py-2 text-xs" required />
+                <div className="grid grid-cols-2 gap-2">
+                  <input type="number" value={expAmount} onChange={(e) => setExpAmount(e.target.value)} placeholder="Amount AED" className="rounded-xl border border-[var(--bw-line-strong)] bg-[var(--bw-soft)] px-3 py-2 text-xs" required />
+                  <input value={expAccount} onChange={(e) => setExpAccount(e.target.value)} placeholder="COA Code (e.g. 5200)" className="rounded-xl border border-[var(--bw-line-strong)] bg-[var(--bw-soft)] px-3 py-2 text-xs font-mono" required />
+                </div>
+                <button disabled={busy} className="bw-btn bw-btn-obsidian w-full text-xs">Post Supplier Bill</button>
               </form>
-              <div className="lg:col-span-2 rounded-2xl bg-[var(--bw-card)] border border-[var(--bw-line)] p-5 space-y-3 overflow-x-auto">
-                <h3 className="text-sm font-extrabold">Recorded Corporate Expenses ({data?.expenses.length ?? 0})</h3>
+              <div className="lg:col-span-2 bw-card p-5 space-y-3 overflow-x-auto">
+                <h3 className="text-sm font-extrabold">Recorded Supplier Bills ({data?.expenses.length ?? 0})</h3>
                 <table className="w-full text-xs">
                   <thead>
                     <tr className="text-left text-[var(--bw-muted)] border-b border-[var(--bw-line)]">
@@ -418,16 +417,15 @@ export default function AccountsPage() {
             </div>
           )}
 
-          {tab === 'payouts' && (
+          {/* 05 PAYMENTS */}
+          {tab === 'payments' && (
             <div className="grid lg:grid-cols-3 gap-5">
-              <form onSubmit={submitPayout} className="rounded-2xl bg-[var(--bw-card)] border border-[var(--bw-line)] p-5 space-y-3">
+              <form onSubmit={submitPayout} className="bw-card p-5 space-y-3">
                 <div className="flex items-center justify-between">
-                  <h2 className="text-sm font-extrabold">RERA Partner Broker Payout</h2>
+                  <h2 className="text-sm font-extrabold">Corporate Partner Payment</h2>
                   <StatusPill label="2-of-2 Owners" tone="navy" />
                 </div>
-                <p className="text-[11px] text-[var(--bw-muted)]">
-                  Corporate-Account-Only Guard enforces verified UAE Corporate IBAN, verified RERA ORN, verified Bank Letter, and requires BOTH Warda Kapadia AND Shabib Siraj to sign off.
-                </p>
+                <p className="text-[11px] text-[var(--bw-muted)]">Corporate-Account-Only Guard enforces verified UAE Corporate IBAN, RERA ORN &amp; dual Owner sign-off.</p>
                 <select
                   value={payBrokerId}
                   onChange={(e) => {
@@ -440,69 +438,37 @@ export default function AccountsPage() {
                     }
                   }}
                   required
-                  className="w-full rounded-xl border border-[var(--bw-line)] bg-[var(--bw-card)] px-3 py-2 text-xs"
+                  className="w-full rounded-xl border border-[var(--bw-line-strong)] bg-[var(--bw-soft)] px-3 py-2 text-xs"
                 >
-                  <option value="">Select Registered RERA Partner Brokerage (Required)</option>
+                  <option value="">Select Registered RERA Partner Brokerage</option>
                   {(data?.brokers ?? []).map((b) => (
                     <option key={String(b.id)} value={String(b.id)}>
                       {String(b.agency_name)} · ORN {String(b.orn_number)}
                     </option>
                   ))}
                 </select>
-                <input
-                  value={payName}
-                  onChange={(e) => setPayName(e.target.value)}
-                  placeholder="Corporate Payee Legal Entity"
-                  className="w-full rounded-xl border border-[var(--bw-line)] bg-transparent px-3 py-2 text-xs"
-                  required
-                />
-                <select
-                  value={payAccountType}
-                  onChange={(e) => setPayAccountType(e.target.value)}
-                  className="w-full rounded-xl border border-[var(--bw-line)] bg-[var(--bw-card)] px-3 py-2 text-xs"
-                >
+                <input value={payName} onChange={(e) => setPayName(e.target.value)} placeholder="Corporate Payee Legal Entity" className="w-full rounded-xl border border-[var(--bw-line-strong)] bg-[var(--bw-soft)] px-3 py-2 text-xs" required />
+                <select value={payAccountType} onChange={(e) => setPayAccountType(e.target.value)} className="w-full rounded-xl border border-[var(--bw-line-strong)] bg-[var(--bw-soft)] px-3 py-2 text-xs">
                   <option value="CORPORATE">CORPORATE — Verified UAE Entity Bank Account</option>
-                  <option value="PERSONAL">PERSONAL — (Will be blocked by Corporate Guard)</option>
-                  <option value="CASH">CASH — (Will be blocked by Corporate Guard)</option>
+                  <option value="PERSONAL">PERSONAL — (Blocked by Corporate Guard)</option>
+                  <option value="CASH">CASH — (Blocked by Corporate Guard)</option>
                 </select>
-                <input
-                  value={payIban}
-                  onChange={(e) => setPayIban(e.target.value)}
-                  placeholder="UAE Corporate IBAN (AE + 21 digits)"
-                  className="w-full rounded-xl border border-[var(--bw-line)] bg-transparent px-3 py-2 text-xs font-mono"
-                  required
-                />
+                <input value={payIban} onChange={(e) => setPayIban(e.target.value)} placeholder="UAE Corporate IBAN" className="w-full rounded-xl border border-[var(--bw-line-strong)] bg-[var(--bw-soft)] px-3 py-2 text-xs font-mono" required />
                 <div className="grid grid-cols-2 gap-2">
-                  <input
-                    value={payBank}
-                    onChange={(e) => setPayBank(e.target.value)}
-                    placeholder="Bank Name"
-                    className="rounded-xl border border-[var(--bw-line)] bg-transparent px-3 py-2 text-xs"
-                  />
-                  <input
-                    type="number"
-                    value={payAmount}
-                    onChange={(e) => setPayAmount(e.target.value)}
-                    placeholder="Amount AED"
-                    className="rounded-xl border border-[var(--bw-line)] bg-transparent px-3 py-2 text-xs"
-                    required
-                  />
+                  <input value={payBank} onChange={(e) => setPayBank(e.target.value)} placeholder="Bank Name" className="rounded-xl border border-[var(--bw-line-strong)] bg-[var(--bw-soft)] px-3 py-2 text-xs" />
+                  <input type="number" value={payAmount} onChange={(e) => setPayAmount(e.target.value)} placeholder="Amount AED" className="rounded-xl border border-[var(--bw-line-strong)] bg-[var(--bw-soft)] px-3 py-2 text-xs" required />
                 </div>
                 <label className="flex items-center gap-2 text-xs">
-                  <input type="checkbox" checked={payOrnOk} onChange={(e) => setPayOrnOk(e.target.checked)} />
-                  RERA ORN Certificate Verified
+                  <input type="checkbox" checked={payOrnOk} onChange={(e) => setPayOrnOk(e.target.checked)} /> RERA ORN Certificate Verified
                 </label>
                 <label className="flex items-center gap-2 text-xs">
-                  <input type="checkbox" checked={payLetterOk} onChange={(e) => setPayLetterOk(e.target.checked)} />
-                  Corporate Bank Account Letter Verified
+                  <input type="checkbox" checked={payLetterOk} onChange={(e) => setPayLetterOk(e.target.checked)} /> Corporate Bank Account Letter Verified
                 </label>
-                <button disabled={busy} className="w-full rounded-xl bg-[#025e3d] text-[#FCF1B7] py-2.5 text-xs font-bold">
-                  Queue Payout for 2-of-2 Owner Release
-                </button>
+                <button disabled={busy} className="bw-btn bw-btn-obsidian w-full text-xs">Queue Payment for 2-of-2 Release</button>
               </form>
 
-              <div className="lg:col-span-2 rounded-2xl bg-[var(--bw-card)] border border-[var(--bw-line)] p-5 space-y-3 overflow-x-auto">
-                <h3 className="text-sm font-extrabold">Outgoing Corporate Payout Queue ({data?.payouts.length ?? 0})</h3>
+              <div className="lg:col-span-2 bw-card p-5 space-y-3 overflow-x-auto">
+                <h3 className="text-sm font-extrabold">Outgoing Corporate Payment Queue ({data?.payouts.length ?? 0})</h3>
                 <table className="w-full text-xs">
                   <thead>
                     <tr className="text-left text-[var(--bw-muted)] border-b border-[var(--bw-line)]">
@@ -521,10 +487,7 @@ export default function AccountsPage() {
                         <td className="py-2 pr-3 font-mono text-[11px]">{String(p.destination_iban)}</td>
                         <td className="py-2 pr-3 font-mono-num font-bold">{fmtAed(Number(p.amount_aed))}</td>
                         <td className="py-2">
-                          <StatusPill
-                            label={String(p.status)}
-                            tone={String(p.status) === 'READY_TO_PAY' || String(p.status) === 'PAID' ? 'emerald' : 'gold'}
-                          />
+                          <StatusPill label={String(p.status)} tone={String(p.status) === 'PAID' ? 'emerald' : 'gold'} />
                         </td>
                       </tr>
                     ))}
@@ -534,22 +497,85 @@ export default function AccountsPage() {
             </div>
           )}
 
-          {tab === 'coa' && (
-            <div className="rounded-2xl bg-[var(--bw-card)] border border-[var(--bw-line)] p-5 overflow-x-auto">
-              <h3 className="text-sm font-extrabold mb-3">UAE IFRS Chart of Accounts ({data?.coa.length ?? 0})</h3>
-              <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-2">
-                {(data?.coa ?? []).map((a) => (
-                  <div
-                    key={a.code}
-                    className="flex items-center justify-between rounded-xl border border-[var(--bw-line)] px-3 py-2 text-xs"
-                  >
-                    <div>
-                      <span className="font-mono font-bold text-[var(--bw-emerald)] mr-2">{a.code}</span>
-                      <span className="font-medium">{a.name}</span>
+          {/* 06 BANK MATCHING */}
+          {tab === 'matching' && (
+            <div className="bw-card p-5 space-y-4 text-xs">
+              <div className="flex flex-wrap items-center justify-between gap-2">
+                <div>
+                  <h2 className="font-display text-sm font-extrabold">Corporate Bank Statement Matching (Wio / ENBD)</h2>
+                  <p className="text-[11px] text-[var(--bw-muted)]">Match incoming UAE bank DSA transfers against issued Tax Invoices to lock GL cash reconciliation.</p>
+                </div>
+                <StatusPill label={`${Object.values(matchedIds).filter(Boolean).length} Reconciled`} tone="emerald" />
+              </div>
+              <div className="space-y-2">
+                {(data?.invoices ?? []).map((inv) => {
+                  const id = String(inv.id);
+                  const ok = Boolean(matchedIds[id]);
+                  return (
+                    <div key={id} className="p-3.5 rounded-xl border border-[var(--bw-line)] bg-[var(--bw-soft)]/50 flex flex-wrap items-center justify-between gap-2">
+                      <div>
+                        <div className="font-bold">{String(inv.invoice_no)} · {String(inv.counterparty_name)}</div>
+                        <div className="text-[11px] text-[var(--bw-muted)] font-mono-num">Expected Credit: {fmtAed(Number(inv.total_aed))}</div>
+                      </div>
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setMatchedIds((p) => ({ ...p, [id]: !p[id] }));
+                          toast(ok ? 'Unmatched bank entry' : `Matched ${String(inv.invoice_no)} to bank feed!`);
+                        }}
+                        className={`px-3.5 py-1.5 rounded-full font-extrabold cursor-pointer ${ok ? 'bg-[#119c78] text-white' : 'bg-[#090d13] text-[#34f0bc]'}`}
+                      >
+                        {ok ? '✓ Matched to Bank' : 'Match Bank Credit'}
+                      </button>
                     </div>
-                    <StatusPill label={a.account_type} tone="slate" />
+                  );
+                })}
+              </div>
+            </div>
+          )}
+
+          {/* 07 PROFIT, BALANCE & VAT */}
+          {tab === 'reports' && (
+            <div className="space-y-5">
+              <div className="grid md:grid-cols-3 gap-4 text-xs">
+                <div className="bw-card p-5 space-y-2">
+                  <div className="font-extrabold text-[#119c78] uppercase text-[10.5px]">Statement of Profit &amp; Loss</div>
+                  <div className="flex justify-between"><span>Bank DSA Revenue</span><strong className="font-mono-num">{fmtAed(data?.summary.revenueAed)}</strong></div>
+                  <div className="flex justify-between"><span>Operating Expenses</span><strong className="font-mono-num">{fmtAed(data?.summary.expensesAed)}</strong></div>
+                  <div className="flex justify-between pt-2 border-t border-[var(--bw-line)] text-sm font-extrabold">
+                    <span>Net Profit (Standard)</span><span className="font-mono-num text-[#119c78]">{fmtAed(data?.summary.netProfitAed)}</span>
                   </div>
-                ))}
+                </div>
+                <div className="bw-card p-5 space-y-2">
+                  <div className="font-extrabold text-[#b88a1e] uppercase text-[10.5px]">UAE FTA VAT 201 Summary (5%)</div>
+                  <div className="flex justify-between"><span>Box 1 Output VAT</span><strong className="font-mono-num">{fmtAed(data?.summary.outputVatAed)}</strong></div>
+                  <div className="flex justify-between"><span>Box 9 Recoverable Input VAT</span><strong className="font-mono-num">{fmtAed(data?.summary.inputVatAed)}</strong></div>
+                  <div className="flex justify-between pt-2 border-t border-[var(--bw-line)] text-sm font-extrabold">
+                    <span>Net FTA VAT Payable</span><span className="font-mono-num text-[#b88a1e]">{fmtAed(data?.summary.netVatPayableAed)}</span>
+                  </div>
+                </div>
+                <div className="bw-card p-5 space-y-2">
+                  <div className="font-extrabold text-[var(--bw-ink)] uppercase text-[10.5px]">IFRS Balance &amp; Exports</div>
+                  <p className="text-[11px] text-[var(--bw-muted)]">Export complete Trial Balance, GL &amp; VAT 201 inside the 17-sheet Master Excel workbook.</p>
+                  <a href="/api/v1/utilities/master-backup-excel" className="bw-btn bw-btn-obsidian w-full text-xs py-2 min-h-[36px] mt-1">
+                    <Download size={13} className="text-[#34f0bc]" /> Export GL &amp; VAT (.xlsx)
+                  </a>
+                </div>
+              </div>
+
+              <div className="bw-card p-5 overflow-x-auto">
+                <h3 className="text-sm font-extrabold mb-3">UAE IFRS Chart of Accounts ({data?.coa.length ?? 0})</h3>
+                <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-2">
+                  {(data?.coa ?? []).map((a) => (
+                    <div key={a.code} className="flex items-center justify-between rounded-xl border border-[var(--bw-line)] px-3 py-2 text-xs">
+                      <div>
+                        <span className="font-mono font-bold text-[#119c78] mr-2">{a.code}</span>
+                        <span className="font-medium">{a.name}</span>
+                      </div>
+                      <StatusPill label={a.account_type} tone="slate" />
+                    </div>
+                  ))}
+                </div>
               </div>
             </div>
           )}

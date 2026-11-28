@@ -38,6 +38,7 @@ import {
 } from 'lucide-react';
 import { useOs } from './OsProvider';
 import { StaffAvatar } from './UiKit';
+import { AnimatedAppIcon } from './AnimatedIcons';
 import { EIBOR_SNAPSHOT } from '@/lib/domain/banks';
 import { prefetchApi } from '@/lib/client-cache';
 
@@ -180,8 +181,6 @@ export function OsShell({ children }: { children: React.ReactNode }) {
         { key: 'compliance', label: 'Compliance', href: '/os/compliance', matchPrefix: '/os/compliance', icon: ShieldCheck, visible: isOwnerOrAdmin },
         { key: 'website', label: 'Website', href: '/os/website-studio', matchPrefix: '/os/website-studio', icon: Globe, visible: hasWebsiteAccess },
         { key: 'employees', label: 'Team & QR', href: '/os/employees', matchPrefix: '/os/employees', icon: Users, visible: true },
-        { key: 'inside', label: 'Betterway Inside', href: '/os/inside', matchPrefix: '/os/inside', icon: MessagesSquare, visible: true },
-        { key: 'sip-calls', label: 'SIP Calls', href: '/os/sip-calls', matchPrefix: '/os/sip-calls', icon: PhoneCall, visible: true },
         { key: 'gps', label: 'Field GPS', href: '/os/field-gps', matchPrefix: '/os/field-gps', icon: MapPin, visible: true },
         { key: 'ai', label: 'Case Playbook', href: '/os/ai', matchPrefix: '/os/ai', icon: BookOpen, visible: true },
         { key: 'utilities', label: 'Utilities', href: '/os/utilities', matchPrefix: '/os/utilities', icon: Wrench, visible: true },
@@ -203,65 +202,72 @@ export function OsShell({ children }: { children: React.ReactNode }) {
 
   return (
     <div className="h-[100dvh] flex flex-col overflow-hidden bg-[var(--bw-bg)] text-[var(--bw-ink)]">
-      {/* Exact Top Header Bar Matching Reference Screenshots (Logo + OS V3 + Live Dubai Clock + 3M EIBOR | Search + Bell + AR/EN + Theme + Profile + Sign Out) */}
-      <header className="flex-none h-[60px] px-4 lg:px-6 bg-white/95 dark:bg-[#080b10]/95 backdrop-blur-xl border-b border-[var(--bw-line)] flex items-center justify-between gap-3 no-print z-40">
-        {/* Left Brand & Live Dubai Telemetry Pills */}
-        <div className="flex items-center gap-2.5 min-w-0">
-          <Link href="/os" className="flex items-center shrink-0 group" aria-label="Betterway Mortgages OS Home">
+      {/* Crisp Prominent Header Bar (Large Clear Betterway Mortgages Logo + Live Dubai Clock + 3M EIBOR | Highlighted Inside & SIP Capsule + Customise UI + Search + Profile) */}
+      <header className="flex-none h-[68px] px-4 lg:px-6 bg-white/95 dark:bg-[#080b10]/95 backdrop-blur-xl border-b border-[var(--bw-line)] flex items-center justify-between gap-3 no-print z-40">
+        {/* Left Prominent Brand Logo & Live Dubai Telemetry Pills */}
+        <div className="flex items-center gap-3 min-w-0">
+          <Link href="/os" className="flex items-center shrink-0 group py-1" aria-label="Betterway Mortgages OS Home">
             <img
               src={dark ? '/brand/betterway-logo-horizontal-dark-transparent.svg' : '/brand/betterway-logo-horizontal-light-transparent.svg'}
               alt="Betterway Mortgages"
-              className="h-8 w-auto object-contain transition-transform duration-200 group-hover:scale-[1.02]"
+              className="h-11 sm:h-12 w-auto object-contain transition-transform duration-200 group-hover:scale-[1.02]"
             />
           </Link>
-          <span className="hidden sm:inline-flex items-center px-2.5 py-0.5 rounded-full bg-[#090d13] text-white text-[10px] font-extrabold tracking-wider shrink-0">
-            OS V3
-          </span>
-          <span className="hidden md:inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[var(--bw-soft)] border border-[var(--bw-line)] text-[11px] font-mono-num font-bold text-[var(--bw-ink)] shrink-0">
+          <span className="hidden xl:inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[var(--bw-soft)] border border-[var(--bw-line)] text-[11px] font-mono-num font-bold text-[var(--bw-ink)] shrink-0">
             <span className="size-1.5 rounded-full bg-[#119c78] animate-pulse" />
             <DubaiClock compact />
           </span>
-          <span className="hidden lg:inline-flex items-center px-3 py-1 rounded-full bg-[#e3fbf3] dark:bg-[#0d2b24] border border-[#9be8ce] dark:border-[#1c5c4b] text-[11px] font-mono-num font-extrabold text-[#053b2e] dark:text-[#34f0bc] shrink-0">
+          <span className="hidden xl:inline-flex items-center px-3 py-1 rounded-full bg-[#e3fbf3] dark:bg-[#0d2b24] border border-[#9be8ce] dark:border-[#1c5c4b] text-[11px] font-mono-num font-extrabold text-[#053b2e] dark:text-[#34f0bc] shrink-0">
             3M EIBOR {EIBOR_SNAPSHOT.latest.threeMonth.toFixed(3)}%
           </span>
         </div>
 
-        {/* Right SIP Phone, Betterway Inside, Customise UI, Search, Alerts, Language, Theme & Profile */}
-        <div className="flex items-center gap-1.5 shrink-0">
-          <Link
-            href="/os/inside"
-            className="hidden 2xl:inline-flex items-center gap-1.5 h-8 px-2.5 rounded-full bg-[var(--bw-soft)] hover:bg-[#090d13] hover:text-[#34f0bc] border border-[var(--bw-line)] text-[11px] font-bold transition"
-            title="Open Betterway Inside Messaging"
-          >
-            <MessagesSquare size={12} className="text-[#119c78]" />
-            <span>Inside</span>
-          </Link>
-          <Link
-            href="/os/sip-calls"
-            className="hidden 2xl:inline-flex items-center gap-1.5 h-8 px-2.5 rounded-full bg-[var(--bw-soft)] hover:bg-[#090d13] hover:text-[#34f0bc] border border-[var(--bw-line)] text-[11px] font-bold transition"
-            title="Open Betterway SIP Call Desk"
-          >
-            <PhoneCall size={12} className="text-[#119c78]" />
-            <span>SIP</span>
-          </Link>
+        {/* Right Highlighted Live Comms Capsule (Betterway Inside & SIP), Customise UI, Search, Alerts & Profile */}
+        <div className="flex items-center gap-2 shrink-0">
+          <div className="hidden lg:inline-flex items-center p-1 rounded-full bg-[#090d13] border border-[#d9b356]/55 shadow-md gap-1">
+            <Link
+              href="/os/inside"
+              className={`group inline-flex items-center gap-1.5 h-7 px-3 rounded-full text-[11px] font-extrabold transition ${
+                pathname.startsWith('/os/inside')
+                  ? 'bg-[#22e2ad] text-[#070e1a] shadow-xs'
+                  : 'text-white hover:bg-white/12'
+              }`}
+              title="Betterway Inside — Team Channels & Direct Messages"
+            >
+              <AnimatedAppIcon name="inside" size={14} />
+              <span>Inside</span>
+            </Link>
+            <Link
+              href="/os/sip-calls"
+              className={`group inline-flex items-center gap-1.5 h-7 px-3 rounded-full text-[11px] font-extrabold transition ${
+                pathname.startsWith('/os/sip-calls')
+                  ? 'bg-[#e1b84c] text-[#070e1a] shadow-xs'
+                  : 'text-[#fbe8a4] hover:bg-white/12'
+              }`}
+              title="Betterway SIP Calls — Cloud PBX & 159 Direct Bank RMs"
+            >
+              <AnimatedAppIcon name="sip-calls" size={14} />
+              <span>SIP</span>
+            </Link>
+          </div>
+
           <button
             type="button"
             onClick={() => setCustomizerOpen(true)}
-            className="inline-flex items-center gap-1.5 h-8 px-3 rounded-full bg-[#090d13] hover:bg-[#141d29] text-[#fbe8a4] border border-[#d9b356]/50 text-[11px] font-extrabold cursor-pointer transition shadow-sm"
+            className="inline-flex items-center gap-1.5 h-8 px-3 rounded-full bg-[var(--bw-soft)] hover:bg-[#090d13] hover:text-[#fbe8a4] text-[var(--bw-ink)] border border-[var(--bw-line-strong)] text-[11px] font-extrabold cursor-pointer transition shadow-xs"
             title="Customise UI colors, fonts, sizes, highlights & pinned drag layout"
           >
-            <Palette size={13} className="text-[#34f0bc]" />
+            <Palette size={13} className="text-[#119c78]" />
             <span className="hidden sm:inline">Customise UI</span>
           </button>
 
           <button
             type="button"
             onClick={() => setSearchOpen(true)}
-            className="hidden sm:inline-flex items-center gap-1.5 h-8 px-3 rounded-full bg-[var(--bw-soft)] hover:bg-[var(--bw-hover)] border border-[var(--bw-line)] text-[11px] font-semibold text-[var(--bw-muted)] cursor-pointer transition"
+            className="hidden sm:inline-flex items-center gap-1.5 h-8 px-2.5 rounded-full bg-[var(--bw-soft)] hover:bg-[var(--bw-hover)] border border-[var(--bw-line)] text-[11px] font-semibold text-[var(--bw-muted)] cursor-pointer transition"
             aria-label="Search OS"
           >
             <Search size={13} />
-            <span className="hidden xl:inline">Search</span>
             <kbd className="text-[10px] px-1.5 py-0.5 rounded bg-white dark:bg-white/10 text-[var(--bw-muted)] border border-[var(--bw-line)]">
               ⌘K
             </kbd>
@@ -378,7 +384,6 @@ export function OsShell({ children }: { children: React.ReactNode }) {
           aria-label="Betterway OS Applications"
         >
           {navApps.map((app) => {
-            const Icon = app.icon;
             const active = isNavAppActive(app);
             return (
               <Link
@@ -388,13 +393,13 @@ export function OsShell({ children }: { children: React.ReactNode }) {
                   router.prefetch(app.href);
                   if (app.prefetchUrl) prefetchApi(app.prefetchUrl);
                 }}
-                className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[11.5px] font-bold whitespace-nowrap transition shrink-0 ${
+                className={`group inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[11.5px] font-bold whitespace-nowrap transition shrink-0 ${
                   active
                     ? 'bg-[#090d13] text-white shadow-md'
                     : 'text-[var(--bw-body)] hover:bg-[var(--bw-soft)] hover:text-[var(--bw-ink)]'
                 }`}
               >
-                <Icon size={13} className={active ? 'text-[#34f0bc]' : 'text-[var(--bw-muted)]'} />
+                <AnimatedAppIcon name={app.key} size={15} className={active ? 'text-[#34f0bc]' : 'text-[var(--bw-muted)] group-hover:text-[#119c78]'} />
                 <span>{app.label}</span>
               </Link>
             );

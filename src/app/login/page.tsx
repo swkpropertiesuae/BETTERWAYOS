@@ -177,7 +177,7 @@ export default function LoginPage() {
               <img
                 src="/brand/betterway-logo-horizontal-dark-transparent.svg"
                 alt="Betterway Mortgages LLC"
-                className="h-10 w-auto object-contain"
+                className="h-12 w-auto object-contain"
               />
               <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/8 border border-[#22e2ad]/40 text-[11px] font-mono-num font-bold text-[#34f0bc]">
                 <span className="size-2 rounded-full bg-[#22e2ad] animate-pulse" />
@@ -334,7 +334,7 @@ export default function LoginPage() {
                 <img
                   src="/brand/betterway-logo-horizontal-light-transparent.svg"
                   alt="Betterway Mortgages"
-                  className="h-9 w-auto object-contain"
+                  className="h-11 w-auto object-contain"
                 />
                 <span className="px-2.5 py-1 rounded-full bg-[#0a0e14] text-[#34f0bc] text-[10px] font-extrabold uppercase tracking-[0.12em] inline-flex items-center gap-1">
                   <Landmark size={11} className="text-[#fbe8a4]" /> Dubai Advisory Desk

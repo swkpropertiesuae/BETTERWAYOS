@@ -555,5 +555,44 @@ describe('Warda & Shabib UAE Mortgage Command Suite — Offline Domain, Schema &
         expect(text, `Generic AI cliché ${pat} found in ${rel}`).not.toMatch(pat);
       }
     }
+
+    // Verify upgraded horizontal header logo visibility, 21st.dev animated icons, highlighted Inside/SIP zone, and all 7 numbered sub-feature suites
+    const lightLogoSvg = fs.readFileSync(path.join(process.cwd(), 'public/brand/betterway-logo-horizontal-light-transparent.svg'), 'utf8');
+    const darkLogoSvg = fs.readFileSync(path.join(process.cwd(), 'public/brand/betterway-logo-horizontal-dark-transparent.svg'), 'utf8');
+    expect(lightLogoSvg).toContain('bw-mortgages-light');
+    expect(lightLogoSvg).toContain('scale(1.44, 1.5)');
+    expect(darkLogoSvg).toContain('bw-mortgages-dark');
+
+    expect(fs.existsSync(path.join(process.cwd(), 'src/components/os/AnimatedIcons.tsx'))).toBe(true);
+    expect(fs.existsSync(path.join(process.cwd(), 'src/components/os/SubFeatureTabs.tsx'))).toBe(true);
+
+    const homeSrc = fs.readFileSync(path.join(process.cwd(), 'src/app/os/page.tsx'), 'utf8');
+    expect(homeSrc).toContain('Betterway Live Communications Suite');
+    expect(homeSrc).toContain('AnimatedAppIcon');
+
+    const subFeatureFiles: Array<[string, number]> = [
+      ['src/app/os/crm/page.tsx', 9],
+      ['src/app/os/command-center/page.tsx', 5],
+      ['src/app/os/accounts/page.tsx', 7],
+      ['src/app/os/utilities/page.tsx', 9],
+      ['src/app/os/sales/page.tsx', 12],
+      ['src/app/os/compliance/page.tsx', 6],
+      ['src/app/os/employees/page.tsx', 8],
+    ];
+    for (const [rel, expectedNum] of subFeatureFiles) {
+      const src = fs.readFileSync(path.join(process.cwd(), rel), 'utf8');
+      expect(src, `${rel} missing SubFeatureTabs`).toContain('SubFeatureTabs');
+      expect(src, `${rel} missing numbered sub-module ${String(expectedNum).padStart(2, '0')}`).toContain(
+        `num: '${String(expectedNum).padStart(2, '0')}'`,
+      );
+    }
+
+    // Also guard accounts/page.tsx & sales/page.tsx for Zero-SWK and Zero real-estate leasing/viewing jargon
+    const accountsSrc = fs.readFileSync(path.join(process.cwd(), 'src/app/os/accounts/page.tsx'), 'utf8');
+    expect(accountsSrc).not.toMatch(/\bswk\b/i);
+    const salesSrcCheck = fs.readFileSync(path.join(process.cwd(), 'src/app/os/sales/page.tsx'), 'utf8');
+    for (const forbidden of ['Viewings', 'Leases & Ejari', 'Rent Schedules', 'Rent Cheques', 'Landlord Hub']) {
+      expect(salesSrcCheck).not.toContain(forbidden);
+    }
   });
 });

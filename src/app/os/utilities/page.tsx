@@ -1,27 +1,82 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
+import Link from 'next/link';
 import {
+  Calculator,
   CheckCircle2,
   Clock,
+  Copy,
   DatabaseBackup,
   Download,
+  FileCode2,
   FileSpreadsheet,
   FileText,
   Languages,
+  Palette,
+  QrCode,
   RefreshCw,
   ScanText,
   Search,
   Smartphone,
+  Wrench,
 } from 'lucide-react';
 import { EXCEL_SPECS } from '@/lib/domain/excel-specs';
 import { useOs } from '@/components/os/OsProvider';
 import { GlossyBlackCard, MetricTile, PageHeader, StatusPill } from '@/components/os/UiKit';
+import { SubFeatureTabs, type SubFeatureItem } from '@/components/os/SubFeatureTabs';
 import { LegalFormsStudioTab } from '@/components/workspace/LegalFormsStudioTab';
+import { UI_PRESETS } from '@/lib/ui-customizer';
+
+type UtilitySubTab =
+  | 'hub'
+  | 'word'
+  | 'letters'
+  | 'ocr'
+  | 'translate'
+  | 'calc_qr'
+  | 'search'
+  | 'mobile'
+  | 'customise';
+
+const UTILITY_SUB_TABS: ReadonlyArray<SubFeatureItem<UtilitySubTab>> = [
+  { id: 'hub', num: '01', label: 'Utility Suite Hub', icon: Wrench },
+  { id: 'word', num: '02', label: 'Word Studio (.docx)', icon: FileText },
+  { id: 'letters', num: '03', label: 'Letter Studio Templates', icon: FileCode2 },
+  { id: 'ocr', num: '04', label: 'Document Tools & OCR', icon: ScanText },
+  { id: 'translate', num: '05', label: 'Translator (9 Langs)', icon: Languages },
+  { id: 'calc_qr', num: '06', label: 'Calculators & QR', icon: Calculator },
+  { id: 'search', num: '07', label: 'Unified Search', icon: Search },
+  { id: 'mobile', num: '08', label: 'Mobile Apps (Android & iOS)', icon: Smartphone },
+  { id: 'customise', num: '09', label: 'Customise UI Studio', icon: Palette },
+];
+
+const LETTER_TEMPLATES = [
+  {
+    code: 'BW-LTR-01',
+    title: 'Bank Credit Rate Exception & Pricing Request',
+    body: 'Dear Mortgage Pricing Desk,\n\nWe represent our client applying for a UAE residential mortgage facility of AED [Loan_Amount] ([LTV]% LTV). Given the borrower profile and clean AECB record, we kindly request a pricing exception to match your 2026 preferred fixed tier with reduced processing fee.\n\nWarm regards,\nBetterway Mortgages LLC — Al Nasr Plaza, Oud Metha, Dubai',
+  },
+  {
+    code: 'BW-LTR-02',
+    title: 'Employer Salary Certificate Request (CBUAE Format)',
+    body: 'Dear HR Department,\n\nTo process our client\'s UAE mortgage pre-approval, kindly issue an official Salary Certificate addressed to [Bank_Name] detailing Joining Date, Designation, Basic Salary, Housing, Transport, and Total Monthly Package.\n\nThank you,\nBetterway Mortgages LLC',
+  },
+  {
+    code: 'BW-LTR-03',
+    title: 'Developer SOA & Mortgage NOC Request',
+    body: 'Dear Developer Collections & NOC Team,\n\nKindly issue the updated Statement of Account (SOA) and Mortgage No-Objection Certificate (NOC) for Unit [Unit_No] in [Project_Name] financed through [Bank_Name] ahead of the DLD Trustee transfer.\n\nBest regards,\nBetterway Operations Desk',
+  },
+  {
+    code: 'BW-LTR-04',
+    title: '90-Day Fixed-Rate Expiry & Buyout Advisory Notice',
+    body: 'Dear Valued Client,\n\nYour current fixed mortgage period expires in 90 days before reverting to EIBOR + Bank Margin. Betterway Mortgages LLC has prepared a complimentary 3-bank retention & buyout comparison to protect your monthly EMI at Zero Client Broker Fee.\n\nWarm regards,\nBetterway Client Care Desk',
+  },
+];
 
 export default function UtilitiesPage() {
-  const { toast } = useOs();
-  const [tab, setTab] = useState<'backup' | 'word' | 'excel' | 'translate' | 'ocr' | 'search'>('backup');
+  const { toast, setCustomizerOpen, uiConfig, setUiConfig } = useOs();
+  const [tab, setTab] = useState<UtilitySubTab>('hub');
 
   // Daily Backup state
   const [backupInfo, setBackupInfo] = useState<any>(null);
@@ -39,10 +94,11 @@ export default function UtilitiesPage() {
   const [rawOcr, setRawOcr] = useState('Emirates ID: 784-1988-4455667-1 | Monthly Salary: AED 38,500 | Visa Expiry: 2028-06-15');
   const [ocrResult, setOcrResult] = useState<Record<string, unknown> | null>(null);
 
-  // Global Search
+  // Global Search & Excel filter
   const [searchQ, setSearchQ] = useState('');
   const [searchResults, setSearchResults] = useState<Array<Record<string, unknown>>>([]);
   const [excelFilter, setExcelFilter] = useState('');
+  const [selectedLetter, setSelectedLetter] = useState(LETTER_TEMPLATES[0]);
 
   const loadBackupStatus = async () => {
     try {
@@ -110,41 +166,18 @@ export default function UtilitiesPage() {
   );
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-5">
       <PageHeader
-        eyebrow="17-Sheet All-Data Master Excel · Automated Daily Backup · Word/JPEG Forms · 50 Excel Hub"
-        title="Excel, Daily Backups &"
+        eyebrow="17-Sheet Master Excel · Automated Daily Backup · Word/Letter Studio · 9-Lang Translator · Mobile Apps"
+        title="Utilities &"
         accent="Document Studio"
-        subtitle="Download 100% of Betterway OS live data into one 17-sheet Master Excel workbook, run or schedule automatic 00:00 Dubai GST daily backups, fill Word/JPEG UAE mortgage forms, translate across 9 languages, and run PII-safe OCR."
+        subtitle="Full 9-module Betterway utility hub: Master Excel & Daily Backups, Word & Letter Studios, PII-Safe OCR, 9-Language Translator, Calculators & QR, Unified Search, Android/iOS Mobile Apps & Customise UI."
       />
 
-      <div className="flex flex-wrap gap-2">
-        {(
-          [
-            ['backup', 'All-Data Excel & Daily Backup', DatabaseBackup],
-            ['word', 'Mortgage Forms (Word / JPEG)', FileText],
-            ['excel', `50-Spec Excel Hub (${EXCEL_SPECS.length})`, FileSpreadsheet],
-            ['translate', '9-Language Translator', Languages],
-            ['ocr', 'PII-Safe OCR', ScanText],
-            ['search', 'Global Search', Search],
-          ] as const
-        ).map(([k, label, Icon]) => (
-          <button
-            key={k}
-            type="button"
-            onClick={() => setTab(k)}
-            className={`inline-flex items-center gap-1.5 px-4 py-2.5 rounded-full text-xs font-extrabold border transition cursor-pointer ${
-              tab === k
-                ? 'bg-[#0a0e14] text-[#34f0bc] border-[#22e2ad]/60 shadow-lg'
-                : 'bg-[var(--bw-card)] border-[var(--bw-line)] text-[var(--bw-body)] hover:border-[#119c78]'
-            }`}
-          >
-            <Icon size={14} className={tab === k ? 'text-[#fbe8a4]' : 'text-[#119c78]'} /> {label}
-          </button>
-        ))}
-      </div>
+      <SubFeatureTabs sectionTitle="Utilities & Documents" items={UTILITY_SUB_TABS} activeId={tab} onSelect={setTab} />
 
-      {tab === 'backup' && (
+      {/* 01 UTILITY SUITE HUB */}
+      {tab === 'hub' && (
         <div className="space-y-5">
           <GlossyBlackCard className="p-6 sm:p-7 space-y-5" accent="dual">
             <div className="flex flex-wrap items-center justify-between gap-4">
@@ -152,11 +185,9 @@ export default function UtilitiesPage() {
                 <div className="inline-flex items-center gap-2 text-[11px] font-extrabold uppercase tracking-[0.14em] text-[#34f0bc]">
                   <DatabaseBackup size={14} className="text-[#fbe8a4]" /> Complete Master Excel + Automated 00:00 GST Daily Backup
                 </div>
-                <h2 className="font-display text-2xl font-extrabold text-white">
-                  100% of Your OS Data in One Excel Workbook
-                </h2>
+                <h2 className="font-display text-2xl font-extrabold text-white">100% of Betterway OS Data in One Excel Workbook</h2>
                 <p className="text-xs sm:text-sm text-slate-300 leading-relaxed">
-                  Exports all 17 live sheets in 1 click: Staff, Leads CRM, 12-Step Cases, Bank Submissions, Valuations, GPS Field Meetings, 5-Track Disbursals, Manager Cheques, Advisor DSA &amp; Expenses, Daily Tasks, Invoices &amp; VAT, RERA Partners, Bank APL Catalog, 18-Bank Rates, 140+ Direct Bank RMs, and Compliance Audit.
+                  Exports all 17 live sheets in 1 click: Staff, Leads CRM, 12-Step Cases, Bank Submissions, Valuations, GPS Field Meetings, 5-Track Disbursals, Manager Cheques, Advisor DSA &amp; Expenses, Daily Tasks, Invoices &amp; VAT, RERA Partners, Bank APL Catalog, 18-Bank Rates, 159 Direct Bank RMs, and Compliance Audit.
                 </p>
               </div>
               <div className="flex flex-wrap gap-2.5">
@@ -166,14 +197,8 @@ export default function UtilitiesPage() {
                 <a href="/api/v1/utilities/bank-matrix-excel" className="bw-btn bw-btn-obsidian text-xs border-[#22e2ad]/45">
                   <FileSpreadsheet size={14} className="text-[#34f0bc]" /> Recreated 2026 Bank Matrix (.xlsx)
                 </a>
-                <button
-                  type="button"
-                  disabled={runningBackup}
-                  onClick={() => void triggerBackupNow()}
-                  className="bw-btn bw-btn-gold text-xs"
-                >
-                  <RefreshCw size={14} className={runningBackup ? 'animate-spin' : ''} />{' '}
-                  {runningBackup ? 'Saving Backup…' : 'Run Daily Backup Now'}
+                <button type="button" disabled={runningBackup} onClick={() => void triggerBackupNow()} className="bw-btn bw-btn-gold text-xs">
+                  <RefreshCw size={14} className={runningBackup ? 'animate-spin' : ''} /> {runningBackup ? 'Saving Backup…' : 'Run Daily Backup Now'}
                 </button>
               </div>
             </div>
@@ -182,7 +207,7 @@ export default function UtilitiesPage() {
               <div className="p-4 rounded-2xl bg-white/[0.06] border border-white/10">
                 <div className="text-[10.5px] font-bold uppercase text-slate-400">Workbook Coverage</div>
                 <div className="font-display text-2xl font-extrabold text-white mt-0.5">17 Sheets</div>
-                <div className="text-[11px] text-[#34f0bc]">All Supabase tables + 140+ RMs</div>
+                <div className="text-[11px] text-[#34f0bc]">All Supabase tables + 159 RMs</div>
               </div>
               <div className="p-4 rounded-2xl bg-white/[0.06] border border-white/10">
                 <div className="text-[10.5px] font-bold uppercase text-slate-400">Automatic Schedule</div>
@@ -223,9 +248,7 @@ export default function UtilitiesPage() {
                 <StatusPill label="Auto-Saved" tone="emerald" />
               </div>
               {(backupInfo?.localFiles ?? []).length === 0 ? (
-                <div className="py-6 text-center text-[var(--bw-muted)]">
-                  Click <strong>Run Daily Backup Now</strong> above to save today&apos;s timestamped `.xlsx` &amp; `.json` snapshot locally.
-                </div>
+                <div className="py-6 text-center text-[var(--bw-muted)]">Click <strong>Run Daily Backup Now</strong> above to save today&apos;s snapshot locally.</div>
               ) : (
                 <div className="divide-y divide-[var(--bw-line)]">
                   {backupInfo.localFiles.map((f: any) => (
@@ -249,22 +272,16 @@ export default function UtilitiesPage() {
                 <StatusPill label="00:00 Dubai GST" tone="gold" />
               </div>
               {(backupInfo?.history ?? []).length === 0 ? (
-                <div className="py-6 text-center text-[var(--bw-muted)]">
-                  No cloud backup runs logged yet. Runs automatically every midnight Dubai GST or on-demand above.
-                </div>
+                <div className="py-6 text-center text-[var(--bw-muted)]">Runs automatically every midnight Dubai GST or on-demand above.</div>
               ) : (
                 <div className="divide-y divide-[var(--bw-line)] max-h-60 overflow-y-auto">
                   {backupInfo.history.map((h: any) => (
                     <div key={h.id} className="py-2.5 flex items-center justify-between gap-2">
                       <div>
                         <div className="font-bold text-[var(--bw-ink)]">{h.entity_id || 'Master Excel Backup'}</div>
-                        <div className="text-[11px] text-[var(--bw-muted)]">
-                          {h.metadata?.totalRows ?? 0} rows · {h.metadata?.sheetCount ?? 17} sheets · {h.metadata?.actor || 'Cron'}
-                        </div>
+                        <div className="text-[11px] text-[var(--bw-muted)]">{h.metadata?.totalRows ?? 0} rows · {h.metadata?.sheetCount ?? 17} sheets</div>
                       </div>
-                      <span className="font-mono-num text-[10.5px] text-[var(--bw-muted)]">
-                        {new Date(h.created_at).toLocaleDateString()}
-                      </span>
+                      <span className="font-mono-num text-[10.5px] text-[var(--bw-muted)]">{new Date(h.created_at).toLocaleDateString()}</span>
                     </div>
                   ))}
                 </div>
@@ -273,66 +290,112 @@ export default function UtilitiesPage() {
           </div>
 
           <div className="grid sm:grid-cols-3 gap-3">
-            <MetricTile label="All-Data Sheets" value="17 Tabs" hint="Includes 18 Banks & 140+ RMs" tone="navy" />
+            <MetricTile label="All-Data Sheets" value="17 Tabs" hint="Includes 18 Banks & 159 RMs" tone="navy" />
             <MetricTile label="50-Spec Operational Hub" value={`${EXCEL_SPECS.length} Files`} hint="Role-scoped individual Excel exports" tone="emerald" />
             <MetricTile label="Daily Archive Retention" value="90 Days" hint="GitHub Actions + Local + Supabase" tone="gold" />
           </div>
         </div>
       )}
 
+      {/* 02 WORD STUDIO (.docx) */}
       {tab === 'word' && <LegalFormsStudioTab />}
 
-      {tab === 'excel' && (
-        <div className="bw-card p-5 space-y-4">
-          <div className="flex flex-wrap items-center justify-between gap-3">
-            <div>
-              <h2 className="text-sm font-extrabold">50-Spec Operational Excel Data Hub</h2>
-              <p className="text-xs text-[var(--bw-muted)]">
-                Download live Supabase-populated `.xlsx` workbooks for Bank Panels, Pipelines, CTO/Average Balance, Accounts, HR &amp; Compliance.
-              </p>
-            </div>
-            <input
-              value={excelFilter}
-              onChange={(e) => setExcelFilter(e.target.value)}
-              placeholder="Filter 50 Excel specs..."
-              className="rounded-full border border-[var(--bw-line-strong)] bg-[var(--bw-soft)] px-4 py-2 text-xs w-64"
-            />
-          </div>
-          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3">
-            {filteredExcel.map((sp) => (
-              <div
-                key={sp.num}
-                className="rounded-2xl border border-[var(--bw-line)] p-4 flex flex-col justify-between gap-2.5 hover:border-[#119c78] transition"
+      {/* 03 LETTER STUDIO TEMPLATES */}
+      {tab === 'letters' && (
+        <div className="grid lg:grid-cols-12 gap-5 text-xs">
+          <div className="lg:col-span-4 bw-card p-4 space-y-2">
+            <h3 className="font-display text-sm font-extrabold px-1">UAE Mortgage Letter Templates</h3>
+            {LETTER_TEMPLATES.map((ltr) => (
+              <button
+                key={ltr.code}
+                type="button"
+                onClick={() => setSelectedLetter(ltr)}
+                className={`w-full p-3 rounded-xl text-start cursor-pointer transition ${
+                  selectedLetter.code === ltr.code
+                    ? 'bg-[#090d13] text-white border border-[#d9b356]/50'
+                    : 'bg-[var(--bw-soft)]/50 hover:bg-[var(--bw-soft)] border border-[var(--bw-line)]'
+                }`}
               >
-                <div>
-                  <div className="flex items-center justify-between gap-2 mb-1">
-                    <span className="font-mono text-[11px] font-extrabold text-[#119c78]">#{sp.num}</span>
-                    <StatusPill label={`${sp.fileType} · ${sp.owner}`} tone="slate" />
-                  </div>
-                  <div className="text-xs font-bold break-all">{sp.filename}</div>
-                  <div className="text-[10.5px] text-[var(--bw-muted)] mt-1 line-clamp-2">{sp.columns.join(' · ')}</div>
-                </div>
-                <a
-                  href={`/api/v1/utilities/excel-export?num=${sp.num}`}
-                  className="bw-btn bw-btn-obsidian w-full text-[11px] py-1.5 min-h-[34px]"
-                >
-                  <Download size={12} className="text-[#34f0bc]" /> Download .xlsx
-                </a>
-              </div>
+                <div className="font-mono text-[10px] text-[#34f0bc] font-bold">{ltr.code}</div>
+                <div className="font-extrabold mt-0.5">{ltr.title}</div>
+              </button>
             ))}
+          </div>
+          <div className="lg:col-span-8 bw-card p-5 space-y-3">
+            <div className="flex flex-wrap items-center justify-between gap-2">
+              <h3 className="font-display text-sm font-extrabold">{selectedLetter.title}</h3>
+              <button
+                type="button"
+                onClick={() => {
+                  void navigator.clipboard?.writeText(selectedLetter.body);
+                  toast(`Copied ${selectedLetter.code} letter template!`);
+                }}
+                className="bw-btn bw-btn-obsidian text-xs py-1.5 min-h-[34px]"
+              >
+                <Copy size={12} className="text-[#34f0bc]" /> Copy Official Letter
+              </button>
+            </div>
+            <textarea
+              rows={9}
+              value={selectedLetter.body}
+              onChange={(e) => setSelectedLetter({ ...selectedLetter, body: e.target.value })}
+              className="w-full rounded-2xl border border-[var(--bw-line-strong)] bg-[var(--bw-soft)] p-4 text-xs leading-relaxed"
+            />
           </div>
         </div>
       )}
 
+      {/* 04 DOCUMENT TOOLS & OCR + 50-SPEC EXCEL */}
+      {tab === 'ocr' && (
+        <div className="space-y-5">
+          <div className="grid md:grid-cols-2 gap-5">
+            <div className="bw-card p-5 space-y-3">
+              <h2 className="text-sm font-extrabold">PII-Shielded Document OCR Extractor</h2>
+              <p className="text-xs text-[var(--bw-muted)]">
+                Extracts Emirates ID presence, salary figures, and expiry dates while masking sensitive personal fields for UAE PDPL compliance.
+              </p>
+              <textarea rows={5} value={rawOcr} onChange={(e) => setRawOcr(e.target.value)} className="w-full rounded-xl border border-[var(--bw-line-strong)] bg-[var(--bw-soft)] p-3 text-xs font-mono" />
+              <button type="button" onClick={runOcr} className="bw-btn bw-btn-obsidian text-xs">Run PII-Safe OCR Parse</button>
+            </div>
+            <div className="bw-card p-5 space-y-2">
+              <h3 className="text-sm font-extrabold">Extracted Structured JSON</h3>
+              <pre className="whitespace-pre-wrap text-xs font-mono bg-[var(--bw-soft)] rounded-xl p-4 min-h-40">
+                {ocrResult ? JSON.stringify(ocrResult, null, 2) : 'Run OCR to inspect extracted fields.'}
+              </pre>
+            </div>
+          </div>
+
+          <div className="bw-card p-5 space-y-4">
+            <div className="flex flex-wrap items-center justify-between gap-3">
+              <h2 className="text-sm font-extrabold">50-Spec Operational Excel Data Hub ({filteredExcel.length})</h2>
+              <input value={excelFilter} onChange={(e) => setExcelFilter(e.target.value)} placeholder="Filter 50 Excel specs..." className="rounded-full border border-[var(--bw-line-strong)] bg-[var(--bw-soft)] px-4 py-2 text-xs w-64" />
+            </div>
+            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3">
+              {filteredExcel.slice(0, 12).map((sp) => (
+                <div key={sp.num} className="rounded-2xl border border-[var(--bw-line)] p-4 flex flex-col justify-between gap-2.5">
+                  <div>
+                    <div className="flex items-center justify-between gap-2 mb-1">
+                      <span className="font-mono text-[11px] font-extrabold text-[#119c78]">#{sp.num}</span>
+                      <StatusPill label={sp.owner} tone="slate" />
+                    </div>
+                    <div className="text-xs font-bold break-all">{sp.filename}</div>
+                  </div>
+                  <a href={`/api/v1/utilities/excel-export?num=${sp.num}`} className="bw-btn bw-btn-obsidian w-full text-[11px] py-1.5 min-h-[34px]">
+                    <Download size={12} className="text-[#34f0bc]" /> Download .xlsx
+                  </a>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* 05 TRANSLATOR (9 LANGS) */}
       {tab === 'translate' && (
         <div className="grid md:grid-cols-2 gap-5">
           <div className="bw-card p-5 space-y-3">
             <h2 className="text-sm font-extrabold">9-Language UAE Mortgage Glossary Translator</h2>
-            <select
-              value={targetLang}
-              onChange={(e) => setTargetLang(e.target.value)}
-              className="w-full rounded-xl border border-[var(--bw-line-strong)] bg-[var(--bw-soft)] px-3 py-2 text-xs"
-            >
+            <select value={targetLang} onChange={(e) => setTargetLang(e.target.value)} className="w-full rounded-xl border border-[var(--bw-line-strong)] bg-[var(--bw-soft)] px-3 py-2 text-xs">
               <option value="ar">Arabic (العربية)</option>
               <option value="hi">Hindi (हिन्दी)</option>
               <option value="ur">Urdu (اردو)</option>
@@ -342,15 +405,8 @@ export default function UtilitiesPage() {
               <option value="tl">Tagalog / Filipino</option>
               <option value="ml">Malayalam (മലയാളം)</option>
             </select>
-            <textarea
-              rows={5}
-              value={sourceText}
-              onChange={(e) => setSourceText(e.target.value)}
-              className="w-full rounded-xl border border-[var(--bw-line-strong)] bg-[var(--bw-soft)] p-3 text-xs"
-            />
-            <button type="button" onClick={runTranslate} className="bw-btn bw-btn-obsidian text-xs">
-              Translate Mortgage Text
-            </button>
+            <textarea rows={5} value={sourceText} onChange={(e) => setSourceText(e.target.value)} className="w-full rounded-xl border border-[var(--bw-line-strong)] bg-[var(--bw-soft)] p-3 text-xs" />
+            <button type="button" onClick={runTranslate} className="bw-btn bw-btn-obsidian text-xs">Translate Mortgage Text</button>
           </div>
           <div className="bw-card p-5 space-y-2">
             <h3 className="text-sm font-extrabold">Glossary-Locked Output</h3>
@@ -361,42 +417,37 @@ export default function UtilitiesPage() {
         </div>
       )}
 
-      {tab === 'ocr' && (
-        <div className="grid md:grid-cols-2 gap-5">
-          <div className="bw-card p-5 space-y-3">
-            <h2 className="text-sm font-extrabold">PII-Shielded Document OCR Extractor</h2>
-            <p className="text-xs text-[var(--bw-muted)]">
-              Extracts Emirates ID presence, salary figures, and expiry dates while masking sensitive personal fields for UAE PDPL compliance.
+      {/* 06 CALCULATORS & QR */}
+      {tab === 'calc_qr' && (
+        <div className="grid lg:grid-cols-2 gap-5 text-xs">
+          <GlossyBlackCard className="p-6 space-y-4" accent="emerald">
+            <div className="inline-flex items-center gap-1.5 text-[10.5px] font-extrabold uppercase tracking-[0.14em] text-[#34f0bc]">
+              <Calculator size={13} /> 12 Institutional UAE Calculators
+            </div>
+            <h3 className="font-display text-xl font-extrabold text-white">Complete CBUAE 2026 Calculation Suite</h3>
+            <p className="text-slate-300 leading-relaxed">
+              EMI &amp; Fixed-to-Variable Amortization, 50% DBR, 4-Emirate DLD/ADM Cash-to-Close, Buyout &amp; Equity Release, Prepayment Saver, Rent vs Buy, Yield &amp; DSCR, EIBOR Shock, CC Limit Optimizer &amp; Golden Visa.
             </p>
-            <textarea
-              rows={5}
-              value={rawOcr}
-              onChange={(e) => setRawOcr(e.target.value)}
-              className="w-full rounded-xl border border-[var(--bw-line-strong)] bg-[var(--bw-soft)] p-3 text-xs font-mono"
-            />
-            <button type="button" onClick={runOcr} className="bw-btn bw-btn-obsidian text-xs">
-              Run PII-Safe OCR Parse
-            </button>
-          </div>
-          <div className="bw-card p-5 space-y-2">
-            <h3 className="text-sm font-extrabold">Extracted Structured JSON</h3>
-            <pre className="whitespace-pre-wrap text-xs font-mono bg-[var(--bw-soft)] rounded-xl p-4 min-h-40">
-              {ocrResult ? JSON.stringify(ocrResult, null, 2) : 'Run OCR to inspect extracted fields.'}
-            </pre>
+            <Link href="/os/calculators" className="bw-btn bw-btn-primary text-xs">Open All 12 UAE Calculators →</Link>
+          </GlossyBlackCard>
+          <div className="bw-card p-6 space-y-4">
+            <div className="inline-flex items-center gap-1.5 text-[10.5px] font-extrabold uppercase tracking-[0.14em] text-[#119c78]">
+              <QrCode size={13} /> Betterway Office &amp; Borrower QR Terminals
+            </div>
+            <h3 className="font-display text-lg font-extrabold">Oud Metha 20s Rotating Reception QR</h3>
+            <p className="text-[var(--bw-muted)] leading-relaxed">
+              Al Nasr Plaza office QR rotates every 20 seconds with GPS geofence verification and posts instant check-in cards to Betterway Inside.
+            </p>
+            <Link href="/os/employees" className="bw-btn bw-btn-obsidian text-xs">Open Live Oud Metha QR Desk →</Link>
           </div>
         </div>
       )}
 
+      {/* 07 UNIFIED SEARCH */}
       {tab === 'search' && (
         <div className="bw-card p-5 space-y-4">
           <form onSubmit={runSearch} className="flex gap-2">
-            <input
-              value={searchQ}
-              onChange={(e) => setSearchQ(e.target.value)}
-              placeholder="Search Leads, Cases, Banks, Communities, Case Studies..."
-              className="flex-1 rounded-full border border-[var(--bw-line-strong)] bg-[var(--bw-soft)] px-4 py-2.5 text-xs"
-              required
-            />
+            <input value={searchQ} onChange={(e) => setSearchQ(e.target.value)} placeholder="Search Leads, Cases, Banks, Communities, Case Precedents..." className="flex-1 rounded-full border border-[var(--bw-line-strong)] bg-[var(--bw-soft)] px-4 py-2.5 text-xs" required />
             <button className="bw-btn bw-btn-obsidian text-xs">Search OS</button>
           </form>
           <div className="space-y-2">
@@ -408,6 +459,68 @@ export default function UtilitiesPage() {
                 </div>
                 <StatusPill label={String(r.type || 'Record')} tone={String(r.type) === 'Privacy Fast Track' ? 'navy' : 'emerald'} />
               </div>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* 08 MOBILE APPS (ANDROID & iOS) */}
+      {tab === 'mobile' && (
+        <div className="grid md:grid-cols-2 gap-5 text-xs">
+          <GlossyBlackCard className="p-6 space-y-3" accent="dual">
+            <div className="text-[10.5px] font-extrabold uppercase tracking-[0.14em] text-[#34f0bc]">Betterway ONE · Android APK &amp; iOS</div>
+            <h3 className="font-display text-xl font-extrabold text-white">Native Capacitor 7 Mobile Builds</h3>
+            <ul className="space-y-2 text-slate-300 leading-relaxed">
+              <li>• <strong className="text-white">Android:</strong> Signed release APK built automatically via GitHub Actions (<code className="text-[#fbe8a4]">mobile-android-ios.yml</code>) with shining black house launcher icon.</li>
+              <li>• <strong className="text-white">iOS:</strong> Native Xcode project (`mobile/ios/App`) configured with AppIcon, Safe Area dock &amp; live sync to `betterwayos.vercel.app`.</li>
+              <li>• <strong className="text-white">Offline PWA:</strong> Install directly on iPhone Safari or Android Chrome via <em>Add to Home Screen</em>.</li>
+            </ul>
+          </GlossyBlackCard>
+          <div className="bw-card p-6 space-y-3">
+            <h3 className="font-display text-base font-extrabold">Mobile Field Capabilities</h3>
+            <div className="grid grid-cols-2 gap-2.5">
+              {['Oud Metha QR Scan', '1-Tap Field GPS SOS', 'Betterway Inside Chat', 'SIP Softphone Dialer', '12 UAE Calculators', '3-Bank WhatsApp Quote'].map((f) => (
+                <div key={f} className="p-3 rounded-xl bg-[var(--bw-soft)] border border-[var(--bw-line)] font-bold flex items-center gap-2">
+                  <CheckCircle2 size={13} className="text-[#119c78] shrink-0" /> {f}
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* 09 CUSTOMISE UI STUDIO */}
+      {tab === 'customise' && (
+        <div className="bw-card p-6 space-y-4 text-xs">
+          <div className="flex flex-wrap items-center justify-between gap-3">
+            <div>
+              <h2 className="font-display text-base font-extrabold">Customise UI Studio — Colors, Fonts, Sizes, Highlights &amp; Pin/Drag</h2>
+              <p className="text-[11px] text-[var(--bw-muted)]">Switch instant presets below or open the full side studio to adjust every hex color, font family, scale, highlight glow, and pinned bar.</p>
+            </div>
+            <button type="button" onClick={() => setCustomizerOpen(true)} className="bw-btn bw-btn-obsidian text-xs">
+              <Palette size={14} className="text-[#34f0bc]" /> Open Full Customise UI Drawer
+            </button>
+          </div>
+          <div className="grid sm:grid-cols-3 gap-3">
+            {UI_PRESETS.map((p) => (
+              <button
+                key={p.id}
+                type="button"
+                onClick={() => {
+                  setUiConfig({ ...uiConfig, presetId: p.id, ...p.patch });
+                  toast(`Applied "${p.name}" theme!`);
+                }}
+                className={`p-4 rounded-2xl border text-start cursor-pointer transition ${
+                  uiConfig.presetId === p.id ? 'border-[#119c78] bg-[#e3fbf3]/50 ring-1 ring-[#22e2ad]' : 'border-[var(--bw-line)] bg-[var(--bw-soft)]/50 hover:border-[#119c78]'
+                }`}
+              >
+                <div className="flex items-center gap-1.5 mb-2">
+                  {p.swatch.map((hex, i) => (
+                    <span key={i} className="size-4 rounded-full border border-black/15" style={{ backgroundColor: hex }} />
+                  ))}
+                </div>
+                <div className="font-extrabold">{p.name}</div>
+              </button>
             ))}
           </div>
         </div>

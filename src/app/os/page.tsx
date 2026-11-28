@@ -34,8 +34,10 @@ import {
 } from 'lucide-react';
 import { useOs } from '@/components/os/OsProvider';
 import { fmtAed, GlossyBlackCard, StaffAvatar } from '@/components/os/UiKit';
+import { AnimatedAppIcon } from '@/components/os/AnimatedIcons';
 import { LiveBankMarquee } from '@/components/os/LiveBankMarquee';
 import { useInstantApi } from '@/lib/client-cache';
+import { getExtensionForEmail } from '@/lib/sip-store';
 
 interface OsAppTile {
   key: string;
@@ -319,12 +321,16 @@ export default function OsApplicationsLauncherPage() {
     },
   ].filter((a) => a.visible);
 
+  // Betterway Inside & SIP Calls are elevated into their own highlighted Live Communications Suite above the main grid!
+  const coreApps = apps.filter((a) => a.key !== 'inside' && a.key !== 'sip-calls');
+  const myExt = getExtensionForEmail(user?.email);
+
   const q = filter.trim().toLowerCase();
   const orderIndex = (k: string) => {
     const idx = uiConfig.appOrder.indexOf(k);
     return idx === -1 ? 999 : idx;
   };
-  const orderedApps = [...apps].sort((a, b) => orderIndex(a.key) - orderIndex(b.key));
+  const orderedApps = [...coreApps].sort((a, b) => orderIndex(a.key) - orderIndex(b.key));
   const visibleApps = orderedApps.filter(
     (a) => !q || a.label.toLowerCase().includes(q) || a.desc.toLowerCase().includes(q) || a.badge.toLowerCase().includes(q),
   );
@@ -432,6 +438,97 @@ export default function OsApplicationsLauncherPage() {
       {/* Live Dual-Band 18 UAE Bank Logos + CBUAE EIBOR / DLD / LTV Marquee */}
       <LiveBankMarquee />
 
+      {/* Highlighted Dedicated Live Communications Zone — Betterway Inside & SIP Voice (Elevated Apart from Standard Apps) */}
+      <section aria-label="Betterway Live Communications Suite" className="space-y-2.5">
+        <div className="flex flex-wrap items-center justify-between gap-2">
+          <div className="inline-flex items-center gap-2 text-[11px] font-extrabold uppercase tracking-[0.16em] text-[#0b5442] dark:text-[#34f0bc]">
+            <span className="size-2 rounded-full bg-[#22e2ad] animate-pulse" />
+            Live Desk Communications · Direct Team Messaging &amp; UAE Cloud SIP
+          </div>
+          <span className="text-[11px] font-mono-num font-bold text-[var(--bw-muted)]">
+            Assigned Line: Ext {myExt.ext} · Oud Metha PBX Active
+          </span>
+        </div>
+
+        <div className="grid md:grid-cols-2 gap-4">
+          {/* Highlighted Card 1: Betterway Inside */}
+          <Link
+            href="/os/inside"
+            className="group bw-glossy-black p-5 sm:p-6 flex flex-col justify-between gap-4 border-[#22e2ad]/45 hover:border-[#34f0bc]"
+          >
+            <div className="flex items-start justify-between gap-3">
+              <div className="flex items-center gap-3.5 min-w-0">
+                <span className="size-13 rounded-2xl bg-gradient-to-br from-[#119c78]/35 to-[#063a2d]/60 border border-[#34f0bc]/50 text-[#34f0bc] flex items-center justify-center shadow-lg shrink-0">
+                  <AnimatedAppIcon name="inside" size={26} />
+                </span>
+                <div className="min-w-0">
+                  <div className="inline-flex items-center gap-1.5 text-[10px] font-extrabold uppercase tracking-[0.14em] text-[#34f0bc]">
+                    <span className="size-1.5 rounded-full bg-[#34f0bc] animate-pulse" /> Dedicated Messaging Studio
+                  </div>
+                  <h2 className="font-display text-xl font-extrabold text-white mt-0.5 truncate">Betterway Inside</h2>
+                </div>
+              </div>
+              <span className="px-2.5 py-1 rounded-full bg-[#22e2ad]/15 border border-[#22e2ad]/40 text-[#34f0bc] text-[10px] font-extrabold whitespace-nowrap">
+                8 Channels · 7 DMs
+              </span>
+            </div>
+
+            <p className="text-xs text-slate-300 leading-relaxed">
+              Private company channels, 1-on-1 staff DMs, automatic Oud Metha Reception QR check-in cards, Mortgage Case sharing, live field pins &amp; reactions.
+            </p>
+
+            <div className="flex flex-wrap items-center justify-between gap-2 pt-3 border-t border-white/12">
+              <div className="flex flex-wrap gap-1.5 text-[10.5px] font-bold">
+                <span className="px-2.5 py-0.5 rounded-full bg-white/10 text-[#fbe8a4]">#attendance-checkin</span>
+                <span className="px-2.5 py-0.5 rounded-full bg-white/10 text-slate-200">#bank-rm-updates</span>
+                {isOwner && <span className="px-2.5 py-0.5 rounded-full bg-[#d9b356]/20 text-[#fbe8a4]">#owners-private</span>}
+              </div>
+              <span className="inline-flex items-center gap-1 text-xs font-extrabold text-[#34f0bc] group-hover:translate-x-0.5 transition">
+                Open Inside <ArrowUpRight size={14} />
+              </span>
+            </div>
+          </Link>
+
+          {/* Highlighted Card 2: Betterway SIP Calls */}
+          <Link
+            href="/os/sip-calls"
+            className="group bw-glossy-black p-5 sm:p-6 flex flex-col justify-between gap-4 border-[#d9b356]/45 hover:border-[#fbe8a4]"
+          >
+            <div className="flex items-start justify-between gap-3">
+              <div className="flex items-center gap-3.5 min-w-0">
+                <span className="size-13 rounded-2xl bg-gradient-to-br from-[#d9b356]/30 to-[#4a370f]/60 border border-[#fbe8a4]/50 text-[#fbe8a4] flex items-center justify-center shadow-lg shrink-0">
+                  <AnimatedAppIcon name="sip-calls" size={26} />
+                </span>
+                <div className="min-w-0">
+                  <div className="inline-flex items-center gap-1.5 text-[10px] font-extrabold uppercase tracking-[0.14em] text-[#fbe8a4]">
+                    <span className="size-1.5 rounded-full bg-[#34f0bc] animate-pulse" /> UAE Cloud PBX &amp; Softphone
+                  </div>
+                  <h2 className="font-display text-xl font-extrabold text-white mt-0.5 truncate">Betterway SIP Calls</h2>
+                </div>
+              </div>
+              <span className="px-2.5 py-1 rounded-full bg-[#d9b356]/20 border border-[#fbe8a4]/40 text-[#fbe8a4] text-[10px] font-extrabold whitespace-nowrap">
+                Ext {myExt.ext} · 159 Bank RMs
+              </span>
+            </div>
+
+            <p className="text-xs text-slate-300 leading-relaxed">
+              Live browser WebRTC SIP dialpad with DTMF audio tones, Mute/Hold/Blind Transfer, CBUAE call recording audit, internal Extensions 100–108 &amp; 1-click speed-dial across 159 UAE Bank RMs.
+            </p>
+
+            <div className="flex flex-wrap items-center justify-between gap-2 pt-3 border-t border-white/12">
+              <div className="flex flex-wrap gap-1.5 text-[10.5px] font-bold">
+                <span className="px-2.5 py-0.5 rounded-full bg-white/10 text-[#34f0bc]">SIP Registered</span>
+                <span className="px-2.5 py-0.5 rounded-full bg-white/10 text-slate-200">PDPL CDR Log</span>
+                <span className="px-2.5 py-0.5 rounded-full bg-white/10 text-[#fbe8a4]">Etisalat / du / 3CX</span>
+              </div>
+              <span className="inline-flex items-center gap-1 text-xs font-extrabold text-[#fbe8a4] group-hover:translate-x-0.5 transition">
+                Open SIP Desk <ArrowUpRight size={14} />
+              </span>
+            </div>
+          </Link>
+        </div>
+      </section>
+
       {/* Pinned Important Options Strip (Instant Access + Customisable) */}
       {pinnedApps.length > 0 && (
         <div className="flex flex-wrap items-center gap-2">
@@ -439,14 +536,13 @@ export default function OsApplicationsLauncherPage() {
             <Pin size={11} /> Pinned:
           </span>
           {pinnedApps.map((p) => {
-            const Icon = p.icon;
             return (
               <Link
                 key={`pin-${p.key}`}
                 href={p.href}
-                className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white dark:bg-[#0e131b] border border-[#d9b356]/60 hover:bg-[#090d13] hover:text-[#34f0bc] text-[11.5px] font-bold shadow-xs transition"
+                className="group inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white dark:bg-[#0e131b] border border-[#d9b356]/60 hover:bg-[#090d13] hover:text-[#34f0bc] text-[11.5px] font-bold shadow-xs transition"
               >
-                <Icon size={12} className="text-[#119c78]" /> {p.label}
+                <AnimatedAppIcon name={p.key} size={14} className="text-[#119c78]" /> {p.label}
               </Link>
             );
           })}
@@ -482,7 +578,6 @@ export default function OsApplicationsLauncherPage() {
       {/* Exact 4-Column White Application Grid (Now Fully Draggable & Pinnable!) */}
       <section className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4" aria-label="Betterway OS Applications">
         {visibleApps.map((app) => {
-          const Icon = app.icon;
           const isPinned = uiConfig.pinnedAppKeys.includes(app.key);
           return (
             <Link
@@ -502,8 +597,8 @@ export default function OsApplicationsLauncherPage() {
             >
               <div className="space-y-3.5">
                 <div className="flex items-start justify-between gap-2">
-                  <span className={`size-11 rounded-[14px] flex items-center justify-center shadow-sm shrink-0 ${app.iconBg}`}>
-                    <Icon size={20} />
+                  <span className={`size-12 rounded-[15px] flex items-center justify-center shadow-md shrink-0 transition-transform duration-300 group-hover:scale-105 ${app.iconBg}`}>
+                    <AnimatedAppIcon name={app.key} size={23} />
                   </span>
                   <div className="flex items-center gap-1">
                     <span className={`px-2.5 py-0.5 rounded-full text-[10px] font-bold border whitespace-nowrap ${app.badgeCls}`}>
