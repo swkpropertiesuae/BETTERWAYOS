@@ -6,18 +6,24 @@ import {
   AlertTriangle,
   ArrowRight,
   Calculator,
+  CalendarClock,
   CheckCircle2,
   Download,
   FileLock2,
   FileText,
   LayoutGrid,
   MapPin,
+  MessageSquarePlus,
+  Paperclip,
   Plus,
   UserCheck,
   UserPlus,
 } from 'lucide-react';
 import { useOs } from '@/components/os/OsProvider';
 import { fmtAed, GlossyBlackCard, MetricTile, ShineLink, StaffAvatar, StatusPill, WalletLoanCard } from '@/components/os/UiKit';
+import { AttachmentChips, AttachmentPicker } from '@/components/os/AttachmentPicker';
+import { TaskFollowUpDrawer, type FollowUpTaskItem } from '@/components/os/TaskFollowUpDrawer';
+import { uploadFilesToScope } from '@/lib/workspace/attachments-types';
 import { useInstantApi } from '@/lib/client-cache';
 import { EIBOR_SNAPSHOT } from '@/lib/domain/banks';
 
@@ -48,6 +54,11 @@ export default function DashboardPage() {
   const [taskTitle, setTaskTitle] = useState('');
   const [taskPriority, setTaskPriority] = useState<'Critical' | 'High' | 'Normal'>('High');
   const [taskAssignee, setTaskAssignee] = useState('');
+  const [taskDueDate, setTaskDueDate] = useState(() => new Intl.DateTimeFormat('en-CA', { timeZone: 'Asia/Dubai' }).format(new Date()));
+  const [taskFiles, setTaskFiles] = useState<File[]>([]);
+  const [taskBusy, setTaskBusy] = useState(false);
+  const [activeFollowUpTask, setActiveFollowUpTask] = useState<FollowUpTaskItem | null>(null);
+  const [selectedBoardMemberId, setSelectedBoardMemberId] = useState<string | null>(null);
 
   useEffect(() => {
     if (!taskAssignee && (liveData?.user?.id || user?.id)) {
@@ -58,15 +69,32 @@ export default function DashboardPage() {
   const addTask = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!taskTitle.trim()) return;
-    const r = await fetch('/api/v1/tasks', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ title: taskTitle, priority: taskPriority, assignedTo: taskAssignee || user?.id }),
-    });
-    if (r.ok) {
-      toast('Task added!');
-      setTaskTitle('');
-      await reload();
+    setTaskBusy(true);
+    try {
+      const r = await fetch('/api/v1/tasks', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          title: taskTitle,
+          priority: taskPriority,
+          dueDate: taskDueDate,
+          assignedTo: taskAssignee || user?.id,
+        }),
+      });
+      const out = await r.json().catch(() => ({}));
+      if (r.ok) {
+        if (taskFiles.length > 0 && out.task?.id) {
+          await uploadFilesToScope(taskFiles, 'task', out.task.id).catch(() => null);
+        }
+        toast(taskFiles.length > 0 ? `Task added with ${taskFiles.length} attachment(s)!` : 'Task added!');
+        setTaskTitle('');
+        setTaskFiles([]);
+        await reload();
+      } else {
+        toast(out.error || 'Unable to add task', 'err');
+      }
+    } finally {
+      setTaskBusy(false);
     }
   };
 
@@ -263,69 +291,161 @@ export default function DashboardPage() {
       {/* Tasks Today + Team Task Board */}
       <div className="grid lg:grid-cols-12 gap-5">
         <div className="lg:col-span-6 bw-card p-5 space-y-4">
-          <div className="flex items-center justify-between">
-            <h3 className="font-display text-sm font-extrabold">
-              My Tasks Today ({(data.myTasks ?? []).filter((t: any) => t.status !== 'Done').length} open)
-            </h3>
+          <div className="flex flex-wrap items-center justify-between gap-2">
+            <div>
+              <h3 className="font-display text-sm font-extrabold">
+                {selectedBoardMemberId
+                  ? `${(data.teamTaskSummary ?? []).find((m: any) => m.userId === selectedBoardMemberId)?.name || 'Staff'}'s Tasks`
+                  : `My Tasks Today (${(data.myTasks ?? []).filter((t: any) => t.status !== 'Done').length} open)`}
+              </h3>
+              <p className="text-[11px] text-[var(--bw-muted)]">Attach documents &amp; click Follow Up on any task for step-by-step tracking.</p>
+            </div>
+            {selectedBoardMemberId && (
+              <button
+                type="button"
+                onClick={() => setSelectedBoardMemberId(null)}
+                className="text-[11px] font-bold text-[#0e5a49] hover:underline cursor-pointer"
+              >
+                Show My Tasks
+              </button>
+            )}
           </div>
-          <form onSubmit={addTask} className="flex flex-wrap gap-2">
-            <input
-              value={taskTitle}
-              onChange={(e) => setTaskTitle(e.target.value)}
-              placeholder="Write a quick follow-up or bank RM task..."
-              className="flex-1 min-w-[180px] h-10 px-3.5 rounded-xl border border-[var(--bw-line-strong)] bg-[var(--bw-soft)] text-xs outline-none focus:border-[#0e5a49]"
-            />
-            <select
-              value={taskPriority}
-              onChange={(e) => setTaskPriority(e.target.value as any)}
-              className="h-10 px-3 rounded-xl border border-[var(--bw-line-strong)] bg-[var(--bw-soft)] text-xs font-semibold"
-            >
-              <option value="Critical">Critical</option>
-              <option value="High">High</option>
-              <option value="Normal">Normal</option>
-            </select>
-            {(user?.isOwner || user?.role === 'TEAM_MANAGER' || user?.role === 'OPERATIONS_MANAGER') && (
+          <form onSubmit={addTask} className="space-y-2.5">
+            <div className="flex flex-wrap gap-2">
+              <input
+                value={taskTitle}
+                onChange={(e) => setTaskTitle(e.target.value)}
+                placeholder="Write a quick follow-up or bank RM task..."
+                className="flex-1 min-w-[180px] h-10 px-3.5 rounded-xl border border-[var(--bw-line-strong)] bg-[var(--bw-soft)] text-xs outline-none focus:border-[#0e5a49]"
+              />
               <select
-                value={taskAssignee}
-                onChange={(e) => setTaskAssignee(e.target.value)}
+                value={taskPriority}
+                onChange={(e) => setTaskPriority(e.target.value as any)}
                 className="h-10 px-3 rounded-xl border border-[var(--bw-line-strong)] bg-[var(--bw-soft)] text-xs font-semibold"
               >
-                {(data.teamTaskSummary ?? []).map((m: any) => (
-                  <option key={m.userId} value={m.userId}>
-                    {m.name}
-                  </option>
-                ))}
+                <option value="Critical">Critical</option>
+                <option value="High">High</option>
+                <option value="Normal">Normal</option>
               </select>
-            )}
-            <button type="submit" className="bw-btn bw-btn-obsidian text-xs">
-              <Plus size={14} /> Add
-            </button>
+              <input
+                type="date"
+                value={taskDueDate}
+                onChange={(e) => setTaskDueDate(e.target.value)}
+                className="h-10 px-2.5 rounded-xl border border-[var(--bw-line-strong)] bg-[var(--bw-soft)] text-xs font-mono-num"
+                title="Due date"
+              />
+              {(user?.isOwner || user?.role === 'TEAM_MANAGER' || user?.role === 'OPERATIONS_MANAGER') && (
+                <select
+                  value={taskAssignee}
+                  onChange={(e) => setTaskAssignee(e.target.value)}
+                  className="h-10 px-3 rounded-xl border border-[var(--bw-line-strong)] bg-[var(--bw-soft)] text-xs font-semibold"
+                >
+                  {(data.teamTaskSummary ?? []).map((m: any) => (
+                    <option key={m.userId} value={m.userId}>
+                      {m.name}
+                    </option>
+                  ))}
+                </select>
+              )}
+              <button type="submit" disabled={taskBusy} className="bw-btn bw-btn-obsidian text-xs">
+                <Plus size={14} /> {taskBusy ? 'Saving...' : 'Add'}
+              </button>
+            </div>
+            <AttachmentPicker
+              files={taskFiles}
+              onChange={setTaskFiles}
+              label="Attach files to task"
+              compact
+            />
           </form>
 
-          <div className="space-y-2 max-h-72 overflow-y-auto">
-            {(data.myTasks ?? []).length === 0 ? (
+          <div className="space-y-2.5 max-h-96 overflow-y-auto pe-1">
+            {((selectedBoardMemberId
+              ? (data.teamTasks ?? []).filter((t: any) => t.assigned_to === selectedBoardMemberId)
+              : data.myTasks) ?? []).length === 0 ? (
               <div className="py-6 text-center text-xs text-[var(--bw-muted)]">No tasks assigned yet today.</div>
             ) : (
-              data.myTasks.map((t: any) => (
-                <div key={t.id} className="p-3 rounded-xl border border-[var(--bw-line)] bg-[var(--bw-soft)]/70 flex items-center justify-between gap-2 text-xs">
-                  <button type="button" onClick={() => void toggleDone(t)} className="flex items-center gap-2.5 text-start cursor-pointer">
-                    <CheckCircle2 size={17} className={t.status === 'Done' ? 'text-[#0e5a49]' : 'text-[var(--bw-muted)]'} />
-                    <span className={t.status === 'Done' ? 'line-through text-[var(--bw-muted)]' : 'font-bold text-[var(--bw-ink)]'}>
-                      {t.title}
-                    </span>
-                  </button>
-                  <StatusPill label={t.priority} tone={t.priority === 'Critical' ? 'red' : t.priority === 'High' ? 'gold' : 'slate'} />
-                </div>
-              ))
+              ((selectedBoardMemberId
+                ? (data.teamTasks ?? []).filter((t: any) => t.assigned_to === selectedBoardMemberId)
+                : data.myTasks) ?? []).map((t: any) => {
+                const lastFu = Array.isArray(t.followUps) && t.followUps.length > 0 ? t.followUps[0] : null;
+                return (
+                  <div key={t.id} className="p-3.5 rounded-xl border border-[var(--bw-line)] bg-[var(--bw-soft)]/70 space-y-2 text-xs">
+                    <div className="flex flex-wrap items-start justify-between gap-2">
+                      <button type="button" onClick={() => void toggleDone(t)} className="flex items-start gap-2.5 text-start cursor-pointer min-w-0 flex-1">
+                        <CheckCircle2 size={17} className={`mt-0.5 shrink-0 ${t.status === 'Done' ? 'text-[#0e5a49]' : 'text-[var(--bw-muted)]'}`} />
+                        <div className="min-w-0">
+                          <div className={t.status === 'Done' ? 'line-through text-[var(--bw-muted)]' : 'font-bold text-[var(--bw-ink)]'}>
+                            {t.title}
+                          </div>
+                          <div className="flex flex-wrap items-center gap-1.5 mt-1 text-[10.5px] text-[var(--bw-muted)]">
+                            {t.due_date && <span className="font-mono-num">Due {t.due_date}</span>}
+                            {t.followUpStage && t.followUpStage !== 'New' && (
+                              <StatusPill
+                                label={t.followUpStage}
+                                tone={t.followUpStage === 'Done' ? 'emerald' : t.followUpStage === 'Escalated' ? 'red' : t.followUpStage === 'Waiting Client' ? 'gold' : 'navy'}
+                              />
+                            )}
+                            {t.nextFollowUpDate && t.status !== 'Done' && (
+                              <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-[#eaf4f1] text-[#0a3f34] font-bold font-mono-num">
+                                <CalendarClock size={10} /> Next: {t.nextFollowUpDate}{t.nextFollowUpTime ? ` ${t.nextFollowUpTime}` : ''}
+                              </span>
+                            )}
+                          </div>
+                        </div>
+                      </button>
+
+                      <div className="flex items-center gap-1.5 shrink-0">
+                        <StatusPill label={t.priority} tone={t.priority === 'Critical' ? 'red' : t.priority === 'High' ? 'gold' : 'slate'} />
+                        <button
+                          type="button"
+                          onClick={() => setActiveFollowUpTask(t)}
+                          className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-[#0b192c] hover:bg-[#10233e] text-[#dfc285] text-[11px] font-bold cursor-pointer transition"
+                        >
+                          <MessageSquarePlus size={12} />
+                          Follow Up{t.followUpCount > 0 ? ` (${t.followUpCount})` : ''}
+                          {t.attachmentCount > 0 && (
+                            <span className="inline-flex items-center gap-0.5 ms-0.5 text-[#64c4a8]">
+                              <Paperclip size={10} />{t.attachmentCount}
+                            </span>
+                          )}
+                        </button>
+                      </div>
+                    </div>
+
+                    {lastFu && (
+                      <div className="ps-6 text-[11px] text-[var(--bw-muted)] truncate">
+                        <strong className="text-[var(--bw-ink)]">Last ({lastFu.channel}):</strong> {lastFu.outcome} — {lastFu.note}
+                      </div>
+                    )}
+
+                    {Array.isArray(t.attachments) && t.attachments.length > 0 && (
+                      <div className="ps-6">
+                        <AttachmentChips attachments={t.attachments} compact />
+                      </div>
+                    )}
+                  </div>
+                );
+              })
             )}
           </div>
         </div>
 
         <div className="lg:col-span-6 bw-card p-5 space-y-3">
-          <h3 className="font-display text-sm font-extrabold">Team Task Board</h3>
+          <div className="flex items-center justify-between gap-2">
+            <h3 className="font-display text-sm font-extrabold">Team Task Board</h3>
+            <span className="text-[11px] text-[var(--bw-muted)]">Click a team member to inspect &amp; follow up</span>
+          </div>
           <div className="divide-y divide-[var(--bw-line)]">
             {(data.teamTaskSummary ?? []).map((m: any) => (
-              <div key={m.userId} className="py-2.5 flex items-center justify-between text-xs">
+              <button
+                key={m.userId}
+                type="button"
+                onClick={() => setSelectedBoardMemberId(selectedBoardMemberId === m.userId ? null : m.userId)}
+                className={`w-full py-2.5 px-2 -mx-2 rounded-xl flex items-center justify-between text-xs text-start transition cursor-pointer ${
+                  selectedBoardMemberId === m.userId ? 'bg-[#eaf4f1] dark:bg-[#0f2924]' : 'hover:bg-[var(--bw-hover)]'
+                }`}
+              >
                 <div className="flex items-center gap-2.5">
                   <StaffAvatar name={m.name} avatarUrl={m.avatarUrl} initials={m.initials} size="sm" />
                   <div>
@@ -338,11 +458,22 @@ export default function DashboardPage() {
                   <StatusPill label={`${m.openCount} Open`} tone="blue" />
                   <StatusPill label={`${m.doneCount} Done`} tone="emerald" />
                 </div>
-              </div>
+              </button>
             ))}
           </div>
         </div>
       </div>
+
+      <TaskFollowUpDrawer
+        task={activeFollowUpTask}
+        assigneeName={
+          activeFollowUpTask
+            ? (data.teamTaskSummary ?? []).find((m: any) => m.userId === activeFollowUpTask.assigned_to)?.name || user?.name
+            : undefined
+        }
+        onClose={() => setActiveFollowUpTask(null)}
+        onUpdated={reload}
+      />
 
       {/* Assigned Clients Table */}
       <section className="bw-card overflow-hidden">

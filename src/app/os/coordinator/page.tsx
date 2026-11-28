@@ -4,6 +4,8 @@ import React, { useState } from 'react';
 import { CheckCircle2, ClipboardList, Download, Landmark, Plus, Receipt } from 'lucide-react';
 import { useOs } from '@/components/os/OsProvider';
 import { fmtAed, GlossyBlackCard, StatusPill } from '@/components/os/UiKit';
+import { AttachmentChips, AttachmentPicker } from '@/components/os/AttachmentPicker';
+import { filesToLocalAttachments, uploadFilesToScope, type AttachmentItem } from '@/lib/workspace/attachments-types';
 
 const TX_TYPES = ['Resale', 'Handover', 'Buyout', 'Equity', 'Buy+EQ', 'Handover + Equity', 'Buyout + Equity'] as const;
 const LOAN_TYPES = ['Residence', 'Commercial', 'Retail', 'Plots', 'Construction'] as const;
@@ -44,6 +46,7 @@ interface CoordinatorLoginRow {
   payAdvisorAed: number;
   payThirdPartyAed: number;
   disbursedMonth: string;
+  attachments?: AttachmentItem[];
 }
 
 const INITIAL_ROWS: CoordinatorLoginRow[] = [
@@ -127,6 +130,7 @@ export default function CoordinatorAndLoginsPage() {
   const { user, toast } = useOs();
   const [section, setSection] = useState<'coordinator' | 'logins' | 'disbursed'>('coordinator');
   const [rows, setRows] = useState<CoordinatorLoginRow[]>(INITIAL_ROWS);
+  const [loginFiles, setLoginFiles] = useState<File[]>([]);
   const [form, setForm] = useState({
     clientName: '',
     clientPhone: '+971 50 ',
@@ -151,17 +155,22 @@ export default function CoordinatorAndLoginsPage() {
     bankPayoutPct: 0.85,
   });
 
-  const addLogin = (e: React.FormEvent) => {
+  const addLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!form.clientName.trim()) {
       toast('Enter client name first', 'err');
       return;
     }
     const nextNo = rows.length + 1;
+    const rowId = `cl-${Date.now()}`;
+    const localAtts = loginFiles.length > 0 ? await filesToLocalAttachments(loginFiles, 'coordinator', rowId, user?.name) : [];
+    if (loginFiles.length > 0) {
+      void uploadFilesToScope(loginFiles, 'coordinator', rowId).catch(() => null);
+    }
     const bankGross = Math.round((form.loanAmountAed * form.bankPayoutPct) / 100);
     setRows((prev) => [
       {
-        id: `cl-${Date.now()}`,
+        id: rowId,
         no: nextNo,
         date: new Date().toISOString().slice(0, 10),
         docsFull: form.docsFull,
@@ -196,11 +205,13 @@ export default function CoordinatorAndLoginsPage() {
         payAdvisorAed: Math.round(bankGross * 0.4),
         payThirdPartyAed: form.thirdPartyName ? Math.round(bankGross * 0.2) : 0,
         disbursedMonth: 'Nov 2026',
+        attachments: localAtts,
       },
       ...prev,
     ]);
     setForm({ ...form, clientName: '', propertyMortgaged: '', docsIncompleteNote: '' });
-    toast(`Bank Login #${nextNo} logged into Coordinator Master Sheet!`);
+    setLoginFiles([]);
+    toast(`Bank Login #${nextNo} logged into Coordinator Master Sheet${localAtts.length > 0 ? ` (${localAtts.length} attachment)` : ''}!`);
   };
 
   const totalLoanVol = rows.reduce((s, r) => s + r.loanAmountAed, 0);
@@ -317,6 +328,9 @@ export default function CoordinatorAndLoginsPage() {
           <button type="submit" className="bw-btn bw-btn-obsidian h-9 text-xs">
             <CheckCircle2 size={14} /> Add Login
           </button>
+          <div className="col-span-2 sm:col-span-3 lg:col-span-6 pt-1">
+            <AttachmentPicker files={loginFiles} onChange={setLoginFiles} label="Attach Bank Login Pack (Application Form, EID, Statements, FOL)" compact />
+          </div>
         </form>
       </section>
 
@@ -361,6 +375,7 @@ export default function CoordinatorAndLoginsPage() {
                     <td className="py-2.5 px-2.5">
                       <StatusPill label={r.docsFull === 'Yes' ? 'Docs Full' : 'Incomplete'} tone={r.docsFull === 'Yes' ? 'emerald' : 'red'} />
                       <div className="text-[10px] text-[var(--bw-muted)] mt-0.5 max-w-[140px] truncate">{r.docsIncompleteNote}</div>
+                      {r.attachments && r.attachments.length > 0 && <AttachmentChips attachments={r.attachments} compact />}
                     </td>
                     <td className="py-2.5 px-2.5 font-bold">{r.advisor}</td>
                     <td className="py-2.5 px-2.5">

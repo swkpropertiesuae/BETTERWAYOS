@@ -4,6 +4,8 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { ArrowRight, Building2, CheckCircle2, Plus, X } from 'lucide-react';
 import { useOs } from '@/components/os/OsProvider';
 import { fmtAed, PageHeader, StatusPill } from '@/components/os/UiKit';
+import { AttachmentPicker } from '@/components/os/AttachmentPicker';
+import { uploadFilesToScope } from '@/lib/workspace/attachments-types';
 import { MORTGAGE_TYPES, PIPELINE_STAGES } from '@/lib/domain/workflow';
 import { UAE_BANKS } from '@/lib/domain/banks';
 import type { StageCode } from '@/lib/domain/types';
@@ -15,6 +17,8 @@ export default function PipelinePage() {
   const [newOpen, setNewOpen] = useState(false);
   const [selected, setSelected] = useState<any>(null);
   const [evidence, setEvidence] = useState('');
+  const [evidenceFiles, setEvidenceFiles] = useState<File[]>([]);
+  const [caseFiles, setCaseFiles] = useState<File[]>([]);
   const [subBank, setSubBank] = useState('emirates-nbd');
   const [form, setForm] = useState({
     borrowerName: '',
@@ -55,8 +59,12 @@ export default function PipelinePage() {
       toast(d.error || 'Failed to create case', 'err');
       return;
     }
-    toast(`Opened ${d.mortgageCase.case_code} + spawned ${d.documents.length} Document Vault items!`);
+    if (caseFiles.length > 0 && d.mortgageCase?.id) {
+      await uploadFilesToScope(caseFiles, 'pipeline', d.mortgageCase.id).catch(() => null);
+    }
+    toast(`Opened ${d.mortgageCase.case_code} + spawned ${d.documents.length} Document Vault items${caseFiles.length > 0 ? ` + ${caseFiles.length} attachment(s)` : ''}!`);
     setNewOpen(false);
+    setCaseFiles([]);
     setForm({ ...form, borrowerName: '', projectName: '' });
     await load();
   };
@@ -73,8 +81,12 @@ export default function PipelinePage() {
       toast(d.error || 'Advance failed', 'err');
       return;
     }
-    toast(`${c.case_code} moved to ${nextStage}!`);
+    if (evidenceFiles.length > 0) {
+      await uploadFilesToScope(evidenceFiles, 'pipeline-stage', `${c.id}-${nextStage}`).catch(() => null);
+    }
+    toast(`${c.case_code} moved to ${nextStage}${evidenceFiles.length > 0 ? ` (${evidenceFiles.length} proof file attached)` : ''}!`);
     setEvidence('');
+    setEvidenceFiles([]);
     setSelected(null);
     await load();
   };
@@ -307,6 +319,7 @@ export default function PipelinePage() {
                 placeholder="Enter verification evidence (e.g. Pre-Approval ref, Valuation report AED 3.1M)..."
                 className="w-full h-9 px-3 rounded-xl border border-[var(--bw-line)] bg-[var(--bw-bg)]"
               />
+              <AttachmentPicker files={evidenceFiles} onChange={setEvidenceFiles} label="Attach Stage Evidence (Pre-Approval / Valuation / FOL)" compact />
               <div className="grid grid-cols-2 gap-1.5">
                 {PIPELINE_STAGES.map((st) => (
                   <button
@@ -400,6 +413,9 @@ export default function PipelinePage() {
                 <select value={form.primaryBankKey} onChange={(e) => setForm({ ...form, primaryBankKey: e.target.value })} className="w-full h-9 px-3 rounded-xl border border-[var(--bw-line)] bg-[var(--bw-bg)]">
                   {UAE_BANKS.map((b) => <option key={b.key} value={b.key}>{b.name}</option>)}
                 </select>
+              </div>
+              <div className="sm:col-span-2">
+                <AttachmentPicker files={caseFiles} onChange={setCaseFiles} label="Initial Case Attachments (Passport, EID, Salary Cert, Form F)" />
               </div>
             </div>
             <div className="flex justify-end gap-2 pt-3 border-t border-[var(--bw-line)]">

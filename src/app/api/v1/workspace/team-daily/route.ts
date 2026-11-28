@@ -3,6 +3,7 @@ import { requireOwner } from '@/lib/auth/session';
 import { getSupabaseAdmin } from '@/lib/supabase/admin';
 import { logAudit } from '@/lib/auth/approvals';
 import { getFieldVerifiers, type FieldVerifierEntry } from '@/lib/workspace/verifiers';
+import { hydrateTasksWithMeta } from '@/lib/workspace/task-followups-server';
 
 function dubaiToday(): string {
   return new Intl.DateTimeFormat('en-CA', { timeZone: 'Asia/Dubai' }).format(new Date());
@@ -32,7 +33,7 @@ export async function GET(req: Request) {
   ]);
 
   const verifierIds = new Set(verifiers.map((v) => v.user_id));
-  const allTasks = tasks ?? [];
+  const allTasks = await hydrateTasksWithMeta(db, tasks ?? []);
   const allAtt = attendance ?? [];
 
   const staffBoard = (users ?? []).map((u) => {

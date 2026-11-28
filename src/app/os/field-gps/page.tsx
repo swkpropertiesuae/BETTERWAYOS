@@ -5,6 +5,8 @@ import { AlertOctagon, CheckCircle2, ClipboardCheck, ExternalLink, MapPin, Navig
 import { useOs } from '@/components/os/OsProvider';
 import { PageHeader, StatusPill } from '@/components/os/UiKit';
 import { ForensicVisitsTab } from '@/components/workspace/ForensicVisitsTab';
+import { AttachmentPicker } from '@/components/os/AttachmentPicker';
+import { uploadFilesToScope } from '@/lib/workspace/attachments-types';
 
 export default function FieldGpsPage() {
   const { toast } = useOs();
@@ -13,6 +15,7 @@ export default function FieldGpsPage() {
   const [purpose, setPurpose] = useState('DLD Trustee Transfer');
   const [destination, setDestination] = useState('Dubai Land Department Trustee — Al Barsha');
   const [coords, setCoords] = useState({ lat: 25.118, lng: 55.2006, accuracyM: 15 });
+  const [visitFiles, setVisitFiles] = useState<File[]>([]);
 
   const load = useCallback(async () => {
     const r = await fetch('/api/v1/field-gps');
@@ -51,8 +54,13 @@ export default function FieldGpsPage() {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ purpose, destinationLabel: destination, ...gps }),
     });
+    const out = await r.json().catch(() => ({}));
     if (r.ok) {
-      toast('Field Visit GPS Check-In active — Owners & Operations can track live!');
+      if (visitFiles.length > 0) {
+        await uploadFilesToScope(visitFiles, 'field-gps', String(out.visit?.id || `gps-${Date.now()}`)).catch(() => null);
+      }
+      toast(`Field Visit GPS Check-In active${visitFiles.length > 0 ? ` (${visitFiles.length} file attached)` : ''} — Owners & Operations can track live!`);
+      setVisitFiles([]);
       await load();
     }
   };
@@ -149,6 +157,7 @@ export default function FieldGpsPage() {
           <div className="p-3 rounded-xl bg-[var(--bw-bg)] border border-[var(--bw-line)] font-mono-num text-[11px]">
             Current GPS Anchor: {coords.lat.toFixed(5)}, {coords.lng.toFixed(5)} (±{coords.accuracyM}m)
           </div>
+          <AttachmentPicker files={visitFiles} onChange={setVisitFiles} label="Attach Visit Photo / Trustee Receipt / NOC" compact />
           <button type="submit" className="w-full h-10 rounded-full bg-[#0e5243] text-white font-bold cursor-pointer">
             Check-In &amp; Share Live GPS
           </button>

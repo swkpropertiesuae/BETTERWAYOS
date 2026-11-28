@@ -12,12 +12,15 @@ import {
   type CommissionEntryType,
 } from '@/lib/workspace/domain';
 import { downloadCsv, downloadJpegDocument, downloadWordDocument, printBrandedDocument } from '@/lib/workspace/exporters';
+import { AttachmentPicker } from '@/components/os/AttachmentPicker';
+import { uploadFilesToScope } from '@/lib/workspace/attachments-types';
 
 export function CommissionsExpensesTab() {
   const { user, toast } = useOs();
   const [data, setData] = useState<any>(null);
   const [statusFilter, setStatusFilter] = useState('ALL');
   const [modeFilter, setModeFilter] = useState('ALL');
+  const [entryFiles, setEntryFiles] = useState<File[]>([]);
 
   const [form, setForm] = useState({
     entryType: 'Advisor DSA Commission' as CommissionEntryType,
@@ -63,8 +66,12 @@ export function CommissionsExpensesTab() {
       toast(out.error || 'Failed to save entry', 'err');
       return;
     }
+    if (entryFiles.length > 0 && out.entry?.id) {
+      await uploadFilesToScope(entryFiles, 'commission-entry', String(out.entry.id)).catch(() => null);
+    }
     toast(`Recorded ${out.entry.entry_no} (${fmtAed(out.entry.net_amount_aed)} · ${out.entry.payment_mode})!`);
     setForm((f) => ({ ...f, dealRef: '', propertyLabel: '', paymentReference: '', notes: '' }));
+    setEntryFiles([]);
     await load();
   };
 
@@ -278,6 +285,8 @@ export function CommissionsExpensesTab() {
               <input value={form.thirdPartyPaymentDetails} onChange={(e) => setForm({ ...form, thirdPartyPaymentDetails: e.target.value })} placeholder="Verified Corporate IBAN / Bank Details (No Personal Accounts)" className="w-full h-8 px-2.5 rounded-lg border border-[var(--bw-line)] bg-[var(--bw-card)]" />
             </div>
           )}
+
+          <AttachmentPicker files={entryFiles} onChange={setEntryFiles} label="Attach Bank Transfer Slip / Botim Receipt / Invoice" compact />
 
           <button type="submit" className="w-full h-10 rounded-full bg-[#0e5243] text-[#ebd5a6] font-extrabold cursor-pointer">
             Save Entry to Mortgage Settlement Ledger

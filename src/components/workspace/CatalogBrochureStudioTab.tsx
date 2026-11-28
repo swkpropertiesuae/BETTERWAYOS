@@ -12,6 +12,8 @@ import {
   type BrochureThemeConfig,
 } from '@/lib/workspace/domain';
 import { downloadJpegDocument, downloadWordDocument, printBrandedDocument } from '@/lib/workspace/exporters';
+import { AttachmentPicker } from '@/components/os/AttachmentPicker';
+import { uploadFilesToScope } from '@/lib/workspace/attachments-types';
 
 type EntityKind = 'community' | 'developer' | 'property' | 'unit';
 
@@ -20,6 +22,7 @@ export function CatalogBrochureStudioTab() {
   const [data, setData] = useState<any>(null);
   const [entity, setEntity] = useState<EntityKind>('property');
   const [theme, setTheme] = useState<BrochureThemeConfig>(DEFAULT_BROCHURE_THEME);
+  const [catalogFiles, setCatalogFiles] = useState<File[]>([]);
 
   const [form, setForm] = useState({
     code: '',
@@ -94,8 +97,12 @@ export function CatalogBrochureStudioTab() {
       toast(out.error || 'Failed to add record', 'err');
       return;
     }
+    if (catalogFiles.length > 0) {
+      await uploadFilesToScope(catalogFiles, 'catalog-brochure', String(out.record?.id || `${entity}-${Date.now()}`)).catch(() => null);
+    }
     toast(`Added ${entity.toUpperCase()} "${form.name}" with custom brochure theme & material specs!`);
     setForm((f) => ({ ...f, code: '', name: '' }));
+    setCatalogFiles([]);
     await load();
   };
 
@@ -294,6 +301,8 @@ export function CatalogBrochureStudioTab() {
             <input value={form.paymentPlanSummary} onChange={(e) => setForm({ ...form, paymentPlanSummary: e.target.value })} placeholder="Mortgage Financing Plan (e.g. 20% Down · 80% 3Y Fixed Mortgage)" className="w-full h-9 px-3 rounded-xl border border-[var(--bw-line)] bg-[var(--bw-bg)]" />
             <textarea rows={2} value={form.description} onChange={(e) => setForm({ ...form, description: e.target.value })} placeholder="Executive UAE mortgage proposal narrative..." className="w-full p-2.5 rounded-xl border border-[var(--bw-line)] bg-[var(--bw-bg)]" />
           </div>
+
+          <AttachmentPicker files={catalogFiles} onChange={setCatalogFiles} label="Attach Floor Plan / Developer Fact Sheet / APL PDF" compact />
 
           <button type="submit" className="w-full h-10 rounded-full bg-[#0e5243] hover:bg-[#0e5243] text-white font-extrabold cursor-pointer">
             Save {entity === 'property' ? 'Project' : entity.toUpperCase()} &amp; Brochure Theme to Master Catalog

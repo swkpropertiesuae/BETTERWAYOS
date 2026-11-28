@@ -6,6 +6,8 @@ import { useOs } from '@/components/os/OsProvider';
 import { fmtAed, MetricTile, StatusPill } from '@/components/os/UiKit';
 import { CLOSING_TRACKS, type ClosingStageItem, type ClosingTrack } from '@/lib/workspace/domain';
 import { downloadJpegDocument, downloadWordDocument, printBrandedDocument } from '@/lib/workspace/exporters';
+import { AttachmentPicker } from '@/components/os/AttachmentPicker';
+import { uploadFilesToScope } from '@/lib/workspace/attachments-types';
 
 export function PinToPinClosingsTab() {
   const { user, toast } = useOs();
@@ -13,6 +15,8 @@ export function PinToPinClosingsTab() {
   const [trackFilter, setTrackFilter] = useState<string>('ALL');
   const [selectedId, setSelectedId] = useState<string>('');
   const [showNew, setShowNew] = useState(false);
+  const [dossierFiles, setDossierFiles] = useState<File[]>([]);
+  const [chequeFiles, setChequeFiles] = useState<File[]>([]);
 
   const [form, setForm] = useState({
     track: 'Ready Purchase Mortgage' as ClosingTrack,
@@ -91,8 +95,12 @@ export function PinToPinClosingsTab() {
       toast(out.error || 'Failed to create mortgage closing dossier', 'err');
       return;
     }
+    if (dossierFiles.length > 0 && out.dossier?.id) {
+      await uploadFilesToScope(dossierFiles, 'closing-dossier', String(out.dossier.id)).catch(() => null);
+    }
     toast(`Created Pin-to-Pin ${form.track} Dossier ${out.dossier.dossier_no}!`);
     setShowNew(false);
+    setDossierFiles([]);
     setSelectedId(out.dossier.id);
     await load();
   };
@@ -129,9 +137,14 @@ export function PinToPinClosingsTab() {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ action: 'add_cheque', dossierId: selected.id, ...chq }),
     });
+    const out = await r.json().catch(() => ({}));
     if (r.ok) {
+      if (chequeFiles.length > 0) {
+        await uploadFilesToScope(chequeFiles, 'closing-cheque', String(out.cheque?.id || selected.id)).catch(() => null);
+      }
       toast('Manager cheque / settlement row added to mortgage ledger!');
       setChq({ ...chq, chequeNo: '', amountAed: 0, notes: '' });
+      setChequeFiles([]);
       await load();
     }
   };
@@ -319,6 +332,8 @@ export function PinToPinClosingsTab() {
             </div>
           </div>
 
+          <AttachmentPicker files={dossierFiles} onChange={setDossierFiles} label="Attach Signed FOL / Oqood / Title Deed / NOC Pack" compact />
+
           <button type="submit" className="px-6 py-2 rounded-full bg-[#0e5243] text-[#ebd5a6] font-extrabold cursor-pointer">
             Create Pin-to-Pin Mortgage Dossier
           </button>
@@ -460,6 +475,9 @@ export function PinToPinClosingsTab() {
                   </select>
                   <input type="number" required value={chq.amountAed} onChange={(e) => setChq({ ...chq, amountAed: Number(e.target.value) })} placeholder="AED Amount" className="h-8 px-2 rounded-lg border border-[var(--bw-line)] bg-[var(--bw-card)] font-mono-num" />
                   <button type="submit" className="h-8 rounded-lg bg-[#0e5243] text-white font-bold cursor-pointer">+ Add Payment</button>
+                  <div className="sm:col-span-6 pt-1">
+                    <AttachmentPicker files={chequeFiles} onChange={setChequeFiles} label="Attach Manager Cheque Scan / Bank Transfer Slip" compact />
+                  </div>
                 </form>
 
                 <div className="overflow-x-auto">

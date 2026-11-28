@@ -28,6 +28,8 @@ import {
 } from 'lucide-react';
 import { useOs } from '@/components/os/OsProvider';
 import { PageHeader, StaffAvatar, StatusPill } from '@/components/os/UiKit';
+import { AttachmentChips, AttachmentPicker } from '@/components/os/AttachmentPicker';
+import { uploadFilesToScope, type AttachmentItem } from '@/lib/workspace/attachments-types';
 import { OFFICIAL_ROSTER } from '@/lib/domain/staff';
 import { BETTERWAY_EXTENSIONS, dialViaSip } from '@/lib/sip-store';
 
@@ -113,6 +115,7 @@ interface ChatMsg {
     bankName?: string;
     loanAmount?: string;
     replyTo?: { id: string; senderName: string; excerpt: string };
+    attachments?: AttachmentItem[];
   };
   created_at: string;
 }
@@ -169,6 +172,7 @@ function BetterwayInsideInner() {
     Record<string, { sender_name: string; body: string; created_at: string; count: number }>
   >({});
   const [body, setBody] = useState('');
+  const [chatFiles, setChatFiles] = useState<File[]>([]);
   const [sending, setSending] = useState(false);
   const [replyTo, setReplyTo] = useState<{ id: string; senderName: string; excerpt: string } | null>(null);
   const [showEmojiBar, setShowEmojiBar] = useState(false);
@@ -308,7 +312,23 @@ function BetterwayInsideInner() {
 
   const handleSendText = async (e: React.FormEvent) => {
     e.preventDefault();
-    await postMessage({ text: body });
+    if (!body.trim() && chatFiles.length === 0) return;
+    let uploaded: AttachmentItem[] = [];
+    if (chatFiles.length > 0) {
+      try {
+        uploaded = await uploadFilesToScope(chatFiles, 'inside-chat', `${activeThread}-${Date.now()}`);
+      } catch (err: unknown) {
+        toast(err instanceof Error ? err.message : 'Attachment upload failed', 'err');
+        return;
+      }
+    }
+    const textToSend =
+      body.trim() || `Shared ${uploaded.length} attachment${uploaded.length > 1 ? 's' : ''}: ${uploaded.map((u) => u.name).join(', ')}`;
+    await postMessage({
+      text: textToSend,
+      metadata: uploaded.length > 0 ? { attachments: uploaded } : undefined,
+    });
+    setChatFiles([]);
   };
 
   const handleShareLocation = () => {
@@ -738,6 +758,10 @@ function BetterwayInsideInner() {
 
                             <p className="leading-relaxed whitespace-pre-wrap">{m.body}</p>
 
+                            {Array.isArray(m.metadata?.attachments) && m.metadata.attachments.length > 0 && (
+                              <AttachmentChips attachments={m.metadata.attachments} compact />
+                            )}
+
                             {m.metadata?.mapsLink && (
                               <a
                                 href={m.metadata.mapsLink}
@@ -921,6 +945,8 @@ function BetterwayInsideInner() {
                 <Smile size={11} /> Emoji
               </button>
             </div>
+
+            <AttachmentPicker files={chatFiles} onChange={setChatFiles} label="Attach File" compact />
 
             <div className="flex items-center gap-2">
               <input

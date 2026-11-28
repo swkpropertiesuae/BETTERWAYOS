@@ -1,9 +1,12 @@
 'use client';
 
 import React, { useCallback, useEffect, useState } from 'react';
-import { CheckCircle2, Circle, Plus, ShieldCheck, Users } from 'lucide-react';
+import { CalendarClock, CheckCircle2, Circle, MessageSquarePlus, Paperclip, Plus, ShieldCheck, Users } from 'lucide-react';
 import { useOs } from '@/components/os/OsProvider';
 import { MetricTile, StaffAvatar, StatusPill } from '@/components/os/UiKit';
+import { AttachmentChips, AttachmentPicker } from '@/components/os/AttachmentPicker';
+import { TaskFollowUpDrawer, type FollowUpTaskItem } from '@/components/os/TaskFollowUpDrawer';
+import { uploadFilesToScope } from '@/lib/workspace/attachments-types';
 
 export function TeamDailyWorkspaceTab() {
   const { toast } = useOs();
@@ -18,6 +21,8 @@ export function TeamDailyWorkspaceTab() {
   const [taskScope, setTaskScope] = useState<'individual' | 'team'>('individual');
   const [assignToId, setAssignToId] = useState('USR-07');
   const [taskDue, setTaskDue] = useState(() => new Intl.DateTimeFormat('en-CA', { timeZone: 'Asia/Dubai' }).format(new Date()));
+  const [taskFiles, setTaskFiles] = useState<File[]>([]);
+  const [activeFollowUpTask, setActiveFollowUpTask] = useState<FollowUpTaskItem | null>(null);
 
   const load = useCallback(async () => {
     setLoading(true);
@@ -54,9 +59,23 @@ export function TeamDailyWorkspaceTab() {
       toast(out.error || 'Failed to assign task', 'err');
       return;
     }
-    toast(taskScope === 'team' ? `Assigned to all ${out.count} team members!` : 'Task assigned cleanly!');
+    if (taskFiles.length > 0) {
+      const targetIds: string[] =
+        taskScope === 'team' && Array.isArray(out.tasks)
+          ? out.tasks.map((t: any) => String(t.id))
+          : out.task?.id
+            ? [String(out.task.id)]
+            : [];
+      await Promise.all(targetIds.map((tid) => uploadFilesToScope(taskFiles, 'task', tid).catch(() => null)));
+    }
+    toast(
+      taskScope === 'team'
+        ? `Assigned to all ${out.count} team members${taskFiles.length > 0 ? ` with ${taskFiles.length} attachment(s)` : ''}!`
+        : `Task assigned${taskFiles.length > 0 ? ` with ${taskFiles.length} attachment(s)` : ''}!`,
+    );
     setTaskTitle('');
     setTaskDesc('');
+    setTaskFiles([]);
     await load();
   };
 
@@ -289,6 +308,11 @@ export function TeamDailyWorkspaceTab() {
               />
             </div>
           </div>
+          <AttachmentPicker
+            files={taskFiles}
+            onChange={setTaskFiles}
+            label="Task Attachments (PDF, Image, Excel, Word)"
+          />
           <button type="submit" className="w-full h-10 rounded-full bg-[#0e5243] hover:bg-[#0e5243] text-white font-extrabold cursor-pointer">
             {taskScope === 'team' ? 'Assign To All Active Staff' : 'Add to Individual To-Do List'}
           </button>
@@ -336,35 +360,78 @@ export function TeamDailyWorkspaceTab() {
               displayedTasks.map((t) => {
                 const assignee = staffBoard.find((s) => s.id === t.assigned_to);
                 const isDone = t.status === 'Done';
+                const lastFu = Array.isArray(t.followUps) && t.followUps.length > 0 ? t.followUps[0] : null;
                 return (
                   <div
                     key={t.id}
-                    className={`p-3.5 rounded-2xl border flex items-start justify-between gap-3 text-xs ${
-                      isDone ? 'bg-emerald-50/40 dark:bg-emerald-950/15 border-emerald-400/35 opacity-80' : 'bg-[var(--bw-bg)]/60 border-[var(--bw-line)]'
+                    className={`p-3.5 rounded-2xl border space-y-2 text-xs ${
+                      isDone ? 'bg-emerald-50/40 dark:bg-emerald-950/15 border-emerald-400/35 opacity-85' : 'bg-[var(--bw-bg)]/60 border-[var(--bw-line)]'
                     }`}
                   >
-                    <div className="flex items-start gap-2.5 min-w-0">
-                      <button
-                        type="button"
-                        onClick={() => void toggleTask(t.id, t.status)}
-                        className="mt-0.5 text-[#0e5243] cursor-pointer shrink-0"
-                        title="Toggle Done"
-                      >
-                        {isDone ? <CheckCircle2 size={18} /> : <Circle size={18} />}
-                      </button>
-                      <div className="min-w-0">
-                        <div className={`font-bold ${isDone ? 'line-through text-[var(--bw-muted)]' : ''}`}>{t.title}</div>
-                        {t.description && <div className="text-[11px] text-[var(--bw-muted)] mt-0.5">{t.description}</div>}
-                        <div className="text-[10.5px] text-[var(--bw-muted)] mt-1">
-                          Assigned to <strong className="text-[var(--bw-ink)]">{assignee?.name || t.assigned_to}</strong> ({assignee?.designation || 'Staff'}) · Due{' '}
-                          <span className="font-mono-num">{t.due_date}</span>
+                    <div className="flex flex-wrap items-start justify-between gap-3">
+                      <div className="flex items-start gap-2.5 min-w-0 flex-1">
+                        <button
+                          type="button"
+                          onClick={() => void toggleTask(t.id, t.status)}
+                          className="mt-0.5 text-[#0e5243] cursor-pointer shrink-0"
+                          title="Toggle Done"
+                        >
+                          {isDone ? <CheckCircle2 size={18} /> : <Circle size={18} />}
+                        </button>
+                        <div className="min-w-0">
+                          <div className={`font-bold ${isDone ? 'line-through text-[var(--bw-muted)]' : ''}`}>{t.title}</div>
+                          {t.description && <div className="text-[11px] text-[var(--bw-muted)] mt-0.5">{t.description}</div>}
+                          <div className="flex flex-wrap items-center gap-1.5 text-[10.5px] text-[var(--bw-muted)] mt-1">
+                            <span>
+                              Assigned to <strong className="text-[var(--bw-ink)]">{assignee?.name || t.assigned_to}</strong> ({assignee?.designation || 'Staff'}) · Due{' '}
+                              <span className="font-mono-num">{t.due_date}</span>
+                            </span>
+                            {t.followUpStage && t.followUpStage !== 'New' && (
+                              <StatusPill
+                                label={t.followUpStage}
+                                tone={t.followUpStage === 'Done' ? 'emerald' : t.followUpStage === 'Escalated' ? 'red' : t.followUpStage === 'Waiting Client' ? 'gold' : 'navy'}
+                              />
+                            )}
+                            {t.nextFollowUpDate && !isDone && (
+                              <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-[#eaf4f1] text-[#0a3f34] font-bold font-mono-num">
+                                <CalendarClock size={10} /> Next: {t.nextFollowUpDate}{t.nextFollowUpTime ? ` ${t.nextFollowUpTime}` : ''}
+                              </span>
+                            )}
+                          </div>
                         </div>
                       </div>
+                      <div className="flex items-center gap-1.5 shrink-0">
+                        <StatusPill
+                          label={isDone ? 'Done' : t.priority}
+                          tone={isDone ? 'emerald' : t.priority === 'Critical' ? 'red' : t.priority === 'High' ? 'gold' : 'slate'}
+                        />
+                        <button
+                          type="button"
+                          onClick={() => setActiveFollowUpTask(t)}
+                          className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-[#0b192c] hover:bg-[#10233e] text-[#dfc285] text-[11px] font-bold cursor-pointer transition"
+                        >
+                          <MessageSquarePlus size={12} />
+                          Follow Up{t.followUpCount > 0 ? ` (${t.followUpCount})` : ''}
+                          {t.attachmentCount > 0 && (
+                            <span className="inline-flex items-center gap-0.5 ms-0.5 text-[#64c4a8]">
+                              <Paperclip size={10} />{t.attachmentCount}
+                            </span>
+                          )}
+                        </button>
+                      </div>
                     </div>
-                    <StatusPill
-                      label={isDone ? 'Done' : t.priority}
-                      tone={isDone ? 'emerald' : t.priority === 'Critical' ? 'red' : t.priority === 'High' ? 'gold' : 'slate'}
-                    />
+
+                    {lastFu && (
+                      <div className="ps-7 text-[11px] text-[var(--bw-muted)] truncate">
+                        <strong className="text-[var(--bw-ink)]">Latest ({lastFu.channel}):</strong> {lastFu.outcome} — {lastFu.note}
+                      </div>
+                    )}
+
+                    {Array.isArray(t.attachments) && t.attachments.length > 0 && (
+                      <div className="ps-7">
+                        <AttachmentChips attachments={t.attachments} compact />
+                      </div>
+                    )}
                   </div>
                 );
               })
@@ -372,6 +439,17 @@ export function TeamDailyWorkspaceTab() {
           </div>
         </div>
       </div>
+
+      <TaskFollowUpDrawer
+        task={activeFollowUpTask}
+        assigneeName={
+          activeFollowUpTask
+            ? staffBoard.find((s) => s.id === activeFollowUpTask.assigned_to)?.name || activeFollowUpTask.assigned_to
+            : undefined
+        }
+        onClose={() => setActiveFollowUpTask(null)}
+        onUpdated={load}
+      />
     </div>
   );
 }

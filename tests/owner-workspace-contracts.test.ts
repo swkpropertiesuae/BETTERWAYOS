@@ -614,6 +614,8 @@ describe('Warda & Shabib UAE Mortgage Command Suite — Offline Domain, Schema &
       'src/components/os/AnimatedIcons.tsx',
       'src/app/os/vault/page.tsx',
       'src/app/os/website-studio/page.tsx',
+      'src/components/os/AttachmentPicker.tsx',
+      'src/components/os/TaskFollowUpDrawer.tsx',
     ];
     const forbiddenNeonHexes = ['#34f0bc', '#22e2ad', '#34dfac', '#e1b84c', '#fbf6e6', '#fbe8a4', '#0284c7', '#6d28d9'];
     for (const rel of paletteGuardFiles) {
@@ -621,6 +623,67 @@ describe('Warda & Shabib UAE Mortgage Command Suite — Offline Domain, Schema &
       for (const hex of forbiddenNeonHexes) {
         expect(lower, `Generic/neon hex ${hex} found in ${rel}`).not.toContain(hex);
       }
+    }
+  });
+
+  it('verifies universal form attachments & detailed Task Follow-Up workflow across all task lists and forms', async () => {
+    const attTypes = await import('@/lib/workspace/attachments-types');
+    expect(attTypes.TASK_FOLLOWUP_CHANNELS).toContain('SIP Call');
+    expect(attTypes.TASK_FOLLOWUP_CHANNELS).toContain('WhatsApp');
+    expect(attTypes.TASK_FOLLOWUP_CHANNELS).toContain('Bank RM');
+    expect(attTypes.TASK_FOLLOWUP_STAGES).toEqual([
+      'New',
+      'In Progress',
+      'Waiting Client',
+      'Waiting Bank',
+      'Escalated',
+      'Done',
+    ]);
+    expect(attTypes.QUICK_FOLLOWUP_TEMPLATES.length).toBeGreaterThanOrEqual(4);
+    expect(attTypes.formatFileSize(1536)).toBe('1.5 KB');
+    expect(attTypes.formatFileSize(2 * 1024 * 1024)).toBe('2.00 MB');
+
+    for (const requiredRoute of [
+      'src/app/api/v1/attachments/route.ts',
+      'src/app/api/v1/tasks/[id]/followups/route.ts',
+      'src/lib/workspace/task-followups-server.ts',
+      'src/components/os/AttachmentPicker.tsx',
+      'src/components/os/TaskFollowUpDrawer.tsx',
+    ]) {
+      expect(fs.existsSync(path.join(process.cwd(), requiredRoute)), `Missing ${requiredRoute}`).toBe(true);
+    }
+
+    // Confirm TaskFollowUpDrawer wired into all task / follow-up views
+    for (const taskScreen of [
+      'src/app/os/dashboard/page.tsx',
+      'src/components/workspace/TeamDailyWorkspaceTab.tsx',
+      'src/app/os/crm/page.tsx',
+    ]) {
+      const src = fs.readFileSync(path.join(process.cwd(), taskScreen), 'utf8');
+      expect(src, `${taskScreen} missing TaskFollowUpDrawer`).toContain('TaskFollowUpDrawer');
+      expect(src, `${taskScreen} missing AttachmentPicker`).toContain('AttachmentPicker');
+    }
+
+    // Confirm AttachmentPicker wired across all operational forms
+    for (const formScreen of [
+      'src/app/os/pipeline/page.tsx',
+      'src/app/os/coordinator/page.tsx',
+      'src/components/workspace/DailyPlanAndReportTab.tsx',
+      'src/components/workspace/OwnerSectionView.tsx',
+      'src/app/os/accounts/page.tsx',
+      'src/app/os/compliance/page.tsx',
+      'src/app/os/employees/page.tsx',
+      'src/app/os/sales/page.tsx',
+      'src/app/os/field-gps/page.tsx',
+      'src/app/os/mortgage-desk/page.tsx',
+      'src/app/os/inside/page.tsx',
+      'src/components/workspace/ForensicVisitsTab.tsx',
+      'src/components/workspace/PinToPinClosingsTab.tsx',
+      'src/components/workspace/CommissionsExpensesTab.tsx',
+      'src/components/workspace/CatalogBrochureStudioTab.tsx',
+    ]) {
+      const src = fs.readFileSync(path.join(process.cwd(), formScreen), 'utf8');
+      expect(src, `${formScreen} missing AttachmentPicker`).toContain('AttachmentPicker');
     }
   });
 });

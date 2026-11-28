@@ -14,6 +14,8 @@ import {
 } from 'lucide-react';
 import { PageHeader, StatusPill } from '@/components/os/UiKit';
 import { SubFeatureTabs, type SubFeatureItem } from '@/components/os/SubFeatureTabs';
+import { AttachmentPicker } from '@/components/os/AttachmentPicker';
+import { uploadFilesToScope } from '@/lib/workspace/attachments-types';
 import { OFFICIAL_ROSTER } from '@/lib/domain/staff';
 
 type ComplianceSubTab = 'kyc' | 'regulatory' | 'aml' | 'licences' | 'cards' | 'risk';
@@ -44,6 +46,9 @@ export default function CompliancePage() {
   const [delId, setDelId] = useState('');
   const [delLabel, setDelLabel] = useState('');
   const [delReason, setDelReason] = useState('');
+  const [kycFiles, setKycFiles] = useState<File[]>([]);
+  const [amlFiles, setAmlFiles] = useState<File[]>([]);
+  const [delFiles, setDelFiles] = useState<File[]>([]);
   const [notice, setNotice] = useState('');
   const [error, setError] = useState('');
 
@@ -67,7 +72,11 @@ export default function CompliancePage() {
     });
     const j = await r.json();
     if (!r.ok) return setError(j.error || 'Screening failed');
+    if (kycFiles.length > 0 && j.check?.id) {
+      await uploadFilesToScope(kycFiles, 'compliance-kyc', String(j.check.id)).catch(() => null);
+    }
     setSubjectName('');
+    setKycFiles([]);
     setNotice(`Compliance check completed: ${j.check.subject_name} → ${j.check.status}`);
     await load();
   }
@@ -83,7 +92,11 @@ export default function CompliancePage() {
     });
     const j = await r.json();
     if (!r.ok) return setError(j.error || 'Import failed');
+    if (amlFiles.length > 0) {
+      await uploadFilesToScope(amlFiles, 'compliance-aml', `watchlist-${Date.now()}`).catch(() => null);
+    }
     setRawWatchlist('');
+    setAmlFiles([]);
     setNotice(`Imported ${j.imported} UAE EOCN / UN watchlist entries.`);
     await load();
   }
@@ -105,9 +118,13 @@ export default function CompliancePage() {
     });
     const j = await r.json();
     if (!r.ok) return setError(j.error || 'Delete purge request failed');
+    if (delFiles.length > 0) {
+      await uploadFilesToScope(delFiles, 'compliance-delete', delId || `del-${Date.now()}`).catch(() => null);
+    }
     setDelId('');
     setDelLabel('');
     setDelReason('');
+    setDelFiles([]);
     setNotice('Permanent Delete Purge queued — requires 2-of-2 Owner sign-off (Warda Kapadia + Shabib Siraj).');
     await load();
   }
@@ -142,6 +159,7 @@ export default function CompliancePage() {
               <option value="SANCTIONS_SCREEN">UAE EOCN / UN Sanctions Screen</option>
               <option value="GOAML_STR">UAE FIU goAML STR Review</option>
             </select>
+            <AttachmentPicker files={kycFiles} onChange={setKycFiles} label="Attach EID / Passport / Signed KFS" compact />
             <button className="bw-btn bw-btn-obsidian w-full text-xs">Run KYC Verification</button>
           </form>
 
@@ -201,6 +219,7 @@ export default function CompliancePage() {
               <Upload size={14} className="text-[#0e5a49]" /> Import UAE EOCN / UN Watchlist
             </h2>
             <textarea rows={5} value={rawWatchlist} onChange={(e) => setRawWatchlist(e.target.value)} placeholder="Paste one full name or entity per line..." className="w-full rounded-xl border border-[var(--bw-line-strong)] bg-[var(--bw-soft)] p-3 text-xs" required />
+            <AttachmentPicker files={amlFiles} onChange={setAmlFiles} label="Attach EOCN / UN Watchlist File" compact />
             <button className="bw-btn bw-btn-obsidian w-full text-xs">Import Watchlist ({data?.sanctions.length ?? 0} Loaded)</button>
           </form>
 
@@ -294,6 +313,7 @@ export default function CompliancePage() {
               <input value={delId} onChange={(e) => setDelId(e.target.value)} placeholder="Record ID / UUID" className="w-full rounded-xl border border-[var(--bw-line-strong)] bg-[var(--bw-soft)] px-3 py-2 text-xs font-mono" required />
               <input value={delLabel} onChange={(e) => setDelLabel(e.target.value)} placeholder="Record Label" className="w-full rounded-xl border border-[var(--bw-line-strong)] bg-[var(--bw-soft)] px-3 py-2 text-xs" required />
               <textarea rows={2} value={delReason} onChange={(e) => setDelReason(e.target.value)} placeholder="Compliance justification..." className="w-full rounded-xl border border-[var(--bw-line-strong)] bg-[var(--bw-soft)] p-2.5 text-xs" required />
+              <AttachmentPicker files={delFiles} onChange={setDelFiles} label="Attach Approval / PDPL Proof" compact />
               <button className="w-full rounded-full bg-red-700 text-white py-2.5 text-xs font-bold cursor-pointer">Submit to 2-of-2 Owner Delete Bin</button>
             </form>
 

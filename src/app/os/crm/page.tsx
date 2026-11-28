@@ -6,8 +6,12 @@ import {
   ArrowRight,
   Briefcase,
   CalendarCheck,
+  CalendarClock,
+  CheckCircle2,
   Mail,
   MessageCircle,
+  MessageSquarePlus,
+  Paperclip,
   PhoneCall,
   Plus,
   Route,
@@ -19,6 +23,13 @@ import {
 import { useOs } from '@/components/os/OsProvider';
 import { fmtAed, GlossyBlackCard, MetricTile, PageHeader, StatusPill } from '@/components/os/UiKit';
 import { SubFeatureTabs, type SubFeatureItem } from '@/components/os/SubFeatureTabs';
+import { AttachmentChips, AttachmentPicker } from '@/components/os/AttachmentPicker';
+import { TaskFollowUpDrawer, type FollowUpTaskItem } from '@/components/os/TaskFollowUpDrawer';
+import {
+  filesToLocalAttachments,
+  uploadFilesToScope,
+  type AttachmentItem,
+} from '@/lib/workspace/attachments-types';
 import { ENQUIRY_CHANNELS } from '@/lib/domain/workflow';
 import { OFFICIAL_ROSTER } from '@/lib/domain/staff';
 import { dialViaSip } from '@/lib/sip-store';
@@ -71,9 +82,16 @@ export default function CrmPage() {
     vaultLeads: [],
   });
   const [cases, setCases] = useState<any[]>([]);
+  const [followUpTasks, setFollowUpTasks] = useState<FollowUpTaskItem[]>([]);
+  const [activeFollowUpTask, setActiveFollowUpTask] = useState<FollowUpTaskItem | null>(null);
   const [dateFilter, setDateFilter] = useState('');
   const [contactSearch, setContactSearch] = useState('');
-  const [emailLog, setEmailLog] = useState<Array<{ id: string; to: string; subject: string; status: string; time: string }>>([
+  const [leadFiles, setLeadFiles] = useState<File[]>([]);
+  const [emailFiles, setEmailFiles] = useState<File[]>([]);
+  const [quickFuTitle, setQuickFuTitle] = useState('');
+  const [quickFuDue, setQuickFuDue] = useState(() => new Intl.DateTimeFormat('en-CA', { timeZone: 'Asia/Dubai' }).format(new Date()));
+  const [quickFuFiles, setQuickFuFiles] = useState<File[]>([]);
+  const [emailLog, setEmailLog] = useState<Array<{ id: string; to: string; subject: string; status: string; time: string; attachments?: AttachmentItem[] }>>([
     { id: 'EM-1', to: 'mortgages@emiratesnbd.com', subject: 'STL Pre-Approval Pack — Dubai Hills Villa (AED 3.8M)', status: 'Sent', time: '09:42 GST' },
     { id: 'EM-2', to: 'client.advisory@domain.ae', subject: 'Betterway 3-Bank Auto-Eco Mortgage Proposal (ENBD / ADIB / CBD)', status: 'Replied', time: '10:15 GST' },
     { id: 'EM-3', to: 'valuations@cbre.ae', subject: 'Valuation Access Confirmation — Palm Jumeirah Apartment', status: 'Pending', time: '11:05 GST' },
@@ -100,14 +118,19 @@ export default function CrmPage() {
 
   const load = useCallback(async () => {
     const q = dateFilter ? `?date=${encodeURIComponent(dateFilter)}` : '';
-    const [leadRes, caseRes] = await Promise.all([
+    const [leadRes, caseRes, taskRes] = await Promise.all([
       fetch(`/api/v1/crm/leads${q}`),
       fetch('/api/v1/pipeline/cases').catch(() => null),
+      fetch('/api/v1/tasks').catch(() => null),
     ]);
     if (leadRes.ok) setData(await leadRes.json());
     if (caseRes && caseRes.ok) {
       const c = await caseRes.json();
       setCases(c.cases ?? []);
+    }
+    if (taskRes && taskRes.ok) {
+      const t = await taskRes.json();
+      setFollowUpTasks(t.tasks ?? []);
     }
   }, [dateFilter]);
 
@@ -127,9 +150,61 @@ export default function CrmPage() {
       toast(out.error || 'Unable to log enquiry', 'err');
       return;
     }
-    toast(`Daily Enquiry ${out.lead.reference_code} logged (${out.lead.received_date_dubai})!`);
+    if (leadFiles.length > 0 && out.lead?.id) {
+      await uploadFilesToScope(leadFiles, 'lead', out.lead.id).catch(() => null);
+    }
+    toast(
+      `Daily Enquiry ${out.lead.reference_code} logged (${out.lead.received_date_dubai})${leadFiles.length > 0 ? ` with ${leadFiles.length} attachment(s)` : ''}!`,
+    );
     setForm({ ...form, contactName: '', contactEmail: '', notes: '' });
+    setLeadFiles([]);
     await load();
+  };
+
+  const createQuickFollowUpTask = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!quickFuTitle.trim()) return;
+    const r = await fetch('/api/v1/tasks', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        title: quickFuTitle.trim(),
+        priority: 'High',
+        dueDate: quickFuDue,
+        assignedTo: user?.id,
+      }),
+    });
+    const out = await r.json().catch(() => ({}));
+    if (r.ok && out.task?.id) {
+      if (quickFuFiles.length > 0) {
+        await uploadFilesToScope(quickFuFiles, 'task', out.task.id).catch(() => null);
+      }
+      toast('Follow-up task scheduled!');
+      setQuickFuTitle('');
+      setQuickFuFiles([]);
+      await load();
+    }
+  };
+
+  const scheduleLeadFollowUp = async (lead: any) => {
+    const r = await fetch('/api/v1/tasks', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        title: `Follow up ${lead.contact_name} (${lead.reference_code}) — ${lead.community || 'UAE Mortgage'}`,
+        description: `Channel: ${lead.source_channel} · Target Asset: ${fmtAed(lead.property_price_aed, true)}`,
+        priority: 'High',
+        assignedTo: user?.id,
+        contactName: lead.contact_name,
+        contactPhone: lead.contact_phone || '',
+      }),
+    });
+    const out = await r.json().catch(() => ({}));
+    if (r.ok && out.task) {
+      toast(`Follow-up task opened for ${lead.contact_name}`);
+      await load();
+      setActiveFollowUpTask(out.task);
+    }
   };
 
   const outreach = async (entityType: 'lead' | 'vault_lead', entityId: string, channel: 'Call' | 'WhatsApp', displayName?: string) => {
@@ -242,6 +317,7 @@ export default function CrmPage() {
               </div>
             </div>
             <textarea rows={2} value={form.notes} onChange={(e) => setForm({ ...form, notes: e.target.value })} placeholder="Mortgage goal, residency, bank preference..." className="w-full p-2.5 rounded-xl border border-[var(--bw-line-strong)] bg-[var(--bw-soft)]" />
+            <AttachmentPicker files={leadFiles} onChange={setLeadFiles} label="Attach Passport / Salary Cert / Quote" />
             <button type="submit" className="bw-btn bw-btn-obsidian w-full text-xs">
               Record Daily Enquiry
             </button>
@@ -433,32 +509,42 @@ export default function CrmPage() {
       {subTab === 'email' && (
         <div className="grid lg:grid-cols-12 gap-5 text-xs">
           <form
-            onSubmit={(e) => {
+            onSubmit={async (e) => {
               e.preventDefault();
               if (!emailDraft.to.trim()) return;
+              const emailId = `EM-${Date.now()}`;
+              const atts = emailFiles.length > 0 ? await filesToLocalAttachments(emailFiles, 'crm-email', emailId, user?.name) : [];
+              if (emailFiles.length > 0) {
+                void uploadFilesToScope(emailFiles, 'crm-email', emailId).catch(() => null);
+              }
               setEmailLog((prev) => [
-                { id: `EM-${Date.now()}`, to: emailDraft.to, subject: emailDraft.subject, status: 'Sent', time: 'Just now' },
+                { id: emailId, to: emailDraft.to, subject: emailDraft.subject, status: 'Sent', time: 'Just now', attachments: atts },
                 ...prev,
               ]);
-              toast(`Logged mortgage email to ${emailDraft.to}`);
+              toast(`Logged mortgage email to ${emailDraft.to}${atts.length > 0 ? ` (${atts.length} attachment)` : ''}`);
               setEmailDraft({ to: '', subject: 'Betterway UAE Mortgage Comparison Proposal' });
+              setEmailFiles([]);
             }}
             className="lg:col-span-5 bw-card p-5 space-y-3"
           >
             <h3 className="font-display text-sm font-extrabold">Compose Borrower / Bank RM Email</h3>
             <input required type="email" value={emailDraft.to} onChange={(e) => setEmailDraft({ ...emailDraft, to: e.target.value })} placeholder="Recipient email (borrower or bank RM)..." className="w-full h-9 px-3 rounded-xl border border-[var(--bw-line-strong)] bg-[var(--bw-soft)]" />
             <input required value={emailDraft.subject} onChange={(e) => setEmailDraft({ ...emailDraft, subject: e.target.value })} placeholder="Subject..." className="w-full h-9 px-3 rounded-xl border border-[var(--bw-line-strong)] bg-[var(--bw-soft)]" />
+            <AttachmentPicker files={emailFiles} onChange={setEmailFiles} label="Attach Proposal / Bank Docs" compact />
             <button type="submit" className="bw-btn bw-btn-obsidian w-full text-xs">Log &amp; Send Correspondence</button>
           </form>
           <div className="lg:col-span-7 bw-card p-5 space-y-3">
             <h3 className="font-display text-sm font-extrabold">Recent Mortgage Email Threads ({emailLog.length})</h3>
             {emailLog.map((em) => (
-              <div key={em.id} className="p-3 rounded-xl border border-[var(--bw-line)] flex items-center justify-between gap-2">
-                <div>
-                  <div className="font-bold">{em.subject}</div>
-                  <div className="text-[11px] text-[var(--bw-muted)]">{em.to} · {em.time}</div>
+              <div key={em.id} className="p-3 rounded-xl border border-[var(--bw-line)] space-y-1.5">
+                <div className="flex items-center justify-between gap-2">
+                  <div>
+                    <div className="font-bold">{em.subject}</div>
+                    <div className="text-[11px] text-[var(--bw-muted)]">{em.to} · {em.time}</div>
+                  </div>
+                  <StatusPill label={em.status} tone={em.status === 'Replied' ? 'emerald' : 'gold'} />
                 </div>
-                <StatusPill label={em.status} tone={em.status === 'Replied' ? 'emerald' : 'gold'} />
+                {em.attachments && em.attachments.length > 0 && <AttachmentChips attachments={em.attachments} compact />}
               </div>
             ))}
           </div>
@@ -467,24 +553,102 @@ export default function CrmPage() {
 
       {/* 07 FOLLOW-UPS & CALLS */}
       {subTab === 'followups' && (
-        <div className="bw-card p-5 space-y-4 text-xs">
-          <div className="flex items-center justify-between">
-            <h2 className="font-display text-sm font-extrabold">Scheduled Borrower Callbacks &amp; SIP Queue</h2>
-            <Link href="/os/sip-calls" className="bw-btn bw-btn-obsidian text-xs py-1.5 min-h-[34px]">Open Full SIP Call Desk →</Link>
-          </div>
-          <div className="space-y-2">
-            {data.leads.slice(0, 10).map((l) => (
-              <div key={l.id} className="p-3.5 rounded-2xl border border-[var(--bw-line)] bg-[var(--bw-soft)]/50 flex flex-wrap items-center justify-between gap-2">
-                <div>
-                  <div className="font-extrabold">{l.contact_name} · <span className="font-mono-num text-[#0e5a49]">{l.reference_code}</span></div>
-                  <div className="text-[11px] text-[var(--bw-muted)]">{l.community || 'Dubai'} · SLA 5-min callback · {l.contact_phone_masked}</div>
-                </div>
-                <button type="button" onClick={() => void outreach('lead', l.id, 'Call', l.contact_name)} className="px-3.5 py-1.5 rounded-full bg-[#0b192c] text-[#64c4a8] font-bold inline-flex items-center gap-1 cursor-pointer">
-                  <PhoneCall size={12} /> Call via SIP
+        <div className="grid lg:grid-cols-12 gap-5 text-xs">
+          <div className="lg:col-span-6 bw-card p-5 space-y-4">
+            <div className="flex items-center justify-between gap-2">
+              <div>
+                <h2 className="font-display text-sm font-extrabold">Task &amp; To-Do Follow-Up Tracker ({followUpTasks.filter((t) => t.status !== 'Done').length} Open)</h2>
+                <p className="text-[11px] text-[var(--bw-muted)]">Add attachments, schedule next callback time, and track every step.</p>
+              </div>
+            </div>
+
+            <form onSubmit={createQuickFollowUpTask} className="space-y-2">
+              <div className="flex flex-wrap gap-2">
+                <input
+                  value={quickFuTitle}
+                  onChange={(e) => setQuickFuTitle(e.target.value)}
+                  placeholder="Schedule borrower or bank RM follow-up..."
+                  className="flex-1 min-w-[160px] h-9 px-3 rounded-xl border border-[var(--bw-line-strong)] bg-[var(--bw-soft)]"
+                />
+                <input
+                  type="date"
+                  value={quickFuDue}
+                  onChange={(e) => setQuickFuDue(e.target.value)}
+                  className="h-9 px-2.5 rounded-xl border border-[var(--bw-line-strong)] bg-[var(--bw-soft)] font-mono-num"
+                />
+                <button type="submit" className="bw-btn bw-btn-obsidian text-xs py-1.5 min-h-[36px]">
+                  <Plus size={13} /> Add
                 </button>
               </div>
-            ))}
-            {data.leads.length === 0 && <div className="py-8 text-center text-[var(--bw-muted)]">All callback queues clear.</div>}
+              <AttachmentPicker files={quickFuFiles} onChange={setQuickFuFiles} label="Attach files to follow-up" compact />
+            </form>
+
+            <div className="space-y-2 max-h-[420px] overflow-y-auto pe-1">
+              {followUpTasks.length === 0 ? (
+                <div className="py-8 text-center text-[var(--bw-muted)]">No follow-up tasks scheduled yet.</div>
+              ) : (
+                followUpTasks.map((t) => (
+                  <div key={t.id} className="p-3 rounded-2xl border border-[var(--bw-line)] bg-[var(--bw-soft)]/50 space-y-1.5">
+                    <div className="flex flex-wrap items-start justify-between gap-2">
+                      <div className="min-w-0 flex-1">
+                        <div className="flex items-center gap-1.5">
+                          <CheckCircle2 size={14} className={t.status === 'Done' ? 'text-[#0e5a49]' : 'text-[var(--bw-muted)]'} />
+                          <span className={`font-bold ${t.status === 'Done' ? 'line-through text-[var(--bw-muted)]' : ''}`}>{t.title}</span>
+                        </div>
+                        <div className="flex flex-wrap items-center gap-1.5 mt-1 text-[10.5px] text-[var(--bw-muted)]">
+                          {t.followUpStage && <StatusPill label={t.followUpStage} tone={t.followUpStage === 'Done' ? 'emerald' : 'navy'} />}
+                          {t.nextFollowUpDate && t.status !== 'Done' && (
+                            <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-[#eaf4f1] text-[#0a3f34] font-mono-num font-bold">
+                              <CalendarClock size={10} /> {t.nextFollowUpDate} {t.nextFollowUpTime || ''}
+                            </span>
+                          )}
+                        </div>
+                      </div>
+                      <button
+                        type="button"
+                        onClick={() => setActiveFollowUpTask(t)}
+                        className="px-2.5 py-1 rounded-full bg-[#0b192c] text-[#dfc285] font-bold inline-flex items-center gap-1 cursor-pointer shrink-0"
+                      >
+                        <MessageSquarePlus size={11} />
+                        Follow Up{t.followUpCount ? ` (${t.followUpCount})` : ''}
+                        {(t.attachmentCount ?? 0) > 0 && (
+                          <span className="text-[#64c4a8] inline-flex items-center gap-0.5">
+                            <Paperclip size={10} />{t.attachmentCount}
+                          </span>
+                        )}
+                      </button>
+                    </div>
+                    {t.attachments && t.attachments.length > 0 && <AttachmentChips attachments={t.attachments} compact />}
+                  </div>
+                ))
+              )}
+            </div>
+          </div>
+
+          <div className="lg:col-span-6 bw-card p-5 space-y-4">
+            <div className="flex items-center justify-between">
+              <h2 className="font-display text-sm font-extrabold">Scheduled Borrower Callbacks &amp; SIP Queue</h2>
+              <Link href="/os/sip-calls" className="bw-btn bw-btn-obsidian text-xs py-1.5 min-h-[34px]">Open Full SIP Call Desk →</Link>
+            </div>
+            <div className="space-y-2 max-h-[480px] overflow-y-auto">
+              {data.leads.slice(0, 12).map((l) => (
+                <div key={l.id} className="p-3.5 rounded-2xl border border-[var(--bw-line)] bg-[var(--bw-soft)]/50 flex flex-wrap items-center justify-between gap-2">
+                  <div>
+                    <div className="font-extrabold">{l.contact_name} · <span className="font-mono-num text-[#0e5a49]">{l.reference_code}</span></div>
+                    <div className="text-[11px] text-[var(--bw-muted)]">{l.community || 'Dubai'} · SLA 5-min callback · {l.contact_phone_masked}</div>
+                  </div>
+                  <div className="flex items-center gap-1.5">
+                    <button type="button" onClick={() => void scheduleLeadFollowUp(l)} className="px-3 py-1.5 rounded-full border border-[var(--bw-line-strong)] bg-white font-bold inline-flex items-center gap-1 cursor-pointer hover:border-[#0e5a49]">
+                      <MessageSquarePlus size={12} className="text-[#0e5a49]" /> Follow Up
+                    </button>
+                    <button type="button" onClick={() => void outreach('lead', l.id, 'Call', l.contact_name)} className="px-3 py-1.5 rounded-full bg-[#0b192c] text-[#64c4a8] font-bold inline-flex items-center gap-1 cursor-pointer">
+                      <PhoneCall size={12} /> SIP Call
+                    </button>
+                  </div>
+                </div>
+              ))}
+              {data.leads.length === 0 && <div className="py-8 text-center text-[var(--bw-muted)]">All callback queues clear.</div>}
+            </div>
           </div>
         </div>
       )}
@@ -552,6 +716,12 @@ export default function CrmPage() {
           </div>
         </div>
       )}
+      <TaskFollowUpDrawer
+        task={activeFollowUpTask}
+        assigneeName={user?.name}
+        onClose={() => setActiveFollowUpTask(null)}
+        onUpdated={load}
+      />
     </div>
   );
 }

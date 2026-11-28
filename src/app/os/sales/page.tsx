@@ -23,6 +23,8 @@ import {
 import { useOs } from '@/components/os/OsProvider';
 import { fmtAed, GlossyBlackCard, PageHeader, StatusPill } from '@/components/os/UiKit';
 import { SubFeatureTabs, type SubFeatureItem } from '@/components/os/SubFeatureTabs';
+import { AttachmentPicker } from '@/components/os/AttachmentPicker';
+import { uploadFilesToScope } from '@/lib/workspace/attachments-types';
 import { useInstantApi } from '@/lib/client-cache';
 
 type SalesSubTab =
@@ -70,6 +72,7 @@ export default function SalesAndServicesPage() {
   });
 
   const [trackerCaseIdx, setTrackerCaseIdx] = useState(0);
+  const [refFiles, setRefFiles] = useState<File[]>([]);
 
   const registerReferral = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -78,9 +81,14 @@ export default function SalesAndServicesPage() {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(refForm),
     });
+    const out = await r.json().catch(() => ({}));
     if (r.ok) {
-      toast('RERA Partner Referral attribution locked into Step 01 CRM!');
+      if (refFiles.length > 0) {
+        await uploadFilesToScope(refFiles, 'partner-referral', String(out.lead?.id || `ref-${Date.now()}`)).catch(() => null);
+      }
+      toast(`RERA Partner Referral attribution locked into Step 01 CRM${refFiles.length > 0 ? ` (${refFiles.length} attachment)` : ''}!`);
       setRefForm({ ...refForm, contactName: '', partnerAgency: '', partnerBrn: '' });
+      setRefFiles([]);
       await reload();
     }
   };
@@ -380,6 +388,7 @@ export default function SalesAndServicesPage() {
               <input value={refForm.community} onChange={(e) => setRefForm({ ...refForm, community: e.target.value })} placeholder="Community" className="h-9 px-3 rounded-xl border border-[var(--bw-line-strong)] bg-[var(--bw-soft)]" />
               <input type="number" value={refForm.propertyPriceAed} onChange={(e) => setRefForm({ ...refForm, propertyPriceAed: Number(e.target.value) })} className="h-9 px-3 rounded-xl border border-[var(--bw-line-strong)] bg-[var(--bw-soft)] font-mono-num" />
             </div>
+            <AttachmentPicker files={refFiles} onChange={setRefFiles} label="Attach RERA ORN / Referral Form / Buyer ID" compact />
             <button type="submit" className="bw-btn bw-btn-obsidian w-full text-xs">Lock Referral Attribution</button>
           </form>
 

@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import { requireSession } from '@/lib/auth/session';
 import { getSupabaseAdmin } from '@/lib/supabase/admin';
+import { hydrateTasksWithMeta } from '@/lib/workspace/task-followups-server';
 
 export async function GET(req: Request) {
   const auth = await requireSession();
@@ -15,7 +16,9 @@ export async function GET(req: Request) {
   }
   const { data, error } = await q.limit(200);
   if (error) return NextResponse.json({ error: error.message }, { status: 400 });
-  return NextResponse.json({ tasks: data ?? [] });
+
+  const tasks = await hydrateTasksWithMeta(db, (data ?? []) as Array<{ id: string; status?: string }>);
+  return NextResponse.json({ tasks });
 }
 
 export async function POST(req: Request) {
@@ -30,11 +33,14 @@ export async function POST(req: Request) {
       assignedTo?: string;
       caseId?: string;
     };
+    const title = String(body.title || '').trim();
+    if (!title) return NextResponse.json({ error: 'Task title is required' }, { status: 400 });
+
     const db = await getSupabaseAdmin();
     const { data, error } = await db
       .from('tasks')
       .insert({
-        title: body.title.trim(),
+        title,
         description: body.description || '',
         priority: body.priority || 'Normal',
         due_date: body.dueDate || new Intl.DateTimeFormat('en-CA', { timeZone: 'Asia/Dubai' }).format(new Date()),
@@ -45,7 +51,9 @@ export async function POST(req: Request) {
       .select('*')
       .single();
     if (error) throw new Error(error.message);
-    return NextResponse.json({ ok: true, task: data }, { status: 201 });
+
+    const [hydrated] = await hydrateTasksWithMeta(db, [data]);
+    return NextResponse.json({ ok: true, task: hydrated ?? data }, { status: 201 });
   } catch (err: unknown) {
     return NextResponse.json({ error: err instanceof Error ? err.message : 'Task create failed' }, { status: 400 });
   }

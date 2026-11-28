@@ -24,6 +24,8 @@ import {
 import { useOs } from '@/components/os/OsProvider';
 import { fmtAed, PageHeader, StaffAvatar, StatusPill } from '@/components/os/UiKit';
 import { SubFeatureTabs, type SubFeatureItem } from '@/components/os/SubFeatureTabs';
+import { AttachmentPicker } from '@/components/os/AttachmentPicker';
+import { uploadFilesToScope } from '@/lib/workspace/attachments-types';
 import { BETTERWAY_EXTENSIONS, dialViaSip } from '@/lib/sip-store';
 
 type EmployeesSubTab =
@@ -91,6 +93,8 @@ export default function EmployeesPage() {
   const [notice, setNotice] = useState('');
   const [error, setError] = useState('');
   const [busy, setBusy] = useState(false);
+  const [dailyCloseFiles, setDailyCloseFiles] = useState<File[]>([]);
+  const [leaveFiles, setLeaveFiles] = useState<File[]>([]);
 
   // Daily Close form
   const [callsMade, setCallsMade] = useState('18');
@@ -176,6 +180,10 @@ export default function EmployeesPage() {
       });
       const j = await r.json();
       if (!r.ok) throw new Error(j.error || 'Daily Close failed');
+      if (dailyCloseFiles.length > 0) {
+        await uploadFilesToScope(dailyCloseFiles, 'daily-close', `${user?.id || 'staff'}-${Date.now()}`).catch(() => null);
+      }
+      setDailyCloseFiles([]);
       setNotice('Mandatory Daily Close Report submitted. Shift Check-Out is now unlocked.');
       await loadQr();
     } catch (err: unknown) {
@@ -219,6 +227,10 @@ export default function EmployeesPage() {
       });
       const j = await r.json();
       if (!r.ok) throw new Error(j.error || 'Leave failed');
+      if (leaveFiles.length > 0) {
+        await uploadFilesToScope(leaveFiles, 'hr-leave', String(j.leave?.id || `lv-${Date.now()}`)).catch(() => null);
+      }
+      setLeaveFiles([]);
       setNotice('Leave request submitted for Owner / HR Manager approval.');
       await loadHr();
     } catch (err: unknown) {
@@ -509,6 +521,7 @@ export default function EmployeesPage() {
             </div>
             <textarea rows={2} value={summaryToday} onChange={(e) => setSummaryToday(e.target.value)} className="w-full rounded-xl border border-[var(--bw-line-strong)] bg-[var(--bw-soft)] p-2.5 text-xs" required />
             <textarea rows={2} value={planTomorrow} onChange={(e) => setPlanTomorrow(e.target.value)} className="w-full rounded-xl border border-[var(--bw-line-strong)] bg-[var(--bw-soft)] p-2.5 text-xs" required />
+            <AttachmentPicker files={dailyCloseFiles} onChange={setDailyCloseFiles} label="Attach EOD Report Proof / Call Sheet" compact />
             <button disabled={busy} className="bw-btn bw-btn-obsidian w-full text-xs">Submit Daily Close &amp; Unlock Check-Out</button>
           </form>
         </div>
@@ -531,6 +544,7 @@ export default function EmployeesPage() {
             </div>
             <input type="number" value={days} onChange={(e) => setDays(e.target.value)} placeholder="Days" className="w-full rounded-xl border border-[var(--bw-line-strong)] bg-[var(--bw-soft)] px-3 py-2 text-xs" />
             <input value={leaveReason} onChange={(e) => setLeaveReason(e.target.value)} placeholder="Reason" className="w-full rounded-xl border border-[var(--bw-line-strong)] bg-[var(--bw-soft)] px-3 py-2 text-xs" />
+            <AttachmentPicker files={leaveFiles} onChange={setLeaveFiles} label="Attach Medical Note / Flight Ticket / Proof" compact />
             <button disabled={busy} className="bw-btn bw-btn-obsidian w-full text-xs">Submit Leave Request</button>
           </form>
 

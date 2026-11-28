@@ -4,6 +4,8 @@ import React, { useState } from 'react';
 import { CalendarClock, CheckCircle2, ClipboardCheck, Download, Plus, Share2 } from 'lucide-react';
 import { useOs } from '@/components/os/OsProvider';
 import { GlossyBlackCard, StatusPill } from '@/components/os/UiKit';
+import { AttachmentChips, AttachmentPicker } from '@/components/os/AttachmentPicker';
+import { filesToLocalAttachments, uploadFilesToScope, type AttachmentItem } from '@/lib/workspace/attachments-types';
 
 interface NextDayPlanRow {
   id: string;
@@ -21,6 +23,7 @@ interface NextDayPlanRow {
   linkedin: number;
   x: number;
   other: string;
+  attachments?: AttachmentItem[];
 }
 
 interface DailyReportRow {
@@ -46,6 +49,7 @@ interface DailyReportRow {
   linkedin: number;
   x: number;
   other: string;
+  attachments?: AttachmentItem[];
 }
 
 export function DailyPlanAndReportTab() {
@@ -182,16 +186,27 @@ export function DailyPlanAndReportTab() {
     other: '',
   });
 
-  const addPlan = (e: React.FormEvent) => {
+  const [planFiles, setPlanFiles] = useState<File[]>([]);
+  const [repFiles, setRepFiles] = useState<File[]>([]);
+
+  const addPlan = async (e: React.FormEvent) => {
     e.preventDefault();
-    setPlans((prev) => [{ id: `p-${Date.now()}`, ...planForm }, ...prev]);
-    toast('Next Day Plan logged!');
+    const id = `p-${Date.now()}`;
+    const atts = planFiles.length > 0 ? await filesToLocalAttachments(planFiles, 'daily-plan', id, user?.name) : [];
+    if (planFiles.length > 0) void uploadFilesToScope(planFiles, 'daily-plan', id).catch(() => null);
+    setPlans((prev) => [{ id, ...planForm, attachments: atts }, ...prev]);
+    setPlanFiles([]);
+    toast(`Next Day Plan logged${atts.length > 0 ? ` with ${atts.length} attachment(s)` : ''}!`);
   };
 
-  const addReport = (e: React.FormEvent) => {
+  const addReport = async (e: React.FormEvent) => {
     e.preventDefault();
-    setReports((prev) => [{ id: `r-${Date.now()}`, ...repForm }, ...prev]);
-    toast('Daily Report logged!');
+    const id = `r-${Date.now()}`;
+    const atts = repFiles.length > 0 ? await filesToLocalAttachments(repFiles, 'daily-report', id, user?.name) : [];
+    if (repFiles.length > 0) void uploadFilesToScope(repFiles, 'daily-report', id).catch(() => null);
+    setReports((prev) => [{ id, ...repForm, attachments: atts }, ...prev]);
+    setRepFiles([]);
+    toast(`Daily Report logged${atts.length > 0 ? ` with ${atts.length} attachment(s)` : ''}!`);
   };
 
   const totCalls = reports.reduce((s, r) => s + r.calls, 0);
@@ -279,6 +294,9 @@ export function DailyPlanAndReportTab() {
               <Plus size={14} /> Save Plan
             </button>
           </div>
+          <div className="col-span-2 sm:col-span-4 lg:col-span-7 pt-1">
+            <AttachmentPicker files={planFiles} onChange={setPlanFiles} label="Attach Next Day Plan sheet / call list" compact />
+          </div>
         </form>
 
         <div className="overflow-x-auto">
@@ -317,7 +335,10 @@ export function DailyPlanAndReportTab() {
                   <td className="py-2.5 px-2 text-center font-mono-num">{p.reddit}</td>
                   <td className="py-2.5 px-2 text-center font-mono-num">{p.linkedin}</td>
                   <td className="py-2.5 px-2 text-center font-mono-num">{p.x}</td>
-                  <td className="py-2.5 px-3 text-[var(--bw-muted)]">{p.other}</td>
+                  <td className="py-2.5 px-3 text-[var(--bw-muted)]">
+                    <div>{p.other}</div>
+                    {p.attachments && p.attachments.length > 0 && <AttachmentChips attachments={p.attachments} compact />}
+                  </td>
                 </tr>
               ))}
             </tbody>
@@ -377,6 +398,9 @@ export function DailyPlanAndReportTab() {
               <CheckCircle2 size={14} /> Submit Daily Report
             </button>
           </div>
+          <div className="col-span-2 sm:col-span-4 lg:col-span-6 pt-1">
+            <AttachmentPicker files={repFiles} onChange={setRepFiles} label="Attach EOD proof (screenshots, bank login receipts, FOLs)" compact />
+          </div>
         </form>
 
         <div className="overflow-x-auto">
@@ -415,7 +439,10 @@ export function DailyPlanAndReportTab() {
                   <td className="py-2.5 px-2 text-center font-mono-num">{r.fol}</td>
                   <td className="py-2.5 px-2 text-center font-mono-num font-extrabold text-[#7d5b1c]">{r.disbursed}</td>
                   <td className="py-2.5 px-2 text-center font-mono-num text-[11px]">{r.fb + r.instagram + r.tiktok + r.snapchat + r.reddit + r.linkedin + r.x}</td>
-                  <td className="py-2.5 px-3 text-[var(--bw-muted)]">{r.other}</td>
+                  <td className="py-2.5 px-3 text-[var(--bw-muted)]">
+                    <div>{r.other}</div>
+                    {r.attachments && r.attachments.length > 0 && <AttachmentChips attachments={r.attachments} compact />}
+                  </td>
                 </tr>
               ))}
             </tbody>

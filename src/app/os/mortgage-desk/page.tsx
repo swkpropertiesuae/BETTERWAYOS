@@ -23,6 +23,8 @@ import { UAE_BANKS } from '@/lib/domain/banks';
 import { computeCreditCardDbrImpact, CREDIT_ANALYST_STATEMENT_CHECKLIST } from '@/lib/domain/bank-intelligence';
 import { ProposalStudioTab } from '@/components/workspace/ProposalStudioTab';
 import { BankRmAndPolicyTab } from '@/components/workspace/BankRmAndPolicyTab';
+import { AttachmentPicker } from '@/components/os/AttachmentPicker';
+import { uploadFilesToScope } from '@/lib/workspace/attachments-types';
 import { useInstantApi } from '@/lib/client-cache';
 
 type DeskTab = 'proposal' | 'matcher' | 'matrix' | 'rms' | 'statement' | 'schedule';
@@ -94,6 +96,7 @@ function MortgageDeskInner() {
     { bank: 'DIB', oldLimitAed: 15_006, newLimitAed: 15_006 },
   ]);
   const [analystChecks, setAnalystChecks] = useState<Record<string, boolean>>({});
+  const [valFiles, setValFiles] = useState<File[]>([]);
 
   const bookValuation = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -106,8 +109,13 @@ function MortgageDeskInner() {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ kind: 'valuation', ...valForm, bookedDate: new Date(valForm.bookedDate).toISOString() }),
     });
+    const out = await r.json().catch(() => ({}));
     if (r.ok) {
-      toast('Bank Valuation booked & added to Schedule!');
+      if (valFiles.length > 0) {
+        await uploadFilesToScope(valFiles, 'valuation', String(out.valuation?.id || valForm.caseId)).catch(() => null);
+      }
+      toast(`Bank Valuation booked & added to Schedule${valFiles.length > 0 ? ` (${valFiles.length} attachment)` : ''}!`);
+      setValFiles([]);
       await reload();
     }
   };
@@ -373,6 +381,7 @@ function MortgageDeskInner() {
               <input required value={valForm.valuationCompany} onChange={(e) => setValForm({ ...valForm, valuationCompany: e.target.value })} placeholder="Valuation panel firm (CBRE, JLL, Cavendish...)" className="w-full h-9 px-3 rounded-xl border border-[var(--bw-line-strong)] bg-[var(--bw-soft)]" />
               <input required value={valForm.accessContact} onChange={(e) => setValForm({ ...valForm, accessContact: e.target.value })} placeholder="Property access contact / key holder" className="w-full h-9 px-3 rounded-xl border border-[var(--bw-line-strong)] bg-[var(--bw-soft)]" />
               <input type="datetime-local" value={valForm.bookedDate} onChange={(e) => setValForm({ ...valForm, bookedDate: e.target.value })} className="w-full h-9 px-3 rounded-xl border border-[var(--bw-line-strong)] bg-[var(--bw-soft)]" />
+              <AttachmentPicker files={valFiles} onChange={setValFiles} label="Attach Title Deed / Oqood / Floor Plan / Fee Slip" compact />
               <button type="submit" className="bw-btn bw-btn-obsidian w-full text-xs">
                 Book Valuation &amp; Sync Schedule
               </button>

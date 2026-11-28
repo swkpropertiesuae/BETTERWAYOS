@@ -22,6 +22,8 @@ import {
   type MortgageFieldMeetingType,
 } from '@/lib/workspace/domain';
 import { downloadJpegDocument, downloadWordDocument, printBrandedDocument } from '@/lib/workspace/exporters';
+import { AttachmentPicker } from '@/components/os/AttachmentPicker';
+import { uploadFilesToScope } from '@/lib/workspace/attachments-types';
 
 interface PaymentRow {
   stage: string;
@@ -43,6 +45,7 @@ export function ForensicVisitsTab({ compactStaffMode = false }: { compactStaffMo
   const [reports, setReports] = useState<any[]>([]);
   const [isVerifier, setIsVerifier] = useState(false);
   const [filterType, setFilterType] = useState('ALL');
+  const [docFiles, setDocFiles] = useState<File[]>([]);
   const [filterOutcome, setFilterOutcome] = useState('ALL');
   const [showForm, setShowForm] = useState(compactStaffMode);
   const [selected, setSelected] = useState<any>(null);
@@ -150,8 +153,12 @@ export function ForensicVisitsTab({ compactStaffMode = false }: { compactStaffMo
       toast(out.error || 'Failed to save forensic mortgage meeting report', 'err');
       return;
     }
+    if (docFiles.length > 0 && out.report?.id) {
+      await uploadFilesToScope(docFiles, 'field-report', String(out.report.id)).catch(() => null);
+    }
     toast(`Forensic ${form.reportType} (${out.report.report_no}) logged & sent for Authority Verification!`);
     setPhotos([]);
+    setDocFiles([]);
     setShowForm(false);
     setSelected(out.report);
     await load();
@@ -429,6 +436,8 @@ export function ForensicVisitsTab({ compactStaffMode = false }: { compactStaffMo
               <textarea rows={3} value={form.forensicNotes} onChange={(e) => setForm({ ...form, forensicNotes: e.target.value })} placeholder="Bank RM feedback, credit exception status, valuation remarks, FOL signing confirmation..." className="w-full p-2.5 rounded-xl border border-[var(--bw-line)] bg-[var(--bw-bg)]" />
             </div>
           </div>
+
+          <AttachmentPicker files={docFiles} onChange={setDocFiles} label="Attach Meeting Documents (PDF, Signed FOL, SOA, Valuation Slip)" compact />
 
           <button type="submit" className="px-6 py-2.5 rounded-full bg-[#0e5243] text-[#ebd5a6] font-extrabold cursor-pointer">
             Submit GPS-Pinned Mortgage Field Report

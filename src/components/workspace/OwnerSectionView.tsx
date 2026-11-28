@@ -19,6 +19,8 @@ import {
 } from 'lucide-react';
 import { useOs } from '@/components/os/OsProvider';
 import { fmtAed, MetricTile, StaffAvatar, StatusPill } from '@/components/os/UiKit';
+import { AttachmentPicker } from '@/components/os/AttachmentPicker';
+import { uploadFilesToScope } from '@/lib/workspace/attachments-types';
 import { TeamDailyWorkspaceTab } from '@/components/workspace/TeamDailyWorkspaceTab';
 import { DailyPlanAndReportTab } from '@/components/workspace/DailyPlanAndReportTab';
 import { ForensicVisitsTab } from '@/components/workspace/ForensicVisitsTab';
@@ -81,6 +83,9 @@ export function OwnerSectionView({ mode }: { mode: 'place' | 'corner' }) {
   const [invSubtotal, setInvSubtotal] = useState(45_000);
   const [invDesc, setInvDesc] = useState('Executive Mortgage Structuring & Priority Bank Coordination');
   const [printInvoice, setPrintInvoice] = useState<any>(null);
+  const [ftFiles, setFtFiles] = useState<File[]>([]);
+  const [invFiles, setInvFiles] = useState<File[]>([]);
+  const [bulkFiles, setBulkFiles] = useState<File[]>([]);
 
   const [bulkText, setBulkText] = useState(
     'Tariq Al Naimi, +971 50 441 8821, Dubai Hills Estate, Sidra Villa 44, 4800000\nLisa Hartmann, +971 58 912 3304, Palm Jumeirah, Shoreline Bldg 4, 3450000, lisa@example.com',
@@ -141,8 +146,12 @@ export function OwnerSectionView({ mode }: { mode: 'place' | 'corner' }) {
       toast(out.error || 'Failed to create Fast-Track job', 'err');
       return;
     }
-    toast(`Created ${out.job.job_code} in ${privacyTitle} (Master Log bypassed)!`);
+    if (ftFiles.length > 0 && out.job?.id) {
+      await uploadFilesToScope(ftFiles, 'fast-track', out.job.id).catch(() => null);
+    }
+    toast(`Created ${out.job.job_code} in ${privacyTitle} (Master Log bypassed)${ftFiles.length > 0 ? ` + ${ftFiles.length} attachment(s)` : ''}!`);
     setFtForm({ ...ftForm, clientName: '', propertySummary: '', notes: '' });
+    setFtFiles([]);
     await load();
   };
 
@@ -163,8 +172,12 @@ export function OwnerSectionView({ mode }: { mode: 'place' | 'corner' }) {
       toast(out.error || 'Invoice failed', 'err');
       return;
     }
+    if (invFiles.length > 0 && out.invoice?.id) {
+      await uploadFilesToScope(invFiles, 'fast-track-invoice', out.invoice.id).catch(() => null);
+    }
     toast(`Private 5% VAT Invoice ${out.invoice.invoice_no} issued!`);
     setInvJob(null);
+    setInvFiles([]);
     setPrintInvoice(out.invoice);
     await load();
   };
@@ -181,7 +194,11 @@ export function OwnerSectionView({ mode }: { mode: 'place' | 'corner' }) {
       toast(out.error || 'Bulk upload failed', 'err');
       return;
     }
+    if (bulkFiles.length > 0) {
+      await uploadFilesToScope(bulkFiles, 'bulk-import', `batch-${Date.now()}`).catch(() => null);
+    }
     setBulkResult(out);
+    setBulkFiles([]);
     toast(`Imported & saved ${out.inserted} clients (${out.duplicatesSkipped} duplicates skipped)!`);
     await load();
   };
@@ -509,6 +526,9 @@ export function OwnerSectionView({ mode }: { mode: 'place' | 'corner' }) {
                 />
                 Lock &quot;Private to me only&quot; (hide even from Co-Owner)
               </label>
+              <div className="sm:col-span-2">
+                <AttachmentPicker files={ftFiles} onChange={setFtFiles} label="Confidential Mandate / Client Docs Attachment" />
+              </div>
             </div>
 
             <button type="submit" className="bw-btn bw-btn-obsidian w-full text-xs">
@@ -621,6 +641,20 @@ export function OwnerSectionView({ mode }: { mode: 'place' | 'corner' }) {
               value={bulkText}
               onChange={(e) => setBulkText(e.target.value)}
               className="w-full p-3.5 rounded-2xl border border-[var(--bw-line-strong)] bg-[var(--bw-soft)] font-mono text-xs"
+            />
+            <AttachmentPicker
+              files={bulkFiles}
+              onChange={(next) => {
+                setBulkFiles(next);
+                const csvFile = next.find((f) => /\.(csv|txt)$/i.test(f.name));
+                if (csvFile) {
+                  void csvFile.text().then((txt) => {
+                    if (txt.trim()) setBulkText(txt);
+                  });
+                }
+              }}
+              label="Attach Source Sheet (.csv, .txt, .xlsx, .pdf)"
+              compact
             />
             <button type="submit" className="bw-btn bw-btn-primary text-xs">
               <Upload size={14} /> Parse &amp; Import Sheet
@@ -739,6 +773,7 @@ export function OwnerSectionView({ mode }: { mode: 'place' | 'corner' }) {
               <div className="p-3 rounded-xl bg-[var(--bw-soft)] font-mono-num">
                 5% UAE VAT: <strong>{fmtAed(invSubtotal * 0.05)}</strong> · Total: <strong>{fmtAed(invSubtotal * 1.05)}</strong>
               </div>
+              <AttachmentPicker files={invFiles} onChange={setInvFiles} label="Attach Mandate / Supporting Document" compact />
             </div>
             <div className="flex justify-end gap-2">
               <button type="button" onClick={() => setInvJob(null)} className="px-4 py-2 rounded-full border border-[var(--bw-line)] text-xs font-bold cursor-pointer">

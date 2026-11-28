@@ -5,6 +5,7 @@ import { getSupabaseAdmin } from '@/lib/supabase/admin';
 import { PIPELINE_STAGES } from '@/lib/domain/workflow';
 import { EIBOR_SNAPSHOT } from '@/lib/domain/banks';
 import { maskPhoneForRole } from '@/lib/auth/masking';
+import { hydrateTasksWithMeta } from '@/lib/workspace/task-followups-server';
 
 export async function GET() {
   const auth = await requireSession();
@@ -47,7 +48,7 @@ export async function GET() {
 
   const cases = casesRes.data ?? [];
   const leads = leadsRes.data ?? [];
-  const allTasks = tasksRes.data ?? [];
+  const allTasks = await hydrateTasksWithMeta(db, tasksRes.data ?? []);
   const myTasks = allTasks.filter((t) => t.assigned_to === auth.user.id);
   const staffList = usersRes.data ?? [];
 
@@ -116,6 +117,7 @@ export async function GET() {
     },
     stageCounts,
     myTasks,
+    teamTasks: allTasks,
     teamTaskSummary,
     assignedClients,
     upcomingDeadlines: eventsRes.data ?? [],

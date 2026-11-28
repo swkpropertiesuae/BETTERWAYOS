@@ -20,6 +20,8 @@ import {
 import { useOs } from '@/components/os/OsProvider';
 import { fmtAed, MetricTile, PageHeader, StatusPill } from '@/components/os/UiKit';
 import { SubFeatureTabs, type SubFeatureItem } from '@/components/os/SubFeatureTabs';
+import { AttachmentPicker } from '@/components/os/AttachmentPicker';
+import { uploadFilesToScope } from '@/lib/workspace/attachments-types';
 
 type AccountsSubTab = 'invoices' | 'receipts' | 'commissions' | 'bills' | 'payments' | 'matching' | 'reports';
 
@@ -79,6 +81,9 @@ export default function AccountsPage() {
   const [payAmount, setPayAmount] = useState('6500');
   const [payOrnOk, setPayOrnOk] = useState(true);
   const [payLetterOk, setPayLetterOk] = useState(true);
+  const [invFiles, setInvFiles] = useState<File[]>([]);
+  const [expFiles, setExpFiles] = useState<File[]>([]);
+  const [payFiles, setPayFiles] = useState<File[]>([]);
 
   // 50/50 Commission Split Estimator
   const [commLoan, setCommLoan] = useState(3_000_000);
@@ -128,6 +133,10 @@ export default function AccountsPage() {
       });
       const j = await r.json();
       if (!r.ok) throw new Error(j.error || 'Invoice creation failed');
+      if (invFiles.length > 0 && j.invoice?.id) {
+        await uploadFilesToScope(invFiles, 'accounts-invoice', String(j.invoice.id)).catch(() => null);
+      }
+      setInvFiles([]);
       setNotice(`Issued ${j.invoice.invoice_no} with UAE 5% VAT & auto-posted GL journal entry.`);
       await load();
     } catch (err: unknown) {
@@ -156,6 +165,10 @@ export default function AccountsPage() {
       });
       const j = await r.json();
       if (!r.ok) throw new Error(j.error || 'Expense failed');
+      if (expFiles.length > 0) {
+        await uploadFilesToScope(expFiles, 'accounts-expense', String(j.expense?.id || `exp-${Date.now()}`)).catch(() => null);
+      }
+      setExpFiles([]);
       setNotice(`Recorded supplier bill for ${expVendor} via Betterway Corporate Bank Account.`);
       await load();
     } catch (err: unknown) {
@@ -188,6 +201,10 @@ export default function AccountsPage() {
       });
       const j = await r.json();
       if (!r.ok) throw new Error(j.error || 'Payout rejected');
+      if (payFiles.length > 0 && j.payout?.id) {
+        await uploadFilesToScope(payFiles, 'accounts-payout', String(j.payout.id)).catch(() => null);
+      }
+      setPayFiles([]);
       setNotice(`Payout ${j.payout.payout_code} queued for 2-of-2 Owner Dual Sign-Off (Warda Kapadia + Shabib Siraj).`);
       await load();
     } catch (err: unknown) {
@@ -257,6 +274,7 @@ export default function AccountsPage() {
                 <input value={invTrn} onChange={(e) => setInvTrn(e.target.value)} placeholder="Counterparty UAE TRN (15 digits)" className="w-full rounded-xl border border-[var(--bw-line-strong)] bg-[var(--bw-soft)] px-3 py-2 text-xs" />
                 <input type="number" value={invSubtotal} onChange={(e) => setInvSubtotal(e.target.value)} placeholder="Subtotal AED (excl. VAT)" className="w-full rounded-xl border border-[var(--bw-line-strong)] bg-[var(--bw-soft)] px-3 py-2 text-xs" required />
                 <input value={invIban} onChange={(e) => setInvIban(e.target.value)} placeholder="Betterway Corporate Receiving IBAN (AE...)" className="w-full rounded-xl border border-[var(--bw-line-strong)] bg-[var(--bw-soft)] px-3 py-2 text-xs font-mono" required />
+                <AttachmentPicker files={invFiles} onChange={setInvFiles} label="Attach Bank Disbursal Advice / DSA Confirmation" compact />
                 <button disabled={busy} className="bw-btn bw-btn-obsidian w-full text-xs">
                   {busy ? 'Issuing…' : 'Issue UAE Tax Invoice (5% VAT)'}
                 </button>
@@ -387,6 +405,7 @@ export default function AccountsPage() {
                   <input type="number" value={expAmount} onChange={(e) => setExpAmount(e.target.value)} placeholder="Amount AED" className="rounded-xl border border-[var(--bw-line-strong)] bg-[var(--bw-soft)] px-3 py-2 text-xs" required />
                   <input value={expAccount} onChange={(e) => setExpAccount(e.target.value)} placeholder="COA Code (e.g. 5200)" className="rounded-xl border border-[var(--bw-line-strong)] bg-[var(--bw-soft)] px-3 py-2 text-xs font-mono" required />
                 </div>
+                <AttachmentPicker files={expFiles} onChange={setExpFiles} label="Attach Supplier Tax Invoice / Receipt" compact />
                 <button disabled={busy} className="bw-btn bw-btn-obsidian w-full text-xs">Post Supplier Bill</button>
               </form>
               <div className="lg:col-span-2 bw-card p-5 space-y-3 overflow-x-auto">
@@ -464,6 +483,7 @@ export default function AccountsPage() {
                 <label className="flex items-center gap-2 text-xs">
                   <input type="checkbox" checked={payLetterOk} onChange={(e) => setPayLetterOk(e.target.checked)} /> Corporate Bank Account Letter Verified
                 </label>
+                <AttachmentPicker files={payFiles} onChange={setPayFiles} label="Attach Corporate IBAN Letter / ORN / Invoice" compact />
                 <button disabled={busy} className="bw-btn bw-btn-obsidian w-full text-xs">Queue Payment for 2-of-2 Release</button>
               </form>
 
