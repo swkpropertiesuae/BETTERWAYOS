@@ -687,5 +687,22 @@ describe('Warda & Shabib UAE Mortgage Command Suite — Offline Domain, Schema &
       const src = fs.readFileSync(path.join(process.cwd(), formScreen), 'utf8');
       expect(src, `${formScreen} missing AttachmentPicker`).toContain('AttachmentPicker');
     }
+
+    // Native Android & iOS Capacitor 7 v3.2.0 contracts (Oxford Navy branding, SIP audio & file attachment permissions)
+    const capCfg = fs.readFileSync(path.join(process.cwd(), 'mobile/capacitor.config.ts'), 'utf8');
+    expect(capCfg).toContain('#0b192c');
+    expect(capCfg).toContain('betterwayos.vercel.app');
+    const androidManifest = fs.readFileSync(path.join(process.cwd(), 'mobile/android/app/src/main/AndroidManifest.xml'), 'utf8');
+    expect(androidManifest).toContain('RECORD_AUDIO');
+    expect(androidManifest).toContain('READ_MEDIA_IMAGES');
+    expect(androidManifest).toContain('ACCESS_FINE_LOCATION');
+    const androidGradle = fs.readFileSync(path.join(process.cwd(), 'mobile/android/app/build.gradle'), 'utf8');
+    expect(androidGradle).toContain('versionName "3.2.0"');
+    const iosPlist = fs.readFileSync(path.join(process.cwd(), 'mobile/ios/App/App/Info.plist'), 'utf8');
+    expect(iosPlist).toContain('NSMicrophoneUsageDescription');
+    expect(iosPlist).toContain('UIFileSharingEnabled');
+    const mobWorkflow = fs.readFileSync(path.join(process.cwd(), '.github/workflows/mobile-android-ios.yml'), 'utf8');
+    expect(mobWorkflow).toContain('Betterway-Mortgages-OS-Android-v3.2.0.apk');
+    expect(mobWorkflow).toContain('Betterway-Mortgages-OS-iOS-v3.2.0.ipa');
   });
 });

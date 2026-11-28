@@ -5,7 +5,7 @@
 	<key>CFBundleDevelopmentRegion</key>
 	<string>en</string>
 	<key>CFBundleDisplayName</key>
-        <string>Betterway Mortgages OS</string>
+	<string>Betterway Mortgages OS</string>
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleIdentifier</key>
@@ -20,8 +20,18 @@
 	<string>$(MARKETING_VERSION)</string>
 	<key>CFBundleVersion</key>
 	<string>$(CURRENT_PROJECT_VERSION)</string>
+	<key>ITSAppUsesNonExemptEncryption</key>
+	<false/>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
+	<key>LSSupportsOpeningDocumentsInPlace</key>
+	<true/>
+	<key>UIFileSharingEnabled</key>
+	<true/>
+	<key>UIBackgroundModes</key>
+	<array>
+		<string>audio</string>
+	</array>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
 	<key>UIMainStoryboardFile</key>
@@ -30,6 +40,8 @@
 	<array>
 		<string>armv7</string>
 	</array>
+	<key>UIStatusBarStyle</key>
+	<string>UIStatusBarStyleLightContent</string>
 	<key>UISupportedInterfaceOrientations</key>
 	<array>
 		<string>UIInterfaceOrientationPortrait</string>
@@ -46,11 +58,14 @@
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<true/>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>Betterway Mortgages OS uses your GPS location to pin verified Mortgage Field Meetings and Oud Metha office check-in.</string>
+	<string>Betterway Mortgages OS uses your GPS location to pin verified Mortgage Field Meetings and Oud Metha office QR check-in.</string>
 	<key>NSCameraUsageDescription</key>
-	<string>Betterway Mortgages OS uses your camera to capture valuation, FOL signing, and KYC documents.</string>
+	<string>Betterway Mortgages OS uses your camera to scan Oud Metha reception QR codes and capture valuation, FOL signing, and KYC documents.</string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>Betterway Mortgages OS uses your microphone for Betterway SIP Cloud voice calls with borrowers and UAE bank RMs.</string>
 	<key>NSPhotoLibraryUsageDescription</key>
-	<string>Betterway Mortgages OS accesses your photo library to attach valuation and mortgage KYC documents.</string>
+	<string>Betterway Mortgages OS accesses your photo library to attach valuation, FOL, and KYC documents to tasks and forms.</string>
+	<key>NSPhotoLibraryAddUsageDescription</key>
+	<string>Betterway Mortgages OS saves exported mortgage proposals, brochures, and receipts to your photo library.</string>
 </dict>
 </plist>
-

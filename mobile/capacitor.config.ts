@@ -7,31 +7,42 @@ const config: CapacitorConfig = {
   server: {
     url: 'https://betterwayos.vercel.app/os',
     cleartext: false,
-    allowNavigation: ['betterwayos.vercel.app', 'betterwaymortgages.com', '*.betterwaymortgages.com', 'maps.google.com'],
+    androidScheme: 'https',
+    allowNavigation: [
+      'betterwayos.vercel.app',
+      'betterwaymortgages.com',
+      '*.betterwaymortgages.com',
+      '*.supabase.co',
+      'maps.google.com',
+      'wa.me',
+    ],
   },
   android: {
-    backgroundColor: '#070A0F',
+    backgroundColor: '#0b192c',
     allowMixedContent: false,
     captureInput: true,
     webContentsDebuggingEnabled: false,
   },
   ios: {
-    backgroundColor: '#070A0F',
+    backgroundColor: '#0b192c',
     contentInset: 'automatic',
     scheme: 'BetterwayOS',
+    allowsLinkPreview: false,
+    limitsNavigationsToAppBoundDomains: false,
   },
   plugins: {
     SplashScreen: {
-      launchShowDuration: 1200,
+      launchShowDuration: 1100,
       launchAutoHide: true,
-      backgroundColor: '#070A0F',
+      backgroundColor: '#0b192c',
       showSpinner: false,
       splashFullScreen: true,
       splashImmersive: true,
     },
     StatusBar: {
       style: 'DARK',
-      backgroundColor: '#070A0F',
+      backgroundColor: '#0b192c',
+      overlaysWebView: false,
     },
   },
 };

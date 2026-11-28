@@ -2,16 +2,16 @@ import type { MetadataRoute } from 'next';
 
 export default function manifest(): MetadataRoute.Manifest {
   return {
-    name: 'Betterway Mortgages OS v3',
+    name: 'Betterway Mortgages OS',
     short_name: 'Betterway OS',
     description:
-      'UAE Mortgage Brokerage Operating System — 24-Bank Policy Matrix, 12-Step Pipeline, Warda & Shabib Workspace, GPS Field Meetings & Daily Excel Backups.',
+      'UAE Mortgage Brokerage Operating System — 18-Bank 2026 Matrix, 12-Step Pipeline, Betterway Inside, SIP Cloud Calls, Task Follow-Ups & Attachments, Field GPS & Daily Excel Backups.',
     start_url: '/os',
     scope: '/',
     display: 'standalone',
     orientation: 'portrait',
-    background_color: '#070a0f',
-    theme_color: '#070a0f',
+    background_color: '#0b192c',
+    theme_color: '#0b192c',
     categories: ['finance', 'business', 'productivity'],
     icons: [
       {
@@ -28,9 +28,10 @@ export default function manifest(): MetadataRoute.Manifest {
       },
     ],
     shortcuts: [
-      { name: 'Workspaces', url: '/os', description: 'Open Betterway OS Home' },
-      { name: 'Dashboard', url: '/os/dashboard', description: 'Live Loan Book & Tasks' },
-      { name: '24-Bank Desk', url: '/os/mortgage-desk', description: '18-Bank Rates, Proposals & RMs' },
+      { name: 'My Tasks & Follow-Ups', url: '/os/dashboard', description: 'Live Loan Book, Tasks & Attachments' },
+      { name: 'Betterway Inside', url: '/os/inside', description: 'Team Channels & Direct Messages' },
+      { name: 'SIP Call Desk', url: '/os/sip-calls', description: 'Cloud PBX & 159 Bank RM Speed-Dial' },
+      { name: '18-Bank Desk', url: '/os/mortgage-desk', description: '2026 Rates, Proposals & RMs' },
       { name: 'Field GPS', url: '/os/field-gps', description: 'Log GPS Mortgage Field Meetings' },
     ],
   };

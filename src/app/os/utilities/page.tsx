@@ -467,19 +467,54 @@ export default function UtilitiesPage() {
       {/* 08 MOBILE APPS (ANDROID & iOS) */}
       {tab === 'mobile' && (
         <div className="grid md:grid-cols-2 gap-5 text-xs">
-          <GlossyBlackCard className="p-6 space-y-3" accent="dual">
-            <div className="text-[10.5px] font-extrabold uppercase tracking-[0.14em] text-[#64c4a8]">Betterway ONE · Android APK &amp; iOS</div>
-            <h3 className="font-display text-xl font-extrabold text-white">Native Capacitor 7 Mobile Builds</h3>
+          <GlossyBlackCard className="p-6 space-y-4" accent="dual">
+            <div className="text-[10.5px] font-extrabold uppercase tracking-[0.14em] text-[#64c4a8]">Betterway Mortgages OS v3.2 · Android &amp; iOS</div>
+            <h3 className="font-display text-xl font-extrabold text-white">Native Capacitor 7 Mobile Apps</h3>
             <ul className="space-y-2 text-slate-300 leading-relaxed">
-              <li>• <strong className="text-white">Android:</strong> Signed release APK built automatically via GitHub Actions (<code className="text-[#dfc285]">mobile-android-ios.yml</code>) with shining black house launcher icon.</li>
-              <li>• <strong className="text-white">iOS:</strong> Native Xcode project (`mobile/ios/App`) configured with AppIcon, Safe Area dock &amp; live sync to `betterwayos.vercel.app`.</li>
-              <li>• <strong className="text-white">Offline PWA:</strong> Install directly on iPhone Safari or Android Chrome via <em>Add to Home Screen</em>.</li>
+              <li>• <strong className="text-white">Android (APK + AAB):</strong> Direct-install APK &amp; Google Play AAB built automatically via GitHub Actions (<code className="text-[#dfc285]">mobile-android-ios.yml</code>) with shining-black house icon, WebRTC SIP audio &amp; file attachments.</li>
+              <li>• <strong className="text-white">iOS (IPA + Xcode):</strong> Native Xcode project (<code className="text-[#dfc285]">mobile/ios/App</code>) with iOS IPA build, AppIcon, microphone/file-sharing permissions &amp; live sync to <code className="text-[#64c4a8]">betterwayos.vercel.app</code>.</li>
+              <li>• <strong className="text-white">Instant PWA Install:</strong> Open on iPhone Safari (Share → <em>Add to Home Screen</em>) or Android Chrome (<em>Install App</em>) for immediate full-screen access.</li>
             </ul>
+            <div className="flex flex-wrap gap-2 pt-1">
+              <a
+                href="https://github.com/swkpropertiesuae/BETTERWAYOS/releases/download/mobile-latest/Betterway-Mortgages-OS-Android-v3.2.0.apk"
+                target="_blank"
+                rel="noreferrer"
+                className="px-4 py-2 rounded-full bg-[#0e5a49] hover:brightness-110 text-white text-xs font-extrabold inline-flex items-center gap-1.5"
+              >
+                <Download size={13} /> Download Android APK
+              </a>
+              <a
+                href="https://github.com/swkpropertiesuae/BETTERWAYOS/releases/download/mobile-latest/Betterway-Mortgages-OS-iOS-v3.2.0.ipa"
+                target="_blank"
+                rel="noreferrer"
+                className="px-4 py-2 rounded-full bg-[#c49a45] hover:brightness-105 text-[#0b192c] text-xs font-extrabold inline-flex items-center gap-1.5"
+              >
+                <Download size={13} /> Download iOS IPA
+              </a>
+              <a
+                href="https://github.com/swkpropertiesuae/BETTERWAYOS/actions/workflows/mobile-android-ios.yml"
+                target="_blank"
+                rel="noreferrer"
+                className="px-4 py-2 rounded-full bg-white/10 hover:bg-white/20 border border-white/15 text-white text-xs font-bold inline-flex items-center gap-1.5"
+              >
+                <Smartphone size={13} /> View Cloud Builds
+              </a>
+            </div>
           </GlossyBlackCard>
           <div className="bw-card p-6 space-y-3">
-            <h3 className="font-display text-base font-extrabold">Mobile Field Capabilities</h3>
+            <h3 className="font-display text-base font-extrabold">Mobile Field &amp; Executive Capabilities</h3>
             <div className="grid grid-cols-2 gap-2.5">
-              {['Oud Metha QR Scan', '1-Tap Field GPS SOS', 'Betterway Inside Chat', 'SIP Softphone Dialer', '12 UAE Calculators', '3-Bank WhatsApp Quote'].map((f) => (
+              {[
+                'Oud Metha QR Scan',
+                '1-Tap Field GPS SOS',
+                'Betterway Inside Chat',
+                'SIP Softphone Dialer',
+                'Task Attachments & Follow-Ups',
+                '12 UAE Calculators',
+                '3-Bank WhatsApp Quote',
+                'Android APK + iOS IPA',
+              ].map((f) => (
                 <div key={f} className="p-3 rounded-xl bg-[var(--bw-soft)] border border-[var(--bw-line)] font-bold flex items-center gap-2">
                   <CheckCircle2 size={13} className="text-[#0e5a49] shrink-0" /> {f}
                 </div>

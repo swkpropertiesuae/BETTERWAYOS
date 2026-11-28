@@ -1,4 +1,4 @@
-name: Betterway OS Mobile Builds (Android APK & iOS)
+name: Betterway OS Mobile Builds (Android APK/AAB & iOS IPA)
 
 on:
   workflow_dispatch:
@@ -8,8 +8,12 @@ on:
       - 'mobile/**'
       - '.github/workflows/mobile-android-ios.yml'
 
+permissions:
+  contents: write
+
 jobs:
-  build-android-apk:
+  build-android:
+    name: Build Android APK & Play Store AAB
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
@@ -32,20 +36,26 @@ jobs:
           npm install
           npx cap sync android
 
-      - name: Build Android Debug APK
+      - name: Build Android Installable Release APK & Play Store AAB
         working-directory: mobile/android
         run: |
           chmod +x gradlew
-          ./gradlew assembleDebug --no-daemon
+          ./gradlew assembleRelease bundleRelease --no-daemon
+          mkdir -p ../../release-artifacts
+          cp app/build/outputs/apk/release/*.apk ../../release-artifacts/Betterway-Mortgages-OS-Android-v3.2.0.apk
+          cp app/build/outputs/bundle/release/*.aab ../../release-artifacts/Betterway-Mortgages-OS-Android-v3.2.0.aab
 
-      - name: Upload Betterway OS Android APK
+      - name: Upload Android APK & AAB Artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: Betterway-Mortgages-OS-Android-APK
-          path: mobile/android/app/build/outputs/apk/debug/*.apk
+          name: Betterway-Mortgages-OS-Android-v3.2.0
+          path: |
+            release-artifacts/Betterway-Mortgages-OS-Android-v3.2.0.apk
+            release-artifacts/Betterway-Mortgages-OS-Android-v3.2.0.aab
           retention-days: 90
 
-  build-ios-app:
+  build-ios:
+    name: Build iOS Device IPA & Simulator App
     runs-on: macos-latest
     steps:
       - name: Checkout repository
@@ -62,15 +72,54 @@ jobs:
           npm install
           npx cap sync ios
 
-      - name: Build iOS App (Simulator Build via App.xcworkspace)
+      - name: Build iOS Device App & Package IPA
         working-directory: mobile/ios/App
         run: |
           pod install --repo-update || pod install
-          xcodebuild -workspace App.xcworkspace -scheme App -configuration Debug -destination 'generic/platform=iOS Simulator' -derivedDataPath build CODE_SIGNING_ALLOWED=NO build
+          xcodebuild -workspace App.xcworkspace -scheme App -configuration Release -sdk iphoneos -destination 'generic/platform=iOS' -derivedDataPath build-device CODE_SIGNING_ALLOWED=NO CODE_SIGNING_REQUIRED=NO CODE_SIGN_IDENTITY="" build
+          mkdir -p ../../../release-artifacts/Payload
+          cp -R build-device/Build/Products/Release-iphoneos/App.app ../../../release-artifacts/Payload/BetterwayMortgagesOS.app
+          cd ../../../release-artifacts
+          zip -qry Betterway-Mortgages-OS-iOS-v3.2.0.ipa Payload
+          rm -rf Payload
 
-      - name: Package & Upload Betterway OS iOS Simulator App
+      - name: Build iOS Simulator App
+        working-directory: mobile/ios/App
+        run: |
+          xcodebuild -workspace App.xcworkspace -scheme App -configuration Debug -destination 'generic/platform=iOS Simulator' -derivedDataPath build-sim CODE_SIGNING_ALLOWED=NO build
+          cd build-sim/Build/Products/Debug-iphonesimulator
+          zip -qry ../../../../../../release-artifacts/Betterway-Mortgages-OS-iOS-Simulator-v3.2.0.app.zip App.app
+
+      - name: Upload iOS IPA & Simulator Artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: Betterway-Mortgages-OS-iOS-App
-          path: mobile/ios/App/build/Build/Products/Debug-iphonesimulator/App.app
+          name: Betterway-Mortgages-OS-iOS-v3.2.0
+          path: |
+            release-artifacts/Betterway-Mortgages-OS-iOS-v3.2.0.ipa
+            release-artifacts/Betterway-Mortgages-OS-iOS-Simulator-v3.2.0.app.zip
           retention-days: 90
+
+  publish-mobile-release:
+    name: Publish Android & iOS Packages to GitHub Releases
+    needs: [build-android, build-ios]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download Android & iOS Artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: all-mobile-artifacts
+          merge-multiple: true
+
+      - name: Publish to mobile-latest Release
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          TAG="mobile-latest"
+          TITLE="Betterway Mortgages OS Mobile v3.2.0 (Android APK/AAB & iOS IPA)"
+          NOTES="Automated native Capacitor 7 builds for **Betterway Mortgages OS v3.2.0** (Oxford Midnight Navy Sovereign Corporate Edition). Includes Betterway Inside messaging, WebRTC SIP Cloud Calls, Universal Form Attachments & Task Follow-Ups, 18-Bank 2026 Matrix, Oud Metha QR Attendance, and GPS Field Meetings."
+          if gh release view "$TAG" >/dev/null 2>&1; then
+            gh release upload "$TAG" all-mobile-artifacts/* --clobber
+            gh release edit "$TAG" --title "$TITLE" --notes "$NOTES"
+          else
+            gh release create "$TAG" all-mobile-artifacts/* --title "$TITLE" --notes "$NOTES"
+          fi
